@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.game-board {
+    position: relative;
+    border: 4px solid rgb(255, 0, 234);
+    width: 800px;
+    height: 600px;
+}
+
+.cat {
+    height: 120px;
+    position: absolute;
+    top: 0px;
+}
+
+.shot-position1 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 35px;
+}
+
+.shot-position2 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 155px;
+}
+
+.shot-position3 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 275px;
+}
+
+.shot-position4 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 395px;
+}
+
+.shot-position5 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 515px;
+}
+
+.arrow-1 {
+    background-color: rgba(137, 43, 226, 0.514);
+    border: 2px solid black;
+    width: 240px;
+    height: 119px;
+}
+
+.arrow-2 {
+    background-color: rgba(43, 226, 211, 0.514);
+    border: 2px solid black;
+    width: 240px;
+    height: 119px;
+}
+
+.arrow-3 {
+    background-color: rgba(55, 43, 226, 0.514);
+    border: 2px solid black;
+    width: 240px;
+    height: 119px;
+}
+
+.arrow-4 {
+    background-color: rgba(198, 226, 43, 0.514);
+    border: 2px solid black;
+    width: 240px;
+    height: 119px;
+}
+
+.arrow-5 {
+    background-color: rgba(226, 43, 43, 0.514);
+    border: 2px solid black;
+    width: 240px;
+    height: 119px;
+}
+
+@keyframes shot-move {
+
+    0% {
+        left: 180px;
+    }
+    100% {
+        left: 800px;
+    }
+
+}
+
+.planet01 {
+    height: 120px;
+    position: absolute;
+    top: 0;
+    right: -125px;
+    animation: moveplanet01 8s infinite linear;
+}
+
+@keyframes moveplanet01 {
+    
+    0% {
+        right: -125px;
+    }
+    100% {
+        right: 800px;
+    }
+
+}
+
+.planet02 {
+    height: 120px;
+    position: absolute;
+    top: 238px;
+    right: -125px;
+    animation: moveplanet02 4s infinite linear;
+}
+
+@keyframes moveplanet02 {
+    
+    0% {
+        right: -125px;
+    }
+    100% {
+        right: 800px;
+    }
+
+}
+
+.planet03 {
+    height: 120px;
+    position: absolute;
+    top: 476px;
+    right: -125px;
+    animation: moveplanet03 3s infinite linear;
+}
+
+@keyframes moveplanet03 {
+    
+    0% {
+        right: -125px;
+    }
+    100% {
+        right: 800px;
+    }
+
+}
+
+.planet007 {
+    height: 120px;
+    position: absolute;
+    top: 0px;
+    right: -125px;
+    animation: moveplanet03 3s infinite linear;
+}
+
+@keyframes moveplanet03 {
+    
+    0% {
+        right: -125px;
+    }
+    100% {
+        right: 800px;
+    }
+
+}
+
+.moon-boss {
+    height: 599px;
+    position: absolute;
+    top: 0px;
+    right: -125px;
+    animation: moveboss01 12s infinite linear;
+}
+
+@keyframes moveboss01 {
+    
+    0% {
+        right: -700px;
+    }
+    100% {
+        right: 800px;
+    }
+
+}
