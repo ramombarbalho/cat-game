@@ -14,47 +14,7 @@
 .cat {
     height: 120px;
     position: absolute;
-    top: 0px;
-}
-
-.shot-position1 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 35px;
-}
-
-.shot-position2 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 155px;
-}
-
-.shot-position3 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 275px;
-}
-
-.shot-position4 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 395px;
-}
-
-.shot-position5 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 515px;
+    top: 240px;
 }
 
 .arrow-1 {
@@ -92,6 +52,46 @@
     height: 119px;
 }
 
+.shot-position-1 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 35px;
+}
+
+.shot-position-2 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 155px;
+}
+
+.shot-position-3 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 275px;
+}
+
+.shot-position-4 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 395px;
+}
+
+.shot-position-5 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 515px;
+}
+
 @keyframes shot-move {
 
     0% {
@@ -103,10 +103,42 @@
 
 }
 
-.planet01 {
+.planet-01-y1 {
     height: 120px;
     position: absolute;
     top: 0;
+    right: -125px;
+    animation: moveplanet01 8s infinite linear;
+}
+
+.planet-01-y2 {
+    height: 120px;
+    position: absolute;
+    top: 119px;
+    right: -125px;
+    animation: moveplanet01 8s infinite linear;
+}
+
+.planet-01-y3 {
+    height: 120px;
+    position: absolute;
+    top: 238px;
+    right: -125px;
+    animation: moveplanet01 8s infinite linear;
+}
+
+.planet-01-y4 {
+    height: 120px;
+    position: absolute;
+    top: 357px;
+    right: -125px;
+    animation: moveplanet01 8s infinite linear;
+}
+
+.planet-01-y5 {
+    height: 120px;
+    position: absolute;
+    top: 476px;
     right: -125px;
     animation: moveplanet01 8s infinite linear;
 }
@@ -122,10 +154,42 @@
 
 }
 
-.planet02 {
+.planet-02-y1 {
+    height: 120px;
+    position: absolute;
+    top: 0;
+    right: -125px;
+    animation: moveplanet02 4s infinite linear;
+}
+
+.planet-02-y2 {
+    height: 120px;
+    position: absolute;
+    top: 119px;
+    right: -125px;
+    animation: moveplanet02 4s infinite linear;
+}
+
+.planet-02-y3 {
     height: 120px;
     position: absolute;
     top: 238px;
+    right: -125px;
+    animation: moveplanet02 4s infinite linear;
+}
+
+.planet-02-y4 {
+    height: 120px;
+    position: absolute;
+    top: 357px;
+    right: -125px;
+    animation: moveplanet02 4s infinite linear;
+}
+
+.planet-02-y5 {
+    height: 120px;
+    position: absolute;
+    top: 476px;
     right: -125px;
     animation: moveplanet02 4s infinite linear;
 }
@@ -141,29 +205,42 @@
 
 }
 
-.planet03 {
+.planet-03-y1 {
     height: 120px;
     position: absolute;
-    top: 476px;
+    top: 0;
     right: -125px;
     animation: moveplanet03 3s infinite linear;
 }
 
-@keyframes moveplanet03 {
-    
-    0% {
-        right: -125px;
-    }
-    100% {
-        right: 800px;
-    }
-
-}
-
-.planet007 {
+.planet-03-y2 {
     height: 120px;
     position: absolute;
-    top: 0px;
+    top: 119px;
+    right: -125px;
+    animation: moveplanet03 3s infinite linear;
+}
+
+.planet-03-y3 {
+    height: 120px;
+    position: absolute;
+    top: 238px;
+    right: -125px;
+    animation: moveplanet03 3s infinite linear;
+}
+
+.planet-03-y4 {
+    height: 120px;
+    position: absolute;
+    top: 357px;
+    right: -125px;
+    animation: moveplanet03 3s infinite linear;
+}
+
+.planet-03-y5 {
+    height: 120px;
+    position: absolute;
+    top: 476px;
     right: -125px;
     animation: moveplanet03 3s infinite linear;
 }
