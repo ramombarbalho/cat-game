@@ -166,7 +166,7 @@ setTimeout(() => {
     planet03Y5.classList.add('planet-03-y5')
     gameBoard.appendChild(planet03Y5)
         
-}, 6000);
+}, 6500);
 
 setTimeout(() => {
 
@@ -175,16 +175,16 @@ setTimeout(() => {
     planet03Y2.classList.add('planet-03-y2')
     gameBoard.appendChild(planet03Y2)
         
-}, 8000);
+}, 9000);
 
 setTimeout(() => {
 
-    planet02Y3 = document.createElement('img')
-    planet02Y3.src = './img/planet02.gif'
-    planet02Y3.classList.add('planet-02-y3')
-    gameBoard.appendChild(planet02Y3)
+    planet03Y3 = document.createElement('img')
+    planet03Y3.src = './img/planet03.gif'
+    planet03Y3.classList.add('planet-03-y3')
+    gameBoard.appendChild(planet03Y3)
         
-}, 10000);
+}, 11500);
 
 setTimeout(() => {
 
@@ -197,12 +197,12 @@ setTimeout(() => {
 
 setTimeout(() => {
 
-    planet01Y2 = document.createElement('img')
-    planet01Y2.src = './img/planet01.gif'
-    planet01Y2.classList.add('planet-01-y2')
-    gameBoard.appendChild(planet01Y2)
+    planet02Y2 = document.createElement('img')
+    planet02Y2.src = './img/planet02.gif'
+    planet02Y2.classList.add('planet-02-y2')
+    gameBoard.appendChild(planet02Y2)
         
-}, 14000);
+}, 13500);
 
 setTimeout(() => {
 
@@ -211,7 +211,7 @@ setTimeout(() => {
     planet02Y4.classList.add('planet-02-y4')
     gameBoard.appendChild(planet02Y4)
         
-}, 16000);
+}, 15000);
 
 setTimeout(() => {
 
@@ -220,7 +220,7 @@ setTimeout(() => {
     planet03Y1.classList.add('planet-03-y1')
     gameBoard.appendChild(planet03Y1)
         
-}, 18000);
+}, 17000);
 
 setTimeout(() => {
 
@@ -229,7 +229,7 @@ setTimeout(() => {
     planet02Y5.classList.add('planet-02-y5')
     gameBoard.appendChild(planet02Y5)
         
-}, 20000);
+}, 17500);
 
 setTimeout(() => {
 
@@ -238,7 +238,7 @@ setTimeout(() => {
     planet01Y3.classList.add('planet-01-y3')
     gameBoard.appendChild(planet01Y3)
         
-}, 22000);
+}, 19000);
 
 // Padrão 2 desce sobe
 
@@ -249,7 +249,7 @@ setTimeout(() => {
     planet03Y1.classList.add('planet-03-y1')
     gameBoard.appendChild(planet03Y1)
         
-}, 24000);
+}, 23000);
 
 setTimeout(() => {
 
@@ -258,7 +258,7 @@ setTimeout(() => {
     planet03Y2.classList.add('planet-03-y2')
     gameBoard.appendChild(planet03Y2)
         
-}, 25000);
+}, 24000);
 
 setTimeout(() => {
 
@@ -267,7 +267,7 @@ setTimeout(() => {
     planet03Y3.classList.add('planet-03-y3')
     gameBoard.appendChild(planet03Y3)
         
-}, 26000);
+}, 25000);
 
 setTimeout(() => {
 
@@ -275,6 +275,15 @@ setTimeout(() => {
     planet03Y4.src = './img/planet03.gif'
     planet03Y4.classList.add('planet-03-y4')
     gameBoard.appendChild(planet03Y4)
+        
+}, 26000);
+
+setTimeout(() => {
+
+    planet03Y5 = document.createElement('img')
+    planet03Y5.src = './img/planet03.gif'
+    planet03Y5.classList.add('planet-03-y5')
+    gameBoard.appendChild(planet03Y5)
         
 }, 27000);
 
@@ -285,7 +294,7 @@ setTimeout(() => {
     planet03Y5.classList.add('planet-03-y5')
     gameBoard.appendChild(planet03Y5)
         
-}, 28000);
+}, 29000);
 
 setTimeout(() => {
 
@@ -294,7 +303,7 @@ setTimeout(() => {
     planet03Y4.classList.add('planet-03-y4')
     gameBoard.appendChild(planet03Y4)
         
-}, 29000);
+}, 29500);
 
 setTimeout(() => {
 
@@ -312,7 +321,7 @@ setTimeout(() => {
     planet03Y2.classList.add('planet-03-y2')
     gameBoard.appendChild(planet03Y2)
         
-}, 31000);
+}, 30500);
 
 setTimeout(() => {
 
@@ -321,7 +330,7 @@ setTimeout(() => {
     planet03Y1.classList.add('planet-03-y1')
     gameBoard.appendChild(planet03Y1)
         
-}, 32000);
+}, 31000);
 
 // Padrão 3 linha
 
@@ -332,7 +341,7 @@ setTimeout(() => {
     planet01Y3.classList.add('planet-01-y3')
     gameBoard.appendChild(planet01Y3)
         
-}, 35000);
+}, 34000);
 
 setTimeout(() => {
 
@@ -341,7 +350,7 @@ setTimeout(() => {
     planet02Y4.classList.add('planet-02-y4')
     gameBoard.appendChild(planet02Y4)
         
-}, 35000);
+}, 36000);
 
 setTimeout(() => {
 
@@ -350,7 +359,7 @@ setTimeout(() => {
     planet02Y2.classList.add('planet-02-y2')
     gameBoard.appendChild(planet02Y2)
         
-}, 35000);
+}, 36000);
 
 setTimeout(() => {
 
@@ -359,18 +368,7 @@ setTimeout(() => {
     planet03Y1.classList.add('planet-03-y1')
     gameBoard.appendChild(planet03Y1)
         
-}, 35000);
-
-setTimeout(() => {
-
-    planet03Y5 = document.createElement('img')
-    planet03Y5.src = './img/planet03.gif'
-    planet03Y5.classList.add('planet-03-y5')
-    gameBoard.appendChild(planet03Y5)
-        
-}, 35000);
-
-// Padrão 4 sobe desce
+}, 38000);
 
 setTimeout(() => {
 
@@ -381,6 +379,17 @@ setTimeout(() => {
         
 }, 38000);
 
+// Padrão 4 sobe desce
+
+setTimeout(() => {
+
+    planet03Y5 = document.createElement('img')
+    planet03Y5.src = './img/planet03.gif'
+    planet03Y5.classList.add('planet-03-y5')
+    gameBoard.appendChild(planet03Y5)
+        
+}, 41000);
+
 setTimeout(() => {
 
     planet03Y4 = document.createElement('img')
@@ -388,7 +397,7 @@ setTimeout(() => {
     planet03Y4.classList.add('planet-03-y4')
     gameBoard.appendChild(planet03Y4)
         
-}, 39000);
+}, 41500);
 
 setTimeout(() => {
 
@@ -396,24 +405,6 @@ setTimeout(() => {
     planet03Y3.src = './img/planet03.gif'
     planet03Y3.classList.add('planet-03-y3')
     gameBoard.appendChild(planet03Y3)
-        
-}, 40000);
-
-setTimeout(() => {
-
-    planet03Y2 = document.createElement('img')
-    planet03Y2.src = './img/planet03.gif'
-    planet03Y2.classList.add('planet-03-y2')
-    gameBoard.appendChild(planet03Y2)
-        
-}, 41000);
-
-setTimeout(() => {
-
-    planet03Y1 = document.createElement('img')
-    planet03Y1.src = './img/planet03.gif'
-    planet03Y1.classList.add('planet-03-y1')
-    gameBoard.appendChild(planet03Y1)
         
 }, 42000);
 
@@ -424,7 +415,34 @@ setTimeout(() => {
     planet03Y2.classList.add('planet-03-y2')
     gameBoard.appendChild(planet03Y2)
         
+}, 42500);
+
+setTimeout(() => {
+
+    planet03Y1 = document.createElement('img')
+    planet03Y1.src = './img/planet03.gif'
+    planet03Y1.classList.add('planet-03-y1')
+    gameBoard.appendChild(planet03Y1)
+        
 }, 43000);
+
+setTimeout(() => {
+
+    planet03Y1 = document.createElement('img')
+    planet03Y1.src = './img/planet03.gif'
+    planet03Y1.classList.add('planet-03-y1')
+    gameBoard.appendChild(planet03Y1)
+        
+}, 45000);
+
+setTimeout(() => {
+
+    planet03Y2 = document.createElement('img')
+    planet03Y2.src = './img/planet03.gif'
+    planet03Y2.classList.add('planet-03-y2')
+    gameBoard.appendChild(planet03Y2)
+        
+}, 45375);
 
 setTimeout(() => {
 
@@ -433,7 +451,7 @@ setTimeout(() => {
     planet03Y3.classList.add('planet-03-y3')
     gameBoard.appendChild(planet03Y3)
         
-}, 44000);
+}, 45750);
 
 setTimeout(() => {
 
@@ -442,7 +460,7 @@ setTimeout(() => {
     planet03Y4.classList.add('planet-03-y4')
     gameBoard.appendChild(planet03Y4)
         
-}, 45000);
+}, 46125);
 
 setTimeout(() => {
 
@@ -451,7 +469,7 @@ setTimeout(() => {
     planet03Y5.classList.add('planet-03-y5')
     gameBoard.appendChild(planet03Y5)
         
-}, 46000);
+}, 46500);
 
 // Padrão 5
 
@@ -462,7 +480,7 @@ setTimeout(() => {
     planet02Y5.classList.add('planet-02-y5')
     gameBoard.appendChild(planet02Y5)
         
-}, 48000);
+}, 48500);
 
 setTimeout(() => {
 
@@ -471,14 +489,7 @@ setTimeout(() => {
     planet02Y4.classList.add('planet-02-y4')
     gameBoard.appendChild(planet02Y4)
         
-}, 49000);setTimeout(() => {
-
-    planet02Y5 = document.createElement('img')
-    planet02Y5.src = './img/planet02.gif'
-    planet02Y5.classList.add('planet-02-y5')
-    gameBoard.appendChild(planet02Y5)
-        
-}, 50000);
+}, 48500);
 
 setTimeout(() => {
 
@@ -487,7 +498,7 @@ setTimeout(() => {
     planet03Y1.classList.add('planet-03-y1')
     gameBoard.appendChild(planet03Y1)
         
-}, 50000);
+}, 49500);
 
 setTimeout(() => {
 
@@ -496,7 +507,7 @@ setTimeout(() => {
     planet02Y1.classList.add('planet-02-y1')
     gameBoard.appendChild(planet02Y1)
         
-}, 52000);
+}, 51000);
 
 setTimeout(() => {
 
@@ -505,16 +516,7 @@ setTimeout(() => {
     planet02Y2.classList.add('planet-02-y2')
     gameBoard.appendChild(planet02Y2)
         
-}, 53000);
-
-setTimeout(() => {
-
-    planet02Y1 = document.createElement('img')
-    planet02Y1.src = './img/planet02.gif'
-    planet02Y1.classList.add('planet-02-y1')
-    gameBoard.appendChild(planet02Y1)
-        
-}, 54000);
+}, 51000);
 
 setTimeout(() => {
 
@@ -523,9 +525,18 @@ setTimeout(() => {
     planet03Y5.classList.add('planet-03-y5')
     gameBoard.appendChild(planet03Y5)
         
-}, 54000);
+}, 52000);
 
 // Padrão 6
+
+setTimeout(() => {
+    
+    planet03Y3 = document.createElement('img')
+    planet03Y3.src = './img/planet03.gif'
+    planet03Y3.classList.add('planet-03-y3')
+    gameBoard.appendChild(planet03Y3)
+    
+}, 54000);
 
 setTimeout(() => {
 
@@ -534,16 +545,7 @@ setTimeout(() => {
     planet02Y3.classList.add('planet-02-y3')
     gameBoard.appendChild(planet02Y3)
         
-}, 56000);
-
-setTimeout(() => {
-
-    planet03Y3 = document.createElement('img')
-    planet03Y3.src = './img/planet03.gif'
-    planet03Y3.classList.add('planet-03-y3')
-    gameBoard.appendChild(planet03Y3)
-        
-}, 56000);
+}, 54500);
 
 setTimeout(() => {
 
@@ -552,7 +554,7 @@ setTimeout(() => {
     planet03Y2.classList.add('planet-03-y2')
     gameBoard.appendChild(planet03Y2)
         
-}, 57000);
+}, 55000);
 
 setTimeout(() => {
 
@@ -561,7 +563,7 @@ setTimeout(() => {
     planet03Y4.classList.add('planet-03-y4')
     gameBoard.appendChild(planet03Y4)
         
-}, 58000);
+}, 56000);
 
 setTimeout(() => {
 
@@ -570,7 +572,7 @@ setTimeout(() => {
     planet03Y1.classList.add('planet-03-y1')
     gameBoard.appendChild(planet03Y1)
         
-}, 59000);
+}, 57000);
 
 setTimeout(() => {
 
@@ -579,7 +581,7 @@ setTimeout(() => {
     planet03Y5.classList.add('planet-03-y5')
     gameBoard.appendChild(planet03Y5)
         
-}, 60000);
+}, 58000);
 
 // Padrão 7 linha
 
@@ -590,7 +592,7 @@ setTimeout(() => {
     planet01Y1.classList.add('planet-01-y1')
     gameBoard.appendChild(planet01Y1)
         
-}, 62000);
+}, 60000);
 
 setTimeout(() => {
 
@@ -599,7 +601,7 @@ setTimeout(() => {
     planet01Y5.classList.add('planet-01-y5')
     gameBoard.appendChild(planet01Y5)
         
-}, 62000);
+}, 60000);
 
 setTimeout(() => {
 
@@ -608,7 +610,7 @@ setTimeout(() => {
     planet02Y4.classList.add('planet-02-y4')
     gameBoard.appendChild(planet02Y4)
         
-}, 62000);
+}, 60000);
 
 setTimeout(() => {
 
@@ -617,7 +619,7 @@ setTimeout(() => {
     planet02Y2.classList.add('planet-02-y2')
     gameBoard.appendChild(planet02Y2)
         
-}, 62000);
+}, 60000);
 
 setTimeout(() => {
 
@@ -626,7 +628,7 @@ setTimeout(() => {
     planet03Y3.classList.add('planet-03-y3')
     gameBoard.appendChild(planet03Y3)
         
-}, 61000);
+}, 60000);
 
 // Padrão 8 boss
 
@@ -637,7 +639,7 @@ setInterval(() => {
     moonBoss.classList.add('moon-boss')
     gameBoard.appendChild(moonBoss)
     
-}, 66000);
+}, 68000);
 
 // Colisões shot/planet01
 

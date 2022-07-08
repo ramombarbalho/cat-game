@@ -12,6 +12,13 @@
     height: 600px;
 }
 
+/* .background-test01 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+} */
+
 .cat {
     height: 120px;
     position: absolute;
@@ -109,7 +116,8 @@
     position: absolute;
     top: 0;
     right: -125px;
-    animation: moveplanet01 8s infinite linear;
+    z-index: -1;
+    animation: moveplanet01 7s infinite linear;
 }
 
 .planet-01-y2 {
@@ -117,7 +125,8 @@
     position: absolute;
     top: 119px;
     right: -125px;
-    animation: moveplanet01 8s infinite linear;
+    z-index: -1;
+    animation: moveplanet01 7s infinite linear;
 }
 
 .planet-01-y3 {
@@ -125,7 +134,8 @@
     position: absolute;
     top: 238px;
     right: -125px;
-    animation: moveplanet01 8s infinite linear;
+    z-index: -1;
+    animation: moveplanet01 7s infinite linear;
 }
 
 .planet-01-y4 {
@@ -133,7 +143,8 @@
     position: absolute;
     top: 357px;
     right: -125px;
-    animation: moveplanet01 8s infinite linear;
+    z-index: -1;
+    animation: moveplanet01 7s infinite linear;
 }
 
 .planet-01-y5 {
@@ -141,7 +152,8 @@
     position: absolute;
     top: 476px;
     right: -125px;
-    animation: moveplanet01 8s infinite linear;
+    z-index: -1;
+    animation: moveplanet01 7s infinite linear;
 }
 
 @keyframes moveplanet01 {
@@ -160,7 +172,8 @@
     position: absolute;
     top: 0;
     right: -125px;
-    animation: moveplanet02 4s infinite linear;
+    z-index: -1;
+    animation: moveplanet02 5s infinite linear;
 }
 
 .planet-02-y2 {
@@ -168,7 +181,8 @@
     position: absolute;
     top: 119px;
     right: -125px;
-    animation: moveplanet02 4s infinite linear;
+    z-index: -1;
+    animation: moveplanet02 5s infinite linear;
 }
 
 .planet-02-y3 {
@@ -176,7 +190,8 @@
     position: absolute;
     top: 238px;
     right: -125px;
-    animation: moveplanet02 4s infinite linear;
+    z-index: -1;
+    animation: moveplanet02 5s infinite linear;
 }
 
 .planet-02-y4 {
@@ -184,7 +199,8 @@
     position: absolute;
     top: 357px;
     right: -125px;
-    animation: moveplanet02 4s infinite linear;
+    z-index: -1;
+    animation: moveplanet02 5s infinite linear;
 }
 
 .planet-02-y5 {
@@ -192,7 +208,8 @@
     position: absolute;
     top: 476px;
     right: -125px;
-    animation: moveplanet02 4s infinite linear;
+    z-index: -1;
+    animation: moveplanet02 5s infinite linear;
 }
 
 @keyframes moveplanet02 {
@@ -211,6 +228,7 @@
     position: absolute;
     top: 0;
     right: -125px;
+    z-index: -1;
     animation: moveplanet03 3s infinite linear;
 }
 
@@ -219,6 +237,7 @@
     position: absolute;
     top: 119px;
     right: -125px;
+    z-index: -1;
     animation: moveplanet03 3s infinite linear;
 }
 
@@ -227,6 +246,7 @@
     position: absolute;
     top: 238px;
     right: -125px;
+    z-index: -1;
     animation: moveplanet03 3s infinite linear;
 }
 
@@ -235,6 +255,7 @@
     position: absolute;
     top: 357px;
     right: -125px;
+    z-index: -1;
     animation: moveplanet03 3s infinite linear;
 }
 
@@ -243,6 +264,7 @@
     position: absolute;
     top: 476px;
     right: -125px;
+    z-index: -1;
     animation: moveplanet03 3s infinite linear;
 }
 
@@ -262,6 +284,7 @@
     position: absolute;
     top: 0px;
     right: -125px;
+    z-index: -1;
     animation: moveboss01 12s infinite linear;
 }
 
