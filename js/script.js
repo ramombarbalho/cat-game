@@ -1,3 +1,5 @@
+// Declarações iniciais
+
 var gameBoard = document.querySelector('.game-board')
 var cat = document.querySelector('.cat')
 var shotPosition = 3
@@ -26,13 +28,11 @@ var hpPlanet03Y3 = 1
 var hpPlanet03Y4 = 1
 var hpPlanet03Y5 = 1
 
-
 // hpMoonBoss
 
 var hpMoonBoss = 40
 
-//var timee = 4000 
-
+// Funções que fazem a movimentação do personagem com o click
 
 function move0() {
 
@@ -68,6 +68,8 @@ function move4() {
     shotPosition = 5
 
 }
+
+// Função que permite o disparo e o faz desparecer após sair do game-board
 
 onkeyup = function shotting() {
 
@@ -144,37 +146,9 @@ onkeyup = function shotting() {
     
 }
 
-/* setInterval(() => {
-    
-    rnggg = Number(Math.floor(Math.random() * (8000 - 2000 + 1 )) + 2000)
-    console.log(rnggg)
-    timee = rnggg
-    
-}, 1999)
+// Ordem dos sprites inimigos (em qual tempo e posição irão surgir)
 
-
-setInterval(() => {
-    
-    setInterval(() => {
-        
-        var planet01Y0 = document.createElement('img')
-        planet01Y0.src = './img/planet01.gif'
-        planet01Y0.classList.add('planet01')
-        gameBoard.appendChild(planet01Y0)
-        
-        setTimeout(() => {
-            gameBoard.removeChild(planet01Y0)
-        }
-        , 2000)
-
-    }, timee)
-
-}, 2000)
- */
-
-// Ordem dos enemies sprites
-
-// 1
+// Padrão 1
 
 setTimeout(() => {
 
@@ -266,7 +240,7 @@ setTimeout(() => {
         
 }, 22000);
 
-// 2 desce sobe
+// Padrão 2 desce sobe
 
 setTimeout(() => {
 
@@ -349,7 +323,7 @@ setTimeout(() => {
         
 }, 32000);
 
-// 3 linha
+// Padrão 3 linha
 
 setTimeout(() => {
 
@@ -396,7 +370,7 @@ setTimeout(() => {
         
 }, 35000);
 
-// 4 sobe desce
+// Padrão 4 sobe desce
 
 setTimeout(() => {
 
@@ -479,7 +453,7 @@ setTimeout(() => {
         
 }, 46000);
 
-// 5
+// Padrão 5
 
 setTimeout(() => {
 
@@ -551,7 +525,7 @@ setTimeout(() => {
         
 }, 54000);
 
-// 6
+// Padrão 6
 
 setTimeout(() => {
 
@@ -607,7 +581,7 @@ setTimeout(() => {
         
 }, 60000);
 
-// 7 linha
+// Padrão 7 linha
 
 setTimeout(() => {
 
@@ -654,7 +628,7 @@ setTimeout(() => {
         
 }, 61000);
 
-// 8 boss
+// Padrão 8 boss
 
 setInterval(() => {
 
@@ -665,20 +639,7 @@ setInterval(() => {
     
 }, 66000);
 
-/* setTimeout(() => {
-
-    planet01Y1 = document.createElement('img')
-    planet01Y1.src = './img/planet01.gif'
-    planet01Y1.classList.add('planet-01-y1')
-    gameBoard.appendChild(planet01Y1)
-
-    //setTimeout(() => {
-      //  gameBoard.removeChild(planett01)
-    //}, 7999);
-        
-}, 8001); */
-
-// colisoes planet01
+// Colisões shot/planet01
 
 setInterval(() => {
 
@@ -820,7 +781,7 @@ setInterval(() => {
 
 }, 100);
 
-// colisoes planet02
+// Colisões shot/planet02
 
 setInterval(() => {
 
@@ -962,7 +923,7 @@ setInterval(() => {
 
 }, 100);
 
-// colisoes planet03
+// Colisões shot/planet03
 
 setInterval(() => {
 
@@ -1104,7 +1065,7 @@ setInterval(() => {
 
 }, 100);
 
-// colisao moon boss
+// Colisão shot/moon boss
 
 setInterval(() => {
 
