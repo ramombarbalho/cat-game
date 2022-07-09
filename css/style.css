@@ -282,7 +282,7 @@
 .moon-boss {
     height: 599px;
     position: absolute;
-    top: 0px;
+    top: 0;
     right: -125px;
     z-index: -1;
     animation: moveboss01 12s infinite linear;
@@ -297,4 +297,11 @@
         right: 800px;
     }
 
+}
+
+.explosion-planet {
+    position: absolute;
+    height: 120px;
+    width: 100px;
+    z-index: -1;
 }

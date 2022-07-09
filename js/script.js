@@ -699,6 +699,24 @@ setTimeout(() => {
                 hpMoonBoss--
                 gameBoard.removeChild(shot03Left)
 
+                if (hpMoonBoss == 30) {
+
+                    moonBoss.src = './img/moon-boss-30.png'
+
+                }
+
+                if (hpMoonBoss == 20) {
+
+                    moonBoss.src = './img/moon-boss-20.png'
+                
+                }
+
+                if (hpMoonBoss == 10) {
+
+                    moonBoss.src = './img/moon-boss-10.png'
+                
+                }
+
                 if (hpMoonBoss == 0) {
 
                     gameBoard.removeChild(moonBoss)
@@ -754,8 +772,7 @@ setTimeout(() => {
 
     }, 10);
 
-}, 1000);
-
+}, 68000);
 
 // Colisões shot/planet01
 
@@ -778,7 +795,20 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet01Y1)
                 hpPlanet01Y1 = 1
-            
+
+                explosionPlanet01Y1 = document.createElement('img')
+                explosionPlanet01Y1.src = './img/explosion-planet-01-y1.gif'
+                explosionPlanet01Y1.classList.add('explosion-planet')
+                explosionPlanet01Y1.style.top = `0`
+                explosionPlanet01Y1.style.left = `${planet01Y1Left}px`
+                gameBoard.appendChild(explosionPlanet01Y1)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y1)
+
+                }, 963);
+
             }
 
         }
@@ -806,6 +836,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet01Y2)
                 hpPlanet01Y2 = 1
+
+                explosionPlanet01Y2 = document.createElement('img')
+                explosionPlanet01Y2.src = './img/explosion-planet-01-y2.gif'
+                explosionPlanet01Y2.classList.add('explosion-planet')
+                explosionPlanet01Y2.style.top = `120px`
+                explosionPlanet01Y2.style.left = `${planet01Y2Left}px`
+                gameBoard.appendChild(explosionPlanet01Y2)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y2)
+
+                }, 963);
             
             }
 
@@ -834,6 +877,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet01Y3)
                 hpPlanet01Y3 = 1
+
+                explosionPlanet01Y3 = document.createElement('img')
+                explosionPlanet01Y3.src = './img/explosion-planet-01-y3.gif'
+                explosionPlanet01Y3.classList.add('explosion-planet')
+                explosionPlanet01Y3.style.top = `240px`
+                explosionPlanet01Y3.style.left = `${planet01Y3Left}px`
+                gameBoard.appendChild(explosionPlanet01Y3)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y3)
+
+                }, 963);
             
             }
 
@@ -862,6 +918,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet01Y4)
                 hpPlanet01Y4 = 1
+
+                explosionPlanet01Y4 = document.createElement('img')
+                explosionPlanet01Y4.src = './img/explosion-planet-01-y4.gif'
+                explosionPlanet01Y4.classList.add('explosion-planet')
+                explosionPlanet01Y4.style.top = `360px`
+                explosionPlanet01Y4.style.left = `${planet01Y4Left}px`
+                gameBoard.appendChild(explosionPlanet01Y4)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y4)
+
+                }, 963);
             
             }
 
@@ -890,6 +959,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet01Y5)
                 hpPlanet01Y5 = 1
+
+                explosionPlanet01Y5 = document.createElement('img')
+                explosionPlanet01Y5.src = './img/explosion-planet-01-y5.gif'
+                explosionPlanet01Y5.classList.add('explosion-planet')
+                explosionPlanet01Y5.style.top = `480px`
+                explosionPlanet01Y5.style.left = `${planet01Y5Left}px`
+                gameBoard.appendChild(explosionPlanet01Y5)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y5)
+
+                }, 963);
             
             }
 
@@ -920,6 +1002,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet03Y1)
                 hpPlanet03Y1 = 3
+
+                explosionPlanet03Y1 = document.createElement('img')
+                explosionPlanet03Y1.src = './img/explosion-planet-03-y1.gif'
+                explosionPlanet03Y1.classList.add('explosion-planet')
+                explosionPlanet03Y1.style.top = `0`
+                explosionPlanet03Y1.style.left = `${planet03Y1Left}px`
+                gameBoard.appendChild(explosionPlanet03Y1)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y1)
+
+                }, 963);
             
             }
 
@@ -948,6 +1043,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet03Y2)
                 hpPlanet03Y2 = 3
+
+                explosionPlanet03Y2 = document.createElement('img')
+                explosionPlanet03Y2.src = './img/explosion-planet-03-y2.gif'
+                explosionPlanet03Y2.classList.add('explosion-planet')
+                explosionPlanet03Y2.style.top = `120px`
+                explosionPlanet03Y2.style.left = `${planet03Y2Left}px`
+                gameBoard.appendChild(explosionPlanet03Y2)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y2)
+
+                }, 963);
             
             }
 
@@ -976,6 +1084,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet03Y3)
                 hpPlanet03Y3 = 3
+
+                explosionPlanet03Y3 = document.createElement('img')
+                explosionPlanet03Y3.src = './img/explosion-planet-03-y3.gif'
+                explosionPlanet03Y3.classList.add('explosion-planet')
+                explosionPlanet03Y3.style.top = `240px`
+                explosionPlanet03Y3.style.left = `${planet03Y3Left}px`
+                gameBoard.appendChild(explosionPlanet03Y3)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y3)
+
+                }, 963);
             
             }
 
@@ -1004,6 +1125,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet03Y4)
                 hpPlanet03Y4 = 3
+
+                explosionPlanet03Y4 = document.createElement('img')
+                explosionPlanet03Y4.src = './img/explosion-planet-03-y4.gif'
+                explosionPlanet03Y4.classList.add('explosion-planet')
+                explosionPlanet03Y4.style.top = `360px`
+                explosionPlanet03Y4.style.left = `${planet03Y4Left}px`
+                gameBoard.appendChild(explosionPlanet03Y4)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y4)
+
+                }, 963);
             
             }
 
@@ -1032,6 +1166,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet03Y5)
                 hpPlanet03Y5 = 3
+
+                explosionPlanet03Y5 = document.createElement('img')
+                explosionPlanet03Y5.src = './img/explosion-planet-03-y5.gif'
+                explosionPlanet03Y5.classList.add('explosion-planet')
+                explosionPlanet03Y5.style.top = `480px`
+                explosionPlanet03Y5.style.left = `${planet03Y5Left}px`
+                gameBoard.appendChild(explosionPlanet03Y5)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y5)
+
+                }, 963);
             
             }
 
@@ -1062,6 +1209,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet05Y1)
                 hpPlanet05Y1 = 5
+
+                explosionPlanet05Y1 = document.createElement('img')
+                explosionPlanet05Y1.src = './img/explosion-planet-05-y1.gif'
+                explosionPlanet05Y1.classList.add('explosion-planet')
+                explosionPlanet05Y1.style.top = `0`
+                explosionPlanet05Y1.style.left = `${planet05Y1Left}px`
+                gameBoard.appendChild(explosionPlanet05Y1)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet05Y1)
+
+                }, 963);
             
             }
 
@@ -1090,6 +1250,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet05Y2)
                 hpPlanet05Y2 = 5
+
+                explosionPlanet05Y2 = document.createElement('img')
+                explosionPlanet05Y2.src = './img/explosion-planet-05-y2.gif'
+                explosionPlanet05Y2.classList.add('explosion-planet')
+                explosionPlanet05Y2.style.top = `120px`
+                explosionPlanet05Y2.style.left = `${planet05Y2Left}px`
+                gameBoard.appendChild(explosionPlanet05Y2)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet05Y2)
+
+                }, 963);
             
             }
 
@@ -1118,6 +1291,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet05Y3)
                 hpPlanet05Y3 = 5
+
+                explosionPlanet05Y3 = document.createElement('img')
+                explosionPlanet05Y3.src = './img/explosion-planet-05-y3.gif'
+                explosionPlanet05Y3.classList.add('explosion-planet')
+                explosionPlanet05Y3.style.top = `240px`
+                explosionPlanet05Y3.style.left = `${planet05Y3Left}px`
+                gameBoard.appendChild(explosionPlanet05Y3)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet05Y3)
+
+                }, 963);
             
             }
 
@@ -1146,6 +1332,22 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet05Y4)
                 hpPlanet05Y4 = 5
+
+                gameBoard.removeChild(planet03Y4)
+                hpPlanet03Y4 = 3
+
+                explosionPlanet05Y4 = document.createElement('img')
+                explosionPlanet05Y4.src = './img/explosion-planet-05-y4.gif'
+                explosionPlanet05Y4.classList.add('explosion-planet')
+                explosionPlanet05Y4.style.top = `360px`
+                explosionPlanet05Y4.style.left = `${planet0154Left}px`
+                gameBoard.appendChild(explosionPlanet05Y4)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet05Y4)
+
+                }, 963);
             
             }
 
@@ -1174,6 +1376,19 @@ setInterval(() => {
 
                 gameBoard.removeChild(planet05Y5)
                 hpPlanet05Y5 = 5
+
+                explosionPlanet05Y5 = document.createElement('img')
+                explosionPlanet05Y5.src = './img/explosion-planet-05-y5.gif'
+                explosionPlanet05Y5.classList.add('explosion-planet')
+                explosionPlanet05Y5.style.top = `480px`
+                explosionPlanet05Y5.style.left = `${planet05Y5Left}px`
+                gameBoard.appendChild(explosionPlanet05Y5)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet05Y5)
+
+                }, 963);
             
             }
 
