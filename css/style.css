@@ -34,6 +34,14 @@
     top: 240px;
 }
 
+.shot-01 {
+    width: 50px;
+}
+
+.bomb {
+    width: 50px;
+}
+
 .arrow-1 {
     background-color: rgba(137, 43, 226, 0.514);
     border: 2px solid black;
@@ -312,6 +320,12 @@
     position: absolute;
     height: 120px;
     width: 100px;
+    z-index: -1;
+}
+
+.boss-explosion {
+    position: absolute;
+    height: 599px;
     z-index: -1;
 }
 
