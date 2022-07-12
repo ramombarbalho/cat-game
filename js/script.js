@@ -2,9 +2,9 @@
 
 var gameBoard = document.querySelector('.game-board')
 var cat = document.querySelector('.cat')
-var txtQtShot01 = document.querySelector('.qt-shot-01')
-var qtShot01 = 150
-txtQtShot01.innerHTML = `x ${qtShot01}`
+var txtQtShotHaduken = document.querySelector('.qt-shot-01')
+var qtShotHaduken = 150
+txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
 var txtQtBomb = document.querySelector('.qt-bomb')
 var qtBomb = 1
 txtQtBomb.innerHTML = `x ${qtBomb}`
@@ -83,7 +83,7 @@ function bombing() {
 
         bombValue = 1
 
-        explosionBomb = document.createElement('img')
+        var explosionBomb = document.createElement('img')
         explosionBomb.src = './img/bomb-explosion.gif'
         explosionBomb.classList.add('bomb-explosion')
         explosionBomb.style.top = `0`
@@ -96,7 +96,7 @@ function bombing() {
 
             bombValue = 2
 
-        }, 200);
+        }, 300);
 
         setTimeout(() => {
 
@@ -114,8 +114,8 @@ if (shotPosition == 5) {
     shot5.src = './img/shot.gif'
     shot5.classList.add('shot-position-5')
     gameBoard.appendChild(shot5)
-    qtShot01--
-    txtQtShot01.innerHTML = `x ${qtShot01}`
+    qtShotHaduken--
+    txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
     
     setTimeout(() => {
         gameBoard.removeChild(shot5)
@@ -128,7 +128,7 @@ if (shotPosition == 5) {
 
 onkeyup = function shotting() {
 
-    if (qtShot01 > 0) {
+    if (qtShotHaduken > 0) {
 
         if (shotPosition == 1) {
             
@@ -136,8 +136,8 @@ onkeyup = function shotting() {
             shot1.src = './img/shot.gif'
             shot1.classList.add('shot-position-1')
             gameBoard.appendChild(shot1)
-            qtShot01--
-            txtQtShot01.innerHTML = `x ${qtShot01}`
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot1)
@@ -152,8 +152,8 @@ onkeyup = function shotting() {
             shot2.src = './img/shot.gif'
             shot2.classList.add('shot-position-2')
             gameBoard.appendChild(shot2)
-            qtShot01--
-            txtQtShot01.innerHTML = `x ${qtShot01}`
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot2)
@@ -168,8 +168,8 @@ onkeyup = function shotting() {
             shot3.src = './img/shot.gif'
             shot3.classList.add('shot-position-3')
             gameBoard.appendChild(shot3)
-            qtShot01--
-            txtQtShot01.innerHTML = `x ${qtShot01}`
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot3)
@@ -184,8 +184,8 @@ onkeyup = function shotting() {
             shot4.src = './img/shot.gif'
             shot4.classList.add('shot-position-4')
             gameBoard.appendChild(shot4)
-            qtShot01--
-            txtQtShot01.innerHTML = `x ${qtShot01}`
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot4)
@@ -200,8 +200,8 @@ onkeyup = function shotting() {
             shot5.src = './img/shot.gif'
             shot5.classList.add('shot-position-5')
             gameBoard.appendChild(shot5)
-            qtShot01--
-            txtQtShot01.innerHTML = `x ${qtShot01}`
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot5)
@@ -220,7 +220,7 @@ onkeyup = function shotting() {
 
 setTimeout(() => {
 
-    stage1_1 = document.createElement('img')
+    var stage1_1 = document.createElement('img')
     stage1_1.src = './img/stage_1-1.png'
     stage1_1.classList.add('stage-start')
     gameBoard.appendChild(stage1_1)
@@ -719,7 +719,7 @@ setTimeout(() => {
 
 setTimeout(() => {
 
-    warning = document.createElement('img')
+    var warning = document.createElement('img')
     warning.src = './img/warning.png'
     warning.classList.add('warning')
     gameBoard.appendChild(warning)
@@ -744,10 +744,10 @@ setTimeout(() => {
     setInterval(() => {
 
 
-        shot01Left = document.querySelector('.shot-position-1')
+        var shot01Left = document.querySelector('.shot-position-1')
         shot01Left = Number(shot01Left.offsetLeft)
 
-        moonBossLeft = document.querySelector('.moon-boss')
+        var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
         if (shot01Left >= 140 && moonBossLeft >= 100) {
@@ -765,10 +765,10 @@ setTimeout(() => {
 
     setInterval(() => {
 
-        shot02Left = document.querySelector('.shot-position-2')
+        var shot02Left = document.querySelector('.shot-position-2')
         shot02Left = Number(shot02Left.offsetLeft)
 
-        moonBossLeft = document.querySelector('.moon-boss')
+        var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
         if (shot02Left >= 140 && moonBossLeft >= 140) {
@@ -786,11 +786,11 @@ setTimeout(() => {
 
     setInterval(() => {
 
-        shot03Left = document.querySelector('.shot-position-3')
+        var shot03Left = document.querySelector('.shot-position-3')
         shot03Left = Number(shot03Left.offsetLeft)
 
 
-        moonBossLeft = document.querySelector('.moon-boss')
+        var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
         if (shot03Left >= 140 && moonBossLeft >= 140) {
@@ -824,7 +824,7 @@ setTimeout(() => {
                     gameBoard.removeChild(moonBoss)
                     hpMoonBoss = 40
 
-                    explosionMoonBoos = document.createElement('img')
+                    var explosionMoonBoos = document.createElement('img')
                     explosionMoonBoos.src = './img/boss-explosion.gif'
                     explosionMoonBoos.classList.add('boss-explosion')
                     explosionMoonBoos.style.top = `0`
@@ -847,10 +847,10 @@ setTimeout(() => {
 
     setInterval(() => {
 
-        shot04Left = document.querySelector('.shot-position-4')
+        var shot04Left = document.querySelector('.shot-position-4')
         shot04Left = Number(shot04Left.offsetLeft)
 
-        moonBossLeft = document.querySelector('.moon-boss')
+        var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
         if (shot04Left >= 140 && moonBossLeft >= 140) {
@@ -868,10 +868,10 @@ setTimeout(() => {
 
     setInterval(() => {
 
-        shot05Left = document.querySelector('.shot-position-5')
+        var shot05Left = document.querySelector('.shot-position-5')
         shot05Left = Number(shot05Left.offsetLeft)
 
-        moonBossLeft = document.querySelector('.moon-boss')
+        var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
         if (shot05Left >= 140 && moonBossLeft >= 100) {
@@ -893,9 +893,9 @@ setTimeout(() => {
 
 setInterval(() => {
 
-    shot01Left = document.querySelector('.shot-position-1')
+    var shot01Left = document.querySelector('.shot-position-1')
     shot01Left = Number(shot01Left.offsetLeft)
-    planet01Y1Left = document.querySelector('.planet-01-y1')
+    var planet01Y1Left = document.querySelector('.planet-01-y1')
     planet01Y1Left = Number(planet01Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet01Y1Left >= 140) {
@@ -911,7 +911,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet01Y1)
                 hpPlanet01Y1 = 1
 
-                explosionPlanet01Y1 = document.createElement('img')
+                var explosionPlanet01Y1 = document.createElement('img')
                 explosionPlanet01Y1.src = './img/explosion-planet-01-y1.gif'
                 explosionPlanet01Y1.classList.add('explosion-planet')
                 explosionPlanet01Y1.style.top = `0`
@@ -945,9 +945,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot02Left = document.querySelector('.shot-position-2')
+    var shot02Left = document.querySelector('.shot-position-2')
     shot02Left = Number(shot02Left.offsetLeft)
-    planet01Y2Left = document.querySelector('.planet-01-y2')
+    var planet01Y2Left = document.querySelector('.planet-01-y2')
     planet01Y2Left = Number(planet01Y2.offsetLeft)
 
     if (shot02Left >= 140 && planet01Y2Left >= 140) {
@@ -963,7 +963,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet01Y2)
                 hpPlanet01Y2 = 1
 
-                explosionPlanet01Y2 = document.createElement('img')
+                var explosionPlanet01Y2 = document.createElement('img')
                 explosionPlanet01Y2.src = './img/explosion-planet-01-y2.gif'
                 explosionPlanet01Y2.classList.add('explosion-planet')
                 explosionPlanet01Y2.style.top = `120px`
@@ -997,9 +997,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot03Left = document.querySelector('.shot-position-3')
+    var shot03Left = document.querySelector('.shot-position-3')
     shot03Left = Number(shot03Left.offsetLeft)
-    planet01Y3Left = document.querySelector('.planet-01-y3')
+    var planet01Y3Left = document.querySelector('.planet-01-y3')
     planet01Y3Left = Number(planet01Y3.offsetLeft)
 
     if (shot03Left >= 140 && planet01Y3Left >= 140) {
@@ -1015,7 +1015,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet01Y3)
                 hpPlanet01Y3 = 1
 
-                explosionPlanet01Y3 = document.createElement('img')
+                var explosionPlanet01Y3 = document.createElement('img')
                 explosionPlanet01Y3.src = './img/explosion-planet-01-y3.gif'
                 explosionPlanet01Y3.classList.add('explosion-planet')
                 explosionPlanet01Y3.style.top = `240px`
@@ -1049,9 +1049,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot04Left = document.querySelector('.shot-position-4')
+    var shot04Left = document.querySelector('.shot-position-4')
     shot04Left = Number(shot04Left.offsetLeft)
-    planet01Y4Left = document.querySelector('.planet-01-y4')
+    var planet01Y4Left = document.querySelector('.planet-01-y4')
     planet01Y4Left = Number(planet01Y4.offsetLeft)
 
     if (shot04Left >= 140 && planet01Y4Left >= 140) {
@@ -1067,7 +1067,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet01Y4)
                 hpPlanet01Y4 = 1
 
-                explosionPlanet01Y4 = document.createElement('img')
+                var explosionPlanet01Y4 = document.createElement('img')
                 explosionPlanet01Y4.src = './img/explosion-planet-01-y4.gif'
                 explosionPlanet01Y4.classList.add('explosion-planet')
                 explosionPlanet01Y4.style.top = `360px`
@@ -1101,9 +1101,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot05Left = document.querySelector('.shot-position-5')
+    var shot05Left = document.querySelector('.shot-position-5')
     shot05Left = Number(shot05Left.offsetLeft)
-    planet01Y5Left = document.querySelector('.planet-01-y5')
+    var planet01Y5Left = document.querySelector('.planet-01-y5')
     planet01Y5Left = Number(planet01Y5.offsetLeft)
 
     if (shot05Left >= 140 && planet01Y5Left >= 140) {
@@ -1119,7 +1119,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet01Y5)
                 hpPlanet01Y5 = 1
 
-                explosionPlanet01Y5 = document.createElement('img')
+                var explosionPlanet01Y5 = document.createElement('img')
                 explosionPlanet01Y5.src = './img/explosion-planet-01-y5.gif'
                 explosionPlanet01Y5.classList.add('explosion-planet')
                 explosionPlanet01Y5.style.top = `480px`
@@ -1155,9 +1155,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot01Left = document.querySelector('.shot-position-1')
+    var shot01Left = document.querySelector('.shot-position-1')
     shot01Left = Number(shot01Left.offsetLeft)
-    planet03Y1Left = document.querySelector('.planet-03-y1')
+    var planet03Y1Left = document.querySelector('.planet-03-y1')
     planet03Y1Left = Number(planet03Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet03Y1Left >= 140) {
@@ -1173,7 +1173,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet03Y1)
                 hpPlanet03Y1 = 3
 
-                explosionPlanet03Y1 = document.createElement('img')
+                var explosionPlanet03Y1 = document.createElement('img')
                 explosionPlanet03Y1.src = './img/explosion-planet-03-y1.gif'
                 explosionPlanet03Y1.classList.add('explosion-planet')
                 explosionPlanet03Y1.style.top = `0`
@@ -1207,9 +1207,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot02Left = document.querySelector('.shot-position-2')
+    var shot02Left = document.querySelector('.shot-position-2')
     shot02Left = Number(shot02Left.offsetLeft)
-    planet03Y2Left = document.querySelector('.planet-03-y2')
+    var planet03Y2Left = document.querySelector('.planet-03-y2')
     planet03Y2Left = Number(planet03Y2.offsetLeft)
 
     if (shot02Left >= 140 && planet03Y2Left >= 140) {
@@ -1225,7 +1225,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet03Y2)
                 hpPlanet03Y2 = 3
 
-                explosionPlanet03Y2 = document.createElement('img')
+                var explosionPlanet03Y2 = document.createElement('img')
                 explosionPlanet03Y2.src = './img/explosion-planet-03-y2.gif'
                 explosionPlanet03Y2.classList.add('explosion-planet')
                 explosionPlanet03Y2.style.top = `120px`
@@ -1259,9 +1259,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot03Left = document.querySelector('.shot-position-3')
+    var shot03Left = document.querySelector('.shot-position-3')
     shot03Left = Number(shot03Left.offsetLeft)
-    planet03Y3Left = document.querySelector('.planet-03-y3')
+    var planet03Y3Left = document.querySelector('.planet-03-y3')
     planet03Y3Left = Number(planet03Y3.offsetLeft)
 
     if (shot03Left >= 140 && planet03Y3Left >= 140) {
@@ -1277,7 +1277,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet03Y3)
                 hpPlanet03Y3 = 3
 
-                explosionPlanet03Y3 = document.createElement('img')
+                var explosionPlanet03Y3 = document.createElement('img')
                 explosionPlanet03Y3.src = './img/explosion-planet-03-y3.gif'
                 explosionPlanet03Y3.classList.add('explosion-planet')
                 explosionPlanet03Y3.style.top = `240px`
@@ -1311,9 +1311,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot04Left = document.querySelector('.shot-position-4')
+    var shot04Left = document.querySelector('.shot-position-4')
     shot04Left = Number(shot04Left.offsetLeft)
-    planet03Y4Left = document.querySelector('.planet-03-y4')
+    var planet03Y4Left = document.querySelector('.planet-03-y4')
     planet03Y4Left = Number(planet03Y4.offsetLeft)
 
     if (shot04Left >= 140 && planet03Y4Left >= 140) {
@@ -1329,7 +1329,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet03Y4)
                 hpPlanet03Y4 = 3
 
-                explosionPlanet03Y4 = document.createElement('img')
+                var explosionPlanet03Y4 = document.createElement('img')
                 explosionPlanet03Y4.src = './img/explosion-planet-03-y4.gif'
                 explosionPlanet03Y4.classList.add('explosion-planet')
                 explosionPlanet03Y4.style.top = `360px`
@@ -1363,9 +1363,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot05Left = document.querySelector('.shot-position-5')
+    var shot05Left = document.querySelector('.shot-position-5')
     shot05Left = Number(shot05Left.offsetLeft)
-    planet03Y5Left = document.querySelector('.planet-03-y5')
+    var planet03Y5Left = document.querySelector('.planet-03-y5')
     planet03Y5Left = Number(planet03Y5.offsetLeft)
 
     if (shot05Left >= 140 && planet03Y5Left >= 140) {
@@ -1381,7 +1381,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet03Y5)
                 hpPlanet03Y5 = 3
 
-                explosionPlanet03Y5 = document.createElement('img')
+                var explosionPlanet03Y5 = document.createElement('img')
                 explosionPlanet03Y5.src = './img/explosion-planet-03-y5.gif'
                 explosionPlanet03Y5.classList.add('explosion-planet')
                 explosionPlanet03Y5.style.top = `480px`
@@ -1417,9 +1417,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot01Left = document.querySelector('.shot-position-1')
+    var shot01Left = document.querySelector('.shot-position-1')
     shot01Left = Number(shot01Left.offsetLeft)
-    planet05Y1Left = document.querySelector('.planet-05-y1')
+    var planet05Y1Left = document.querySelector('.planet-05-y1')
     planet05Y1Left = Number(planet05Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet05Y1Left >= 140) {
@@ -1435,7 +1435,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet05Y1)
                 hpPlanet05Y1 = 5
 
-                explosionPlanet05Y1 = document.createElement('img')
+                var explosionPlanet05Y1 = document.createElement('img')
                 explosionPlanet05Y1.src = './img/explosion-planet-05-y1.gif'
                 explosionPlanet05Y1.classList.add('explosion-planet')
                 explosionPlanet05Y1.style.top = `0`
@@ -1469,9 +1469,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot02Left = document.querySelector('.shot-position-2')
+    var shot02Left = document.querySelector('.shot-position-2')
     shot02Left = Number(shot02Left.offsetLeft)
-    planet05Y2Left = document.querySelector('.planet-05-y2')
+    var planet05Y2Left = document.querySelector('.planet-05-y2')
     planet05Y2Left = Number(planet05Y2.offsetLeft)
 
     if (shot02Left >= 140 && planet05Y2Left >= 140) {
@@ -1487,7 +1487,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet05Y2)
                 hpPlanet05Y2 = 5
 
-                explosionPlanet05Y2 = document.createElement('img')
+                var explosionPlanet05Y2 = document.createElement('img')
                 explosionPlanet05Y2.src = './img/explosion-planet-05-y2.gif'
                 explosionPlanet05Y2.classList.add('explosion-planet')
                 explosionPlanet05Y2.style.top = `120px`
@@ -1521,9 +1521,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot03Left = document.querySelector('.shot-position-3')
+    var shot03Left = document.querySelector('.shot-position-3')
     shot03Left = Number(shot03Left.offsetLeft)
-    planet05Y3Left = document.querySelector('.planet-05-y3')
+    var planet05Y3Left = document.querySelector('.planet-05-y3')
     planet05Y3Left = Number(planet05Y3.offsetLeft)
 
     if (shot03Left >= 140 && planet05Y3Left >= 140) {
@@ -1539,7 +1539,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet05Y3)
                 hpPlanet05Y3 = 5
 
-                explosionPlanet05Y3 = document.createElement('img')
+                var explosionPlanet05Y3 = document.createElement('img')
                 explosionPlanet05Y3.src = './img/explosion-planet-05-y3.gif'
                 explosionPlanet05Y3.classList.add('explosion-planet')
                 explosionPlanet05Y3.style.top = `240px`
@@ -1573,9 +1573,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot04Left = document.querySelector('.shot-position-4')
+    var shot04Left = document.querySelector('.shot-position-4')
     shot04Left = Number(shot04Left.offsetLeft)
-    planet05Y4Left = document.querySelector('.planet-05-y4')
+    var planet05Y4Left = document.querySelector('.planet-05-y4')
     planet05Y4Left = Number(planet05Y4.offsetLeft)
 
     if (shot04Left >= 140 && planet05Y4Left >= 140) {
@@ -1591,7 +1591,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet05Y4)
                 hpPlanet05Y4 = 5
 
-                explosionPlanet05Y4 = document.createElement('img')
+                var explosionPlanet05Y4 = document.createElement('img')
                 explosionPlanet05Y4.src = './img/explosion-planet-05-y4.gif'
                 explosionPlanet05Y4.classList.add('explosion-planet')
                 explosionPlanet05Y4.style.top = `360px`
@@ -1625,9 +1625,9 @@ setInterval(() => {
 
 setInterval(() => {
 
-    shot05Left = document.querySelector('.shot-position-5')
+    var shot05Left = document.querySelector('.shot-position-5')
     shot05Left = Number(shot05Left.offsetLeft)
-    planet05Y5Left = document.querySelector('.planet-05-y5')
+    var planet05Y5Left = document.querySelector('.planet-05-y5')
     planet05Y5Left = Number(planet05Y5.offsetLeft)
 
     if (shot05Left >= 140 && planet05Y5Left >= 140) {
@@ -1643,7 +1643,7 @@ setInterval(() => {
                 gameBoard.removeChild(planet05Y5)
                 hpPlanet05Y5 = 5
 
-                explosionPlanet05Y5 = document.createElement('img')
+                var explosionPlanet05Y5 = document.createElement('img')
                 explosionPlanet05Y5.src = './img/explosion-planet-05-y5.gif'
                 explosionPlanet05Y5.classList.add('explosion-planet')
                 explosionPlanet05Y5.style.top = `480px`
@@ -1675,77 +1675,232 @@ setInterval(() => {
 
 }, 100);
 
-/* setInterval(() => {
+// Verificação Game Over
 
-    planet01Y1Left = document.querySelector('.planet-01-y1')
+/* setInterval(() => {
+    
+    var planet01Y1Left = document.querySelector('.planet-01-y1')
     planet01Y1Left = Number(planet01Y1.offsetLeft)
 
-    planet01Y2Left = document.querySelector('.planet-01-y2')
-    planet01Y2Left = Number(planet01Y2.offsetLeft)
-
-    planet01Y3Left = document.querySelector('.planet-01-y3')
-    planet01Y3Left = Number(planet0131.offsetLeft)
-
-    planet01Y4Left = document.querySelector('.planet-01-y4')
-    planet01Y4Left = Number(planet01Y4.offsetLeft)
-
-    planet01Y5Left = document.querySelector('.planet-01-y5')
-    planet01Y5Left = Number(planet01Y5.offsetLeft)
-
-    planet03Y1Left = document.querySelector('.planet-03-y1')
-    planet03Y1Left = Number(planet03Y1.offsetLeft)
-
-    planet03Y2Left = document.querySelector('.planet-03-y2')
-    planet03Y2Left = Number(planet03Y2.offsetLeft)
-
-    planet03Y3Left = document.querySelector('.planet-03-y3')
-    planet03Y3Left = Number(planet03Y3.offsetLeft)
-
-    planet03Y4Left = document.querySelector('.planet-03-y4')
-    planet03Y4Left = Number(planet03Y4.offsetLeft)
-
-    planet03Y5Left = document.querySelector('.planet-03-y5')
-    planet03Y5Left = Number(planet03Y5.offsetLeft)
-
-    planet05Y1Left = document.querySelector('.planet-05-y1')
-    planet05Y1Left = Number(planet05Y1.offsetLeft)
-
-    planet05Y2Left = document.querySelector('.planet-05-y2')
-    planet05Y2Left = Number(planet05Y2.offsetLeft)
-
-    planet05Y3Left = document.querySelector('.planet-05-y3')
-    planet05Y3Left = Number(planet05Y3.offsetLeft)
-
-    planet05Y4Left = document.querySelector('.planet-05-y4')
-    planet05Y4Left = Number(planet05Y4.offsetLeft)
-
-    planet05Y5Left = document.querySelector('.planet-05-y5')
-    planet05Y5Left = Number(planet05Y5.offsetLeft)
-
-    if (
-        
-        (planet01Y1Left >= 1 && planet01Y1Left <= 40) || 
-        (planet01Y2Left >= 1 && planet01Y2Left <= 40) || 
-        (planet01Y3Left >= 1 && planet01Y3Left <= 40) || 
-        (planet01Y4Left >= 1 && planet01Y4Left <= 40) || 
-        (planet01Y5Left >= 1 && planet01Y5Left <= 40) || 
-        (planet03Y1Left >= 1 && planet03Y1Left <= 40) || 
-        (planet03Y2Left >= 1 && planet03Y2Left <= 40) || 
-        (planet03Y3Left >= 1 && planet03Y3Left <= 40) || 
-        (planet03Y4Left >= 1 && planet03Y4Left <= 40) || 
-        (planet03Y5Left >= 1 && planet03Y5Left <= 40) || 
-        (planet05Y1Left >= 1 && planet05Y1Left <= 40) || 
-        (planet05Y2Left >= 1 && planet05Y2Left <= 40) || 
-        (planet05Y3Left >= 1 && planet05Y3Left <= 40) || 
-        (planet05Y4Left >= 1 && planet05Y4Left <= 40) || 
-        (planet05Y5Left >= 1 && planet05Y5Left <= 40)
-
-    ) {
+    if (planet01Y1Left >= 1 && planet01Y1Left <= 40) {
     
         gameOver = document.createElement('img')
         gameOver.src = './img/boss01.jpg'
         gameBoard.appendChild(gameOver)
 
     }
+
+}, 50);
+
+setInterval(() => {
+
+    var planet01Y2Left = document.querySelector('.planet-01-y2')
+    planet01Y2Left = Number(planet01Y2.offsetLeft)
+
+    if (planet01Y2Left >= 1 && planet01Y2Left <= 40) {
+
+        gameOver = document.createElement('img')
+        gameOver.src = './img/boss01.jpg'
+        gameBoard.appendChild(gameOver)
+
+    }
+
+}, 50);
+
+
+setInterval(() => {
+
+    var planet01Y3Left = document.querySelector('.planet-01-y3')
+    planet01Y3Left = Number(planet0131.offsetLeft)
+
+    if (planet01Y3Left >= 1 && planet01Y3Left <= 40) {
+
+        gameOver = document.createElement('img')
+        gameOver.src = './img/boss01.jpg'
+        gameBoard.appendChild(gameOver)
+
+    }
+
+}, 50);
+
+setInterval(() => {
+
+var planet01Y4Left = document.querySelector('.planet-01-y4')
+planet01Y4Left = Number(planet01Y4.offsetLeft)
+
+if (planet01Y4Left >= 1 && planet01Y4Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+
+}, 50);
+
+setInterval(() => {
+
+var planet01Y5Left = document.querySelector('.planet-01-y5')
+planet01Y5Left = Number(planet01Y5.offsetLeft)
+
+if (planet01Y5Left >= 1 && planet01Y5Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+
+}, 50);
+
+setInterval(() => {
+
+var planet03Y1Left = document.querySelector('.planet-03-y1')
+planet03Y1Left = Number(planet03Y1.offsetLeft)
+
+if (planet03Y1Left >= 1 && planet03Y1Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet03Y2Left = document.querySelector('.planet-03-y2')
+planet03Y2Left = Number(planet03Y2.offsetLeft)
+
+if (planet03Y2Left >= 1 && planet03Y2Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet03Y3Left = document.querySelector('.planet-03-y3')
+planet03Y3Left = Number(planet03Y3.offsetLeft)
+
+if (planet03Y3Left >= 1 && planet03Y3Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet03Y4Left = document.querySelector('.planet-03-y4')
+planet03Y4Left = Number(planet03Y4.offsetLeft)
+
+if (planet03Y4Left >= 1 && planet03Y4Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet03Y5Left = document.querySelector('.planet-03-y5')
+planet03Y5Left = Number(planet03Y5.offsetLeft)
+
+if (planet03Y5Left >= 1 && planet03Y5Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet05Y1Left = document.querySelector('.planet-05-y1')
+planet05Y1Left = Number(planet05Y1.offsetLeft)
+
+if (planet05Y1Left >= 1 && planet05Y1Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet05Y2Left = document.querySelector('.planet-05-y2')
+planet05Y2Left = Number(planet05Y2.offsetLeft)
+
+if (planet05Y2Left >= 1 && planet05Y2Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet05Y3Left = document.querySelector('.planet-05-y3')
+planet05Y3Left = Number(planet05Y3.offsetLeft)
+
+if (planet05Y3Left >= 1 && planet05Y3Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet05Y4Left = document.querySelector('.planet-05-y4')
+planet05Y4Left = Number(planet05Y4.offsetLeft)
+
+if (planet05Y4Left >= 1 && planet05Y4Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
+
+}, 50);
+
+setInterval(() => {
+
+var planet05Y5Left = document.querySelector('.planet-05-y5')
+planet05Y5Left = Number(planet05Y5.offsetLeft)
+
+if (planet05Y5Left >= 1 && planet05Y5Left <= 40) {
+
+    gameOver = document.createElement('img')
+    gameOver.src = './img/boss01.jpg'
+    gameBoard.appendChild(gameOver)
+
+}
 
 }, 50); */
