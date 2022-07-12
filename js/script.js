@@ -8,7 +8,7 @@ txtQtShot01.innerHTML = `x ${qtShot01}`
 var txtQtBomb = document.querySelector('.qt-bomb')
 var qtBomb = 1
 txtQtBomb.innerHTML = `x ${qtBomb}`
-var shot01DMG = 1
+var shotHadukenDMG = 1
 var shotPosition = 3
 var bombValue = 0
 
@@ -85,9 +85,9 @@ function bombing() {
 
         explosionBomb = document.createElement('img')
         explosionBomb.src = './img/bomb-explosion.gif'
-        explosionBomb.classList.add('boss-explosion')
+        explosionBomb.classList.add('bomb-explosion')
         explosionBomb.style.top = `0`
-        explosionBomb.style.left = `120px`
+        explosionBomb.style.left = `0`
         gameBoard.appendChild(explosionBomb)
         qtBomb--
         txtQtBomb.innerHTML = `x ${qtBomb}`
@@ -102,7 +102,7 @@ function bombing() {
 
             gameBoard.removeChild(explosionBomb)
 
-        }, 1800);
+        }, 350);
 
     }
 
@@ -798,7 +798,7 @@ setTimeout(() => {
             if (shot03Left >= moonBossLeft) {
 
                 var shot03Left = document.querySelector('.shot-position-3')
-                hpMoonBoss = hpMoonBoss - shot01DMG
+                hpMoonBoss = hpMoonBoss - shotHadukenDMG
                 gameBoard.removeChild(shot03Left)
 
                 if (hpMoonBoss == 30) {
@@ -903,7 +903,7 @@ setInterval(() => {
         if (shot01Left >= planet01Y1Left) {
 
             var shot01Left = document.querySelector('.shot-position-1')
-            hpPlanet01Y1 = hpPlanet01Y1 - shot01DMG
+            hpPlanet01Y1 = hpPlanet01Y1 - shotHadukenDMG
             gameBoard.removeChild(shot01Left)
 
             if (hpPlanet01Y1 == 0) {
@@ -955,7 +955,7 @@ setInterval(() => {
         if (shot02Left >= planet01Y2Left) {
 
             var shot02Left = document.querySelector('.shot-position-2')
-            hpPlanet01Y2 = hpPlanet01Y2 - shot01DMG
+            hpPlanet01Y2 = hpPlanet01Y2 - shotHadukenDMG
             gameBoard.removeChild(shot02Left)
 
             if (hpPlanet01Y2 == 0) {
@@ -1007,7 +1007,7 @@ setInterval(() => {
         if (shot03Left >= planet01Y3Left) {
 
             var shot03Left = document.querySelector('.shot-position-3')
-            hpPlanet01Y3 = hpPlanet01Y3 - shot01DMG
+            hpPlanet01Y3 = hpPlanet01Y3 - shotHadukenDMG
             gameBoard.removeChild(shot03Left)
 
             if (hpPlanet01Y3 == 0) {
@@ -1059,7 +1059,7 @@ setInterval(() => {
         if (shot04Left >= planet01Y4Left) {
 
             var shot04Left = document.querySelector('.shot-position-4')
-            hpPlanet01Y4 = hpPlanet01Y4 - shot01DMG
+            hpPlanet01Y4 = hpPlanet01Y4 - shotHadukenDMG
             gameBoard.removeChild(shot04Left)
 
             if (hpPlanet01Y4 == 0) {
@@ -1111,7 +1111,7 @@ setInterval(() => {
         if (shot05Left >= planet01Y5Left) {
 
             var shot05Left = document.querySelector('.shot-position-5')
-            hpPlanet01Y5 = hpPlanet01Y5 - shot01DMG
+            hpPlanet01Y5 = hpPlanet01Y5 - shotHadukenDMG
             gameBoard.removeChild(shot05Left)
 
             if (hpPlanet01Y5 == 0) {
@@ -1165,7 +1165,7 @@ setInterval(() => {
         if (shot01Left >= planet03Y1Left) {
 
             var shot01Left = document.querySelector('.shot-position-1')
-            hpPlanet03Y1 = hpPlanet03Y1 - shot01DMG
+            hpPlanet03Y1 = hpPlanet03Y1 - shotHadukenDMG
             gameBoard.removeChild(shot01Left)
 
             if (hpPlanet03Y1 == 0) {
@@ -1217,7 +1217,7 @@ setInterval(() => {
         if (shot02Left >= planet03Y2Left) {
 
             var shot02Left = document.querySelector('.shot-position-2')
-            hpPlanet03Y2 = hpPlanet03Y2 - shot01DMG
+            hpPlanet03Y2 = hpPlanet03Y2 - shotHadukenDMG
             gameBoard.removeChild(shot02Left)
 
             if (hpPlanet03Y2 == 0) {
@@ -1269,7 +1269,7 @@ setInterval(() => {
         if (shot03Left >= planet03Y3Left) {
 
             var shot03Left = document.querySelector('.shot-position-3')
-            hpPlanet03Y3 = hpPlanet03Y3 - shot01DMG
+            hpPlanet03Y3 = hpPlanet03Y3 - shotHadukenDMG
             gameBoard.removeChild(shot03Left)
 
             if (hpPlanet03Y3 == 0) {
@@ -1321,7 +1321,7 @@ setInterval(() => {
         if (shot04Left >= planet03Y4Left) {
 
             var shot04Left = document.querySelector('.shot-position-4')
-            hpPlanet03Y4 = hpPlanet03Y4 - shot01DMG
+            hpPlanet03Y4 = hpPlanet03Y4 - shotHadukenDMG
             gameBoard.removeChild(shot04Left)
 
             if (hpPlanet03Y4 == 0) {
@@ -1373,7 +1373,7 @@ setInterval(() => {
         if (shot05Left >= planet03Y5Left) {
 
             var shot05Left = document.querySelector('.shot-position-5')
-            hpPlanet03Y5 = hpPlanet03Y5 - shot01DMG
+            hpPlanet03Y5 = hpPlanet03Y5 - shotHadukenDMG
             gameBoard.removeChild(shot05Left)
 
             if (hpPlanet03Y5 == 0) {
@@ -1427,7 +1427,7 @@ setInterval(() => {
         if (shot01Left >= planet05Y1Left) {
 
             var shot01Left = document.querySelector('.shot-position-1')
-            hpPlanet05Y1 = hpPlanet05Y1 - shot01DMG
+            hpPlanet05Y1 = hpPlanet05Y1 - shotHadukenDMG
             gameBoard.removeChild(shot01Left)
 
             if (hpPlanet05Y1 == 0) {
@@ -1479,7 +1479,7 @@ setInterval(() => {
         if (shot02Left >= planet05Y2Left) {
 
             var shot02Left = document.querySelector('.shot-position-2')
-            hpPlanet05Y2 = hpPlanet05Y2 - shot01DMG
+            hpPlanet05Y2 = hpPlanet05Y2 - shotHadukenDMG
             gameBoard.removeChild(shot02Left)
 
             if (hpPlanet05Y2 == 0) {
@@ -1531,7 +1531,7 @@ setInterval(() => {
         if (shot03Left >= planet05Y3Left) {
 
             var shot03Left = document.querySelector('.shot-position-3')
-            hpPlanet05Y3 = hpPlanet05Y3 - shot01DMG
+            hpPlanet05Y3 = hpPlanet05Y3 - shotHadukenDMG
             gameBoard.removeChild(shot03Left)
 
             if (hpPlanet05Y3 == 0) {
@@ -1583,7 +1583,7 @@ setInterval(() => {
         if (shot04Left >= planet05Y4Left) {
 
             var shot04Left = document.querySelector('.shot-position-4')
-            hpPlanet05Y4 = hpPlanet05Y4 - shot01DMG
+            hpPlanet05Y4 = hpPlanet05Y4 - shotHadukenDMG
             gameBoard.removeChild(shot04Left)
 
             if (hpPlanet05Y4 == 0) {
@@ -1595,7 +1595,7 @@ setInterval(() => {
                 explosionPlanet05Y4.src = './img/explosion-planet-05-y4.gif'
                 explosionPlanet05Y4.classList.add('explosion-planet')
                 explosionPlanet05Y4.style.top = `360px`
-                explosionPlanet05Y4.style.left = `${planet0154Left}px`
+                explosionPlanet05Y4.style.left = `${planet05Y4Left}px`
                 gameBoard.appendChild(explosionPlanet05Y4)
 
                 setTimeout(() => {
@@ -1635,7 +1635,7 @@ setInterval(() => {
         if (shot05Left >= planet05Y5Left) {
 
             var shot05Left = document.querySelector('.shot-position-5')
-            hpPlanet05Y5 = hpPlanet05Y5 - shot01DMG
+            hpPlanet05Y5 = hpPlanet05Y5 - shotHadukenDMG
             gameBoard.removeChild(shot05Left)
 
             if (hpPlanet05Y5 == 0) {
@@ -1674,3 +1674,78 @@ setInterval(() => {
     }
 
 }, 100);
+
+/* setInterval(() => {
+
+    planet01Y1Left = document.querySelector('.planet-01-y1')
+    planet01Y1Left = Number(planet01Y1.offsetLeft)
+
+    planet01Y2Left = document.querySelector('.planet-01-y2')
+    planet01Y2Left = Number(planet01Y2.offsetLeft)
+
+    planet01Y3Left = document.querySelector('.planet-01-y3')
+    planet01Y3Left = Number(planet0131.offsetLeft)
+
+    planet01Y4Left = document.querySelector('.planet-01-y4')
+    planet01Y4Left = Number(planet01Y4.offsetLeft)
+
+    planet01Y5Left = document.querySelector('.planet-01-y5')
+    planet01Y5Left = Number(planet01Y5.offsetLeft)
+
+    planet03Y1Left = document.querySelector('.planet-03-y1')
+    planet03Y1Left = Number(planet03Y1.offsetLeft)
+
+    planet03Y2Left = document.querySelector('.planet-03-y2')
+    planet03Y2Left = Number(planet03Y2.offsetLeft)
+
+    planet03Y3Left = document.querySelector('.planet-03-y3')
+    planet03Y3Left = Number(planet03Y3.offsetLeft)
+
+    planet03Y4Left = document.querySelector('.planet-03-y4')
+    planet03Y4Left = Number(planet03Y4.offsetLeft)
+
+    planet03Y5Left = document.querySelector('.planet-03-y5')
+    planet03Y5Left = Number(planet03Y5.offsetLeft)
+
+    planet05Y1Left = document.querySelector('.planet-05-y1')
+    planet05Y1Left = Number(planet05Y1.offsetLeft)
+
+    planet05Y2Left = document.querySelector('.planet-05-y2')
+    planet05Y2Left = Number(planet05Y2.offsetLeft)
+
+    planet05Y3Left = document.querySelector('.planet-05-y3')
+    planet05Y3Left = Number(planet05Y3.offsetLeft)
+
+    planet05Y4Left = document.querySelector('.planet-05-y4')
+    planet05Y4Left = Number(planet05Y4.offsetLeft)
+
+    planet05Y5Left = document.querySelector('.planet-05-y5')
+    planet05Y5Left = Number(planet05Y5.offsetLeft)
+
+    if (
+        
+        (planet01Y1Left >= 1 && planet01Y1Left <= 40) || 
+        (planet01Y2Left >= 1 && planet01Y2Left <= 40) || 
+        (planet01Y3Left >= 1 && planet01Y3Left <= 40) || 
+        (planet01Y4Left >= 1 && planet01Y4Left <= 40) || 
+        (planet01Y5Left >= 1 && planet01Y5Left <= 40) || 
+        (planet03Y1Left >= 1 && planet03Y1Left <= 40) || 
+        (planet03Y2Left >= 1 && planet03Y2Left <= 40) || 
+        (planet03Y3Left >= 1 && planet03Y3Left <= 40) || 
+        (planet03Y4Left >= 1 && planet03Y4Left <= 40) || 
+        (planet03Y5Left >= 1 && planet03Y5Left <= 40) || 
+        (planet05Y1Left >= 1 && planet05Y1Left <= 40) || 
+        (planet05Y2Left >= 1 && planet05Y2Left <= 40) || 
+        (planet05Y3Left >= 1 && planet05Y3Left <= 40) || 
+        (planet05Y4Left >= 1 && planet05Y4Left <= 40) || 
+        (planet05Y5Left >= 1 && planet05Y5Left <= 40)
+
+    ) {
+    
+        gameOver = document.createElement('img')
+        gameOver.src = './img/boss01.jpg'
+        gameBoard.appendChild(gameOver)
+
+    }
+
+}, 50); */
