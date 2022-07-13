@@ -379,7 +379,7 @@ setTimeout(() => {
     planet01Y5.classList.add('planet-01-y5')
     gameBoard.appendChild(planet01Y5)
         
-}, 29000);
+}, 30000);
 
 setTimeout(() => {
 
@@ -388,7 +388,7 @@ setTimeout(() => {
     planet01Y4.classList.add('planet-01-y4')
     gameBoard.appendChild(planet01Y4)
         
-}, 29500);
+}, 30500);
 
 setTimeout(() => {
 
@@ -397,7 +397,7 @@ setTimeout(() => {
     planet01Y3.classList.add('planet-01-y3')
     gameBoard.appendChild(planet01Y3)
         
-}, 30000);
+}, 31000);
 
 setTimeout(() => {
 
@@ -406,7 +406,7 @@ setTimeout(() => {
     planet01Y2.classList.add('planet-01-y2')
     gameBoard.appendChild(planet01Y2)
         
-}, 30500);
+}, 31500);
 
 setTimeout(() => {
 
@@ -415,7 +415,7 @@ setTimeout(() => {
     planet01Y1.classList.add('planet-01-y1')
     gameBoard.appendChild(planet01Y1)
         
-}, 31000);
+}, 32000);
 
 // Padrão 3 linha
 
@@ -518,7 +518,7 @@ setTimeout(() => {
     planet01Y1.classList.add('planet-01-y1')
     gameBoard.appendChild(planet01Y1)
         
-}, 45000);
+}, 46000);
 
 setTimeout(() => {
 
@@ -527,7 +527,7 @@ setTimeout(() => {
     planet01Y2.classList.add('planet-01-y2')
     gameBoard.appendChild(planet01Y2)
         
-}, 45375);
+}, 46375);
 
 setTimeout(() => {
 
@@ -536,7 +536,7 @@ setTimeout(() => {
     planet01Y3.classList.add('planet-01-y3')
     gameBoard.appendChild(planet01Y3)
         
-}, 45750);
+}, 46750);
 
 setTimeout(() => {
 
@@ -545,7 +545,7 @@ setTimeout(() => {
     planet01Y4.classList.add('planet-01-y4')
     gameBoard.appendChild(planet01Y4)
         
-}, 46125);
+}, 47125);
 
 setTimeout(() => {
 
@@ -554,7 +554,7 @@ setTimeout(() => {
     planet01Y5.classList.add('planet-01-y5')
     gameBoard.appendChild(planet01Y5)
         
-}, 46500);
+}, 47500);
 
 // Padrão 5
 
@@ -565,7 +565,7 @@ setTimeout(() => {
     planet03Y5.classList.add('planet-03-y5')
     gameBoard.appendChild(planet03Y5)
         
-}, 48500);
+}, 49500);
 
 setTimeout(() => {
 
@@ -574,7 +574,7 @@ setTimeout(() => {
     planet03Y4.classList.add('planet-03-y4')
     gameBoard.appendChild(planet03Y4)
         
-}, 48500);
+}, 49500);
 
 setTimeout(() => {
 
@@ -583,7 +583,7 @@ setTimeout(() => {
     planet01Y1.classList.add('planet-01-y1')
     gameBoard.appendChild(planet01Y1)
         
-}, 49500);
+}, 50500);
 
 setTimeout(() => {
 
@@ -592,7 +592,7 @@ setTimeout(() => {
     planet03Y1.classList.add('planet-03-y1')
     gameBoard.appendChild(planet03Y1)
         
-}, 51000);
+}, 52000);
 
 setTimeout(() => {
 
@@ -601,7 +601,7 @@ setTimeout(() => {
     planet03Y2.classList.add('planet-03-y2')
     gameBoard.appendChild(planet03Y2)
         
-}, 51000);
+}, 52000);
 
 setTimeout(() => {
 
@@ -610,7 +610,7 @@ setTimeout(() => {
     planet01Y5.classList.add('planet-01-y5')
     gameBoard.appendChild(planet01Y5)
         
-}, 52000);
+}, 53000);
 
 // Padrão 6
 
@@ -621,7 +621,7 @@ setTimeout(() => {
     planet01Y3.classList.add('planet-01-y3')
     gameBoard.appendChild(planet01Y3)
     
-}, 54000);
+}, 55000);
 
 setTimeout(() => {
 
@@ -630,7 +630,7 @@ setTimeout(() => {
     planet05Y3.classList.add('planet-05-y3')
     gameBoard.appendChild(planet05Y3)
         
-}, 54500);
+}, 55500);
 
 setTimeout(() => {
 
@@ -639,7 +639,7 @@ setTimeout(() => {
     planet01Y2.classList.add('planet-01-y2')
     gameBoard.appendChild(planet01Y2)
         
-}, 55000);
+}, 56000);
 
 setTimeout(() => {
 
@@ -648,7 +648,7 @@ setTimeout(() => {
     planet01Y4.classList.add('planet-01-y4')
     gameBoard.appendChild(planet01Y4)
         
-}, 56000);
+}, 57000);
 
 setTimeout(() => {
 
@@ -657,7 +657,7 @@ setTimeout(() => {
     planet01Y1.classList.add('planet-01-y1')
     gameBoard.appendChild(planet01Y1)
         
-}, 57000);
+}, 58000);
 
 setTimeout(() => {
 
@@ -666,7 +666,7 @@ setTimeout(() => {
     planet01Y5.classList.add('planet-01-y5')
     gameBoard.appendChild(planet01Y5)
         
-}, 58000);
+}, 59000);
 
 // Padrão 7 linha
 
@@ -677,7 +677,7 @@ setTimeout(() => {
     planet01Y3.classList.add('planet-01-y3')
     gameBoard.appendChild(planet01Y3)
         
-}, 60000);
+}, 61000);
 
 setTimeout(() => {
 
@@ -686,7 +686,7 @@ setTimeout(() => {
     planet03Y4.classList.add('planet-03-y4')
     gameBoard.appendChild(planet03Y4)
         
-}, 60000);
+}, 61000);
 
 setTimeout(() => {
 
@@ -695,7 +695,7 @@ setTimeout(() => {
     planet03Y2.classList.add('planet-03-y2')
     gameBoard.appendChild(planet03Y2)
         
-}, 60000);
+}, 61000);
 
 setTimeout(() => {
 
@@ -704,7 +704,7 @@ setTimeout(() => {
     planet05Y1.classList.add('planet-05-y1')
     gameBoard.appendChild(planet05Y1)
         
-}, 60000);
+}, 61000);
 
 setTimeout(() => {
 
@@ -713,7 +713,7 @@ setTimeout(() => {
     planet05Y5.classList.add('planet-05-y5')
     gameBoard.appendChild(planet05Y5)
         
-}, 60000);
+}, 61000);
 
 // Warning
 
@@ -730,7 +730,7 @@ setTimeout(() => {
         
     }, 2900);
 
-}, 66000);
+}, 68000);
 
 // Padrão 8 e colisão shot/boss
 
@@ -746,7 +746,6 @@ setTimeout(() => {
 
         var shot01Left = document.querySelector('.shot-position-1')
         shot01Left = Number(shot01Left.offsetLeft)
-
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
@@ -767,7 +766,6 @@ setTimeout(() => {
 
         var shot02Left = document.querySelector('.shot-position-2')
         shot02Left = Number(shot02Left.offsetLeft)
-
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
@@ -788,8 +786,6 @@ setTimeout(() => {
 
         var shot03Left = document.querySelector('.shot-position-3')
         shot03Left = Number(shot03Left.offsetLeft)
-
-
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
@@ -832,10 +828,31 @@ setTimeout(() => {
                     gameBoard.appendChild(explosionMoonBoos)
 
                     setTimeout(() => {
-
+                        
                         gameBoard.removeChild(explosionMoonBoos)
-
+                        
                     }, 1790);
+
+                    setTimeout(() => {
+
+                        var missionComplete = document.createElement('img')
+                        missionComplete.src = './img/mission-complete.gif'
+                        missionComplete.classList.add('mission-complete')
+                        gameBoard.appendChild(missionComplete)
+
+                        setTimeout(() => {
+
+                            gameBoard.removeChild(missionComplete)
+                            
+                        }, 5000);
+ 
+                    }, 2500);
+
+                    setTimeout(() => {
+                        
+                        location.reload()
+
+                    }, 7500);
                 
                 }
 
@@ -849,7 +866,6 @@ setTimeout(() => {
 
         var shot04Left = document.querySelector('.shot-position-4')
         shot04Left = Number(shot04Left.offsetLeft)
-
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
@@ -870,7 +886,6 @@ setTimeout(() => {
 
         var shot05Left = document.querySelector('.shot-position-5')
         shot05Left = Number(shot05Left.offsetLeft)
-
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
@@ -887,7 +902,7 @@ setTimeout(() => {
 
     }, 10);
 
-}, 70000);
+}, 72000);
 
 // Colisões shot/planet01
 
