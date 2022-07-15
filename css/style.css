@@ -35,11 +35,11 @@
     top: 240px;
 }
 
-.shot-01 {
+.shot-haduken-stts {
     width: 50px;
 }
 
-.bomb {
+.bomb-stts {
     width: 50px;
 }
 
@@ -96,6 +96,46 @@
 
 .arrow-5:hover {
     background-color: rgba(226, 43, 43, 0.8);
+}
+
+@keyframes move1 {
+    
+    100% {
+        top: 0px;
+    }
+
+}
+
+@keyframes move2 {
+    
+    100% {
+        top: 120px;
+    }
+
+}
+
+@keyframes move3 {
+    
+    100% {
+        top: 240px;
+    }
+
+}
+
+@keyframes move4 {
+    
+    100% {
+        top: 360px;
+    }
+
+}
+
+@keyframes move5 {
+    
+    100% {
+        top: 480px;
+    }
+
 }
 
 .shot-position-1 {
@@ -344,12 +384,6 @@
     z-index: -1;
 }
 
-.boss-explosion {
-    position: absolute;
-    height: 599px;
-    z-index: -1;
-}
-
 .bomb-explosion {
     position: absolute;
     width: 1200px;
@@ -400,14 +434,6 @@
     animation: warning-move 3s;
 }
 
-.mission-complete {
-    position: absolute;
-    width: 900px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-38%, -50%);
-}
-
 @keyframes warning-move {
 
     0% {
@@ -430,4 +456,18 @@
         opacity: 0;
     }
 
+}
+
+.boss-explosion {
+    position: absolute;
+    height: 599px;
+    z-index: -1;
+}
+
+.mission-complete {
+    position: absolute;
+    width: 900px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-38%, -50%);
 }

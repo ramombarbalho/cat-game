@@ -2,7 +2,7 @@
 
 var gameBoard = document.querySelector('.game-board')
 var cat = document.querySelector('.cat')
-var txtQtShotHaduken = document.querySelector('.qt-shot-01')
+var txtQtShotHaduken = document.querySelector('.qt-shot-haduken')
 var qtShotHaduken = 150
 txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
 var txtQtBomb = document.querySelector('.qt-bomb')
@@ -11,6 +11,7 @@ txtQtBomb.innerHTML = `x ${qtBomb}`
 var shotHadukenDMG = 1
 var shotPosition = 3
 var bombValue = 0
+var gameOver = false
 
 // hpPlanet01
 
@@ -40,40 +41,72 @@ var hpPlanet05Y5 = 5
 
 var hpMoonBoss = 40
 
+/* while (gameOver == false) { */
+
 // Funções que fazem a movimentação do personagem com o click
 
 function move1() {
 
-    cat.style.top = "0px"
+    cat.style.animation = "move1 0.0709s 1"
     shotPosition = 1
+
+    setTimeout(() => {
+
+        cat.style.top = "0px"
+        
+    }, 71);
 
 }
 
 function move2() {
 
-    cat.style.top = "120px"
+    cat.style.animation = "move2 0.0709s 1"
     shotPosition = 2
+
+    setTimeout(() => {
+
+        cat.style.top = "120px"
+        
+    }, 71);
 
 }
 
 function move3() {
 
-    cat.style.top = "240px"
+    cat.style.animation = "move3 0.0709s 1"
     shotPosition = 3
+
+    setTimeout(() => {
+
+        cat.style.top = "240px"
+        
+    }, 71);
 
 }
 
 function move4() {
 
-    cat.style.top = "360px"
+    cat.style.animation = "move4 0.0709s 1"
     shotPosition = 4
-    
+
+    setTimeout(() => {
+
+        cat.style.top = "360px"
+        
+    }, 71);
+
 }
 
 function move5() {
 
-    cat.style.top = "480px"
+    cat.style.animation = "move5 0.0709s 1"
     shotPosition = 5
+
+    setTimeout(() => {
+
+        cat.style.top = "480px"
+        
+    }, 71);
 
 }
 
@@ -736,7 +769,7 @@ setTimeout(() => {
 
 setTimeout(() => {
 
-    moonBoss = document.createElement('img')
+    var moonBoss = document.createElement('img')
     moonBoss.src = './img/moon-boss.png'
     moonBoss.classList.add('moon-boss')
     gameBoard.appendChild(moonBoss)
@@ -860,6 +893,10 @@ setTimeout(() => {
 
         }
 
+        /* else if (moonBossLeft <= 100) {
+            gameOver = true
+        }
+ */
     }, 10);
 
     setInterval(() => {
@@ -1918,4 +1955,42 @@ if (planet05Y5Left >= 1 && planet05Y5Left <= 40) {
 
 }
 
+}, 50); */
+
+/* } */
+
+/* setInterval(() => {
+
+        var moonBossLeft0 = document.querySelector('.moon-boss')
+        moonBossLeft0 = Number(moonBossLeft0.offsetLeft)
+        var momomo = document.querySelector('.moon-boss')
+
+        if (moonBossLeft0 <= 100) {
+
+            gameOver = true
+            
+            if (gameOver == true) {
+
+                gameBoard.removeChild(momomo)
+
+            }
+
+        }
+
+        var planet01Y1Left0 = document.querySelector('.planet-01-y1')
+        planet01Y1Left0 = Number(planet01Y1Left0.offsetLeft)
+        var aaasss = document.querySelector('.planet-01-y1')
+
+        if (planet01Y1Left0 <= 100) {
+
+            gameOver = true
+            
+            if (gameOver == true) {
+
+                gameBoard.removeChild(aaasss)
+
+            }
+
+        }
+    
 }, 50); */
