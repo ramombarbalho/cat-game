@@ -2,6 +2,7 @@
 
 var gameBoard = document.querySelector('.game-board')
 var gameStatus = document.querySelector('.game-status')
+var boxHearts = document.querySelector('box-hearts')
 var heartStatus = document.querySelector('.heart-status')
 var cat = document.querySelector('.cat')
 var hpCat = 3
@@ -10,11 +11,12 @@ var qtShotHaduken = 150
 txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
 var txtQtBomb = document.querySelector('.qt-bomb')
 var qtBomb = 1
-txtQtBomb.innerHTML = `x ${qtBomb}`
+/* txtQtBomb.innerHTML = `x ${qtBomb}` */
 var shotHadukenDMG = 1
 var shotPosition = 3
 var bombValue = 0
 var gameOver = false
+var retryMsg = document.querySelector('.retry-msg')
 
 // hpPlanet01
 
@@ -126,7 +128,9 @@ function bombing() {
         explosionBomb.style.left = `0`
         gameBoard.appendChild(explosionBomb)
         qtBomb--
-        txtQtBomb.innerHTML = `x ${qtBomb}`
+        var noAllowed = document.querySelector('.no-allowed')
+        noAllowed.style.display = 'block'
+        /* txtQtBomb.innerHTML = `x ${qtBomb}` */
 
         setTimeout(() => {
 
@@ -883,7 +887,7 @@ const sprite054 = setTimeout(() => {
                         }, 5000);
  
                     }, 2500);
-
+                
                     setTimeout(() => {
                         
                         location.reload()
@@ -1968,6 +1972,21 @@ const heartP05Y5 = setInterval(() => {
     
 }, 50);
 
+const heartMoonBoss = setInterval(() => {
+    
+        var moonBossLeft = document.querySelector('.moon-boss')
+        moonBossLeft = Number(moonBossLeft.offsetLeft)
+        var boxHearts = document.querySelector('.box-hearts')
+
+    if (moonBossLeft <= -55 && hpCat > 0) {
+   
+        gameStatus.removeChild(boxHearts)
+        hpCat = 0
+
+    }
+    
+}, 50);
+
 const gameOverVerification = setInterval(() => {
 
     if (hpCat <= 0) {
@@ -1976,118 +1995,128 @@ const gameOverVerification = setInterval(() => {
 
         if (gameOver == true) {
 
-                clearTimeout(sprite000)
-                clearTimeout(sprite001)
-                clearTimeout(sprite002)
-                clearTimeout(sprite003)
-                clearTimeout(sprite004)
-                clearTimeout(sprite005)
-                clearTimeout(sprite006)
-                clearTimeout(sprite007)
-                clearTimeout(sprite008)
-                clearTimeout(sprite009)
-                clearTimeout(sprite010)
-                clearTimeout(sprite011)
-                clearTimeout(sprite012)
-                clearTimeout(sprite013)
-                clearTimeout(sprite014)
-                clearTimeout(sprite015)
-                clearTimeout(sprite016)
-                clearTimeout(sprite017)
-                clearTimeout(sprite018)
-                clearTimeout(sprite019)
-                clearTimeout(sprite020)
-                clearTimeout(sprite021)
-                clearTimeout(sprite022)
-                clearTimeout(sprite023)
-                clearTimeout(sprite024)
-                clearTimeout(sprite025)
-                clearTimeout(sprite026)
-                clearTimeout(sprite027)
-                clearTimeout(sprite028)
-                clearTimeout(sprite029)
-                clearTimeout(sprite030)
-                clearTimeout(sprite031)
-                clearTimeout(sprite032)
-                clearTimeout(sprite033)
-                clearTimeout(sprite034)
-                clearTimeout(sprite035)
-                clearTimeout(sprite036)
-                clearTimeout(sprite037)
-                clearTimeout(sprite038)
-                clearTimeout(sprite039)
-                clearTimeout(sprite040)
-                clearTimeout(sprite041)
-                clearTimeout(sprite042)
-                clearTimeout(sprite043)
-                clearTimeout(sprite044)
-                clearTimeout(sprite045)
-                clearTimeout(sprite046)
-                clearTimeout(sprite047)
-                clearTimeout(sprite048)
-                clearTimeout(sprite049)
-                clearTimeout(sprite050)
-                clearTimeout(sprite051)
-                clearTimeout(sprite052)
-                clearTimeout(sprite053)
-                clearTimeout(sprite054)
+            clearTimeout(sprite000)
+            clearTimeout(sprite001)
+            clearTimeout(sprite002)
+            clearTimeout(sprite003)
+            clearTimeout(sprite004)
+            clearTimeout(sprite005)
+            clearTimeout(sprite006)
+            clearTimeout(sprite007)
+            clearTimeout(sprite008)
+            clearTimeout(sprite009)
+            clearTimeout(sprite010)
+            clearTimeout(sprite011)
+            clearTimeout(sprite012)
+            clearTimeout(sprite013)
+            clearTimeout(sprite014)
+            clearTimeout(sprite015)
+            clearTimeout(sprite016)
+            clearTimeout(sprite017)
+            clearTimeout(sprite018)
+            clearTimeout(sprite019)
+            clearTimeout(sprite020)
+            clearTimeout(sprite021)
+            clearTimeout(sprite022)
+            clearTimeout(sprite023)
+            clearTimeout(sprite024)
+            clearTimeout(sprite025)
+            clearTimeout(sprite026)
+            clearTimeout(sprite027)
+            clearTimeout(sprite028)
+            clearTimeout(sprite029)
+            clearTimeout(sprite030)
+            clearTimeout(sprite031)
+            clearTimeout(sprite032)
+            clearTimeout(sprite033)
+            clearTimeout(sprite034)
+            clearTimeout(sprite035)
+            clearTimeout(sprite036)
+            clearTimeout(sprite037)
+            clearTimeout(sprite038)
+            clearTimeout(sprite039)
+            clearTimeout(sprite040)
+            clearTimeout(sprite041)
+            clearTimeout(sprite042)
+            clearTimeout(sprite043)
+            clearTimeout(sprite044)
+            clearTimeout(sprite045)
+            clearTimeout(sprite046)
+            clearTimeout(sprite047)
+            clearTimeout(sprite048)
+            clearTimeout(sprite049)
+            clearTimeout(sprite050)
+            clearTimeout(sprite051)
+            clearTimeout(sprite052)
+            clearTimeout(sprite053)
+            clearTimeout(sprite054)
 
-                clearInterval(colisaoP01Y1)
-                clearInterval(colisaoP01Y2)
-                clearInterval(colisaoP01Y3)
-                clearInterval(colisaoP01Y4)
-                clearInterval(colisaoP01Y5)
+            clearInterval(colisaoP01Y1)
+            clearInterval(colisaoP01Y2)
+            clearInterval(colisaoP01Y3)
+            clearInterval(colisaoP01Y4)
+            clearInterval(colisaoP01Y5)
 
-                clearInterval(colisaoP03Y1)
-                clearInterval(colisaoP03Y2)
-                clearInterval(colisaoP03Y3)
-                clearInterval(colisaoP03Y4)
-                clearInterval(colisaoP03Y5)
+            clearInterval(colisaoP03Y1)
+            clearInterval(colisaoP03Y2)
+            clearInterval(colisaoP03Y3)
+            clearInterval(colisaoP03Y4)
+            clearInterval(colisaoP03Y5)
 
-                clearInterval(colisaoP05Y1)
-                clearInterval(colisaoP05Y2)
-                clearInterval(colisaoP05Y3)
-                clearInterval(colisaoP05Y4)
-                clearInterval(colisaoP05Y5)
+            clearInterval(colisaoP05Y1)
+            clearInterval(colisaoP05Y2)
+            clearInterval(colisaoP05Y3)
+            clearInterval(colisaoP05Y4)
+            clearInterval(colisaoP05Y5)
 
-                clearInterval(bombP01Y1)
-                clearInterval(bombP01Y2)
-                clearInterval(bombP01Y3)
-                clearInterval(bombP01Y4)
-                clearInterval(bombP01Y5)
+            clearInterval(bombP01Y1)
+            clearInterval(bombP01Y2)
+            clearInterval(bombP01Y3)
+            clearInterval(bombP01Y4)
+            clearInterval(bombP01Y5)
 
-                clearInterval(bombP03Y1)
-                clearInterval(bombP03Y2)
-                clearInterval(bombP03Y3)
-                clearInterval(bombP03Y4)
-                clearInterval(bombP03Y5)
+            clearInterval(bombP03Y1)
+            clearInterval(bombP03Y2)
+            clearInterval(bombP03Y3)
+            clearInterval(bombP03Y4)
+            clearInterval(bombP03Y5)
 
-                clearInterval(bombP05Y1)
-                clearInterval(bombP05Y2)
-                clearInterval(bombP05Y3)
-                clearInterval(bombP05Y4)
-                clearInterval(bombP05Y5)
+            clearInterval(bombP05Y1)
+            clearInterval(bombP05Y2)
+            clearInterval(bombP05Y3)
+            clearInterval(bombP05Y4)
+            clearInterval(bombP05Y5)
 
-                clearInterval(heartP01Y1)
-                clearInterval(heartP01Y2)
-                clearInterval(heartP01Y3)
-                clearInterval(heartP01Y4)
-                clearInterval(heartP01Y5)
+            clearInterval(heartP01Y1)
+            clearInterval(heartP01Y2)
+            clearInterval(heartP01Y3)
+            clearInterval(heartP01Y4)
+            clearInterval(heartP01Y5)
 
-                clearInterval(heartP03Y1)
-                clearInterval(heartP03Y2)
-                clearInterval(heartP03Y3)
-                clearInterval(heartP03Y4)
-                clearInterval(heartP03Y5)
+            clearInterval(heartP03Y1)
+            clearInterval(heartP03Y2)
+            clearInterval(heartP03Y3)
+            clearInterval(heartP03Y4)
+            clearInterval(heartP03Y5)
 
-                clearInterval(heartP05Y1)
-                clearInterval(heartP05Y2)
-                clearInterval(heartP05Y3)
-                clearInterval(heartP05Y4)
-                clearInterval(heartP05Y5)
+            clearInterval(heartP05Y1)
+            clearInterval(heartP05Y2)
+            clearInterval(heartP05Y3)
+            clearInterval(heartP05Y4)
+            clearInterval(heartP05Y5)
+
+            clearInterval(heartMoonBoss)
+
+            retryMsg.style.display = 'block'
                 
         }
 
     }
     
 }, 100);
+
+function retry() {
+
+    location.reload()
+
+}

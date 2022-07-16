@@ -14,7 +14,6 @@
 
     <div class="game-board">
 
-        <!-- <img src="./img/background-test.gif" alt="background-test01" class="background-test01"> -->
         <img src="./img/cat.gif" alt="cat" class="cat">
         <div class="arrow-1" onmousedown="move1()"></div>
         <div class="arrow-2" onmousedown="move2()"></div>
@@ -22,21 +21,41 @@
         <div class="arrow-4" onmousedown="move4()"></div>
         <div class="arrow-5" onmousedown="move5()"></div>
 
+        <div class="retry-msg">
+
+            <img src="./img/game-over.png" alt="game over" class="game-over-msg">
+            <input type="button" value="RETRY" class="button-retry" onclick="retry()">
+
+        </div>
+
     </div>
 
     <div class="game-status">
 
-        <div class="heart-status">
-            <img src="./img/full-heart1.png" alt="heart" class="heart-active">
-            <img src="./img/full-heart1.png" alt="heart" class="heart-active">
-            <img src="./img/full-heart1.png" alt="heart" class="heart-active">
+            <div class="box-hearts">
+
+                <div class="heart-status">
+                    <img src="./img/heart-active.png" alt="heart" class="heart-active">
+                    <img src="./img/heart-active.png" alt="heart" class="heart-active">
+                    <img src="./img/heart-active.png" alt="heart" class="heart-active">
+                </div>
+
+            </div>
+
+        <div class="box-bomb" onclick="bombing()">
+
+            <img src="./img/bomb.webp" alt="bomb" class="bomb-stts">
+            <img src="./img/no-allowed.webp" alt="no allowed" class="no-allowed">
+            <!-- <span class="qt-bomb"></span> -->
+
         </div>
 
-        <img src="./img/bomb.webp" alt="bomb" class="bomb-stts" onclick="bombing()">
-        <span class="qt-bomb"></span>
+        <div class="box-shot">
 
-        <img src="./img/shot.gif" alt="shot" class="shot-haduken-stts">
-        <span class="qt-shot-haduken"></span>
+            <img src="./img/shot.gif" alt="shot" class="shot-haduken-stts">
+            <span class="qt-shot-haduken"></span>
+
+        </div>
 
     </div>
 

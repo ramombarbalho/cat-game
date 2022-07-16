@@ -5,28 +5,26 @@
 }
 
 .game-board {
+    background-image: linear-gradient( #340b69, #09a0ce);
     position: relative;
     margin: auto;
     border: 4px solid rgb(255, 0, 234);
     width: 1200px;
     height: 600px;
     overflow: hidden;
+    z-index: 0;
 }
 
 .game-status {
+    background-image: linear-gradient(to right, yellow, red);
     position: relative;
     margin: auto;
+    display: flex;
+    align-items: center;
     border: 4px solid rgb(255, 0, 234);
     width: 1200px;
     height: 120px;
 }
-
-/* .background-test01 {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-} */
 
 .cat {
     height: 120px;
@@ -34,23 +32,67 @@
     top: 240px;
 }
 
+.box-hearts {
+    width: 240px;
+    height: 119px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+
 .heart-status {
     width: 160px;
     height: 52px;
-    margin: 30px 40px;
+    margin-left: 15px;
+    margin-right: 15px;
     border: solid 1px black;
     display: inline-block;
 }
 
-.shot-haduken-stts {
+.heart-active {
     width: 50px;
+}
+
+.box-bomb {
+    position: relative;
+    background-color: rgb(49, 49, 49);
+    width: 120px;
+    height: 119px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.box-bomb:hover {
+    background-image: linear-gradient(to bottom right, rgb(175, 175, 175), rgb(24, 24, 24));
+    cursor: pointer;
 }
 
 .bomb-stts {
-    width: 50px;
+    width: 65px;
 }
 
-.heart-active {
+.no-allowed {
+    width: 75px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    display: none;
+}
+
+.box-shot {
+    width: 120px;
+    height: 119px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.shot-haduken-stts {
     width: 50px;
 }
 
@@ -59,6 +101,7 @@
     border: 2px solid black;
     width: 240px;
     height: 119px;
+    z-index: 10;
 }
 
 .arrow-1:hover {
@@ -70,6 +113,7 @@
     border: 2px solid black;
     width: 240px;
     height: 119px;
+    z-index: 10;
 }
 
 .arrow-2:hover {
@@ -81,6 +125,7 @@
     border: 2px solid black;
     width: 240px;
     height: 119px;
+    z-index: 10;
 }
 
 .arrow-3:hover {
@@ -92,6 +137,7 @@
     border: 2px solid black;
     width: 240px;
     height: 119px;
+    z-index: 10;
 }
 
 .arrow-4:hover {
@@ -103,6 +149,7 @@
     border: 2px solid black;
     width: 240px;
     height: 119px;
+    z-index: 10;
 }
 
 .arrow-5:hover {
@@ -155,6 +202,7 @@
     left: 140px;
     animation: shot-move 2s linear;
     top: 35px;
+    z-index: 5;
 }
 
 .shot-position-2 {
@@ -163,6 +211,7 @@
     left: 140px;
     animation: shot-move 2s linear;
     top: 155px;
+    z-index: 5;
 }
 
 .shot-position-3 {
@@ -171,6 +220,7 @@
     left: 140px;
     animation: shot-move 2s linear;
     top: 275px;
+    z-index: 5;
 }
 
 .shot-position-4 {
@@ -179,6 +229,7 @@
     left: 140px;
     animation: shot-move 2s linear;
     top: 395px;
+    z-index: 5;
 }
 
 .shot-position-5 {
@@ -187,6 +238,7 @@
     left: 140px;
     animation: shot-move 2s linear;
     top: 515px;
+    z-index: 5;
 }
 
 @keyframes shot-move {
@@ -483,12 +535,32 @@
     transform: translate(-38%, -50%);
 }
 
-.button-retry {
+.retry-msg {
+    background-color: black;
+    width: 500px;
+    height: 500px;
+    text-align: center;
+    padding-top: 100px;
     position: absolute;
-    width: 300px;
+    top: 50%;
     left: 50%;
-    top: 20%;
-    background-image: url('img/game-over.png');
-    transform: translate(-12%, -10%);
-    animation: warning-move 3s;
+    transform: translate(-26%, -50%);
+    border: solid 1px black;
+    border-radius: 30px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 5;
+}
+
+.button-retry {
+    background-color: rgb(204, 204, 204);
+    width: 100px;
+    height: 50px;
+    border-radius: 20px;
+    margin-top: 100px;
+}
+
+.button-retry:hover {
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
 }
