@@ -1743,6 +1743,7 @@ const heartP01Y1 = setInterval(() => {
         gameBoard.removeChild(planet01Y1)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet01Y1 = 1
 
     }
     
@@ -1759,6 +1760,7 @@ const heartP01Y2 = setInterval(() => {
         gameBoard.removeChild(planet01Y2)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet01Y2 = 1
 
     }
     
@@ -1775,6 +1777,7 @@ const heartP01Y3 = setInterval(() => {
         gameBoard.removeChild(planet01Y3)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet01Y3 = 1
 
     }
     
@@ -1791,6 +1794,7 @@ const heartP01Y4 = setInterval(() => {
         gameBoard.removeChild(planet01Y4)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet01Y4 = 1
 
     }
     
@@ -1807,6 +1811,7 @@ const heartP01Y5 = setInterval(() => {
         gameBoard.removeChild(planet01Y5)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet01Y5 = 1
 
     }
     
@@ -1823,6 +1828,7 @@ const heartP03Y1 = setInterval(() => {
         gameBoard.removeChild(planet03Y1)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet03Y1 = 3
 
     }
     
@@ -1839,6 +1845,7 @@ const heartP03Y2 = setInterval(() => {
         gameBoard.removeChild(planet03Y2)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet03Y2 = 3
 
     }
     
@@ -1855,6 +1862,7 @@ const heartP03Y3 = setInterval(() => {
         gameBoard.removeChild(planet03Y3)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet03Y3 = 3
 
     }
     
@@ -1871,6 +1879,7 @@ const heartP03Y4 = setInterval(() => {
         gameBoard.removeChild(planet03Y4)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet03Y4 = 3
 
     }
     
@@ -1887,6 +1896,7 @@ const heartP03Y5 = setInterval(() => {
         gameBoard.removeChild(planet03Y5)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet03Y5 = 3
 
     }
     
@@ -1903,6 +1913,7 @@ const heartP05Y1 = setInterval(() => {
         gameBoard.removeChild(planet05Y1)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet05Y1 = 5
 
     }
     
@@ -1919,6 +1930,7 @@ const heartP05Y2 = setInterval(() => {
         gameBoard.removeChild(planet05Y2)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet05Y2 = 5
 
     }
     
@@ -1935,6 +1947,7 @@ const heartP05Y3 = setInterval(() => {
         gameBoard.removeChild(planet05Y3)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet05Y3 = 5
 
     }
     
@@ -1951,6 +1964,7 @@ const heartP05Y4 = setInterval(() => {
         gameBoard.removeChild(planet05Y4)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet05Y4 = 5
 
     }
     
@@ -1967,6 +1981,7 @@ const heartP05Y5 = setInterval(() => {
         gameBoard.removeChild(planet05Y5)
         heartStatus.removeChild(heartCat)
         hpCat--
+        hpPlanet05Y5 = 5
 
     }
     
@@ -1986,6 +2001,8 @@ const heartMoonBoss = setInterval(() => {
     }
     
 }, 50);
+
+// Game Over verificação
 
 const gameOverVerification = setInterval(() => {
 
