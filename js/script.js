@@ -8,7 +8,7 @@ var cat = document.querySelector('.cat')
 var hpCat = 3
 var txtQtShotHaduken = document.querySelector('.qt-shot-haduken')
 var qtShotHaduken = 150
-txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
+txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
 var txtQtBomb = document.querySelector('.qt-bomb')
 var qtBomb = 1
 /* txtQtBomb.innerHTML = `x ${qtBomb}` */
@@ -148,28 +148,13 @@ function bombing() {
 
 }
 
-if (shotPosition == 5) {
-        
-    var shot5 = document.createElement('img')
-    shot5.src = './img/shot.gif'
-    shot5.classList.add('shot-position-5')
-    gameBoard.appendChild(shot5)
-    qtShotHaduken--
-    txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
-    
-    setTimeout(() => {
-        gameBoard.removeChild(shot5)
-    }
-    , 2000)
-
-}
 
 // Função que permite o disparo e o faz desparecer após sair do game-board
 
 onkeyup = function shotting() {
-
+    
     if (qtShotHaduken > 0) {
-
+        
         if (shotPosition == 1) {
             
             var shot1 = document.createElement('img')
@@ -177,7 +162,7 @@ onkeyup = function shotting() {
             shot1.classList.add('shot-position-1')
             gameBoard.appendChild(shot1)
             qtShotHaduken--
-            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot1)
@@ -185,7 +170,7 @@ onkeyup = function shotting() {
             , 2000)
             
         }
-
+        
         if (shotPosition == 2) {
 
             var shot2 = document.createElement('img')
@@ -193,7 +178,7 @@ onkeyup = function shotting() {
             shot2.classList.add('shot-position-2')
             gameBoard.appendChild(shot2)
             qtShotHaduken--
-            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot2)
@@ -209,7 +194,7 @@ onkeyup = function shotting() {
             shot3.classList.add('shot-position-3')
             gameBoard.appendChild(shot3)
             qtShotHaduken--
-            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot3)
@@ -225,7 +210,7 @@ onkeyup = function shotting() {
             shot4.classList.add('shot-position-4')
             gameBoard.appendChild(shot4)
             qtShotHaduken--
-            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot4)
@@ -235,21 +220,21 @@ onkeyup = function shotting() {
         }
         
         if (shotPosition == 5) {
-        
+            
             var shot5 = document.createElement('img')
             shot5.src = './img/shot.gif'
             shot5.classList.add('shot-position-5')
             gameBoard.appendChild(shot5)
             qtShotHaduken--
-            txtQtShotHaduken.innerHTML = `x ${qtShotHaduken}`
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
             
             setTimeout(() => {
                 gameBoard.removeChild(shot5)
             }
             , 2000)
-        
+            
         }
-
+        
     }
     
 }
