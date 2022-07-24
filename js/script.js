@@ -23,7 +23,6 @@ var pointQtBomb = 0
 var qtPointsFinal = 0
 var stageComplete = false
 
-
 // hpPlanet01
 
 var hpPlanet01Y1 = 1
@@ -51,8 +50,10 @@ var hpPlanet05Y5 = 5
 // hpMoonBoss
 
 var hpMoonBoss = 40
-
-/* while (gameOver == false) { */
+var hpMoonBossFixed = hpMoonBoss
+var boxBarrHpBoss = document.querySelector('box-barr-hp-boss')
+var barrHpBoss = document.querySelector('.barr-hp-boss')
+var valueBarrHpBoss = 100
 
 // Funções que fazem a movimentação do personagem com o click
 
@@ -153,7 +154,6 @@ function bombing() {
     }
 
 }
-
 
 // Função que permite o disparo e o faz desparecer após sair do game-board
 
@@ -1050,6 +1050,9 @@ const sprite055 = setTimeout(() => {
                     clearInterval(colisaoBossY5)
                 
                 }
+
+                valueBarrHpBoss = valueBarrHpBoss - (100/(hpMoonBossFixed))
+                barrHpBoss.style.width = `${valueBarrHpBoss}%`
 
             }
 
