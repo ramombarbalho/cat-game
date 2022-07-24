@@ -17,6 +17,12 @@ var shotPosition = 3
 var bombValue = 0
 var gameOver = false
 var retryMsg = document.querySelector('.retry-msg')
+var pointHpCat = 0
+var pointQtShotHaduken = 0
+var pointQtBomb = 0
+var qtPointsFinal = 0
+var stageComplete = false
+
 
 // hpPlanet01
 
@@ -350,9 +356,18 @@ const sprite010 = setTimeout(() => {
         
 }, 19000);
 
+const sprite011 = setTimeout(() => {
+
+    planet01Y4 = document.createElement('img')
+    planet01Y4.src = './img/planet01.gif'
+    planet01Y4.classList.add('planet-01-y4')
+    gameBoard.appendChild(planet01Y4)
+        
+}, 20000);
+
 // Padrão 2 desce sobe
 
-const sprite011 = setTimeout(() => {
+const sprite012 = setTimeout(() => {
 
     planet01Y1 = document.createElement('img')
     planet01Y1.src = './img/planet01.gif'
@@ -361,7 +376,7 @@ const sprite011 = setTimeout(() => {
         
 }, 23000);
 
-const sprite012 = setTimeout(() => {
+const sprite013 = setTimeout(() => {
 
     planet01Y2 = document.createElement('img')
     planet01Y2.src = './img/planet01.gif'
@@ -370,7 +385,7 @@ const sprite012 = setTimeout(() => {
         
 }, 24000);
 
-const sprite013 = setTimeout(() => {
+const sprite014 = setTimeout(() => {
 
     planet01Y3 = document.createElement('img')
     planet01Y3.src = './img/planet01.gif'
@@ -379,7 +394,7 @@ const sprite013 = setTimeout(() => {
         
 }, 25000);
 
-const sprite014 = setTimeout(() => {
+const sprite015 = setTimeout(() => {
 
     planet01Y4 = document.createElement('img')
     planet01Y4.src = './img/planet01.gif'
@@ -388,7 +403,7 @@ const sprite014 = setTimeout(() => {
         
 }, 26000);
 
-const sprite015 = setTimeout(() => {
+const sprite016 = setTimeout(() => {
 
     planet01Y5 = document.createElement('img')
     planet01Y5.src = './img/planet01.gif'
@@ -397,7 +412,7 @@ const sprite015 = setTimeout(() => {
         
 }, 27000);
 
-const sprite016 = setTimeout(() => {
+const sprite017 = setTimeout(() => {
 
     planet01Y5 = document.createElement('img')
     planet01Y5.src = './img/planet01.gif'
@@ -406,7 +421,7 @@ const sprite016 = setTimeout(() => {
         
 }, 30000);
 
-const sprite017 = setTimeout(() => {
+const sprite018 = setTimeout(() => {
 
     planet01Y4 = document.createElement('img')
     planet01Y4.src = './img/planet01.gif'
@@ -415,7 +430,7 @@ const sprite017 = setTimeout(() => {
         
 }, 30500);
 
-const sprite018 = setTimeout(() => {
+const sprite019 = setTimeout(() => {
 
     planet01Y3 = document.createElement('img')
     planet01Y3.src = './img/planet01.gif'
@@ -424,7 +439,7 @@ const sprite018 = setTimeout(() => {
         
 }, 31000);
 
-const sprite019 = setTimeout(() => {
+const sprite020 = setTimeout(() => {
 
     planet01Y2 = document.createElement('img')
     planet01Y2.src = './img/planet01.gif'
@@ -433,7 +448,7 @@ const sprite019 = setTimeout(() => {
         
 }, 31500);
 
-const sprite020 = setTimeout(() => {
+const sprite021 = setTimeout(() => {
 
     planet01Y1 = document.createElement('img')
     planet01Y1.src = './img/planet01.gif'
@@ -444,7 +459,7 @@ const sprite020 = setTimeout(() => {
 
 // Padrão 3 linha
 
-const sprite021 = setTimeout(() => {
+const sprite022 = setTimeout(() => {
 
     planet05Y3 = document.createElement('img')
     planet05Y3.src = './img/planet05.gif'
@@ -453,7 +468,7 @@ const sprite021 = setTimeout(() => {
         
 }, 34000);
 
-const sprite022 = setTimeout(() => {
+const sprite023 = setTimeout(() => {
 
     planet03Y4 = document.createElement('img')
     planet03Y4.src = './img/planet03.gif'
@@ -462,7 +477,7 @@ const sprite022 = setTimeout(() => {
         
 }, 36000);
 
-const sprite023 = setTimeout(() => {
+const sprite024 = setTimeout(() => {
 
     planet03Y2 = document.createElement('img')
     planet03Y2.src = './img/planet03.gif'
@@ -471,7 +486,7 @@ const sprite023 = setTimeout(() => {
         
 }, 36000);
 
-const sprite024 = setTimeout(() => {
+const sprite025 = setTimeout(() => {
 
     planet01Y1 = document.createElement('img')
     planet01Y1.src = './img/planet01.gif'
@@ -480,7 +495,7 @@ const sprite024 = setTimeout(() => {
         
 }, 38000);
 
-const sprite025 = setTimeout(() => {
+const sprite026 = setTimeout(() => {
 
     planet01Y5 = document.createElement('img')
     planet01Y5.src = './img/planet01.gif'
@@ -491,7 +506,7 @@ const sprite025 = setTimeout(() => {
 
 // Padrão 4 sobe desce
 
-const sprite026 = setTimeout(() => {
+const sprite027 = setTimeout(() => {
 
     planet01Y5 = document.createElement('img')
     planet01Y5.src = './img/planet01.gif'
@@ -500,7 +515,7 @@ const sprite026 = setTimeout(() => {
         
 }, 41000);
 
-const sprite027 = setTimeout(() => {
+const sprite028 = setTimeout(() => {
 
     planet01Y4 = document.createElement('img')
     planet01Y4.src = './img/planet01.gif'
@@ -509,7 +524,7 @@ const sprite027 = setTimeout(() => {
         
 }, 41500);
 
-const sprite028 = setTimeout(() => {
+const sprite029 = setTimeout(() => {
 
     planet01Y3 = document.createElement('img')
     planet01Y3.src = './img/planet01.gif'
@@ -518,7 +533,7 @@ const sprite028 = setTimeout(() => {
         
 }, 42000);
 
-const sprite029 = setTimeout(() => {
+const sprite030 = setTimeout(() => {
 
     planet01Y2 = document.createElement('img')
     planet01Y2.src = './img/planet01.gif'
@@ -527,7 +542,7 @@ const sprite029 = setTimeout(() => {
         
 }, 42500);
 
-const sprite030 = setTimeout(() => {
+const sprite031 = setTimeout(() => {
 
     planet01Y1 = document.createElement('img')
     planet01Y1.src = './img/planet01.gif'
@@ -536,7 +551,7 @@ const sprite030 = setTimeout(() => {
         
 }, 43000);
 
-const sprite031 = setTimeout(() => {
+const sprite032 = setTimeout(() => {
 
     planet01Y1 = document.createElement('img')
     planet01Y1.src = './img/planet01.gif'
@@ -545,7 +560,7 @@ const sprite031 = setTimeout(() => {
         
 }, 46000);
 
-const sprite032 = setTimeout(() => {
+const sprite033 = setTimeout(() => {
 
     planet01Y2 = document.createElement('img')
     planet01Y2.src = './img/planet01.gif'
@@ -554,7 +569,7 @@ const sprite032 = setTimeout(() => {
         
 }, 46375);
 
-const sprite033 = setTimeout(() => {
+const sprite034 = setTimeout(() => {
 
     planet01Y3 = document.createElement('img')
     planet01Y3.src = './img/planet01.gif'
@@ -563,7 +578,7 @@ const sprite033 = setTimeout(() => {
         
 }, 46750);
 
-const sprite034 = setTimeout(() => {
+const sprite035 = setTimeout(() => {
 
     planet01Y4 = document.createElement('img')
     planet01Y4.src = './img/planet01.gif'
@@ -572,7 +587,7 @@ const sprite034 = setTimeout(() => {
         
 }, 47125);
 
-const sprite035 = setTimeout(() => {
+const sprite036 = setTimeout(() => {
 
     planet01Y5 = document.createElement('img')
     planet01Y5.src = './img/planet01.gif'
@@ -583,7 +598,7 @@ const sprite035 = setTimeout(() => {
 
 // Padrão 5
 
-const sprite036 = setTimeout(() => {
+const sprite037 = setTimeout(() => {
 
     planet03Y5 = document.createElement('img')
     planet03Y5.src = './img/planet03.gif'
@@ -592,7 +607,7 @@ const sprite036 = setTimeout(() => {
         
 }, 49500);
 
-const sprite037 = setTimeout(() => {
+const sprite038 = setTimeout(() => {
 
     planet03Y4 = document.createElement('img')
     planet03Y4.src = './img/planet03.gif'
@@ -601,7 +616,7 @@ const sprite037 = setTimeout(() => {
         
 }, 49500);
 
-const sprite038 = setTimeout(() => {
+const sprite039 = setTimeout(() => {
 
     planet01Y1 = document.createElement('img')
     planet01Y1.src = './img/planet01.gif'
@@ -610,7 +625,7 @@ const sprite038 = setTimeout(() => {
         
 }, 50500);
 
-const sprite039 = setTimeout(() => {
+const sprite040 = setTimeout(() => {
 
     planet03Y1 = document.createElement('img')
     planet03Y1.src = './img/planet03.gif'
@@ -619,7 +634,7 @@ const sprite039 = setTimeout(() => {
         
 }, 52000);
 
-const sprite040 = setTimeout(() => {
+const sprite041 = setTimeout(() => {
 
     planet03Y2 = document.createElement('img')
     planet03Y2.src = './img/planet03.gif'
@@ -628,7 +643,7 @@ const sprite040 = setTimeout(() => {
         
 }, 52000);
 
-const sprite041 = setTimeout(() => {
+const sprite042 = setTimeout(() => {
 
     planet01Y5 = document.createElement('img')
     planet01Y5.src = './img/planet01.gif'
@@ -639,7 +654,7 @@ const sprite041 = setTimeout(() => {
 
 // Padrão 6
 
-const sprite042 = setTimeout(() => {
+const sprite043 = setTimeout(() => {
     
     planet01Y3 = document.createElement('img')
     planet01Y3.src = './img/planet01.gif'
@@ -648,7 +663,7 @@ const sprite042 = setTimeout(() => {
     
 }, 55000);
 
-const sprite043 = setTimeout(() => {
+const sprite044 = setTimeout(() => {
 
     planet05Y3 = document.createElement('img')
     planet05Y3.src = './img/planet05.gif'
@@ -657,7 +672,7 @@ const sprite043 = setTimeout(() => {
         
 }, 55500);
 
-const sprite044 = setTimeout(() => {
+const sprite045 = setTimeout(() => {
 
     planet01Y2 = document.createElement('img')
     planet01Y2.src = './img/planet01.gif'
@@ -666,7 +681,7 @@ const sprite044 = setTimeout(() => {
         
 }, 56000);
 
-const sprite045 = setTimeout(() => {
+const sprite046 = setTimeout(() => {
 
     planet01Y4 = document.createElement('img')
     planet01Y4.src = './img/planet01.gif'
@@ -675,7 +690,7 @@ const sprite045 = setTimeout(() => {
         
 }, 57000);
 
-const sprite046 = setTimeout(() => {
+const sprite047 = setTimeout(() => {
 
     planet01Y1 = document.createElement('img')
     planet01Y1.src = './img/planet01.gif'
@@ -684,7 +699,7 @@ const sprite046 = setTimeout(() => {
         
 }, 58000);
 
-const sprite047 = setTimeout(() => {
+const sprite048 = setTimeout(() => {
 
     planet01Y5 = document.createElement('img')
     planet01Y5.src = './img/planet01.gif'
@@ -695,7 +710,7 @@ const sprite047 = setTimeout(() => {
 
 // Padrão 7 linha
 
-const sprite048 = setTimeout(() => {
+const sprite049 = setTimeout(() => {
 
     planet01Y3 = document.createElement('img')
     planet01Y3.src = './img/planet01.gif'
@@ -704,7 +719,7 @@ const sprite048 = setTimeout(() => {
         
 }, 61000);
 
-const sprite049 = setTimeout(() => {
+const sprite050 = setTimeout(() => {
 
     planet03Y4 = document.createElement('img')
     planet03Y4.src = './img/planet03.gif'
@@ -713,7 +728,7 @@ const sprite049 = setTimeout(() => {
         
 }, 61000);
 
-const sprite050 = setTimeout(() => {
+const sprite051 = setTimeout(() => {
 
     planet03Y2 = document.createElement('img')
     planet03Y2.src = './img/planet03.gif'
@@ -722,7 +737,7 @@ const sprite050 = setTimeout(() => {
         
 }, 61000);
 
-const sprite051 = setTimeout(() => {
+const sprite052 = setTimeout(() => {
 
     planet05Y1 = document.createElement('img')
     planet05Y1.src = './img/planet05.gif'
@@ -731,7 +746,7 @@ const sprite051 = setTimeout(() => {
         
 }, 61000);
 
-const sprite052 = setTimeout(() => {
+const sprite053 = setTimeout(() => {
 
     planet05Y5 = document.createElement('img')
     planet05Y5.src = './img/planet05.gif'
@@ -742,12 +757,13 @@ const sprite052 = setTimeout(() => {
 
 // Warning
 
-const sprite053 = setTimeout(() => {
+const sprite054 = setTimeout(() => {
 
     var warning = document.createElement('img')
     warning.src = './img/warning.png'
     warning.classList.add('warning')
     gameBoard.appendChild(warning)
+
 
     setTimeout(() => {
 
@@ -755,18 +771,127 @@ const sprite053 = setTimeout(() => {
         
     }, 2900);
 
+    clearTimeout(sprite000)
+    clearTimeout(sprite001)
+    clearTimeout(sprite002)
+    clearTimeout(sprite003)
+    clearTimeout(sprite004)
+    clearTimeout(sprite005)
+    clearTimeout(sprite006)
+    clearTimeout(sprite007)
+    clearTimeout(sprite008)
+    clearTimeout(sprite009)
+    clearTimeout(sprite010)
+    clearTimeout(sprite011)
+    clearTimeout(sprite012)
+    clearTimeout(sprite013)
+    clearTimeout(sprite014)
+    clearTimeout(sprite015)
+    clearTimeout(sprite016)
+    clearTimeout(sprite017)
+    clearTimeout(sprite018)
+    clearTimeout(sprite019)
+    clearTimeout(sprite020)
+    clearTimeout(sprite021)
+    clearTimeout(sprite022)
+    clearTimeout(sprite023)
+    clearTimeout(sprite024)
+    clearTimeout(sprite025)
+    clearTimeout(sprite026)
+    clearTimeout(sprite027)
+    clearTimeout(sprite028)
+    clearTimeout(sprite029)
+    clearTimeout(sprite030)
+    clearTimeout(sprite031)
+    clearTimeout(sprite032)
+    clearTimeout(sprite033)
+    clearTimeout(sprite034)
+    clearTimeout(sprite035)
+    clearTimeout(sprite036)
+    clearTimeout(sprite037)
+    clearTimeout(sprite038)
+    clearTimeout(sprite039)
+    clearTimeout(sprite040)
+    clearTimeout(sprite041)
+    clearTimeout(sprite042)
+    clearTimeout(sprite043)
+    clearTimeout(sprite044)
+    clearTimeout(sprite045)
+    clearTimeout(sprite046)
+    clearTimeout(sprite047)
+    clearTimeout(sprite048)
+    clearTimeout(sprite049)
+    clearTimeout(sprite050)
+    clearTimeout(sprite051)
+    clearTimeout(sprite052)
+    clearTimeout(sprite053)
+
+    clearInterval(colisaoP01Y1)
+    clearInterval(colisaoP01Y2)
+    clearInterval(colisaoP01Y3)
+    clearInterval(colisaoP01Y4)
+    clearInterval(colisaoP01Y5)
+
+    clearInterval(colisaoP03Y1)
+    clearInterval(colisaoP03Y2)
+    clearInterval(colisaoP03Y3)
+    clearInterval(colisaoP03Y4)
+    clearInterval(colisaoP03Y5)
+
+    clearInterval(colisaoP05Y1)
+    clearInterval(colisaoP05Y2)
+    clearInterval(colisaoP05Y3)
+    clearInterval(colisaoP05Y4)
+    clearInterval(colisaoP05Y5)
+
+    clearInterval(bombP01Y1)
+    clearInterval(bombP01Y2)
+    clearInterval(bombP01Y3)
+    clearInterval(bombP01Y4)
+    clearInterval(bombP01Y5)
+
+    clearInterval(bombP03Y1)
+    clearInterval(bombP03Y2)
+    clearInterval(bombP03Y3)
+    clearInterval(bombP03Y4)
+    clearInterval(bombP03Y5)
+
+    clearInterval(bombP05Y1)
+    clearInterval(bombP05Y2)
+    clearInterval(bombP05Y3)
+    clearInterval(bombP05Y4)
+    clearInterval(bombP05Y5)
+
+    clearInterval(heartP01Y1)
+    clearInterval(heartP01Y2)
+    clearInterval(heartP01Y3)
+    clearInterval(heartP01Y4)
+    clearInterval(heartP01Y5)
+
+    clearInterval(heartP03Y1)
+    clearInterval(heartP03Y2)
+    clearInterval(heartP03Y3)
+    clearInterval(heartP03Y4)
+    clearInterval(heartP03Y5)
+
+    clearInterval(heartP05Y1)
+    clearInterval(heartP05Y2)
+    clearInterval(heartP05Y3)
+    clearInterval(heartP05Y4)
+    clearInterval(heartP05Y5)
+
 }, 68000);
 
 // Padrão 8 e colisão shot/boss
 
-const sprite054 = setTimeout(() => {
+const sprite055 = setTimeout(() => {
 
     var moonBoss = document.createElement('img')
     moonBoss.src = './img/moon-boss.png'
     moonBoss.classList.add('moon-boss')
     gameBoard.appendChild(moonBoss)
 
-    setInterval(() => {
+    const colisaoBossY1 = setInterval(() => {
 
 
         var shot01Left = document.querySelector('.shot-position-1')
@@ -787,7 +912,7 @@ const sprite054 = setTimeout(() => {
 
     }, 10);
 
-    setInterval(() => {
+    const colisaoBossY2 = setInterval(() => {
 
         var shot02Left = document.querySelector('.shot-position-2')
         shot02Left = Number(shot02Left.offsetLeft)
@@ -807,7 +932,7 @@ const sprite054 = setTimeout(() => {
 
     }, 10);
 
-    setInterval(() => {
+    const colisaoBossY3 = setInterval(() => {
 
         var shot03Left = document.querySelector('.shot-position-3')
         shot03Left = Number(shot03Left.offsetLeft)
@@ -845,6 +970,11 @@ const sprite054 = setTimeout(() => {
                     gameBoard.removeChild(moonBoss)
                     hpMoonBoss = 40
 
+                    pointHpCat = hpCat * 1500
+                    pointQtBomb = qtBomb * 4000
+                    pointQtShotHaduken = qtShotHaduken * 100
+                    qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken
+
                     var explosionMoonBoos = document.createElement('img')
                     explosionMoonBoos.src = './img/boss-explosion.gif'
                     explosionMoonBoos.classList.add('boss-explosion')
@@ -872,12 +1002,52 @@ const sprite054 = setTimeout(() => {
                         }, 5000);
  
                     }, 2500);
+
+                    setTimeout(() => {
+
+                        var msgPointsFinal = document.createElement('div')
+                        msgPointsFinal.classList.add('points-final')
+                        msgPointsFinal.innerHTML = `<h2>Points:</h1> <br>
+                                                    <h2>HP:.....${pointHpCat}pts</h2>
+                                                    <h2>BOMB:...${pointQtBomb}pts</h2>
+                                                    <h2>SHOTS:..${pointQtShotHaduken}pts</h2> <br> <br>
+                                                    <h1>TOTAL: ${qtPointsFinal}pts`
+                        gameBoard.appendChild(msgPointsFinal)
+
+                        if (qtPointsFinal == 10000) {
+
+                            var perfectStage = document.createElement('img')
+                            perfectStage.src = './img/cat-perfect-stage.png'
+                            perfectStage.classList.add('perfect-stage')
+                            msgPointsFinal.appendChild(perfectStage)
+
+                            var perfectStageMsg = document.createElement('p')
+                            perfectStageMsg.innerHTML = `<center>YOU ARE A GAMER!!</center>`
+                            msgPointsFinal.appendChild(perfectStageMsg)
+
+                        }
+
+                        setTimeout(() => {
+
+                            gameBoard.removeChild(msgPointsFinal)
+                            
+                        }, 6000);
+ 
+                    }, 8000);
                 
                     setTimeout(() => {
-                        
-                        location.reload()
 
-                    }, 7500);
+                        stageComplete = true
+
+                    }, 15000);
+
+                    clearInterval(heartMoonBoss)
+
+                    clearInterval(colisaoBossY1)
+                    clearInterval(colisaoBossY2)
+                    clearInterval(colisaoBossY3)
+                    clearInterval(colisaoBossY4)
+                    clearInterval(colisaoBossY5)
                 
                 }
 
@@ -887,7 +1057,7 @@ const sprite054 = setTimeout(() => {
 
     }, 10);
 
-    setInterval(() => {
+    const colisaoBossY4 = setInterval(() => {
 
         var shot04Left = document.querySelector('.shot-position-4')
         shot04Left = Number(shot04Left.offsetLeft)
@@ -907,7 +1077,7 @@ const sprite054 = setTimeout(() => {
 
     }, 10);
 
-    setInterval(() => {
+    const colisaoBossY5 = setInterval(() => {
 
         var shot05Left = document.querySelector('.shot-position-5')
         shot05Left = Number(shot05Left.offsetLeft)
@@ -1991,7 +2161,7 @@ const heartMoonBoss = setInterval(() => {
 
 const gameOverVerification = setInterval(() => {
 
-    if (hpCat <= 0) {
+    if (hpCat <= 0 || stageComplete) {
 
         gameOver = true
 
@@ -2052,6 +2222,7 @@ const gameOverVerification = setInterval(() => {
             clearTimeout(sprite052)
             clearTimeout(sprite053)
             clearTimeout(sprite054)
+            clearTimeout(sprite055)
 
             clearInterval(colisaoP01Y1)
             clearInterval(colisaoP01Y2)
