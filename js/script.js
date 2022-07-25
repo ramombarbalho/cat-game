@@ -17,6 +17,7 @@ var shotPosition = 3
 var bombValue = 0
 var gameOver = false
 var retryMsg = document.querySelector('.retry-msg')
+var imgCatGameOver = document.querySelector('.cat-game-over')
 var pointHpCat = 0
 var pointQtShotHaduken = 0
 var pointQtBomb = 0
@@ -51,7 +52,7 @@ var hpPlanet05Y5 = 5
 
 var hpMoonBoss = 40
 var hpMoonBossFixed = hpMoonBoss
-var boxBarrHpBoss = document.querySelector('box-barr-hp-boss')
+var boxBarrHpBoss = document.querySelector('.box-barr-hp-boss')
 var barrHpBoss = document.querySelector('.barr-hp-boss')
 var valueBarrHpBoss = 100
 
@@ -764,6 +765,18 @@ const sprite054 = setTimeout(() => {
     warning.classList.add('warning')
     gameBoard.appendChild(warning)
 
+    setTimeout(() => {
+
+        boxBarrHpBoss.style.display = 'block'
+        barrHpBoss.style.animation = "full-boss-hp 2s 1"
+        
+        setTimeout(() => {
+        
+            barrHpBoss.style.width = "100%"
+                
+        }, 1900);
+
+    }, 1500);
 
     setTimeout(() => {
 
@@ -1007,7 +1020,7 @@ const sprite055 = setTimeout(() => {
 
                         var msgPointsFinal = document.createElement('div')
                         msgPointsFinal.classList.add('points-final')
-                        msgPointsFinal.innerHTML = `<h2>Points:</h1> <br>
+                        msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
                                                     <h2>HP:.....${pointHpCat}pts</h2>
                                                     <h2>BOMB:...${pointQtBomb}pts</h2>
                                                     <h2>SHOTS:..${pointQtShotHaduken}pts</h2> <br> <br>
@@ -1017,7 +1030,7 @@ const sprite055 = setTimeout(() => {
                         if (qtPointsFinal == 10000) {
 
                             var perfectStage = document.createElement('img')
-                            perfectStage.src = './img/cat-perfect-stage.png'
+                            perfectStage.src = './img/cat-perfect-stage.jpg'
                             perfectStage.classList.add('perfect-stage')
                             msgPointsFinal.appendChild(perfectStage)
 
@@ -2161,6 +2174,19 @@ const heartMoonBoss = setInterval(() => {
 }, 50);
 
 // Game Over verificação
+
+function catThumbsUp() {
+
+    imgCatGameOver.src = './img/cat-thumbs-up.jpg'
+    
+}
+  
+function catSad() {
+
+    imgCatGameOver.src = './img/cat-game-over.jpg'
+    
+}
+
 
 const gameOverVerification = setInterval(() => {
 
