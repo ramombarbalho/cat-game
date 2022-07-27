@@ -2,7 +2,6 @@
 
 var gameBoard = document.querySelector('.game-board')
 var gameStatus = document.querySelector('.game-status')
-var boxHearts = document.querySelector('box-hearts')
 var heartStatus = document.querySelector('.heart-status')
 var cat = document.querySelector('.cat')
 var hpCat = 3
@@ -2162,11 +2161,10 @@ const heartMoonBoss = setInterval(() => {
     
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
-        var boxHearts = document.querySelector('.box-hearts')
 
     if (moonBossLeft <= -55 && hpCat > 0) {
    
-        gameStatus.removeChild(boxHearts)
+        heartStatus.style.display = 'none'
         hpCat = 0
 
     }
