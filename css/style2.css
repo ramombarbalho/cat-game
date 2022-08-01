@@ -594,19 +594,32 @@
     z-index: 5;
 }
 
+.text-game-over {
+    color: rgb(255, 60, 0);
+    font-family: Courier, monospace;
+    font-size: 5em;
+    text-shadow: 0 0 30px rgb(255, 60, 0);
+}
+
 .cat-game-over {
     width: 200px;
     display: block;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 50px;
 }
 
 .button-retry {
+    font-family: Courier, monospace;
     background-color: rgb(255, 255, 255);
     font-weight: bolder;
-    width: 120px;
-    height: 50px;
+    font-size: 1.4em;
+    width: 140px;
+    height: 60px;
     border-radius: 20px;
-    margin-top: 25px;
+    margin: auto;
+    padding: 10px;
+    text-decoration: none;
 }
 
 .button-retry:hover {
@@ -621,10 +634,10 @@
     color: white;
     width: 500px;
     height: 500px;
-    text-align: left;
-    font-size: 1.5em;
+    text-align: center;
+    font-size: 1.4em;
     padding: 20px;
-    padding-top: 40px;
+    padding-top: 25px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -635,14 +648,40 @@
     z-index: 5;
 }
 
+.points-final > h2 {
+    text-align: left;
+}
+
 .points-final > h1 {
-    color: gold;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.button-stage-complete {
+    background-color: rgb(255, 255, 255);
+    font-weight: bolder;
+    border-radius: 20px;
+    margin: auto;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.button-stage-complete:hover {
+    background-color: rgb(64, 255, 121);
+    box-shadow: inset 1px 1px 30px rgb(255, 255, 255);
+    cursor: pointer;
 }
 
 .perfect-stage {
     width: 150px;
     display: block;
     margin: auto;
+    margin-top: 25px;
     margin-bottom: 10px;
     border-radius: 15px;
+}
+
+.perfect-stage-msg {
+    color: gold;
 }

@@ -9,8 +9,8 @@
     background-image: url("/img/map-game.jpg");
     background-size: 100% 100%;
     margin: auto;
-    width: 800px;
-    height: 600px;
+    width: 1120px;
+    height: 630px;
     border: 4px solid rgb(255, 0, 255);
 }
 
@@ -29,21 +29,21 @@
 
 .stage-1 {
     position: absolute;
-    top: 140px;
-    left: 155px;
+    top: 145px;
+    left: 235px;
     /* display: none; */
 }
 
 .stage-2 {
     position: absolute;
-    top: 150px;
-    left: 555px;
+    top: 160px;
+    left: 800px;
     /* display: none; */
 }
 
 .stage-3 {
     position: absolute;
-    top: 405px;
-    left: 390px;
+    top: 430px;
+    left: 565px;
     /* display: none; */
 }

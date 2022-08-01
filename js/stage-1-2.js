@@ -813,7 +813,7 @@ const sprite055 = setTimeout(() => {
                             
                         }, 5000);
  
-                    }, 2500);
+                    }, 2000);
 
                     setTimeout(() => {
 
@@ -822,8 +822,10 @@ const sprite055 = setTimeout(() => {
                         msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
                                                     <h2>HP:.....${pointHpCat}pts</h2>
                                                     <h2>BOMB:...${pointQtBomb}pts</h2>
-                                                    <h2>SHOTS:..${pointQtShotHaduken}pts</h2> <br> <br>
-                                                    <h1>TOTAL: ${qtPointsFinal}pts</h1>`
+                                                    <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
+                                                    <h1>TOTAL: ${qtPointsFinal}pts</h1>
+                                                    <a href="../map/map.html" class="button-stage-complete">NEXT STAGE</a>
+                                                    <a href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`
                         gameBoard.appendChild(msgPointsFinal)
 
                         if (qtPointsFinal >= 10000) {
@@ -833,33 +835,19 @@ const sprite055 = setTimeout(() => {
                             perfectStage.classList.add('perfect-stage')
                             msgPointsFinal.appendChild(perfectStage)
 
-                            var perfectStageMsg = document.createElement('p')
-                            perfectStageMsg.innerHTML = `<center>YOU ARE A GAMER!!</center>`
+                            var perfectStageMsg = document.createElement('div')
+                            perfectStageMsg.classList.add('perfect-stage-msg')
+                            perfectStageMsg.innerHTML = `<h2><b>YOU ARE AWESOME!!</b></h2>`
                             msgPointsFinal.appendChild(perfectStageMsg)
-
-                            var nextStage = document.createElement('a')
-                            nextStage.innerHTML = `Next Stage`
-                            msgPointsFinal.appendChild(nextStage)
-
-                            var tentar = document.createElement('a')
-                            tentar.innerHTML = `Retry`
-                            msgPointsFinal.appendChild(tentar)
-
                         }
-
-                        setTimeout(() => {
-
-                            gameBoard.removeChild(msgPointsFinal)
-                            
-                        }, 6000);
  
-                    }, 8000);
+                    }, 6500);
                 
                     setTimeout(() => {
 
                         stageComplete = true
 
-                    }, 15000);
+                    }, 6500);
 
                     clearInterval(heartMoonBoss)
 
@@ -1993,7 +1981,6 @@ function catSad() {
     
 }
 
-
 const gameOverVerification = setInterval(() => {
 
     if (hpCat <= 0 || stageComplete) {
@@ -2115,7 +2102,11 @@ const gameOverVerification = setInterval(() => {
 
             clearInterval(heartMoonBoss)
 
-            retryMsg.style.display = 'block'
+            if (hpCat <= 0) {
+
+                retryMsg.style.display = 'block'
+
+            }
                 
         }
 
