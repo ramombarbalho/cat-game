@@ -47,6 +47,20 @@ var boxBarrHpBoss = document.querySelector('.box-barr-hp-boss')
 var barrHpBoss = document.querySelector('.barr-hp-boss')
 var valueBarrHpBoss = 100
 
+//
+//
+//
+/* 
+var gundamBoss = document.createElement('img')
+    gundamBoss.src = '../img/gundam-boss.gif'
+    gundamBoss.classList.add('gundam-boss')
+    gameBoard.appendChild(gundamBoss)
+
+ */
+//
+//
+//
+
 // Stage 1-1
 
 const sprite000 = setTimeout(() => {
@@ -908,7 +922,7 @@ const sprite055 = setTimeout(() => {
 
     }, 10);
 
-}, 1000);
+}, 72000);
 
 // Colisões shot/planet01
 

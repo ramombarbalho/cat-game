@@ -10,6 +10,7 @@ var qtBomb = 1
 txtQtBomb.innerHTML = `x ${qtBomb}` */
 var shotPosition = 3
 var bombValue = 0
+var btnRetry = document.querySelector('.button-retry')
 
 // Funções que fazem a movimentação do personagem com o click
 
@@ -113,7 +114,7 @@ function bombing() {
 
 // Função que permite o disparo e o faz desparecer após sair do game-board
 
-onkeyup = function shotting() {
+/* onkeyup = function shotting() {
     
     if (qtShotHaduken > 0) {
         
@@ -199,4 +200,148 @@ onkeyup = function shotting() {
         
     }
     
+} */
+
+onkeydown = function KeyboardControls() {
+
+    var keyboardKey = event.keyCode
+
+    if ((shotPosition == 1 && keyboardKey == 40) || (shotPosition == 1 && keyboardKey == 83)) {
+            
+        move2()
+
+    }
+        
+    else if ((shotPosition == 2 && keyboardKey == 40) || (shotPosition == 2 && keyboardKey == 83)) {
+
+        move3()
+
+    } else if ((shotPosition == 2 && keyboardKey == 38) || (shotPosition == 2 && keyboardKey == 87)) {
+
+        move1()
+
+    }    
+    
+    else if ((shotPosition == 3 && keyboardKey == 40) || (shotPosition == 3 && keyboardKey == 83)) {
+
+        move4()
+
+    } else if ((shotPosition == 3 && keyboardKey == 38) || (shotPosition == 3 && keyboardKey == 87)) {
+
+        move2()
+
+    }
+    
+    else if ((shotPosition == 4 && keyboardKey == 40) || (shotPosition == 4 && keyboardKey == 83)) {
+
+        move5()
+
+    } else if ((shotPosition == 4 && keyboardKey == 38) || (shotPosition == 4 && keyboardKey == 87)) {
+
+        move3()
+
+    }
+    
+    else if ((shotPosition == 5 && keyboardKey == 38) || (shotPosition == 5 && keyboardKey == 87)) {
+
+        move4()
+
+    }
+
+    if (qtShotHaduken > 0) {
+        
+        if (shotPosition == 1 && keyboardKey == 75) {
+            
+            var shot1 = document.createElement('img')
+            shot1.src = '../img/shot.gif'
+            shot1.classList.add('shot-position-1')
+            gameBoard.appendChild(shot1)
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
+            
+            setTimeout(() => {
+                gameBoard.removeChild(shot1)
+            }
+            , 2000)
+            
+        }
+        
+        if (shotPosition == 2 && keyboardKey == 75) {
+
+            var shot2 = document.createElement('img')
+            shot2.src = '../img/shot.gif'
+            shot2.classList.add('shot-position-2')
+            gameBoard.appendChild(shot2)
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
+            
+            setTimeout(() => {
+                gameBoard.removeChild(shot2)
+            }
+            , 2000)
+            
+        }
+        
+        if (shotPosition == 3 && keyboardKey == 75) {
+            
+            var shot3 = document.createElement('img')
+            shot3.src = '../img/shot.gif'
+            shot3.classList.add('shot-position-3')
+            gameBoard.appendChild(shot3)
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
+            
+            setTimeout(() => {
+                gameBoard.removeChild(shot3)
+            }
+            , 2000)
+            
+        }
+        
+        if (shotPosition == 4 && keyboardKey == 75) {
+            
+            var shot4 = document.createElement('img')
+            shot4.src = '../img/shot.gif'
+            shot4.classList.add('shot-position-4')
+            gameBoard.appendChild(shot4)
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
+            
+            setTimeout(() => {
+                gameBoard.removeChild(shot4)
+            }
+            , 2000)
+            
+        }
+        
+        if (shotPosition == 5 && keyboardKey == 75) {
+            
+            var shot5 = document.createElement('img')
+            shot5.src = '../img/shot.gif'
+            shot5.classList.add('shot-position-5')
+            gameBoard.appendChild(shot5)
+            qtShotHaduken--
+            txtQtShotHaduken.innerHTML = `${qtShotHaduken}`
+            
+            setTimeout(() => {
+                gameBoard.removeChild(shot5)
+            }
+            , 2000)
+
+        }
+
+    }
+
+    if (keyboardKey == 32) {
+
+        bombing()
+
+    }
+
+    if (retryMsg.style.display == "block" && keyboardKey == 13) {
+
+        location.reload()
+
+    }
+
 }

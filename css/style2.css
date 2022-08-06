@@ -10,20 +10,21 @@
     margin: auto;
     border: 4px solid rgb(255, 0, 234);
     width: 1200px;
-    height: 600px;
+    height: 720px;
     overflow: hidden;
     z-index: 0;
 }
 
 .game-status {
-    background-image: linear-gradient(to right, yellow, red);
+    background-image: linear-gradient(to right, rgba(255, 255, 0, 0.7), rgba(255, 0, 0, 0.7));
     position: relative;
     margin: auto;
     display: flex;
     align-items: center;
-    border: 4px solid rgb(255, 0, 234);
+    border-top: 4px solid rgb(255, 0, 234);
     width: 1200px;
     height: 120px;
+    z-index: 3;
 }
 
 .cat {
@@ -466,6 +467,7 @@
 .stage-start {
     position: absolute;
     width: 500px;
+    transform: translate(-26%, -68%);
     animation: stage-start-move 2s;
 }
 
@@ -474,25 +476,21 @@
     0% {
         left: 125%;
         top: 50%;
-        transform: translate(-26%, -50%);
     }
 
     15% {
         left: 50%;
         top: 50%;
-        transform: translate(-26%, -50%);
     }
 
     85% {
         left: 50%;
         top: 50%;
-        transform: translate(-26%, -50%);
     }
 
     100% {
         left: 125%;
         top: 50%;
-        transform: translate(-26%, -50%);
     }
 
 }
@@ -502,7 +500,7 @@
     width: 800px;
     left: 50%;
     top: 50%;
-    transform: translate(-35%, -50%);
+    transform: translate(-35%, -78%);
     animation: warning-move 3s;
 }
 
@@ -574,7 +572,7 @@
     width: 900px;
     left: 50%;
     top: 50%;
-    transform: translate(-38%, -50%);
+    transform: translate(-38%, -66%);
 }
 
 .retry-msg {
@@ -586,7 +584,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-26%, -50%);
+    transform: translate(-26%, -65%);
     border: solid 1px black;
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
@@ -641,7 +639,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-26%, -50%);
+    transform: translate(-26%, -62%);
     border: solid 1px black;
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
@@ -685,3 +683,25 @@
 .perfect-stage-msg {
     color: gold;
 }
+
+/* .gundam-boss {
+    height: 320px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    animation: movegundam 5s infinite;
+}
+
+@keyframes movegundam {
+
+    0% {
+        top: 0;
+    }
+    50% {
+        top: 480px;
+    }
+    100% {
+        top: 0;
+    }
+
+} */
