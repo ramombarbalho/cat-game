@@ -11,7 +11,7 @@
     border: 4px solid rgb(255, 0, 234);
     width: 1200px;
     height: 720px;
-    overflow: hidden;
+    /* overflow: hidden; */
     z-index: 0;
 }
 
@@ -258,174 +258,6 @@
     }
     100% {
         left: 1200px;
-    }
-
-}
-
-.planet-01-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-@keyframes move-planet-01 {
-    
-    0% {
-        right: -125px;
-    }
-    100% {
-        right: 1200px;
-    }
-
-}
-
-.planet-03-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-@keyframes move-planet-03 {
-    
-    0% {
-        right: -125px;
-    }
-    100% {
-        right: 1200px;
-    }
-
-}
-
-.planet-05-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-@keyframes move-planet-05 {
-    
-    0% {
-        right: -125px;
-    }
-    100% {
-        right: 1200px;
     }
 
 }
@@ -684,12 +516,12 @@
     color: gold;
 }
 
-/* .gundam-boss {
-    height: 320px;
+.gundam-boss {
+    height: 280px;
     position: absolute;
-    top: 0;
+    top: 120px;
     right: 0;
-    animation: movegundam 5s infinite;
+    /* animation: movegundam 5s infinite; */
 }
 
 @keyframes movegundam {
@@ -704,4 +536,119 @@
         top: 0;
     }
 
-} */
+}
+
+.tac-boss {
+    height: 120px;
+    position: absolute;
+    top: 240px;
+    right: 0px;
+    display: none;
+}
+
+.cannon1 {
+    height: 120px;
+    position: absolute;
+    top: 0px;
+    right: 180px;
+}
+
+.cannon2 {
+    height: 120px;
+    position: absolute;
+    top: 120px;
+    right: 180px;
+}
+
+.cannon3 {
+    height: 120px;
+    position: absolute;
+    top: 240px;
+    right: 180px;
+}
+
+.cannon4 {
+    height: 120px;
+    position: absolute;
+    top: 360px;
+    right: 180px;
+}
+
+.cannon5 {
+    height: 120px;
+    position: absolute;
+    top: 480px;
+    right: 180px;
+}
+
+.circle-shot-01 {
+    height: 120px;
+    position: absolute;
+    top: 0px;
+    right: 300px;
+    animation: mover-circle-shot-01 3s 1 linear;
+}
+
+@keyframes mover-circle-shot-01 {
+
+    0% {
+        height: 0px;
+        top: 60px;
+        right: 360px;
+    }
+
+    100% {
+        height: 120px;
+        top: 0px;
+        right: 300px;
+    }
+
+}
+
+.circle-shot-02 {
+    height: 120px;
+    position: absolute;
+    top: 120px;
+    right: 300px;
+    animation: mover-circle-shot-02 3s 1 linear;
+}
+
+@keyframes mover-circle-shot-02 {
+
+    0% {
+        height: 0px;
+        top: 180px;
+        right: 360px;
+    }
+
+    100% {
+        height: 120px;
+        top: 120px;
+        right: 300px;
+    }
+
+}
+
+.circle-shot-05 {
+    height: 120px;
+    position: absolute;
+    top: 480px;
+    right: 300px;
+    animation: mover-circle-shot-05 3s 1 linear;
+}
+
+@keyframes mover-circle-shot-05 {
+
+    0% {
+        height: 0px;
+        top: 540px;
+        right: 360px;
+    }
+
+    100% {
+        height: 120px;
+        top: 480px;
+        right: 300px;
+    }
+
+}

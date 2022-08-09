@@ -684,12 +684,12 @@
     color: gold;
 }
 
-/* .gundam-boss {
-    height: 320px;
+.gundam-boss {
+    height: 280px;
     position: absolute;
-    top: 0;
+    top: 120px;
     right: 0;
-    animation: movegundam 5s infinite;
+    /* animation: movegundam 5s infinite; */
 }
 
 @keyframes movegundam {
@@ -704,4 +704,4 @@
         top: 0;
     }
 
-} */
+}
