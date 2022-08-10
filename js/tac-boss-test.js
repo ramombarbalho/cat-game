@@ -22,10 +22,13 @@ var pointQtBomb = 0
 var qtPointsFinal = 0
 var stageComplete = false
 var tacBoss = document.querySelector('.tac-boss')
+var shield = document.querySelector('.shield')
 /* var txtQtBomb = document.querySelector('.qt-bomb')
 txtQtBomb.innerHTML = `x ${qtBomb}` */
 
 /* chargePower = 0 */
+
+var texto = document.querySelector('.texto')
 
 // hpPlanet01
 
@@ -46,12 +49,14 @@ function move1() {
 
     cat.style.animation = "move1 0.08s 1"
     tacBoss.style.animation = "move1 0.08s 1"
+    shield.style.animation = "move1 0.08s 1"
     shotPosition = 1
 
     setTimeout(() => {
 
         cat.style.top = "0px"
         tacBoss.style.top = "0px"
+        shield.style.top = "0px"
         
     }, 65);
 
@@ -61,12 +66,14 @@ function move2() {
 
     cat.style.animation = "move2 0.08s 1"
     tacBoss.style.animation = "move2 0.08s 1"
+    shield.style.animation = "move2 0.08s 1"
     shotPosition = 2
 
     setTimeout(() => {
 
         cat.style.top = "120px"
         tacBoss.style.top = "120px"
+        shield.style.top = "120px"
         
     }, 65);
 
@@ -76,12 +83,14 @@ function move3() {
 
     cat.style.animation = "move3 0.08s 1"
     tacBoss.style.animation = "move3 0.08s 1"
+    shield.style.animation = "move3 0.08s 1"
     shotPosition = 3
 
     setTimeout(() => {
 
         cat.style.top = "240px"
         tacBoss.style.top = "240px"
+        shield.style.top = "240px"
         
     }, 65);
 
@@ -91,12 +100,14 @@ function move4() {
 
     cat.style.animation = "move4 0.08s 1"
     tacBoss.style.animation = "move4 0.08s 1"
+    shield.style.animation = "move4 0.08s 1"
     shotPosition = 4
 
     setTimeout(() => {
 
         cat.style.top = "360px"
         tacBoss.style.top = "360px"
+        shield.style.top = "360px"
         
     }, 65);
 
@@ -106,12 +117,14 @@ function move5() {
 
     cat.style.animation = "move5 0.08s 1"
     tacBoss.style.animation = "move5 0.08s 1"
+    shield.style.animation = "move5 0.08s 1"
     shotPosition = 5
 
     setTimeout(() => {
 
         cat.style.top = "480px"
         tacBoss.style.top = "480px"
+        shield.style.top = "480px"
         
     }, 65);
 
@@ -328,8 +341,6 @@ onkeydown = function keyboardControls() {
 
 // Padrão 1
 
-var tacBoss = document.querySelector('.tac-boss')
-
 const sprite001 = setTimeout(() => {
 
     var cannon1 = document.createElement('img')
@@ -354,6 +365,7 @@ const sprite001 = setTimeout(() => {
     gameBoard.appendChild(cannon5)
 
     tacBoss.style.display = 'block'
+    shield.style.display = 'block'
         
 }, 1000);
 
@@ -373,7 +385,7 @@ const sprite003 = setTimeout(() => {
     circleShot02.classList.add('circle-shot-02')
     gameBoard.appendChild(circleShot02)
         
-}, 1000);
+}, 2000);
 
 const sprite004 = setTimeout(() => {
 
@@ -381,8 +393,49 @@ const sprite004 = setTimeout(() => {
     circleShot05.src = '../img/circle-shot.gif'
     circleShot05.classList.add('circle-shot-05')
     gameBoard.appendChild(circleShot05)
-        
-}, 1000);
+    
+}, 3000);
+
+const colisaoCircleShot01 = setInterval(() => {
+    
+    circleShot01 = document.querySelector('.circle-shot-01')
+    var circleShot01Left = Number(circleShot01.offsetLeft)
+
+    if (circleShot01Left <= 295 && circleShot01Left >= 150 && shotPosition == 1) {
+
+        gameBoard.removeChild(circleShot01)
+
+    }
+
+}, 100);
+
+const colisaoCircleShot02 = setInterval(() => {
+    
+    circleShot02 = document.querySelector('.circle-shot-02')
+    var circleShot02Left = Number(circleShot02.offsetLeft)
+
+    if (circleShot02Left <= 295 && circleShot02Left >= 150 && shotPosition == 2) {
+
+        gameBoard.removeChild(circleShot02)
+
+    }
+
+}, 100);
+
+const colisaoCircleShot05 = setInterval(() => {
+    
+    circleShot05 = document.querySelector('.circle-shot-05')
+    var circleShot05Left = Number(circleShot05.offsetLeft)
+
+    texto.innerHTML = `${circleShot05Left}`
+
+    if (circleShot05Left <= 295 && circleShot05Left >= 150 && shotPosition == 5) {
+
+        gameBoard.removeChild(circleShot05)
+
+    }
+
+}, 100);
 
 // Warning
 

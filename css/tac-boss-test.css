@@ -585,8 +585,8 @@
     height: 120px;
     position: absolute;
     top: 0px;
-    right: 300px;
-    animation: mover-circle-shot-01 3s 1 linear;
+    right: -120px;
+    animation: mover-circle-shot-01 3.5s 1 linear;
 }
 
 @keyframes mover-circle-shot-01 {
@@ -597,10 +597,14 @@
         right: 360px;
     }
 
-    100% {
+    75% {
         height: 120px;
         top: 0px;
         right: 300px;
+    }
+
+    100% {
+        right: 1200px;
     }
 
 }
@@ -609,8 +613,8 @@
     height: 120px;
     position: absolute;
     top: 120px;
-    right: 300px;
-    animation: mover-circle-shot-02 3s 1 linear;
+    right: -120px;
+    animation: mover-circle-shot-02 3.5s 1 linear;
 }
 
 @keyframes mover-circle-shot-02 {
@@ -621,10 +625,14 @@
         right: 360px;
     }
 
-    100% {
+    75% {
         height: 120px;
         top: 120px;
         right: 300px;
+    }
+
+    100% {
+        right: 1200px;
     }
 
 }
@@ -633,11 +641,12 @@
     height: 120px;
     position: absolute;
     top: 480px;
-    right: 300px;
-    animation: mover-circle-shot-05 3s 1 linear;
+    right: -120px;
+    z-index: -1;
+    animation: move-circle-shot-05 3.5s 1 linear;
 }
 
-@keyframes mover-circle-shot-05 {
+@keyframes move-circle-shot-05 {
 
     0% {
         height: 0px;
@@ -645,10 +654,22 @@
         right: 360px;
     }
 
-    100% {
+    75% {
         height: 120px;
         top: 480px;
         right: 300px;
     }
 
+    100% {
+        right: 1200px;
+    }
+
+}
+
+.shield {
+    height: 120px;
+    position: absolute;
+    top: 240px;
+    left: 250px;
+    display: none;
 }

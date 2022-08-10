@@ -1120,12 +1120,11 @@ const colisaoP01Y1 = setInterval(() => {
 
     var shot01Left = document.querySelector('.shot-position-1')
     shot01Left = Number(shot01Left.offsetLeft)
-    var planet01Y1Left = document.querySelector('.planet-01-y1')
     planet01Y1Left = Number(planet01Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet01Y1Left >= 140) {
 
-        if (shot01Left >= planet01Y1Left) {
+        if (shot01Left >= planet01Y1Left - 80) {
 
             var shot01Left = document.querySelector('.shot-position-1')
             hpPlanet01Y1 = hpPlanet01Y1 - shotHadukenDMG
@@ -1172,12 +1171,11 @@ const colisaoP01Y2 = setInterval(() => {
 
     var shot02Left = document.querySelector('.shot-position-2')
     shot02Left = Number(shot02Left.offsetLeft)
-    var planet01Y2Left = document.querySelector('.planet-01-y2')
     planet01Y2Left = Number(planet01Y2.offsetLeft)
 
     if (shot02Left >= 140 && planet01Y2Left >= 140) {
 
-        if (shot02Left >= planet01Y2Left) {
+        if (shot02Left >= planet01Y2Left - 80) {
 
             var shot02Left = document.querySelector('.shot-position-2')
             hpPlanet01Y2 = hpPlanet01Y2 - shotHadukenDMG
@@ -1224,12 +1222,11 @@ const colisaoP01Y3 = setInterval(() => {
 
     var shot03Left = document.querySelector('.shot-position-3')
     shot03Left = Number(shot03Left.offsetLeft)
-    var planet01Y3Left = document.querySelector('.planet-01-y3')
     planet01Y3Left = Number(planet01Y3.offsetLeft)
 
     if (shot03Left >= 140 && planet01Y3Left >= 140) {
 
-        if (shot03Left >= planet01Y3Left) {
+        if (shot03Left >= planet01Y3Left - 80) {
 
             var shot03Left = document.querySelector('.shot-position-3')
             hpPlanet01Y3 = hpPlanet01Y3 - shotHadukenDMG
@@ -1276,12 +1273,11 @@ const colisaoP01Y4 = setInterval(() => {
 
     var shot04Left = document.querySelector('.shot-position-4')
     shot04Left = Number(shot04Left.offsetLeft)
-    var planet01Y4Left = document.querySelector('.planet-01-y4')
     planet01Y4Left = Number(planet01Y4.offsetLeft)
 
     if (shot04Left >= 140 && planet01Y4Left >= 140) {
 
-        if (shot04Left >= planet01Y4Left) {
+        if (shot04Left >= planet01Y4Left - 80) {
 
             var shot04Left = document.querySelector('.shot-position-4')
             hpPlanet01Y4 = hpPlanet01Y4 - shotHadukenDMG
@@ -1328,12 +1324,11 @@ const colisaoP01Y5 = setInterval(() => {
 
     var shot05Left = document.querySelector('.shot-position-5')
     shot05Left = Number(shot05Left.offsetLeft)
-    var planet01Y5Left = document.querySelector('.planet-01-y5')
     planet01Y5Left = Number(planet01Y5.offsetLeft)
 
     if (shot05Left >= 140 && planet01Y5Left >= 140) {
 
-        if (shot05Left >= planet01Y5Left) {
+        if (shot05Left >= planet01Y5Left - 80) {
 
             var shot05Left = document.querySelector('.shot-position-5')
             hpPlanet01Y5 = hpPlanet01Y5 - shotHadukenDMG
@@ -1382,12 +1377,11 @@ const colisaoP03Y1 = setInterval(() => {
 
     var shot01Left = document.querySelector('.shot-position-1')
     shot01Left = Number(shot01Left.offsetLeft)
-    var planet03Y1Left = document.querySelector('.planet-03-y1')
     planet03Y1Left = Number(planet03Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet03Y1Left >= 140) {
 
-        if (shot01Left >= planet03Y1Left) {
+        if (shot01Left >= planet03Y1Left - 80) {
 
             var shot01Left = document.querySelector('.shot-position-1')
             hpPlanet03Y1 = hpPlanet03Y1 - shotHadukenDMG
@@ -1434,12 +1428,11 @@ const colisaoP03Y2 = setInterval(() => {
 
     var shot02Left = document.querySelector('.shot-position-2')
     shot02Left = Number(shot02Left.offsetLeft)
-    var planet03Y2Left = document.querySelector('.planet-03-y2')
     planet03Y2Left = Number(planet03Y2.offsetLeft)
 
     if (shot02Left >= 140 && planet03Y2Left >= 140) {
 
-        if (shot02Left >= planet03Y2Left) {
+        if (shot02Left >= planet03Y2Left - 80) {
 
             var shot02Left = document.querySelector('.shot-position-2')
             hpPlanet03Y2 = hpPlanet03Y2 - shotHadukenDMG
@@ -1486,12 +1479,11 @@ const colisaoP03Y3 = setInterval(() => {
 
     var shot03Left = document.querySelector('.shot-position-3')
     shot03Left = Number(shot03Left.offsetLeft)
-    var planet03Y3Left = document.querySelector('.planet-03-y3')
     planet03Y3Left = Number(planet03Y3.offsetLeft)
 
     if (shot03Left >= 140 && planet03Y3Left >= 140) {
 
-        if (shot03Left >= planet03Y3Left) {
+        if (shot03Left >= planet03Y3Left - 80) {
 
             var shot03Left = document.querySelector('.shot-position-3')
             hpPlanet03Y3 = hpPlanet03Y3 - shotHadukenDMG
@@ -1538,12 +1530,11 @@ const colisaoP03Y4 = setInterval(() => {
 
     var shot04Left = document.querySelector('.shot-position-4')
     shot04Left = Number(shot04Left.offsetLeft)
-    var planet03Y4Left = document.querySelector('.planet-03-y4')
     planet03Y4Left = Number(planet03Y4.offsetLeft)
 
     if (shot04Left >= 140 && planet03Y4Left >= 140) {
 
-        if (shot04Left >= planet03Y4Left) {
+        if (shot04Left >= planet03Y4Left - 80) {
 
             var shot04Left = document.querySelector('.shot-position-4')
             hpPlanet03Y4 = hpPlanet03Y4 - shotHadukenDMG
@@ -1590,12 +1581,11 @@ const colisaoP03Y5 = setInterval(() => {
 
     var shot05Left = document.querySelector('.shot-position-5')
     shot05Left = Number(shot05Left.offsetLeft)
-    var planet03Y5Left = document.querySelector('.planet-03-y5')
     planet03Y5Left = Number(planet03Y5.offsetLeft)
 
     if (shot05Left >= 140 && planet03Y5Left >= 140) {
 
-        if (shot05Left >= planet03Y5Left) {
+        if (shot05Left >= planet03Y5Left - 80) {
 
             var shot05Left = document.querySelector('.shot-position-5')
             hpPlanet03Y5 = hpPlanet03Y5 - shotHadukenDMG
@@ -1644,12 +1634,11 @@ const colisaoP05Y1 = setInterval(() => {
 
     var shot01Left = document.querySelector('.shot-position-1')
     shot01Left = Number(shot01Left.offsetLeft)
-    var planet05Y1Left = document.querySelector('.planet-05-y1')
     planet05Y1Left = Number(planet05Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet05Y1Left >= 140) {
 
-        if (shot01Left >= planet05Y1Left) {
+        if (shot01Left >= planet05Y1Left - 80) {
 
             var shot01Left = document.querySelector('.shot-position-1')
             hpPlanet05Y1 = hpPlanet05Y1 - shotHadukenDMG
@@ -1696,12 +1685,11 @@ const colisaoP05Y2 = setInterval(() => {
 
     var shot02Left = document.querySelector('.shot-position-2')
     shot02Left = Number(shot02Left.offsetLeft)
-    var planet05Y2Left = document.querySelector('.planet-05-y2')
     planet05Y2Left = Number(planet05Y2.offsetLeft)
 
     if (shot02Left >= 140 && planet05Y2Left >= 140) {
 
-        if (shot02Left >= planet05Y2Left) {
+        if (shot02Left >= planet05Y2Left - 80) {
 
             var shot02Left = document.querySelector('.shot-position-2')
             hpPlanet05Y2 = hpPlanet05Y2 - shotHadukenDMG
@@ -1748,12 +1736,11 @@ const colisaoP05Y3 = setInterval(() => {
 
     var shot03Left = document.querySelector('.shot-position-3')
     shot03Left = Number(shot03Left.offsetLeft)
-    var planet05Y3Left = document.querySelector('.planet-05-y3')
     planet05Y3Left = Number(planet05Y3.offsetLeft)
 
     if (shot03Left >= 140 && planet05Y3Left >= 140) {
 
-        if (shot03Left >= planet05Y3Left) {
+        if (shot03Left >= planet05Y3Left - 80) {
 
             var shot03Left = document.querySelector('.shot-position-3')
             hpPlanet05Y3 = hpPlanet05Y3 - shotHadukenDMG
@@ -1800,12 +1787,11 @@ const colisaoP05Y4 = setInterval(() => {
 
     var shot04Left = document.querySelector('.shot-position-4')
     shot04Left = Number(shot04Left.offsetLeft)
-    var planet05Y4Left = document.querySelector('.planet-05-y4')
     planet05Y4Left = Number(planet05Y4.offsetLeft)
 
     if (shot04Left >= 140 && planet05Y4Left >= 140) {
 
-        if (shot04Left >= planet05Y4Left) {
+        if (shot04Left >= planet05Y4Left - 80) {
 
             var shot04Left = document.querySelector('.shot-position-4')
             hpPlanet05Y4 = hpPlanet05Y4 - shotHadukenDMG
@@ -1852,12 +1838,11 @@ const colisaoP05Y5 = setInterval(() => {
 
     var shot05Left = document.querySelector('.shot-position-5')
     shot05Left = Number(shot05Left.offsetLeft)
-    var planet05Y5Left = document.querySelector('.planet-05-y5')
     planet05Y5Left = Number(planet05Y5.offsetLeft)
 
     if (shot05Left >= 140 && planet05Y5Left >= 140) {
 
-        if (shot05Left >= planet05Y5Left) {
+        if (shot05Left >= planet05Y5Left - 80) {
 
             var shot05Left = document.querySelector('.shot-position-5')
             hpPlanet05Y5 = hpPlanet05Y5 - shotHadukenDMG
@@ -1904,7 +1889,7 @@ const bombP05Y5 = setInterval(() => {
 
 const heartP01Y1 = setInterval(() => {
     
-    var planet01Y1Left = document.querySelector('.planet-01-y1')
+    
     planet01Y1Left = Number(planet01Y1.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -1921,7 +1906,7 @@ const heartP01Y1 = setInterval(() => {
 
 const heartP01Y2 = setInterval(() => {
     
-    var planet01Y2Left = document.querySelector('.planet-01-y2')
+    
     planet01Y2Left = Number(planet01Y2.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -1938,7 +1923,7 @@ const heartP01Y2 = setInterval(() => {
 
 const heartP01Y3 = setInterval(() => {
     
-    var planet01Y3Left = document.querySelector('.planet-01-y3')
+    
     planet01Y3Left = Number(planet01Y3.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -1955,7 +1940,7 @@ const heartP01Y3 = setInterval(() => {
 
 const heartP01Y4 = setInterval(() => {
     
-    var planet01Y4Left = document.querySelector('.planet-01-y4')
+    
     planet01Y4Left = Number(planet01Y4.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -1972,7 +1957,7 @@ const heartP01Y4 = setInterval(() => {
 
 const heartP01Y5 = setInterval(() => {
     
-    var planet01Y5Left = document.querySelector('.planet-01-y5')
+    
     planet01Y5Left = Number(planet01Y5.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -1989,7 +1974,6 @@ const heartP01Y5 = setInterval(() => {
 
 const heartP03Y1 = setInterval(() => {
     
-    var planet03Y1Left = document.querySelector('.planet-03-y1')
     planet03Y1Left = Number(planet03Y1.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2006,7 +1990,6 @@ const heartP03Y1 = setInterval(() => {
 
 const heartP03Y2 = setInterval(() => {
     
-    var planet03Y2Left = document.querySelector('.planet-03-y2')
     planet03Y2Left = Number(planet03Y2.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2023,7 +2006,6 @@ const heartP03Y2 = setInterval(() => {
 
 const heartP03Y3 = setInterval(() => {
     
-    var planet03Y3Left = document.querySelector('.planet-03-y3')
     planet03Y3Left = Number(planet03Y3.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2040,7 +2022,6 @@ const heartP03Y3 = setInterval(() => {
 
 const heartP03Y4 = setInterval(() => {
     
-    var planet03Y4Left = document.querySelector('.planet-03-y4')
     planet03Y4Left = Number(planet03Y4.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2057,7 +2038,6 @@ const heartP03Y4 = setInterval(() => {
 
 const heartP03Y5 = setInterval(() => {
     
-    var planet03Y5Left = document.querySelector('.planet-03-y5')
     planet03Y5Left = Number(planet03Y5.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2074,7 +2054,6 @@ const heartP03Y5 = setInterval(() => {
 
 const heartP05Y1 = setInterval(() => {
     
-    var planet05Y1Left = document.querySelector('.planet-05-y1')
     planet05Y1Left = Number(planet05Y1.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2091,7 +2070,6 @@ const heartP05Y1 = setInterval(() => {
 
 const heartP05Y2 = setInterval(() => {
     
-    var planet05Y2Left = document.querySelector('.planet-05-y2')
     planet05Y2Left = Number(planet05Y2.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2108,7 +2086,6 @@ const heartP05Y2 = setInterval(() => {
 
 const heartP05Y3 = setInterval(() => {
     
-    var planet05Y3Left = document.querySelector('.planet-05-y3')
     planet05Y3Left = Number(planet05Y3.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2125,7 +2102,6 @@ const heartP05Y3 = setInterval(() => {
 
 const heartP05Y4 = setInterval(() => {
     
-    var planet05Y4Left = document.querySelector('.planet-05-y4')
     planet05Y4Left = Number(planet05Y4.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
@@ -2142,7 +2118,6 @@ const heartP05Y4 = setInterval(() => {
 
 const heartP05Y5 = setInterval(() => {
     
-    var planet05Y5Left = document.querySelector('.planet-05-y5')
     planet05Y5Left = Number(planet05Y5.offsetLeft)
     var heartCat = document.querySelector('.heart-active')
 
