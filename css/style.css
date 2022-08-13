@@ -63,11 +63,11 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
+    cursor: pointer;
 }
 
 .box-bomb:hover {
     background-image: linear-gradient(to bottom right, rgb(83, 83, 83), rgb(223, 223, 223));
-    cursor: pointer;
 }
 
 .bomb-stts {
@@ -461,6 +461,8 @@
     position: absolute;
     width: 1200px;
     height: 599px;
+    top: 0;
+    left: 0;
     z-index: -1;
 }
 
@@ -684,12 +686,12 @@
     color: gold;
 }
 
-/* .gundam-boss {
-    height: 320px;
+.gundam-boss {
+    height: 280px;
     position: absolute;
-    top: 0;
+    top: 120px;
     right: 0;
-    animation: movegundam 5s infinite;
+    /* animation: movegundam 5s infinite; */
 }
 
 @keyframes movegundam {
@@ -704,4 +706,4 @@
         top: 0;
     }
 
-} */
+}

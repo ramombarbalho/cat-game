@@ -294,6 +294,8 @@
     width: 1200px;
     height: 599px;
     z-index: -1;
+    top: 0;
+    left: 0;
 }
 
 .stage-start {
@@ -586,6 +588,7 @@
     position: absolute;
     top: 0px;
     right: -120px;
+    z-index: -1;
     animation: mover-circle-shot-01 3.5s 1 linear;
 }
 
@@ -614,6 +617,7 @@
     position: absolute;
     top: 120px;
     right: -120px;
+    z-index: -1;
     animation: mover-circle-shot-02 3.5s 1 linear;
 }
 

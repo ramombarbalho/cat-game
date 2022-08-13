@@ -139,10 +139,10 @@ function bombing() {
         var explosionBomb = document.createElement('img')
         explosionBomb.src = '../img/bomb-explosion.gif'
         explosionBomb.classList.add('bomb-explosion')
-        explosionBomb.style.top = `0`
-        explosionBomb.style.left = `0`
         gameBoard.appendChild(explosionBomb)
         qtBomb--
+        var boxBomb = document.querySelector('.box-bomb')
+        boxBomb.style.cursor = 'not-allowed'
         var noAllowed = document.querySelector('.no-allowed')
         noAllowed.style.display = 'block'
         /* txtQtBomb.innerHTML = `x ${qtBomb}` */

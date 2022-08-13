@@ -4,8 +4,8 @@ var gameBoard = document.querySelector('.game-board')
 var heartStatus = document.querySelector('.heart-status')
 var heartCat = document.querySelector('.heart-active')
 var cat = document.querySelector('.cat')
+var catPosition = 3
 var hpCat = 3
-var shotPosition = 3
 var shotHadukenDMG = 1
 var txtQtShotHaduken = document.querySelector('.qt-shot-haduken')
 var qtShotHaduken = 150
@@ -23,6 +23,8 @@ var qtPointsFinal = 0
 var stageComplete = false
 /* var txtQtBomb = document.querySelector('.qt-bomb')
 txtQtBomb.innerHTML = `x ${qtBomb}` */
+
+var texto = document.querySelector('.texto')
 
 /* chargePower = 0 */
 
@@ -78,7 +80,7 @@ var valueBarrHpBoss = 100
 function move1() {
 
     cat.style.animation = "move1 0.08s 1"
-    shotPosition = 1
+    catPosition = 1
 
     setTimeout(() => {
 
@@ -91,7 +93,7 @@ function move1() {
 function move2() {
 
     cat.style.animation = "move2 0.08s 1"
-    shotPosition = 2
+    catPosition = 2
 
     setTimeout(() => {
 
@@ -104,7 +106,7 @@ function move2() {
 function move3() {
 
     cat.style.animation = "move3 0.08s 1"
-    shotPosition = 3
+    catPosition = 3
 
     setTimeout(() => {
 
@@ -117,7 +119,7 @@ function move3() {
 function move4() {
 
     cat.style.animation = "move4 0.08s 1"
-    shotPosition = 4
+    catPosition = 4
 
     setTimeout(() => {
 
@@ -130,7 +132,7 @@ function move4() {
 function move5() {
 
     cat.style.animation = "move5 0.08s 1"
-    shotPosition = 5
+    catPosition = 5
 
     setTimeout(() => {
 
@@ -149,10 +151,10 @@ function bombing() {
         var explosionBomb = document.createElement('img')
         explosionBomb.src = '../img/bomb-explosion.gif'
         explosionBomb.classList.add('bomb-explosion')
-        explosionBomb.style.top = `0`
-        explosionBomb.style.left = `0`
         gameBoard.appendChild(explosionBomb)
         qtBomb--
+        var boxBomb = document.querySelector('.box-bomb')
+        boxBomb.style.cursor = 'not-allowed'
         var noAllowed = document.querySelector('.no-allowed')
         noAllowed.style.display = 'block'
         /* txtQtBomb.innerHTML = `x ${qtBomb}` */
@@ -179,43 +181,43 @@ onkeydown = function keyboardControls() {
 
     var keyboardKey = event.keyCode
 
-    if ((shotPosition == 1 && keyboardKey == 40) || (shotPosition == 1 && keyboardKey == 83)) {
+    if ((catPosition == 1 && keyboardKey == 40) || (catPosition == 1 && keyboardKey == 83)) {
             
         move2()
 
     }
         
-    else if ((shotPosition == 2 && keyboardKey == 40) || (shotPosition == 2 && keyboardKey == 83)) {
+    else if ((catPosition == 2 && keyboardKey == 40) || (catPosition == 2 && keyboardKey == 83)) {
 
         move3()
 
-    } else if ((shotPosition == 2 && keyboardKey == 38) || (shotPosition == 2 && keyboardKey == 87)) {
+    } else if ((catPosition == 2 && keyboardKey == 38) || (catPosition == 2 && keyboardKey == 87)) {
 
         move1()
 
     }    
     
-    else if ((shotPosition == 3 && keyboardKey == 40) || (shotPosition == 3 && keyboardKey == 83)) {
+    else if ((catPosition == 3 && keyboardKey == 40) || (catPosition == 3 && keyboardKey == 83)) {
 
         move4()
 
-    } else if ((shotPosition == 3 && keyboardKey == 38) || (shotPosition == 3 && keyboardKey == 87)) {
+    } else if ((catPosition == 3 && keyboardKey == 38) || (catPosition == 3 && keyboardKey == 87)) {
 
         move2()
 
     }
     
-    else if ((shotPosition == 4 && keyboardKey == 40) || (shotPosition == 4 && keyboardKey == 83)) {
+    else if ((catPosition == 4 && keyboardKey == 40) || (catPosition == 4 && keyboardKey == 83)) {
 
         move5()
 
-    } else if ((shotPosition == 4 && keyboardKey == 38) || (shotPosition == 4 && keyboardKey == 87)) {
+    } else if ((catPosition == 4 && keyboardKey == 38) || (catPosition == 4 && keyboardKey == 87)) {
 
         move3()
 
     }
     
-    else if ((shotPosition == 5 && keyboardKey == 38) || (shotPosition == 5 && keyboardKey == 87)) {
+    else if ((catPosition == 5 && keyboardKey == 38) || (catPosition == 5 && keyboardKey == 87)) {
 
         move4()
 
@@ -235,7 +237,7 @@ onkeydown = function keyboardControls() {
 
     if (qtShotHaduken > 0) {
         
-        if (shotPosition == 1 && keyboardKey == 75) {
+        if (catPosition == 1 && keyboardKey == 75) {
             
             var shot1 = document.createElement('img')
             shot1.src = '../img/shot.gif'
@@ -263,7 +265,7 @@ onkeydown = function keyboardControls() {
             
         }
         
-        if (shotPosition == 2 && keyboardKey == 75) {
+        if (catPosition == 2 && keyboardKey == 75) {
 
             var shot2 = document.createElement('img')
             shot2.src = '../img/shot.gif'
@@ -279,7 +281,7 @@ onkeydown = function keyboardControls() {
             
         }
         
-        if (shotPosition == 3 && keyboardKey == 75) {
+        if (catPosition == 3 && keyboardKey == 75) {
             
             var shot3 = document.createElement('img')
             shot3.src = '../img/shot.gif'
@@ -295,7 +297,7 @@ onkeydown = function keyboardControls() {
             
         }
         
-        if (shotPosition == 4 && keyboardKey == 75) {
+        if (catPosition == 4 && keyboardKey == 75) {
             
             var shot4 = document.createElement('img')
             shot4.src = '../img/shot.gif'
@@ -311,7 +313,7 @@ onkeydown = function keyboardControls() {
             
         }
         
-        if (shotPosition == 5 && keyboardKey == 75) {
+        if (catPosition == 5 && keyboardKey == 75) {
             
             var shot5 = document.createElement('img')
             shot5.src = '../img/shot.gif'
@@ -842,23 +844,11 @@ const sprite054 = setTimeout(() => {
     clearTimeout(sprite052)
     clearTimeout(sprite053)
 
-    clearInterval(colisaoP01Y1)
-    clearInterval(colisaoP01Y2)
-    clearInterval(colisaoP01Y3)
-    clearInterval(colisaoP01Y4)
-    clearInterval(colisaoP01Y5)
-
-    clearInterval(colisaoP03Y1)
-    clearInterval(colisaoP03Y2)
-    clearInterval(colisaoP03Y3)
-    clearInterval(colisaoP03Y4)
-    clearInterval(colisaoP03Y5)
-
-    clearInterval(colisaoP05Y1)
-    clearInterval(colisaoP05Y2)
-    clearInterval(colisaoP05Y3)
-    clearInterval(colisaoP05Y4)
-    clearInterval(colisaoP05Y5)
+    clearInterval(colisaoShotY1)
+    clearInterval(colisaoShotY2)
+    clearInterval(colisaoShotY3)
+    clearInterval(colisaoShotY4)
+    clearInterval(colisaoShotY5)
 
     clearInterval(bombP01Y1)
     clearInterval(bombP01Y2)
@@ -878,23 +868,7 @@ const sprite054 = setTimeout(() => {
     clearInterval(bombP05Y4)
     clearInterval(bombP05Y5)
 
-    clearInterval(heartP01Y1)
-    clearInterval(heartP01Y2)
-    clearInterval(heartP01Y3)
-    clearInterval(heartP01Y4)
-    clearInterval(heartP01Y5)
-
-    clearInterval(heartP03Y1)
-    clearInterval(heartP03Y2)
-    clearInterval(heartP03Y3)
-    clearInterval(heartP03Y4)
-    clearInterval(heartP03Y5)
-
-    clearInterval(heartP05Y1)
-    clearInterval(heartP05Y2)
-    clearInterval(heartP05Y3)
-    clearInterval(heartP05Y4)
-    clearInterval(heartP05Y5)
+    clearInterval(dmgPlanets)
 
 }, 68000);
 
@@ -1114,13 +1088,16 @@ const sprite055 = setTimeout(() => {
 
 }, 72000);
 
-// Colisões shot/planet01
+// Colisões shot/eixoY1
 
-const colisaoP01Y1 = setInterval(() => {
+const colisaoShotY1 = setInterval(() => {
 
     var shot01Left = document.querySelector('.shot-position-1')
     shot01Left = Number(shot01Left.offsetLeft)
+
     planet01Y1Left = Number(planet01Y1.offsetLeft)
+    planet03Y1Left = Number(planet03Y1.offsetLeft)
+    planet05Y1Left = Number(planet05Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet01Y1Left >= 140) {
 
@@ -1154,231 +1131,6 @@ const colisaoP01Y1 = setInterval(() => {
 
     }
 
-}, 100);
-
-const bombP01Y1 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet01Y1)
-        hpPlanet01Y1 = 1
-
-    }
-
-}, 100);
-
-const colisaoP01Y2 = setInterval(() => {
-
-    var shot02Left = document.querySelector('.shot-position-2')
-    shot02Left = Number(shot02Left.offsetLeft)
-    planet01Y2Left = Number(planet01Y2.offsetLeft)
-
-    if (shot02Left >= 140 && planet01Y2Left >= 140) {
-
-        if (shot02Left >= planet01Y2Left - 80) {
-
-            var shot02Left = document.querySelector('.shot-position-2')
-            hpPlanet01Y2 = hpPlanet01Y2 - shotHadukenDMG
-            gameBoard.removeChild(shot02Left)
-
-            if (hpPlanet01Y2 == 0) {
-
-                gameBoard.removeChild(planet01Y2)
-                hpPlanet01Y2 = 1
-
-                var explosionPlanet01Y2 = document.createElement('img')
-                explosionPlanet01Y2.src = '../img/explosion-planet-01-y2.gif'
-                explosionPlanet01Y2.classList.add('explosion-planet')
-                explosionPlanet01Y2.style.top = `120px`
-                explosionPlanet01Y2.style.left = `${planet01Y2Left}px`
-                gameBoard.appendChild(explosionPlanet01Y2)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet01Y2)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP01Y2 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet01Y2)
-        hpPlanet01Y2 = 1
-
-    }
-
-}, 100);
-
-const colisaoP01Y3 = setInterval(() => {
-
-    var shot03Left = document.querySelector('.shot-position-3')
-    shot03Left = Number(shot03Left.offsetLeft)
-    planet01Y3Left = Number(planet01Y3.offsetLeft)
-
-    if (shot03Left >= 140 && planet01Y3Left >= 140) {
-
-        if (shot03Left >= planet01Y3Left - 80) {
-
-            var shot03Left = document.querySelector('.shot-position-3')
-            hpPlanet01Y3 = hpPlanet01Y3 - shotHadukenDMG
-            gameBoard.removeChild(shot03Left)
-
-            if (hpPlanet01Y3 == 0) {
-
-                gameBoard.removeChild(planet01Y3)
-                hpPlanet01Y3 = 1
-
-                var explosionPlanet01Y3 = document.createElement('img')
-                explosionPlanet01Y3.src = '../img/explosion-planet-01-y3.gif'
-                explosionPlanet01Y3.classList.add('explosion-planet')
-                explosionPlanet01Y3.style.top = `240px`
-                explosionPlanet01Y3.style.left = `${planet01Y3Left}px`
-                gameBoard.appendChild(explosionPlanet01Y3)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet01Y3)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP01Y3 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet01Y3)
-        hpPlanet01Y3 = 1
-
-    }
-
-}, 100);
-
-const colisaoP01Y4 = setInterval(() => {
-
-    var shot04Left = document.querySelector('.shot-position-4')
-    shot04Left = Number(shot04Left.offsetLeft)
-    planet01Y4Left = Number(planet01Y4.offsetLeft)
-
-    if (shot04Left >= 140 && planet01Y4Left >= 140) {
-
-        if (shot04Left >= planet01Y4Left - 80) {
-
-            var shot04Left = document.querySelector('.shot-position-4')
-            hpPlanet01Y4 = hpPlanet01Y4 - shotHadukenDMG
-            gameBoard.removeChild(shot04Left)
-
-            if (hpPlanet01Y4 == 0) {
-
-                gameBoard.removeChild(planet01Y4)
-                hpPlanet01Y4 = 1
-
-                var explosionPlanet01Y4 = document.createElement('img')
-                explosionPlanet01Y4.src = '../img/explosion-planet-01-y4.gif'
-                explosionPlanet01Y4.classList.add('explosion-planet')
-                explosionPlanet01Y4.style.top = `360px`
-                explosionPlanet01Y4.style.left = `${planet01Y4Left}px`
-                gameBoard.appendChild(explosionPlanet01Y4)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet01Y4)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP01Y4 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet01Y4)
-        hpPlanet01Y4 = 1
-
-    }
-
-}, 100);
-
-const colisaoP01Y5 = setInterval(() => {
-
-    var shot05Left = document.querySelector('.shot-position-5')
-    shot05Left = Number(shot05Left.offsetLeft)
-    planet01Y5Left = Number(planet01Y5.offsetLeft)
-
-    if (shot05Left >= 140 && planet01Y5Left >= 140) {
-
-        if (shot05Left >= planet01Y5Left - 80) {
-
-            var shot05Left = document.querySelector('.shot-position-5')
-            hpPlanet01Y5 = hpPlanet01Y5 - shotHadukenDMG
-            gameBoard.removeChild(shot05Left)
-
-            if (hpPlanet01Y5 == 0) {
-
-                gameBoard.removeChild(planet01Y5)
-                hpPlanet01Y5 = 1
-
-                var explosionPlanet01Y5 = document.createElement('img')
-                explosionPlanet01Y5.src = '../img/explosion-planet-01-y5.gif'
-                explosionPlanet01Y5.classList.add('explosion-planet')
-                explosionPlanet01Y5.style.top = `480px`
-                explosionPlanet01Y5.style.left = `${planet01Y5Left}px`
-                gameBoard.appendChild(explosionPlanet01Y5)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet01Y5)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP01Y5 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet01Y5)
-        hpPlanet01Y5 = 1
-
-    }
-
-}, 100);
-
-// Colisões shot/planet03
-
-const colisaoP03Y1 = setInterval(() => {
-
-    var shot01Left = document.querySelector('.shot-position-1')
-    shot01Left = Number(shot01Left.offsetLeft)
-    planet03Y1Left = Number(planet03Y1.offsetLeft)
-
     if (shot01Left >= 140 && planet03Y1Left >= 140) {
 
         if (shot01Left >= planet03Y1Left - 80) {
@@ -1410,231 +1162,6 @@ const colisaoP03Y1 = setInterval(() => {
         }
 
     }
-
-}, 100);
-
-const bombP03Y1 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet03Y1)
-        hpPlanet03Y1 = 3
-
-    }
-
-}, 100);
-
-const colisaoP03Y2 = setInterval(() => {
-
-    var shot02Left = document.querySelector('.shot-position-2')
-    shot02Left = Number(shot02Left.offsetLeft)
-    planet03Y2Left = Number(planet03Y2.offsetLeft)
-
-    if (shot02Left >= 140 && planet03Y2Left >= 140) {
-
-        if (shot02Left >= planet03Y2Left - 80) {
-
-            var shot02Left = document.querySelector('.shot-position-2')
-            hpPlanet03Y2 = hpPlanet03Y2 - shotHadukenDMG
-            gameBoard.removeChild(shot02Left)
-
-            if (hpPlanet03Y2 == 0) {
-
-                gameBoard.removeChild(planet03Y2)
-                hpPlanet03Y2 = 3
-
-                var explosionPlanet03Y2 = document.createElement('img')
-                explosionPlanet03Y2.src = '../img/explosion-planet-03-y2.gif'
-                explosionPlanet03Y2.classList.add('explosion-planet')
-                explosionPlanet03Y2.style.top = `120px`
-                explosionPlanet03Y2.style.left = `${planet03Y2Left}px`
-                gameBoard.appendChild(explosionPlanet03Y2)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet03Y2)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP03Y2 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet03Y2)
-        hpPlanet03Y2 = 3
-
-    }
-
-}, 100);
-
-const colisaoP03Y3 = setInterval(() => {
-
-    var shot03Left = document.querySelector('.shot-position-3')
-    shot03Left = Number(shot03Left.offsetLeft)
-    planet03Y3Left = Number(planet03Y3.offsetLeft)
-
-    if (shot03Left >= 140 && planet03Y3Left >= 140) {
-
-        if (shot03Left >= planet03Y3Left - 80) {
-
-            var shot03Left = document.querySelector('.shot-position-3')
-            hpPlanet03Y3 = hpPlanet03Y3 - shotHadukenDMG
-            gameBoard.removeChild(shot03Left)
-
-            if (hpPlanet03Y3 == 0) {
-
-                gameBoard.removeChild(planet03Y3)
-                hpPlanet03Y3 = 3
-
-                var explosionPlanet03Y3 = document.createElement('img')
-                explosionPlanet03Y3.src = '../img/explosion-planet-03-y3.gif'
-                explosionPlanet03Y3.classList.add('explosion-planet')
-                explosionPlanet03Y3.style.top = `240px`
-                explosionPlanet03Y3.style.left = `${planet03Y3Left}px`
-                gameBoard.appendChild(explosionPlanet03Y3)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet03Y3)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP03Y3 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet03Y3)
-        hpPlanet03Y3 = 3
-
-    }
-
-}, 100);
-
-const colisaoP03Y4 = setInterval(() => {
-
-    var shot04Left = document.querySelector('.shot-position-4')
-    shot04Left = Number(shot04Left.offsetLeft)
-    planet03Y4Left = Number(planet03Y4.offsetLeft)
-
-    if (shot04Left >= 140 && planet03Y4Left >= 140) {
-
-        if (shot04Left >= planet03Y4Left - 80) {
-
-            var shot04Left = document.querySelector('.shot-position-4')
-            hpPlanet03Y4 = hpPlanet03Y4 - shotHadukenDMG
-            gameBoard.removeChild(shot04Left)
-
-            if (hpPlanet03Y4 == 0) {
-
-                gameBoard.removeChild(planet03Y4)
-                hpPlanet03Y4 = 3
-
-                var explosionPlanet03Y4 = document.createElement('img')
-                explosionPlanet03Y4.src = '../img/explosion-planet-03-y4.gif'
-                explosionPlanet03Y4.classList.add('explosion-planet')
-                explosionPlanet03Y4.style.top = `360px`
-                explosionPlanet03Y4.style.left = `${planet03Y4Left}px`
-                gameBoard.appendChild(explosionPlanet03Y4)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet03Y4)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP03Y4 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet03Y4)
-        hpPlanet03Y4 = 3
-
-    }
-
-}, 100);
-
-const colisaoP03Y5 = setInterval(() => {
-
-    var shot05Left = document.querySelector('.shot-position-5')
-    shot05Left = Number(shot05Left.offsetLeft)
-    planet03Y5Left = Number(planet03Y5.offsetLeft)
-
-    if (shot05Left >= 140 && planet03Y5Left >= 140) {
-
-        if (shot05Left >= planet03Y5Left - 80) {
-
-            var shot05Left = document.querySelector('.shot-position-5')
-            hpPlanet03Y5 = hpPlanet03Y5 - shotHadukenDMG
-            gameBoard.removeChild(shot05Left)
-
-            if (hpPlanet03Y5 == 0) {
-
-                gameBoard.removeChild(planet03Y5)
-                hpPlanet03Y5 = 3
-
-                var explosionPlanet03Y5 = document.createElement('img')
-                explosionPlanet03Y5.src = '../img/explosion-planet-03-y5.gif'
-                explosionPlanet03Y5.classList.add('explosion-planet')
-                explosionPlanet03Y5.style.top = `480px`
-                explosionPlanet03Y5.style.left = `${planet03Y5Left}px`
-                gameBoard.appendChild(explosionPlanet03Y5)
-
-                setTimeout(() => {
-
-                    gameBoard.removeChild(explosionPlanet03Y5)
-
-                }, 963);
-            
-            }
-
-        }
-
-    }
-
-}, 100);
-
-const bombP03Y5 = setInterval(() => {
-
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet03Y5)
-        hpPlanet03Y5 = 3
-
-    }
-
-}, 100);
-
-// Colisões shot/planet05
-
-const colisaoP05Y1 = setInterval(() => {
-
-    var shot01Left = document.querySelector('.shot-position-1')
-    shot01Left = Number(shot01Left.offsetLeft)
-    planet05Y1Left = Number(planet05Y1.offsetLeft)
 
     if (shot01Left >= 140 && planet05Y1Left >= 140) {
 
@@ -1670,22 +1197,80 @@ const colisaoP05Y1 = setInterval(() => {
 
 }, 100);
 
-const bombP05Y1 = setInterval(() => {
+// Colisões shot/eixoY2
 
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet05Y1)
-        hpPlanet05Y1 = 5
-
-    }
-
-}, 100);
-
-const colisaoP05Y2 = setInterval(() => {
+const colisaoShotY2 = setInterval(() => {
 
     var shot02Left = document.querySelector('.shot-position-2')
     shot02Left = Number(shot02Left.offsetLeft)
+
+    planet01Y2Left = Number(planet01Y2.offsetLeft)
+    planet03Y2Left = Number(planet03Y2.offsetLeft)
     planet05Y2Left = Number(planet05Y2.offsetLeft)
+
+    if (shot02Left >= 140 && planet01Y2Left >= 140) {
+
+        if (shot02Left >= planet01Y2Left - 80) {
+
+            var shot02Left = document.querySelector('.shot-position-2')
+            hpPlanet01Y2 = hpPlanet01Y2 - shotHadukenDMG
+            gameBoard.removeChild(shot02Left)
+
+            if (hpPlanet01Y2 == 0) {
+
+                gameBoard.removeChild(planet01Y2)
+                hpPlanet01Y2 = 1
+
+                var explosionPlanet01Y2 = document.createElement('img')
+                explosionPlanet01Y2.src = '../img/explosion-planet-01-y2.gif'
+                explosionPlanet01Y2.classList.add('explosion-planet')
+                explosionPlanet01Y2.style.top = `120px`
+                explosionPlanet01Y2.style.left = `${planet01Y2Left}px`
+                gameBoard.appendChild(explosionPlanet01Y2)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y2)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
+
+    if (shot02Left >= 140 && planet03Y2Left >= 140) {
+
+        if (shot02Left >= planet03Y2Left - 80) {
+
+            var shot02Left = document.querySelector('.shot-position-2')
+            hpPlanet03Y2 = hpPlanet03Y2 - shotHadukenDMG
+            gameBoard.removeChild(shot02Left)
+
+            if (hpPlanet03Y2 == 0) {
+
+                gameBoard.removeChild(planet03Y2)
+                hpPlanet03Y2 = 3
+
+                var explosionPlanet03Y2 = document.createElement('img')
+                explosionPlanet03Y2.src = '../img/explosion-planet-03-y2.gif'
+                explosionPlanet03Y2.classList.add('explosion-planet')
+                explosionPlanet03Y2.style.top = `120px`
+                explosionPlanet03Y2.style.left = `${planet03Y2Left}px`
+                gameBoard.appendChild(explosionPlanet03Y2)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y2)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
 
     if (shot02Left >= 140 && planet05Y2Left >= 140) {
 
@@ -1721,22 +1306,80 @@ const colisaoP05Y2 = setInterval(() => {
 
 }, 100);
 
-const bombP05Y2 = setInterval(() => {
+// Colisões shot/eixoY3
 
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet05Y2)
-        hpPlanet05Y2 = 5
-
-    }
-
-}, 100);
-
-const colisaoP05Y3 = setInterval(() => {
+const colisaoShotY3 = setInterval(() => {
 
     var shot03Left = document.querySelector('.shot-position-3')
     shot03Left = Number(shot03Left.offsetLeft)
+
+    planet01Y3Left = Number(planet01Y3.offsetLeft)
+    planet03Y3Left = Number(planet03Y3.offsetLeft)
     planet05Y3Left = Number(planet05Y3.offsetLeft)
+
+    if (shot03Left >= 140 && planet01Y3Left >= 140) {
+
+        if (shot03Left >= planet01Y3Left - 80) {
+
+            var shot03Left = document.querySelector('.shot-position-3')
+            hpPlanet01Y3 = hpPlanet01Y3 - shotHadukenDMG
+            gameBoard.removeChild(shot03Left)
+
+            if (hpPlanet01Y3 == 0) {
+
+                gameBoard.removeChild(planet01Y3)
+                hpPlanet01Y3 = 1
+
+                var explosionPlanet01Y3 = document.createElement('img')
+                explosionPlanet01Y3.src = '../img/explosion-planet-01-y3.gif'
+                explosionPlanet01Y3.classList.add('explosion-planet')
+                explosionPlanet01Y3.style.top = `240px`
+                explosionPlanet01Y3.style.left = `${planet01Y3Left}px`
+                gameBoard.appendChild(explosionPlanet01Y3)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y3)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
+
+    if (shot03Left >= 140 && planet03Y3Left >= 140) {
+
+        if (shot03Left >= planet03Y3Left - 80) {
+
+            var shot03Left = document.querySelector('.shot-position-3')
+            hpPlanet03Y3 = hpPlanet03Y3 - shotHadukenDMG
+            gameBoard.removeChild(shot03Left)
+
+            if (hpPlanet03Y3 == 0) {
+
+                gameBoard.removeChild(planet03Y3)
+                hpPlanet03Y3 = 3
+
+                var explosionPlanet03Y3 = document.createElement('img')
+                explosionPlanet03Y3.src = '../img/explosion-planet-03-y3.gif'
+                explosionPlanet03Y3.classList.add('explosion-planet')
+                explosionPlanet03Y3.style.top = `240px`
+                explosionPlanet03Y3.style.left = `${planet03Y3Left}px`
+                gameBoard.appendChild(explosionPlanet03Y3)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y3)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
 
     if (shot03Left >= 140 && planet05Y3Left >= 140) {
 
@@ -1772,22 +1415,80 @@ const colisaoP05Y3 = setInterval(() => {
 
 }, 100);
 
-const bombP05Y3 = setInterval(() => {
+// Colisões shot/eixoY4
 
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet05Y3)
-        hpPlanet05Y3 = 5
-
-    }
-
-}, 100);
-
-const colisaoP05Y4 = setInterval(() => {
+const colisaoShotY4 = setInterval(() => {
 
     var shot04Left = document.querySelector('.shot-position-4')
     shot04Left = Number(shot04Left.offsetLeft)
+
+    planet01Y4Left = Number(planet01Y4.offsetLeft)
+    planet03Y4Left = Number(planet03Y4.offsetLeft)
     planet05Y4Left = Number(planet05Y4.offsetLeft)
+
+    if (shot04Left >= 140 && planet01Y4Left >= 140) {
+
+        if (shot04Left >= planet01Y4Left - 80) {
+
+            var shot04Left = document.querySelector('.shot-position-4')
+            hpPlanet01Y4 = hpPlanet01Y4 - shotHadukenDMG
+            gameBoard.removeChild(shot04Left)
+
+            if (hpPlanet01Y4 == 0) {
+
+                gameBoard.removeChild(planet01Y4)
+                hpPlanet01Y4 = 1
+
+                var explosionPlanet01Y4 = document.createElement('img')
+                explosionPlanet01Y4.src = '../img/explosion-planet-01-y4.gif'
+                explosionPlanet01Y4.classList.add('explosion-planet')
+                explosionPlanet01Y4.style.top = `360px`
+                explosionPlanet01Y4.style.left = `${planet01Y4Left}px`
+                gameBoard.appendChild(explosionPlanet01Y4)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y4)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
+
+    if (shot04Left >= 140 && planet03Y4Left >= 140) {
+
+        if (shot04Left >= planet03Y4Left - 80) {
+
+            var shot04Left = document.querySelector('.shot-position-4')
+            hpPlanet03Y4 = hpPlanet03Y4 - shotHadukenDMG
+            gameBoard.removeChild(shot04Left)
+
+            if (hpPlanet03Y4 == 0) {
+
+                gameBoard.removeChild(planet03Y4)
+                hpPlanet03Y4 = 3
+
+                var explosionPlanet03Y4 = document.createElement('img')
+                explosionPlanet03Y4.src = '../img/explosion-planet-03-y4.gif'
+                explosionPlanet03Y4.classList.add('explosion-planet')
+                explosionPlanet03Y4.style.top = `360px`
+                explosionPlanet03Y4.style.left = `${planet03Y4Left}px`
+                gameBoard.appendChild(explosionPlanet03Y4)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y4)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
 
     if (shot04Left >= 140 && planet05Y4Left >= 140) {
 
@@ -1823,22 +1524,80 @@ const colisaoP05Y4 = setInterval(() => {
 
 }, 100);
 
-const bombP05Y4 = setInterval(() => {
+// Colisões shot/eixoY5
 
-    if (bombValue == 1) {
-        
-        gameBoard.removeChild(planet05Y4)
-        hpPlanet05Y4 = 5
-
-    }
-
-}, 100);
-
-const colisaoP05Y5 = setInterval(() => {
+const colisaoShotY5 = setInterval(() => {
 
     var shot05Left = document.querySelector('.shot-position-5')
     shot05Left = Number(shot05Left.offsetLeft)
+
+    planet01Y5Left = Number(planet01Y5.offsetLeft)
+    planet03Y5Left = Number(planet03Y5.offsetLeft)
     planet05Y5Left = Number(planet05Y5.offsetLeft)
+
+    if (shot05Left >= 140 && planet01Y5Left >= 140) {
+
+        if (shot05Left >= planet01Y5Left - 80) {
+
+            var shot05Left = document.querySelector('.shot-position-5')
+            hpPlanet01Y5 = hpPlanet01Y5 - shotHadukenDMG
+            gameBoard.removeChild(shot05Left)
+
+            if (hpPlanet01Y5 == 0) {
+
+                gameBoard.removeChild(planet01Y5)
+                hpPlanet01Y5 = 1
+
+                var explosionPlanet01Y5 = document.createElement('img')
+                explosionPlanet01Y5.src = '../img/explosion-planet-01-y5.gif'
+                explosionPlanet01Y5.classList.add('explosion-planet')
+                explosionPlanet01Y5.style.top = `480px`
+                explosionPlanet01Y5.style.left = `${planet01Y5Left}px`
+                gameBoard.appendChild(explosionPlanet01Y5)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y5)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
+
+    if (shot05Left >= 140 && planet03Y5Left >= 140) {
+
+        if (shot05Left >= planet03Y5Left - 80) {
+
+            var shot05Left = document.querySelector('.shot-position-5')
+            hpPlanet03Y5 = hpPlanet03Y5 - shotHadukenDMG
+            gameBoard.removeChild(shot05Left)
+
+            if (hpPlanet03Y5 == 0) {
+
+                gameBoard.removeChild(planet03Y5)
+                hpPlanet03Y5 = 3
+
+                var explosionPlanet03Y5 = document.createElement('img')
+                explosionPlanet03Y5.src = '../img/explosion-planet-03-y5.gif'
+                explosionPlanet03Y5.classList.add('explosion-planet')
+                explosionPlanet03Y5.style.top = `480px`
+                explosionPlanet03Y5.style.left = `${planet03Y5Left}px`
+                gameBoard.appendChild(explosionPlanet03Y5)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet03Y5)
+
+                }, 963);
+            
+            }
+
+        }
+
+    }
 
     if (shot05Left >= 140 && planet05Y5Left >= 140) {
 
@@ -1872,6 +1631,165 @@ const colisaoP05Y5 = setInterval(() => {
 
     }
 
+
+}, 100);
+
+const bombP01Y1 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet01Y1)
+        hpPlanet01Y1 = 1
+
+    }
+
+}, 100);
+
+const bombP01Y2 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet01Y2)
+        hpPlanet01Y2 = 1
+
+    }
+
+}, 100);
+
+const bombP01Y3 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet01Y3)
+        hpPlanet01Y3 = 1
+
+    }
+
+}, 100);
+
+const bombP01Y4 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet01Y4)
+        hpPlanet01Y4 = 1
+
+    }
+
+}, 100);
+
+const bombP01Y5 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet01Y5)
+        hpPlanet01Y5 = 1
+
+    }
+
+}, 100);
+
+// Colisões shot/planet03
+
+const bombP03Y1 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet03Y1)
+        hpPlanet03Y1 = 3
+
+    }
+
+}, 100);
+
+const bombP03Y2 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet03Y2)
+        hpPlanet03Y2 = 3
+
+    }
+
+}, 100);
+
+const bombP03Y3 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet03Y3)
+        hpPlanet03Y3 = 3
+
+    }
+
+}, 100);
+
+const bombP03Y4 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet03Y4)
+        hpPlanet03Y4 = 3
+
+    }
+
+}, 100);
+
+const bombP03Y5 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet03Y5)
+        hpPlanet03Y5 = 3
+
+    }
+
+}, 100);
+
+// Colisões shot/planet05
+
+const bombP05Y1 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet05Y1)
+        hpPlanet05Y1 = 5
+
+    }
+
+}, 100);
+
+const bombP05Y2 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet05Y2)
+        hpPlanet05Y2 = 5
+
+    }
+
+}, 100);
+
+const bombP05Y3 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet05Y3)
+        hpPlanet05Y3 = 5
+
+    }
+
+}, 100);
+
+const bombP05Y4 = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(planet05Y4)
+        hpPlanet05Y4 = 5
+
+    }
+
 }, 100);
 
 const bombP05Y5 = setInterval(() => {
@@ -1887,10 +1805,24 @@ const bombP05Y5 = setInterval(() => {
 
 // Sistema de Hp
 
-const heartP01Y1 = setInterval(() => {
+const dmgPlanets = setInterval(() => {
     
-    
-    planet01Y1Left = Number(planet01Y1.offsetLeft)
+    var planet01Y1Left = Number(planet01Y1.offsetLeft)
+    var planet01Y2Left = Number(planet01Y2.offsetLeft)
+    var planet01Y3Left = Number(planet01Y3.offsetLeft)
+    var planet01Y4Left = Number(planet01Y4.offsetLeft)
+    var planet01Y5Left = Number(planet01Y5.offsetLeft)
+    var planet03Y1Left = Number(planet03Y1.offsetLeft)
+    var planet03Y2Left = Number(planet03Y2.offsetLeft)
+    var planet03Y3Left = Number(planet03Y3.offsetLeft)
+    var planet03Y4Left = Number(planet03Y4.offsetLeft)
+    var planet03Y5Left = Number(planet03Y5.offsetLeft)
+    var planet05Y1Left = Number(planet05Y1.offsetLeft)
+    var planet05Y2Left = Number(planet05Y2.offsetLeft)
+    var planet05Y3Left = Number(planet05Y3.offsetLeft)
+    var planet05Y4Left = Number(planet05Y4.offsetLeft)
+    var planet05Y5Left = Number(planet05Y5.offsetLeft)
+
     var heartCat = document.querySelector('.heart-active')
 
     if (planet01Y1Left <= -55 && hpCat > 0) {
@@ -1898,84 +1830,50 @@ const heartP01Y1 = setInterval(() => {
         gameBoard.removeChild(planet01Y1)
         heartStatus.removeChild(heartCat)
         hpCat--
+        texto.innerHTML = `${hpCat}`
         hpPlanet01Y1 = 1
 
     }
-    
-}, 50);
-
-const heartP01Y2 = setInterval(() => {
-    
-    
-    planet01Y2Left = Number(planet01Y2.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet01Y2Left <= -55 && hpCat > 0) {
 
         gameBoard.removeChild(planet01Y2)
         heartStatus.removeChild(heartCat)
         hpCat--
+        texto.innerHTML = `${hpCat}`
         hpPlanet01Y2 = 1
 
     }
-    
-}, 50);
-
-const heartP01Y3 = setInterval(() => {
-    
-    
-    planet01Y3Left = Number(planet01Y3.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet01Y3Left <= -55 && hpCat > 0) {
 
         gameBoard.removeChild(planet01Y3)
         heartStatus.removeChild(heartCat)
         hpCat--
+        texto.innerHTML = `${hpCat}`
         hpPlanet01Y3 = 1
 
     }
-    
-}, 50);
-
-const heartP01Y4 = setInterval(() => {
-    
-    
-    planet01Y4Left = Number(planet01Y4.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet01Y4Left <= -55 && hpCat > 0) {
 
         gameBoard.removeChild(planet01Y4)
         heartStatus.removeChild(heartCat)
         hpCat--
+        texto.innerHTML = `${hpCat}`
         hpPlanet01Y4 = 1
 
     }
-    
-}, 50);
-
-const heartP01Y5 = setInterval(() => {
-    
-    
-    planet01Y5Left = Number(planet01Y5.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet01Y5Left <= -55 && hpCat > 0) {
 
         gameBoard.removeChild(planet01Y5)
         heartStatus.removeChild(heartCat)
         hpCat--
+        texto.innerHTML = `${hpCat}`
         hpPlanet01Y5 = 1
 
     }
-    
-}, 50);
-
-const heartP03Y1 = setInterval(() => {
-    
-    planet03Y1Left = Number(planet03Y1.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet03Y1Left <= -55 && hpCat > 0) {
 
@@ -1985,13 +1883,6 @@ const heartP03Y1 = setInterval(() => {
         hpPlanet03Y1 = 3
 
     }
-    
-}, 50);
-
-const heartP03Y2 = setInterval(() => {
-    
-    planet03Y2Left = Number(planet03Y2.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet03Y2Left <= -55 && hpCat > 0) {
 
@@ -2001,13 +1892,6 @@ const heartP03Y2 = setInterval(() => {
         hpPlanet03Y2 = 3
 
     }
-    
-}, 50);
-
-const heartP03Y3 = setInterval(() => {
-    
-    planet03Y3Left = Number(planet03Y3.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet03Y3Left <= -55 && hpCat > 0) {
 
@@ -2017,13 +1901,6 @@ const heartP03Y3 = setInterval(() => {
         hpPlanet03Y3 = 3
 
     }
-    
-}, 50);
-
-const heartP03Y4 = setInterval(() => {
-    
-    planet03Y4Left = Number(planet03Y4.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet03Y4Left <= -55 && hpCat > 0) {
 
@@ -2033,13 +1910,6 @@ const heartP03Y4 = setInterval(() => {
         hpPlanet03Y4 = 3
 
     }
-    
-}, 50);
-
-const heartP03Y5 = setInterval(() => {
-    
-    planet03Y5Left = Number(planet03Y5.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet03Y5Left <= -55 && hpCat > 0) {
 
@@ -2049,13 +1919,6 @@ const heartP03Y5 = setInterval(() => {
         hpPlanet03Y5 = 3
 
     }
-    
-}, 50);
-
-const heartP05Y1 = setInterval(() => {
-    
-    planet05Y1Left = Number(planet05Y1.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet05Y1Left <= -55 && hpCat > 0) {
 
@@ -2065,13 +1928,6 @@ const heartP05Y1 = setInterval(() => {
         hpPlanet05Y1 = 5
 
     }
-    
-}, 50);
-
-const heartP05Y2 = setInterval(() => {
-    
-    planet05Y2Left = Number(planet05Y2.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet05Y2Left <= -55 && hpCat > 0) {
 
@@ -2081,13 +1937,6 @@ const heartP05Y2 = setInterval(() => {
         hpPlanet05Y2 = 5
 
     }
-    
-}, 50);
-
-const heartP05Y3 = setInterval(() => {
-    
-    planet05Y3Left = Number(planet05Y3.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet05Y3Left <= -55 && hpCat > 0) {
 
@@ -2097,13 +1946,6 @@ const heartP05Y3 = setInterval(() => {
         hpPlanet05Y3 = 5
 
     }
-    
-}, 50);
-
-const heartP05Y4 = setInterval(() => {
-    
-    planet05Y4Left = Number(planet05Y4.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet05Y4Left <= -55 && hpCat > 0) {
 
@@ -2113,13 +1955,6 @@ const heartP05Y4 = setInterval(() => {
         hpPlanet05Y4 = 5
 
     }
-    
-}, 50);
-
-const heartP05Y5 = setInterval(() => {
-    
-    planet05Y5Left = Number(planet05Y5.offsetLeft)
-    var heartCat = document.querySelector('.heart-active')
 
     if (planet05Y5Left <= -55 && hpCat > 0) {
 
@@ -2225,23 +2060,11 @@ const gameOverVerification = setInterval(() => {
             clearTimeout(sprite054)
             clearTimeout(sprite055)
 
-            clearInterval(colisaoP01Y1)
-            clearInterval(colisaoP01Y2)
-            clearInterval(colisaoP01Y3)
-            clearInterval(colisaoP01Y4)
-            clearInterval(colisaoP01Y5)
-
-            clearInterval(colisaoP03Y1)
-            clearInterval(colisaoP03Y2)
-            clearInterval(colisaoP03Y3)
-            clearInterval(colisaoP03Y4)
-            clearInterval(colisaoP03Y5)
-
-            clearInterval(colisaoP05Y1)
-            clearInterval(colisaoP05Y2)
-            clearInterval(colisaoP05Y3)
-            clearInterval(colisaoP05Y4)
-            clearInterval(colisaoP05Y5)
+            clearInterval(colisaoShotY1)
+            clearInterval(colisaoShotY2)
+            clearInterval(colisaoShotY3)
+            clearInterval(colisaoShotY4)
+            clearInterval(colisaoShotY5)
 
             clearInterval(bombP01Y1)
             clearInterval(bombP01Y2)
@@ -2261,23 +2084,7 @@ const gameOverVerification = setInterval(() => {
             clearInterval(bombP05Y4)
             clearInterval(bombP05Y5)
 
-            clearInterval(heartP01Y1)
-            clearInterval(heartP01Y2)
-            clearInterval(heartP01Y3)
-            clearInterval(heartP01Y4)
-            clearInterval(heartP01Y5)
-
-            clearInterval(heartP03Y1)
-            clearInterval(heartP03Y2)
-            clearInterval(heartP03Y3)
-            clearInterval(heartP03Y4)
-            clearInterval(heartP03Y5)
-
-            clearInterval(heartP05Y1)
-            clearInterval(heartP05Y2)
-            clearInterval(heartP05Y3)
-            clearInterval(heartP05Y4)
-            clearInterval(heartP05Y5)
+            clearInterval(dmgPlanets)
 
             clearInterval(heartMoonBoss)
 

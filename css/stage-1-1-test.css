@@ -11,7 +11,7 @@
     border: 4px solid rgb(255, 0, 234);
     width: 1200px;
     height: 720px;
-    overflow: hidden;
+    /* overflow: hidden; */
     z-index: 0;
 }
 
@@ -63,11 +63,11 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
+    cursor: pointer;
 }
 
 .box-bomb:hover {
     background-image: linear-gradient(to bottom right, rgb(83, 83, 83), rgb(223, 223, 223));
-    cursor: pointer;
 }
 
 .bomb-stts {
@@ -107,63 +107,63 @@
 }
 
 .arrow-1 {
-    background-color: rgba(132, 0, 255, 0.7);
-    border: 2px solid black;
-    width: 240px;
+    background-image: linear-gradient(to right, rgba(132, 0, 255, 0.5), rgba(132, 0, 255, 0));
+    
+    width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
 .arrow-1:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
 }
 
 .arrow-2 {
-    background-color: rgba(0, 255, 234, 0.7);
-    border: 2px solid black;
-    width: 240px;
+    background-image: linear-gradient(to right, rgba(0, 255, 234, 0.5), rgba(0, 255, 234, 0));
+    
+    width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
 .arrow-2:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
 }
 
 .arrow-3 {
-    background-color: rgba(17, 0, 255, 0.7);
-    border: 2px solid black;
-    width: 240px;
+    background-image: linear-gradient(to right, rgba(17, 0, 255, 0.5), rgba(17, 0, 255, 0));
+    
+    width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
 .arrow-3:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
 }
 
 .arrow-4 {
-    background-color: rgba(217, 255, 0, 0.7);
-    border: 2px solid black;
-    width: 240px;
+    background-image: linear-gradient(to right, rgba(217, 255, 0, 0.5), rgba(217, 255, 0, 0));
+    
+    width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
 .arrow-4:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
 }
 
 .arrow-5 {
-    background-color: rgba(255, 0, 0, 0.7);
-    border: 2px solid black;
-    width: 240px;
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0));
+    
+    width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
 .arrow-5:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
 }
 
 @keyframes move1 {
@@ -461,6 +461,8 @@
     position: absolute;
     width: 1200px;
     height: 599px;
+    top: 0;
+    left: 0;
     z-index: -1;
 }
 
@@ -547,6 +549,7 @@
     right: 0;
     height: 100%;
     box-shadow: -1px 0 0.75em rgba(0, 0, 0, 0.3);
+    animation: full-boss-hp 2s 1;
 }
 
 @keyframes full-boss-hp {
@@ -590,6 +593,18 @@
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     display: none;
     z-index: 5;
+    animation: transition-msg 1s;
+}
+
+@keyframes transition-msg {
+
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+
 }
 
 .text-game-over {
@@ -644,6 +659,7 @@
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     z-index: 5;
+    animation: transition-msg 1s;
 }
 
 .points-final > h2 {
@@ -704,4 +720,12 @@
         top: 0;
     }
 
+}
+
+.charge1 {
+    height: 120px;
+    position: absolute;
+    top: 240;
+    left: 150px;
+    display: none;
 }
