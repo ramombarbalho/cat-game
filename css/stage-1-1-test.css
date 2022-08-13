@@ -11,7 +11,7 @@
     border: 4px solid rgb(255, 0, 234);
     width: 1200px;
     height: 720px;
-    /* overflow: hidden; */
+    overflow: hidden;
     z-index: 0;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .shot-haduken-stts {
-    width: 65px;
+    width: 40px;
     margin-bottom: 5px;
 }
 
@@ -107,64 +107,59 @@
 }
 
 .arrow-1 {
-    background-image: linear-gradient(to right, rgba(132, 0, 255, 0.5), rgba(132, 0, 255, 0));
-    
+    background-image: linear-gradient(to right, rgba(132, 0, 255, 0.2), rgba(132, 0, 255, 0));
     width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
-.arrow-1:hover {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
-}
+/* .arrow-1:hover {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+} */
 
 .arrow-2 {
-    background-image: linear-gradient(to right, rgba(0, 255, 234, 0.5), rgba(0, 255, 234, 0));
-    
+    background-image: linear-gradient(to right, rgba(0, 255, 234, 0.2), rgba(0, 255, 234, 0));
     width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
-.arrow-2:hover {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
-}
+/* .arrow-2:hover {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+} */
 
 .arrow-3 {
-    background-image: linear-gradient(to right, rgba(17, 0, 255, 0.5), rgba(17, 0, 255, 0));
-    
+    background-image: linear-gradient(to right, rgba(17, 0, 255, 0.2), rgba(17, 0, 255, 0));
     width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
-.arrow-3:hover {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
-}
+/* .arrow-3:hover {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+} */
 
 .arrow-4 {
-    background-image: linear-gradient(to right, rgba(217, 255, 0, 0.5), rgba(217, 255, 0, 0));
-    
+    background-image: linear-gradient(to right, rgba(217, 255, 0, 0.2), rgba(217, 255, 0, 0));
     width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
-.arrow-4:hover {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
-}
+/* .arrow-4:hover {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+} */
 
 .arrow-5 {
-    background-image: linear-gradient(to right, rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0));
-    
+    background-image: linear-gradient(to right, rgba(255, 0, 0, 0.2), rgba(255, 0, 0, 0));
     width: 1200px;
     height: 119px;
     z-index: 10;
 }
 
-.arrow-5:hover {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
-}
+/* .arrow-5:hover {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+} */
 
 @keyframes move1 {
     
@@ -247,6 +242,96 @@
     height: 50px;
     left: 140px;
     animation: shot-move 2s linear;
+    top: 515px;
+    z-index: 5;
+}
+
+.shot-2-position-1 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 35px;
+    z-index: 5;
+}
+
+.shot-2-position-2 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 155px;
+    z-index: 5;
+}
+
+.shot-2-position-3 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 275px;
+    z-index: 5;
+}
+
+.shot-2-position-4 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 395px;
+    z-index: 5;
+}
+
+.shot-2-position-5 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 515px;
+    z-index: 5;
+}
+
+.shot-3-position-1 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 35px;
+    z-index: 5;
+}
+
+.shot-3-position-2 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 155px;
+    z-index: 5;
+}
+
+.shot-3-position-3 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 275px;
+    z-index: 5;
+}
+
+.shot-3-position-4 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 395px;
+    z-index: 5;
+}
+
+.shot-3-position-5 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
     top: 515px;
     z-index: 5;
 }
@@ -723,9 +808,17 @@
 }
 
 .charge1 {
-    height: 120px;
+    height: 160px;
     position: absolute;
-    top: 240;
-    left: 150px;
+    top: 220px;
+    left: 130px;
+    display: none;
+}
+
+.charge2 {
+    height: 160px;
+    position: absolute;
+    top: 220px;
+    left: 130px;
     display: none;
 }
