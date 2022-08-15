@@ -15,6 +15,7 @@
     <div class="game-board">
 
         <img src="../img/cat.gif" alt="cat" class="cat">
+        <img src="../img/cat-shadow.png" alt="shadow-move" class="shadow-move">
         <img src="../img/charge1.gif" alt="charge1" class="charge1">
         <img src="../img/charge2.gif" alt="charge2" class="charge2">
         <div class="arrow-1" onmousedown="move1()"></div>
@@ -47,12 +48,12 @@
         <div class="box-bomb" onclick="bombing()">
 
             <img src="../img/bomb.webp" alt="bomb" class="bomb-stts">
-            <img src="../img/no-allowed.webp" alt="no allowed" class="no-allowed">
-            <!-- <span class="qt-bomb"></span> -->
+            <img src="../img/no-allowed.png" alt="no allowed" class="no-allowed">
+            <div class="cooldown-bomb"></div>
 
         </div>
 
-        <div class="box-shot">
+        <div class="box-shot"> <!-- style="display: none;" -->
 
             <img src="../img/shot1.png" alt="shot1" class="shot-haduken-stts">
             <span class="qt-shot-haduken"></span>
