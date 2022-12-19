@@ -5,15 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+
+    .img-hor {
+
+        transform: rotateY(180deg);
+        width: 50px;
+
+    }
+
+    </style>
+
 </head>
 <body>
 
     <div id="out"></div>
+    <img src="../img/bomb.webp" alt="a" class="img-hor">
 
     <script>
 
-        var keys = {};
         var texto = document.querySelector('#out')
+
+        var keys = {};
 
         document.addEventListener('keydown', (e) => {
 
@@ -43,6 +57,7 @@
             }
 
             texto.innerHTML = html
+            
         }
 
     </script>

@@ -11,7 +11,7 @@
     border: 3px solid rgb(255, 0, 234);
     width: 1200px;
     height: 720px;
-    /* overflow: hidden; */
+    overflow: hidden;
     z-index: 0;
 }
 
@@ -502,11 +502,17 @@
     animation: move-planet-01 3s 1 linear;
 }
 
+.colunm {
+    height: 600px;
+    position: absolute;
+    top: 0px;
+    right: -250px;
+    z-index: -1;
+    animation: move-planet-01 5s 1 linear;
+}
+
 @keyframes move-planet-01 {
     
-    0% {
-        right: -125px;
-    }
     100% {
         right: 1200px;
     }
@@ -629,39 +635,20 @@
     height: 592px;
     position: absolute;
     top: 0;
-    left: 1200px;
+    right: -575px;
     z-index: -1;
-    animation: move-boss 12s 1 linear;
+    animation: move-boss-01 12s 1 linear;
 }
 
-@keyframes move-boss {
+@keyframes move-boss-01 {
     
-    100% {
-        left: -675px;
-    }
-
-}
-
-@keyframes rotate-center {
-
     0% {
-      transform: rotate(0);
+        right: -700px;
     }
     100% {
-      transform: rotate(360deg);
+        right: 1200px;
     }
-    
-}
 
-@keyframes rotate-center2 {
-
-    0% {
-      transform: rotate(0);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-    
 }
 
 .explosion-planet {
@@ -915,28 +902,6 @@
     color: gold;
 }
 
-.gundam-boss {
-    height: 280px;
-    position: absolute;
-    top: 120px;
-    right: 0;
-    /* animation: movegundam 5s infinite; */
-}
-
-@keyframes movegundam {
-
-    0% {
-        top: 0;
-    }
-    50% {
-        top: 480px;
-    }
-    100% {
-        top: 0;
-    }
-
-}
-
 .charge1 {
     height: 160px;
     position: absolute;
@@ -953,4 +918,52 @@
     left: 130px;
     display: none;
     z-index: 1;
+}
+
+.gundam-boss {
+    height: 280px;
+    position: absolute;
+    top: 120px;
+    right: 0;
+    /* animation: movegundam 5s infinite; */
+}
+
+@keyframes move-gundam {
+    
+    0% {
+        opacity: 1;
+    }
+
+    20% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
+
+@keyframes transition-gundam {
+    
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
 }

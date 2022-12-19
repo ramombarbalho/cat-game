@@ -74,8 +74,6 @@ var hpPlanet05Y5 = 5
 // hpMoonBoss
 
 var hpMoonBoss = 40
-var dmgBoss = true
-var bossPhase = 0
 var hpMoonBossFixed = hpMoonBoss
 var boxBarrHpBoss = document.querySelector('.box-barr-hp-boss')
 var barrHpBoss = document.querySelector('.barr-hp-boss')
@@ -85,12 +83,8 @@ var valueBarrHpBoss = 100
 //
 //
 
-/*
-    var gundamBoss = document.createElement('img')
-    gundamBoss.src = '../img/gundam-boss.gif'
-    gundamBoss.classList.add('gundam-boss')
-    gameBoard.appendChild(gundamBoss)
-*/
+var gundamPosition = 2
+var hpGundamBoss = 10
 
 //
 //
@@ -879,9 +873,276 @@ var planet05Y5 = document.createElement('img')
 planet05Y5.src = '../img/planet04.gif'
 planet05Y5.classList.add('planet-05-y5')
 
+var colunm = document.createElement('img')
+colunm.src = '../img/coluna.png'
+colunm.classList.add('colunm')
+
+const colisaoColunm1 = setInterval(() => {
+
+    var shot01Left = document.querySelector('.shot-position-1')
+    shot01Left = Number(shot01Left.offsetLeft)  
+    
+    var colunmLeft = document.querySelector('.colunm')
+    colunmLeft = Number(colunmLeft.offsetLeft)
+
+    if (shot01Left >= 140 && colunmLeft >= 140) {
+
+        if (shot01Left >= colunmLeft) {
+
+            var shot01Left = document.querySelector('.shot-position-1')
+            gameBoard.removeChild(shot01Left)
+
+        }
+
+    }
+
+}, 10);
+
+const colisaoColunm2 = setInterval(() => {
+
+    var shot02Left = document.querySelector('.shot-position-2')
+    shot02Left = Number(shot02Left.offsetLeft)
+    var colunmLeft = document.querySelector('.colunm')
+    colunmLeft = Number(colunmLeft.offsetLeft)
+
+    if (shot02Left >= 140 && colunmLeft >= 140) {
+
+        if (shot02Left >= colunmLeft) {
+
+            var shot02Left = document.querySelector('.shot-position-2')
+            gameBoard.removeChild(shot02Left)
+
+        }
+
+    }
+
+}, 10);
+
+const colisaoColunm3 = setInterval(() => {
+
+    var shot03Left = document.querySelector('.shot-position-3')
+    shot03Left = Number(shot03Left.offsetLeft)
+    var colunmLeft = document.querySelector('.colunm')
+    colunmLeft = Number(colunmLeft.offsetLeft)
+
+    if (shot03Left >= 140 && colunmLeft >= 140) {
+
+        if (shot03Left >= colunmLeft) {
+
+            var shot03Left = document.querySelector('.shot-position-3')
+            gameBoard.removeChild(shot03Left)
+
+        }
+
+    }
+    
+}, 10);
+
+const colisaoColunm4 = setInterval(() => {
+
+    var shot04Left = document.querySelector('.shot-position-4')
+    shot04Left = Number(shot04Left.offsetLeft)
+    var colunmLeft = document.querySelector('.colunm')
+    colunmLeft = Number(colunmLeft.offsetLeft)
+
+    if (shot04Left >= 140 && colunmLeft >= 140) {
+
+        if (shot04Left >= colunmLeft) {
+
+            var shot04Left = document.querySelector('.shot-position-4')
+            gameBoard.removeChild(shot04Left)
+
+        }
+
+    }
+
+}, 10);
+
+const colisaoColunm5 = setInterval(() => {
+
+    var shot05Left = document.querySelector('.shot-position-5')
+    shot05Left = Number(shot05Left.offsetLeft)
+    var colunmLeft = document.querySelector('.colunm')
+    colunmLeft = Number(colunmLeft.offsetLeft)
+
+    if (shot05Left >= 140 && colunmLeft >= 140) {
+
+        if (shot05Left >= colunmLeft) {
+
+            var shot05Left = document.querySelector('.shot-position-5')
+            gameBoard.removeChild(shot05Left)
+
+        }
+
+    }
+
+}, 10);
+
+const bombColunm = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(colunm)
+
+    }
+
+}, 100);
+
 // Padrão 1
 
-const sprite001 = setTimeout(() => {
+//
+//
+//
+//
+
+setTimeout(() => {
+
+    var gundamBoss = document.createElement('img')
+    gundamBoss.src = '../img/gundam-boss.gif'
+    gundamBoss.classList.add('gundam-boss')
+    gameBoard.appendChild(gundamBoss)
+
+    planet01Y1.style.right = "50px"
+    planet01Y2.style.right = "50px"
+    planet01Y3.style.right = "50px"
+    planet01Y4.style.right = "50px"
+    planet01Y5.style.right = "50px"
+    
+    setInterval(() => {
+
+        gundamPosition = Math.floor(Math.random() * 4) + 1
+
+        if (gundamPosition == 1) {
+
+            gundamBoss.style.animation = "move-gundam 0.5s"
+
+            setTimeout(() => {
+
+                gundamBoss.style.animation = "transition-gundam 0.2s"
+                gundamBoss.style.top = "0px"
+                
+            }, 480);
+
+            setTimeout(() => {
+
+                gameBoard.appendChild(planet01Y1)
+                gameBoard.appendChild(planet01Y2)
+                gameBoard.appendChild(colunm)
+                
+            }, 2000);
+
+        }
+
+        if (gundamPosition == 2) {
+
+            gundamBoss.style.animation = "move-gundam 0.5s"
+            
+            setTimeout(() => {
+                
+                gundamBoss.style.animation = "transition-gundam 0.2s"
+                gundamBoss.style.top = "120px"
+                
+            }, 480);
+
+            setTimeout(() => {
+
+                gameBoard.appendChild(planet01Y3)
+                gameBoard.appendChild(planet01Y2)
+                
+            }, 2000);
+            
+        }
+
+        if (gundamPosition == 3) {
+
+            gundamBoss.style.animation = "move-gundam 0.5s"
+            
+            setTimeout(() => {
+
+                gundamBoss.style.animation = "transition-gundam 0.2s"
+                gundamBoss.style.top = "240px"
+                
+            }, 480);
+
+            setTimeout(() => {
+
+                gameBoard.appendChild(planet01Y3)
+                gameBoard.appendChild(planet01Y4)
+                
+            }, 2000);
+            
+        }
+
+        if (gundamPosition == 4) {
+            
+            gundamBoss.style.animation = "move-gundam 0.5s"
+            
+            setTimeout(() => {
+
+                gundamBoss.style.animation = "transition-gundam 0.2s"
+                gundamBoss.style.top = "360px"
+                
+            }, 480);
+            
+            setTimeout(() => {
+
+                gameBoard.appendChild(planet01Y5)
+                gameBoard.appendChild(planet01Y4)
+                
+            }, 2000);
+
+        }
+
+        function gundamSkill() {
+
+            gundamPosition = 2
+            gundamBoss.style.top = "180px"
+        
+        }
+
+        var shot02Left = document.querySelector('.shot-position-2')
+        shot02Left = Number(shot02Left.offsetLeft)
+    
+        if (shot02Left >= 950 && gundamPosition == 2) {
+    
+            var shot02Left = document.querySelector('.shot-position-2')
+            hpGundamBoss = hpGundamBoss - shot1DMG
+            gameBoard.removeChild(shot02Left)
+
+            if (hpGundamBoss <= 0) {
+
+                gameBoard.removeChild(gundamBoss)
+                gundamPosition = 0
+                hpGundamBoss = 10
+
+                var explosionPlanet01Y1 = document.createElement('img')
+                explosionPlanet01Y1.src = '../img/explosion-planet-01-y1.gif'
+                explosionPlanet01Y1.classList.add('explosion-planet')
+                explosionPlanet01Y1.style.top = `120px`
+                explosionPlanet01Y1.style.right = `0`
+                gameBoard.appendChild(explosionPlanet01Y1)
+
+                setTimeout(() => {
+
+                    gameBoard.removeChild(explosionPlanet01Y1)
+
+                }, 963);
+
+            }
+    
+        }
+    
+    }, 2000);
+    
+    
+}, 2000);
+
+//
+//
+//
+//
+
+/* const sprite001 = setTimeout(() => {
 
     gameBoard.appendChild(planet01Y1)
         
@@ -1039,7 +1300,7 @@ const sprite026 = setTimeout(() => {
 
     gameBoard.appendChild(planet01Y5)
         
-}, 38000);
+}, 38000); */
 
 // Padrão 4 sobe desce
 
@@ -1350,7 +1611,7 @@ const sprite055 = setTimeout(() => {
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
-        if (shot01Left >= 140 && moonBossLeft >= 100 && dmgBoss == true) {
+        if (shot01Left >= 140 && moonBossLeft >= 100) {
 
             if (shot01Left >= (moonBossLeft + 100)) {
 
@@ -1370,7 +1631,7 @@ const sprite055 = setTimeout(() => {
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
-        if (shot02Left >= 140 && moonBossLeft >= 140 && dmgBoss == true) {
+        if (shot02Left >= 140 && moonBossLeft >= 140) {
 
             if (shot02Left >= moonBossLeft) {
 
@@ -1390,104 +1651,29 @@ const sprite055 = setTimeout(() => {
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
-        if (shot03Left >= 140 && moonBossLeft >= 140 && dmgBoss == true) {
+        if (shot03Left >= 140 && moonBossLeft >= 140) {
 
-            if (shot03Left >= moonBossLeft /*  && shot03Left <= (moonBossLeft + 300) */ ) {
+            if (shot03Left >= moonBossLeft) {
 
                 var shot03Left = document.querySelector('.shot-position-3')
                 hpMoonBoss = hpMoonBoss - shot1DMG
                 gameBoard.removeChild(shot03Left)
 
-                if (hpMoonBoss <= 30 && bossPhase == 0) {
+                if (hpMoonBoss <= 30) {
 
-                    dmgBoss = false
-                    bossPhase = 1
                     moonBoss.src = '../img/moon-boss-30.png'
-                    moonBoss.style.left = `${moonBossLeft}px`
-                    moonBoss.style.animation = "rotate-center 0.5s linear 10"
 
-                    gameBoard.appendChild(planet01Y1)
-                    
-                    setTimeout(() => {
-
-                        gameBoard.appendChild(planet01Y2)
-                        
-                    }, 1000);
-
-                    setTimeout(() => {
-
-                        gameBoard.appendChild(planet01Y3)
-                        
-                    }, 2000);
-
-                    setTimeout(() => {
-
-                        dmgBoss = true
-                        moonBoss.style.animation = "move-boss 10s 1 linear"
-                        
-                    }, 5500);
-                    
                 }
 
-                if (hpMoonBoss <= 20 && bossPhase == 1) {
+                if (hpMoonBoss <= 20) {
 
-                    dmgBoss = false
-                    bossPhase = 2
                     moonBoss.src = '../img/moon-boss-20.png'
-                    moonBoss.style.left = `${moonBossLeft}px`
-                    moonBoss.style.animation = "rotate-center 0.5s linear 10"
-
-                    gameBoard.appendChild(planet01Y3)
-
-                    setTimeout(() => {
-
-                        gameBoard.appendChild(planet01Y4)
-                        
-                    }, 1000);
-
-                    setTimeout(() => {
-
-                        gameBoard.appendChild(planet01Y5)
-                        
-                    }, 2000);
-
-                    setTimeout(() => {
-
-                        dmgBoss = true
-                        moonBoss.style.animation = "move-boss 8s 1 linear"
-                        
-                    }, 5500);
                 
                 }
 
-                if (hpMoonBoss <= 10 && bossPhase == 2) {
+                if (hpMoonBoss <= 10) {
 
-                    dmgBoss = false
-                    bossPhase = 3
                     moonBoss.src = '../img/moon-boss-10.png'
-                    moonBoss.style.left = `${moonBossLeft}px`
-                    moonBoss.style.animation = "rotate-center 0.5s linear 10"
-
-                    gameBoard.appendChild(planet01Y1)
-
-                    setTimeout(() => {
-
-                        gameBoard.appendChild(planet01Y3)
-                        
-                    }, 1000);
-
-                    setTimeout(() => {
-
-                        gameBoard.appendChild(planet01Y5)
-                        
-                    }, 2000);
-
-                    setTimeout(() => {
-
-                        dmgBoss = true
-                        moonBoss.style.animation = "move-boss 6s 1 linear"
-                        
-                    }, 5500);
                 
                 }
 
@@ -1594,7 +1780,7 @@ const sprite055 = setTimeout(() => {
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
-        if (shot04Left >= 140 && moonBossLeft >= 140 && dmgBoss == true) {
+        if (shot04Left >= 140 && moonBossLeft >= 140) {
 
             if (shot04Left >= moonBossLeft) {
 
@@ -1614,7 +1800,7 @@ const sprite055 = setTimeout(() => {
         var moonBossLeft = document.querySelector('.moon-boss')
         moonBossLeft = Number(moonBossLeft.offsetLeft)
 
-        if (shot05Left >= 140 && moonBossLeft >= 100 && dmgBoss == true) {
+        if (shot05Left >= 140 && moonBossLeft >= 100) {
 
             if (shot05Left >= (moonBossLeft + 100)) {
 
@@ -4020,6 +4206,6 @@ function retry() {
 
 setInterval(() => {
 
-    texto.innerHTML += (`${hpCat} `)
+    texto.innerHTML += (`${gundamPosition}`)
     
-}, 3000);
+}, 1500);
