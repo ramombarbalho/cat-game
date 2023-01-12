@@ -191,7 +191,7 @@
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
 } */
 
-@keyframes move1 {
+@keyframes move0 {
 
     100% {
         top: 0px;
@@ -199,7 +199,7 @@
 
 }
 
-@keyframes move2 {
+@keyframes move1 {
     
     100% {
         top: 120px;
@@ -207,7 +207,7 @@
 
 }
 
-@keyframes move3 {
+@keyframes move2 {
     
     100% {
         top: 240px;
@@ -215,7 +215,7 @@
 
 }
 
-@keyframes move4 {
+@keyframes move3 {
     
     100% {
         top: 360px;
@@ -223,7 +223,7 @@
 
 }
 
-@keyframes move5 {
+@keyframes move4 {
     
     100% {
         top: 480px;
@@ -231,7 +231,7 @@
 
 }
 
-@keyframes move1-charge {
+@keyframes move0-charge {
     
     100% {
         top: -20px;
@@ -239,7 +239,7 @@
 
 }
 
-@keyframes move2-charge {
+@keyframes move1-charge {
     
     100% {
         top: 100px;
@@ -247,7 +247,7 @@
 
 }
 
-@keyframes move3-charge {
+@keyframes move2-charge {
     
     100% {
         top: 220px;
@@ -255,7 +255,7 @@
 
 }
 
-@keyframes move4-charge {
+@keyframes move3-charge {
     
     100% {
         top: 340px;
@@ -263,7 +263,7 @@
 
 }
 
-@keyframes move5-charge {
+@keyframes move4-charge {
     
     100% {
         top: 460px;
@@ -311,139 +311,27 @@
 
 }
 
-.shot-position-1 {
+.shots {
     position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 35px;
     z-index: 5;
 }
 
-.shot-position-2 {
-    position: absolute;
+.shot-0 {
     height: 50px;
     left: 140px;
-    animation: shot-move 2s linear;
-    top: 155px;
-    z-index: 5;
+    animation: shot-move 3.9s linear;
 }
 
-.shot-position-3 {
-    position: absolute;
-    height: 50px;
+.shot-1 {
     left: 140px;
-    animation: shot-move 2s linear;
-    top: 275px;
-    z-index: 5;
+    height: 75px;
+    animation: shot-move 3.2s linear;
 }
 
-.shot-position-4 {
-    position: absolute;
-    height: 50px;
+.shot-2 {
     left: 140px;
-    animation: shot-move 2s linear;
-    top: 395px;
-    z-index: 5;
-}
-
-.shot-position-5 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 515px;
-    z-index: 5;
-}
-
-.shot-2-position-1 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 35px;
-    z-index: 5;
-}
-
-.shot-2-position-2 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 155px;
-    z-index: 5;
-}
-
-.shot-2-position-3 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 275px;
-    z-index: 5;
-}
-
-.shot-2-position-4 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 395px;
-    z-index: 5;
-}
-
-.shot-2-position-5 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 515px;
-    z-index: 5;
-}
-
-.shot-3-position-1 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 35px;
-    z-index: 5;
-}
-
-.shot-3-position-2 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 155px;
-    z-index: 5;
-}
-
-.shot-3-position-3 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 275px;
-    z-index: 5;
-}
-
-.shot-3-position-4 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 395px;
-    z-index: 5;
-}
-
-.shot-3-position-5 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 515px;
-    z-index: 5;
+    height: 100px;
+    animation: shot-move 2.5s linear;
 }
 
 @keyframes shot-move {
@@ -452,175 +340,38 @@
         left: 180px;
     }
     100% {
+        left: 2100px;
+    }
+
+}
+
+.planets {
+    position: absolute;
+    z-index: -1;
+}
+
+.planet-0 {
+    height: 120px;
+    right: -125px;
+}
+
+.planet-1 {
+    height: 120px;
+    right: -125px;
+}
+
+.planet-2 {
+    height: 120px;
+    right: -125px;
+}
+
+@keyframes move-planet {
+    
+    0% {
         left: 1200px;
     }
-
-}
-
-.planet-01-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.planet-01-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-@keyframes move-planet-01 {
-    
-    0% {
-        right: -125px;
-    }
     100% {
-        right: 1200px;
-    }
-
-}
-
-.planet-03-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-@keyframes move-planet-03 {
-    
-    0% {
-        right: -125px;
-    }
-    100% {
-        right: 1200px;
-    }
-
-}
-
-.planet-05-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-@keyframes move-planet-05 {
-    
-    0% {
-        right: -125px;
-    }
-    100% {
-        right: 1200px;
+        left: -250px;
     }
 
 }

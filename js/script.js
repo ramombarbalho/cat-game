@@ -870,35 +870,52 @@ const sprite054 = setTimeout(() => {
 
     clearInterval(dmgPlanets)
 
-}, 68000);
+}, 1000);
 
 // Padrão 8 e colisão shot/boss
 
+///////////////////////////////////////////////////////////////////////////////
+
+var moonBossLeft01 = 1000
+var colisionShot01 = 0
+
+var moonBoss = document.createElement('img')
+moonBoss.src = '../img/moon-boss.png'
+moonBoss.classList.add('moon-boss')
+
+
+var shot01Left = document.querySelector('.shot-position-1')
+
+var texttext = document.querySelector('.asdfasdf')
+
+setInterval(() => {
+    
+    texttext.textContent = `shot: ${typeof Number(shot01Left.offsetLeft)} boss: ${typeof Number(moonBoss.offsetLeft)}`
+
+
+}, 1000);
+
+///////////////////////////////////////////////////////////////////////////////
+
 const sprite055 = setTimeout(() => {
 
-    var moonBoss = document.createElement('img')
-    moonBoss.src = '../img/moon-boss.png'
-    moonBoss.classList.add('moon-boss')
     gameBoard.appendChild(moonBoss)
 
     const colisaoBossY1 = setInterval(() => {
+        
+        colisionShot01 = Number(shot01Left.offsetLeft)
+        moonBossLeft01 = Number(moonBoss.offsetLeft)
 
+        if (colisionShot01 >= 140 && moonBossLeft01 >= 100) {
 
-        var shot01Left = document.querySelector('.shot-position-1')
-        shot01Left = Number(shot01Left.offsetLeft)
-        var moonBossLeft = document.querySelector('.moon-boss')
-        moonBossLeft = Number(moonBossLeft.offsetLeft)
+            if (colisionShot01 >= (moonBossLeft01 + 100)) {
 
-        if (shot01Left >= 140 && moonBossLeft >= 100) {
-
-            if (shot01Left >= (moonBossLeft + 100)) {
-
-                var shot01Left = document.querySelector('.shot-position-1')
                 gameBoard.removeChild(shot01Left)
 
             }
 
         }
+
 
     }, 10);
 
@@ -1086,7 +1103,7 @@ const sprite055 = setTimeout(() => {
 
     }, 10);
 
-}, 72000);
+}, 5000);
 
 // Colisões shot/eixoY1
 
