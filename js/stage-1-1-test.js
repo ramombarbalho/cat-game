@@ -33,12 +33,14 @@ let stageComplete = false;
 // hpMoonBoss
 
 let hpMoonBoss = 40;
-let dmgBoss = true;
-let bossPhase = 0;
+let dmgBoss = false;
+let bossRage = 0;
 let hpMoonBossFixed = hpMoonBoss;
 let boxBarrHpBoss = document.querySelector('.box-barr-hp-boss');
 let barrHpBoss = document.querySelector('.barr-hp-boss');
 let valueBarrHpBoss = 100;
+let hpRotateTop = 5;
+let hpRotateBottom = 5;
 
 
 // Funções que fazem a movimentação do personagem com o mouse
@@ -419,11 +421,14 @@ const openStage = setTimeout(() => {
 
 // Declarações dos sprites
 
+let crashedPlanets = 0;
+let generatePlanets;
+
 const enemyPlanet = setTimeout(() => {
     
-    let intervalPlanets = 2000 // Math.trunc(Math.random() * (3000 - 1000 + 1) ) + 1000;
+    let intervalPlanets = 2000 // Math.trunc(Math.random() * (3000 - 1000 + 1)) + 1000;
     
-    setInterval(() => {
+    generatePlanets = setInterval(() => {
 
         if (!gameOver && !stageComplete) {
         
@@ -437,7 +442,7 @@ const enemyPlanet = setTimeout(() => {
             planetEnemy.style.animation = `move-planet ${(planetType * 2) + 3}s 1 linear`;
             planetEnemy.setAttribute('data-hp', `${(planetType * 2) + 1}`);
             gameBoard.appendChild(planetEnemy);
-            // intervalPlanets = Math.trunc(Math.random() * (3000 - 1000 + 1) ) + 1000;
+            // intervalPlanets = Math.trunc(Math.random() * (3000 - 1000 + 1)) + 1000;
 
         }
             
@@ -555,27 +560,61 @@ function colisionShots() {
 
         if (shots[i] && moonBoss) {
 
-            if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft) && (shots[i].offsetTop <= (moonBoss.offsetTop + 592) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop)) && dmgBoss) {
+            if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft) && (shots[i].offsetTop <= (moonBoss.offsetTop + 472) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 120)) && !dmgBoss) {
 
-                
+                gameBoard.removeChild(shots[i]);
+
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && ((shots[i].offsetTop + 14) < moonBoss.offsetTop + 120) && !dmgBoss) {
+
+                if (hpRotateTop > 1) {
+
+                    hpRotateTop--;
+                    gameBoard.removeChild(shots[i]);
+
+                } else {
+
+                    gameBoard.removeChild(shots[i]);
+                    moonBossSkill(0, bossRage);
+
+                }
+
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && (shots[i].offsetTop > (moonBoss.offsetTop + 472)) && !dmgBoss) {
+
+                if (hpRotateBottom > 1) {
+
+                    hpRotateBottom--;
+                    gameBoard.removeChild(shots[i]);
+
+                } else {
+
+                    gameBoard.removeChild(shots[i]);
+                    moonBossSkill(1, bossRage);
+
+                }
+
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 230) && (shots[i].offsetTop <= (moonBoss.offsetTop + 352) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 240)) && dmgBoss) {
+
                 if (shots[i].classList.contains('shot-0')) {
-                    
-                    bossColision(i, 1);
+
+                    gameBoard.removeChild(shots[i]);
+                    bossColision(1);
 
                 }
 
                 if (shots[i].classList.contains('shot-1')) {
 
-                    bossColision(i, 3);
+                    gameBoard.removeChild(shots[i]);
+                    bossColision(3);
 
                 }
 
                 if (shots[i].classList.contains('shot-2')) {
 
-                    bossColision(i, 5);
+                    gameBoard.removeChild(shots[i]);
+                    bossColision(5);
 
                 }
-    
+
             }
 
         }
@@ -604,6 +643,29 @@ function planetColision(a, b, x) {
         
         gameBoard.removeChild(planetsTotal[b]);
         planetsTotal[b] = false;
+        crashedPlanets++;
+
+        if (crashedPlanets === 10) {
+
+            /* if (planetsTotal.length === 0) { */
+
+                clearInterval(generatePlanets);
+
+                setTimeout(() => {
+
+                    warningBoss();
+    
+                    setTimeout(() => {
+    
+                        moonBossAppears();
+                        
+                    }, 4000);
+                    
+                }, 2000);
+
+            /* } */
+        
+        }
 
     }
 
@@ -621,7 +683,7 @@ function colisionBomb() {
 
 // Padrão Warning
 
-const warningBoss = setTimeout(() => {
+function warningBoss() {
 
     const warning = document.createElement('img');
     warning.src = '../img/warning.png';
@@ -648,39 +710,47 @@ const warningBoss = setTimeout(() => {
 
     clearTimeout(openStage)
 
-}, 3000);
+};
 
 // Padrão Boss e colisão shot/boss
 
-const moonBossAppears = setTimeout(() => {
+function moonBossAppears() {
 
     let moonBossEntrance = document.createElement('img');
     moonBossEntrance.src = '../img/moon-boss.png';
     moonBossEntrance.classList.add('moon-boss');
     gameBoard.appendChild(moonBossEntrance);
 
-}, 7000);
+};
 
-function bossColision(a, x) {
+function bossColision(x) {
 
-    gameBoard.removeChild(shots[a]);
     hpMoonBoss -= x;
 
-    if (hpMoonBoss <= 30 && bossPhase === 0) {
+    valueBarrHpBoss = valueBarrHpBoss - (x*(100/(hpMoonBossFixed)));
+    barrHpBoss.style.width = `${valueBarrHpBoss}%`;
 
-        moonBossSkill(1)
+    if (valueBarrHpBoss <= 0) {
+        barrHpBoss.style.width = '0%';
+    }
+
+    if (hpMoonBoss <= 30) {
+
+        moonBoss.src = `../img/moon-boss-10.png`;
+        bossRage = 1;
         
     }
 
-    if (hpMoonBoss <= 20 && bossPhase === 1) {
+    if (hpMoonBoss <= 20) {
 
-        moonBossSkill(2)
+        moonBoss.src = `../img/moon-boss-20.png`;
+        bossRage = 2;
     
     }
 
-    if (hpMoonBoss <= 10 && bossPhase === 2) {
+    if (hpMoonBoss <= 10) {
 
-        moonBossSkill(3)
+        moonBoss.src = `../img/moon-boss-30.png`;
     
     }
 
@@ -710,72 +780,19 @@ function bossColision(a, x) {
             
         }, 1700);
 
-        setTimeout(() => {
+        stageClear()
 
-            let missionComplete = document.createElement('img');
-            missionComplete.src = '../img/mission-complete.gif';
-            missionComplete.classList.add('mission-complete');
-            gameBoard.appendChild(missionComplete);
-
-            setTimeout(() => {
-
-                gameBoard.removeChild(missionComplete);
-                
-            }, 5000);
-
-        }, 2000);
-
-        setTimeout(() => {
-
-            msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
-                                        <h2>HP:.....${pointHpCat}pts</h2>
-                                        <h2>BOMB:...${pointQtBomb}pts</h2>
-                                        <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
-                                        <h1>TOTAL: ${qtPointsFinal}pts</h1>
-                                        <a href="../map/map.html" class="button-stage-complete">NEXT STAGE</a>
-                                        <a href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`
-            msgPointsFinal.style.display = 'block';
-            controlsAllowed = false;
-
-            if (qtPointsFinal >= 10000) {
-
-                let perfectStage = document.createElement('img');
-                perfectStage.src = '../img/cat-perfect-stage.jpg';
-                perfectStage.classList.add('perfect-stage');
-                msgPointsFinal.appendChild(perfectStage);
-
-                let perfectStageMsg = document.createElement('div');
-                perfectStageMsg.classList.add('perfect-stage-msg');
-                perfectStageMsg.innerHTML = `<h2><b>YOU ARE AWESOME!!</b></h2>`;
-                msgPointsFinal.appendChild(perfectStageMsg);
-            }
-
-        }, 6500);
-    
-        setTimeout(() => {
-
-            stageComplete = true;
-
-        }, 6500);
-
-    }
-
-    valueBarrHpBoss = valueBarrHpBoss - (x*(100/(hpMoonBossFixed)));
-    barrHpBoss.style.width = `${valueBarrHpBoss}%`;
-
-    if (valueBarrHpBoss <= 0) {
-        barrHpBoss.style.width = '0%';
     }
 
 }
 
-function moonBossSkill(x) {
+function moonBossSkill(x, rage) {
 
-    dmgBoss = false;
-    bossPhase = x;
-    moonBoss.src = `../img/moon-boss-${x}0.png`;
+    dmgBoss = true;
+    hpRotateTop = 5;
+    hpRotateBottom = 5;
     moonBoss.style.left = `${moonBoss.offsetLeft}px`;
-    moonBoss.style.animation = 'rotate-center 0.5s linear 10';
+    moonBoss.style.animation = `rotate-center-${x} ${0.5 - (rage * 0.1)}s linear 11`;
 
     /* gameBoard.appendChild(planet01Y1) */
     
@@ -791,12 +808,69 @@ function moonBossSkill(x) {
         
     }, 2000);
 
+    /* setTimeout(() => {
+
+        
+    }, (6 - (rage + 1)) * 1000); */
+    
+    setTimeout(() => {
+        
+        moonBoss.style.animation = `move-boss ${10 - (rage * 2)}s 1 linear`;
+        dmgBoss = false;
+        
+    }, ((6 - (rage + 1)) * 1000) + 500);
+
+}
+
+function stageClear() {
+
     setTimeout(() => {
 
-        dmgBoss = true
-        moonBoss.style.animation = `move-boss ${12 - (x * 2)}s 1 linear`;
-        
-    }, 5500);
+        let missionComplete = document.createElement('img');
+        missionComplete.src = '../img/mission-complete.gif';
+        missionComplete.classList.add('mission-complete');
+        gameBoard.appendChild(missionComplete);
+
+        setTimeout(() => {
+
+            gameBoard.removeChild(missionComplete);
+            
+        }, 5000);
+
+    }, 2000);
+
+    setTimeout(() => {
+
+        msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
+                                    <h2>HP:.....${pointHpCat}pts</h2>
+                                    <h2>BOMB:...${pointQtBomb}pts</h2>
+                                    <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
+                                    <h1>TOTAL: ${qtPointsFinal}pts</h1>
+                                    <a href="../map/map.html" class="button-stage-complete">NEXT STAGE</a>
+                                    <a href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`
+        msgPointsFinal.style.display = 'block';
+        controlsAllowed = false;
+
+        if (qtPointsFinal >= 10000) {
+
+            let perfectStage = document.createElement('img');
+            perfectStage.src = '../img/cat-perfect-stage.jpg';
+            perfectStage.classList.add('perfect-stage');
+            msgPointsFinal.appendChild(perfectStage);
+
+            let perfectStageMsg = document.createElement('div');
+            perfectStageMsg.classList.add('perfect-stage-msg');
+            perfectStageMsg.innerHTML = `<h2><b>YOU ARE AWESOME!!</b></h2>`;
+            msgPointsFinal.appendChild(perfectStageMsg);
+        }
+
+    }, 6500);
+
+    setTimeout(() => {
+
+        stageComplete = true;
+
+    }, 6500);
 
 }
     
@@ -822,7 +896,7 @@ function gameOverVerification() {
 
         for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animation = '';
 
-        if (gameOver === true) {
+        if (gameOver) {
 
             clearTimeout(warningBoss);
             clearTimeout(moonBossAppears);
@@ -856,7 +930,7 @@ let texto = document.querySelector('.texto');
 
 setInterval(() => {
 
-    texto.innerHTML = (`hpCat: ${hpCat} planets: ${Number(planetsTotal[0].dataset.hp)}, shots: ${shotDMG}, boss: ${Boolean(moonBoss)} hpBoss: ${hpMoonBoss}`);
+    texto.innerHTML = (`hpCat: ${crashedPlanets} planets: ${planetsTotal.length}, shots: ${shotDMG}, boss: ${Boolean(moonBoss)} hpBoss: ${hpMoonBoss}`);
     
 }, 100);
 
