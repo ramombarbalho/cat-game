@@ -11,7 +11,7 @@
     border: 3px solid rgb(255, 0, 234);
     width: 1200px;
     height: 720px;
-    /* overflow: hidden; */
+    overflow: hidden;
     z-index: 0;
 }
 
@@ -435,7 +435,7 @@
     position: absolute;
     width: 500px;
     transform: translate(-26%, -68%);
-    animation: stage-start-move 2s;
+    animation: stage-start-move 2s 1 linear;
 }
 
 @keyframes stage-start-move {
@@ -471,8 +471,6 @@
     animation: warning-move 3s;
 }
 
-
-
 @keyframes warning-move {
 
     0% {
@@ -493,6 +491,38 @@
 
     100% {
         opacity: 0;
+    }
+
+}
+
+.stage-clear {  
+    position: absolute;
+    width: 800px;
+    left: 26%;
+    top: -15%;
+    animation: stage-clear-move 4s;
+}
+
+@keyframes stage-clear-move {
+
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: rotate(0);
+        top: 10%;
+        left: 26%;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        top: 10%;
+        left: 125%;
     }
 
 }
@@ -533,14 +563,6 @@
     position: absolute;
     height: 599px;
     z-index: -1;
-}
-
-.mission-complete {
-    position: absolute;
-    width: 900px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-38%, -66%);
 }
 
 .retry-msg {

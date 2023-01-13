@@ -33,7 +33,7 @@ let stageComplete = false;
 // hpMoonBoss
 
 let hpMoonBoss = 40;
-let dmgBoss = false;
+let bossVunerable = false;
 let bossRage = 0;
 let hpMoonBossFixed = hpMoonBoss;
 let boxBarrHpBoss = document.querySelector('.box-barr-hp-boss');
@@ -414,9 +414,10 @@ const openStage = setTimeout(() => {
         
         gameBoard.removeChild(stage1_1);
         controlsAllowed = true;
+        generatePlanets00()
 
     }, 1900);
-        
+
 }, 1000);
 
 // Declarações dos sprites
@@ -424,31 +425,67 @@ const openStage = setTimeout(() => {
 let crashedPlanets = 0;
 let generatePlanets;
 
-const enemyPlanet = setTimeout(() => {
-    
-    let intervalPlanets = 2000 // Math.trunc(Math.random() * (3000 - 1000 + 1)) + 1000;
-    
-    generatePlanets = setInterval(() => {
+function planetGenerator(p) {
 
-        if (!gameOver && !stageComplete) {
+    let planetPosition = Math.trunc(Math.random() * 5);
+    let planetType = Math.trunc(Math.random() * 3);
+    let planetEnemy = document.createElement('img');
+    planetEnemy.src = `../img/planet-${planetType}.gif`;
+    planetEnemy.classList.add('planets');
+    planetEnemy.classList.add(`planet-${planetType}`);
+    planetEnemy.style.top = `${(planetPosition * 120) - 3}px`;
+    planetEnemy.style.animation = `move-planet ${(planetType * 2) + 3 - p}s 1 linear`;
+    planetEnemy.setAttribute('data-hp', `${(planetType * 2) + 1}`);
+    gameBoard.appendChild(planetEnemy);
+
+}
+
+let intervalPlanets = 2000
+let generatePlanets0;
+let generatePlanets1;
+let generatePlanets2;
+
+function generatePlanets00() {
+
+    generatePlanets0 = setInterval(() => {
+
+    if (!gameOver && !stageComplete) {
+    
+        planetGenerator(0);
+
+    }
         
-            let planetPosition = Math.trunc(Math.random() * 5);
-            let planetType = Math.trunc(Math.random() * 3);
-            let planetEnemy = document.createElement('img');
-            planetEnemy.src = `../img/planet-${planetType}.gif`;
-            planetEnemy.classList.add('planets');
-            planetEnemy.classList.add(`planet-${planetType}`);
-            planetEnemy.style.top = `${(planetPosition * 120) - 3}px`;
-            planetEnemy.style.animation = `move-planet ${(planetType * 2) + 3}s 1 linear`;
-            planetEnemy.setAttribute('data-hp', `${(planetType * 2) + 1}`);
-            gameBoard.appendChild(planetEnemy);
-            // intervalPlanets = Math.trunc(Math.random() * (3000 - 1000 + 1)) + 1000;
-
-        }
-            
     }, intervalPlanets);
+
+}
+
+function generatePlanets01() {
+
+    generatePlanets1 = setInterval(() => {
+
+    if (!gameOver && !stageComplete) {
     
-}, 500);
+        planetGenerator(0);
+
+    }
+        
+    }, intervalPlanets);
+
+}
+
+function generatePlanets02() {
+
+    generatePlanets2 = setInterval(() => {
+
+    if (!gameOver && !stageComplete) {
+    
+        planetGenerator(0);
+
+    }
+        
+    }, intervalPlanets);
+
+}
 
 let shots;
 let planetsTotal;
@@ -560,11 +597,11 @@ function colisionShots() {
 
         if (shots[i] && moonBoss) {
 
-            if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft) && (shots[i].offsetTop <= (moonBoss.offsetTop + 472) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 120)) && !dmgBoss) {
+            if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft) && (shots[i].offsetTop <= (moonBoss.offsetTop + 472) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 120)) && !bossVunerable) {
 
                 gameBoard.removeChild(shots[i]);
 
-            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && ((shots[i].offsetTop + 14) < moonBoss.offsetTop + 120) && !dmgBoss) {
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && ((shots[i].offsetTop + 14) < moonBoss.offsetTop + 120) && !bossVunerable) {
 
                 if (hpRotateTop > 1) {
 
@@ -578,7 +615,7 @@ function colisionShots() {
 
                 }
 
-            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && (shots[i].offsetTop > (moonBoss.offsetTop + 472)) && !dmgBoss) {
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && (shots[i].offsetTop > (moonBoss.offsetTop + 472)) && !bossVunerable) {
 
                 if (hpRotateBottom > 1) {
 
@@ -592,7 +629,7 @@ function colisionShots() {
 
                 }
 
-            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 230) && (shots[i].offsetTop <= (moonBoss.offsetTop + 352) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 240)) && dmgBoss) {
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 230) && (shots[i].offsetTop <= (moonBoss.offsetTop + 352) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 240)) && bossVunerable) {
 
                 if (shots[i].classList.contains('shot-0')) {
 
@@ -647,23 +684,31 @@ function planetColision(a, b, x) {
 
         if (crashedPlanets === 10) {
 
-            /* if (planetsTotal.length === 0) { */
+            clearInterval(generatePlanets0);
+            intervalPlanets = 1500;
+            generatePlanets01()
 
-                clearInterval(generatePlanets);
+        } else if (crashedPlanets === 20) {
 
+            clearInterval(generatePlanets1);
+            intervalPlanets = 1000;
+            generatePlanets02()
+
+        } else if (crashedPlanets === 35) {
+
+            clearInterval(generatePlanets2);
+
+            setTimeout(() => {
+
+                warningBoss();
+    
                 setTimeout(() => {
-
-                    warningBoss();
     
-                    setTimeout(() => {
-    
-                        moonBossAppears();
+                    moonBossAppears();
                         
-                    }, 4000);
+                }, 4000);
                     
-                }, 2000);
-
-            /* } */
+            }, 2000);
         
         }
 
@@ -727,7 +772,7 @@ function bossColision(x) {
 
     hpMoonBoss -= x;
 
-    valueBarrHpBoss = valueBarrHpBoss - (x*(100/(hpMoonBossFixed)));
+    valueBarrHpBoss = valueBarrHpBoss - (x * (100 / (hpMoonBossFixed)));
     barrHpBoss.style.width = `${valueBarrHpBoss}%`;
 
     if (valueBarrHpBoss <= 0) {
@@ -751,6 +796,7 @@ function bossColision(x) {
     if (hpMoonBoss <= 10) {
 
         moonBoss.src = `../img/moon-boss-30.png`;
+        bossRage = 3;
     
     }
 
@@ -758,6 +804,8 @@ function bossColision(x) {
 
         for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animation = '';
         gameOver = true;
+
+        clearTimeout(moveAnimationBoss);
         
         pointHpCat = hpCat * 1500;
         pointQtBomb = qtBomb * 4000;
@@ -786,37 +834,24 @@ function bossColision(x) {
 
 }
 
+let moveAnimationBoss;
+
 function moonBossSkill(x, rage) {
 
-    dmgBoss = true;
+    bossVunerable = true;
     hpRotateTop = 5;
     hpRotateBottom = 5;
     moonBoss.style.left = `${moonBoss.offsetLeft}px`;
-    moonBoss.style.animation = `rotate-center-${x} ${0.5 - (rage * 0.1)}s linear 11`;
+    moonBoss.style.animation = `rotate-center-${x} ${0.5 - (rage * 0.1)}s linear 10`;
 
-    /* gameBoard.appendChild(planet01Y1) */
+    planetGenerator((rage * 0.4) + 0.1);
+    planetGenerator((rage * 0.4) + 0.2);
+    planetGenerator((rage * 0.4) + 0.3);
     
-    setTimeout(() => {
-
-        /* gameBoard.appendChild(planet01Y2) */
-        
-    }, 1000);
-
-    setTimeout(() => {
-
-        /* gameBoard.appendChild(planet01Y3) */
-        
-    }, 2000);
-
-    /* setTimeout(() => {
-
-        
-    }, (6 - (rage + 1)) * 1000); */
-    
-    setTimeout(() => {
+    moveAnimationBoss = setTimeout(() => {
         
         moonBoss.style.animation = `move-boss ${10 - (rage * 2)}s 1 linear`;
-        dmgBoss = false;
+        bossVunerable = false;
         
     }, ((6 - (rage + 1)) * 1000) + 500);
 
@@ -827,19 +862,22 @@ function stageClear() {
     setTimeout(() => {
 
         let missionComplete = document.createElement('img');
-        missionComplete.src = '../img/mission-complete.gif';
-        missionComplete.classList.add('mission-complete');
+        missionComplete.src = '../img/stage-clear.png';
+        missionComplete.classList.add('stage-clear');
         gameBoard.appendChild(missionComplete);
 
         setTimeout(() => {
 
             gameBoard.removeChild(missionComplete);
             
-        }, 5000);
+        }, 3500);
 
-    }, 2000);
-
+    }, 3000);
+    
     setTimeout(() => {
+        
+        stageComplete = true;
+        controlsAllowed = false;
 
         msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
                                     <h2>HP:.....${pointHpCat}pts</h2>
@@ -849,7 +887,6 @@ function stageClear() {
                                     <a href="../map/map.html" class="button-stage-complete">NEXT STAGE</a>
                                     <a href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`
         msgPointsFinal.style.display = 'block';
-        controlsAllowed = false;
 
         if (qtPointsFinal >= 10000) {
 
@@ -864,13 +901,7 @@ function stageClear() {
             msgPointsFinal.appendChild(perfectStageMsg);
         }
 
-    }, 6500);
-
-    setTimeout(() => {
-
-        stageComplete = true;
-
-    }, 6500);
+    }, 6000);
 
 }
     
@@ -930,9 +961,9 @@ let texto = document.querySelector('.texto');
 
 setInterval(() => {
 
-    texto.innerHTML = (`hpCat: ${crashedPlanets} planets: ${planetsTotal.length}, shots: ${shotDMG}, boss: ${Boolean(moonBoss)} hpBoss: ${hpMoonBoss}`);
+    texto.innerHTML = (`hpCat: ${hpCat} planetsLive: ${planetsTotal.length}, shotsLive: ${shotDMG}, boss: ${Boolean(moonBoss)} hpBoss: ${hpMoonBoss} crashedPlanets: ${crashedPlanets}`);
     
-}, 100);
+}, 1000);
 
 // Texto auxiliar
 //
@@ -944,4 +975,4 @@ setInterval(() => {
 
 setTimeout(() => {
     console.log(Number(planetsTotal[0].dataset.hp)) ;
-}, 3000);
+}, 5000);
