@@ -32,6 +32,19 @@
     position: absolute;
     top: 240px;
     z-index: 1;
+    animation: cat-entrance 2.8s;
+}
+
+@keyframes cat-entrance {
+
+    0% {
+        left: -240px;
+    }
+
+    100% {
+        left: 0px;
+    }
+
 }
 
 .shadow-move {
@@ -323,14 +336,14 @@
 }
 
 .shot-1 {
-    left: 140px;
     height: 75px;
+    left: 140px;
     animation: shot-move 3.2s linear;
 }
 
 .shot-2 {
-    left: 140px;
     height: 100px;
+    left: 140px;
     animation: shot-move 2.5s linear;
 }
 
@@ -382,7 +395,7 @@
     top: 0;
     left: 1200px;
     z-index: -1;
-    animation: move-boss 12s 1 linear;
+    animation: move-boss 14s 1 linear;
 }
 
 @keyframes move-boss {

@@ -11,7 +11,6 @@ let shotCharging = false;
 let shotDMG = [1, 3, 5];
 let charge1 = document.querySelector('.charge1');
 let charge2 = document.querySelector('.charge2');
-let charge3 = document.querySelector('.charge3');
 let txtQtShotHaduken = document.querySelector('.qt-shot-haduken');
 let qtShotHaduken = 150;
 txtQtShotHaduken.innerHTML = `${qtShotHaduken}`;
@@ -47,34 +46,36 @@ let hpRotateBottom = 5;
 
 function move(x) {
 
-    cat.style.animation = `move${x} 0.09s 1`;
-    shadowMove.style.display = 'block';
-    charge1.style.animation = `move${x}-charge 0.09s 1`;
-    charge2.style.animation = `move${x}-charge 0.09s 1`;
-    catPosition = x;
+    if (controlsAllowed) {
 
-    setTimeout(() => {
-        
-        cat.style.top = `${x * 120}px`;
-        charge1.style.top = `${(x * 120) - 20}px`;
-        charge2.style.top = `${(x * 120) - 20}px`;
-        
-    }, 60);
+        cat.style.animation = `move${x} 0.09s 1`;
+        shadowMove.style.display = 'block';
+        charge1.style.animation = `move${x}-charge 0.09s 1`;
+        charge2.style.animation = `move${x}-charge 0.09s 1`;
+        catPosition = x;
 
-    setTimeout(() => {
-        
-        shadowMove.style.top = `${x * 120}px`;
-        shadowMove.style.display = `none`
-        
-    }, 120);
+        setTimeout(() => {
+            
+            cat.style.top = `${x * 120}px`;
+            charge1.style.top = `${(x * 120) - 20}px`;
+            charge2.style.top = `${(x * 120) - 20}px`;
+            
+        }, 60);
+
+        setTimeout(() => {
+            
+            shadowMove.style.top = `${x * 120}px`;
+            shadowMove.style.display = `none`
+            
+        }, 120);
+
+    }
 
 }
 
 function keyboardKeyDownMove() {
 
-    var keyboardKeyMove = event.keyCode
-
-    if ((catPosition === 0 && keyboardKeyMove === 40) || (catPosition === 0 && keyboardKeyMove === 83) || (catPosition === 0 && keyboardKeyMove === 101)) {
+    if ((catPosition === 0 && event.keyCode === 40) || (catPosition === 0 && event.keyCode === 83) || (catPosition === 0 && event.keyCode === 101)) {
             
         move(1);
 
@@ -93,7 +94,7 @@ function keyboardKeyDownMove() {
 
     }
         
-    else if ((catPosition === 1 && keyboardKeyMove === 40) || (catPosition === 1 && keyboardKeyMove === 83) || (catPosition === 1 && keyboardKeyMove === 101)) {
+    else if ((catPosition === 1 && event.keyCode === 40) || (catPosition === 1 && event.keyCode === 83) || (catPosition === 1 && event.keyCode === 101)) {
 
         move(2);
 
@@ -105,13 +106,13 @@ function keyboardKeyDownMove() {
             move(4);
         }, 325);
 
-    } else if ((catPosition === 1 && keyboardKeyMove === 38) || (catPosition === 1 && keyboardKeyMove === 87) || (catPosition === 1 && keyboardKeyMove === 104)) {
+    } else if ((catPosition === 1 && event.keyCode === 38) || (catPosition === 1 && event.keyCode === 87) || (catPosition === 1 && event.keyCode === 104)) {
 
         move(0);
 
     }    
     
-    else if ((catPosition === 2 && keyboardKeyMove === 40) || (catPosition === 2 && keyboardKeyMove === 83) || (catPosition === 2 && keyboardKeyMove === 101)) {
+    else if ((catPosition === 2 && event.keyCode === 40) || (catPosition === 2 && event.keyCode === 83) || (catPosition === 2 && event.keyCode === 101)) {
 
         move(3);
 
@@ -119,7 +120,7 @@ function keyboardKeyDownMove() {
             move(4);
         }, 200);
 
-    } else if ((catPosition === 2 && keyboardKeyMove === 38) || (catPosition === 2 && keyboardKeyMove === 87) || (catPosition === 2 && keyboardKeyMove === 104)) {
+    } else if ((catPosition === 2 && event.keyCode === 38) || (catPosition === 2 && event.keyCode === 87) || (catPosition === 2 && event.keyCode === 104)) {
 
         move(1);
 
@@ -129,11 +130,11 @@ function keyboardKeyDownMove() {
 
     }
     
-    else if ((catPosition === 3 && keyboardKeyMove === 40) || (catPosition === 3 && keyboardKeyMove === 83) || (catPosition === 3 && keyboardKeyMove === 101)) {
+    else if ((catPosition === 3 && event.keyCode === 40) || (catPosition === 3 && event.keyCode === 83) || (catPosition === 3 && event.keyCode === 101)) {
 
         move(4);
 
-    } else if ((catPosition === 3 && keyboardKeyMove === 38) || (catPosition === 3 && keyboardKeyMove === 87) || (catPosition === 3 && keyboardKeyMove === 104)) {
+    } else if ((catPosition === 3 && event.keyCode === 38) || (catPosition === 3 && event.keyCode === 87) || (catPosition === 3 && event.keyCode === 104)) {
 
         move(2);
 
@@ -147,7 +148,7 @@ function keyboardKeyDownMove() {
 
     }
     
-    else if ((catPosition === 4 && keyboardKeyMove === 38) || (catPosition === 4 && keyboardKeyMove === 87) || (catPosition === 4 && keyboardKeyMove === 104)) {
+    else if ((catPosition === 4 && event.keyCode === 38) || (catPosition === 4 && event.keyCode === 87) || (catPosition === 4 && event.keyCode === 104)) {
 
         move(3);
 
@@ -163,7 +164,7 @@ function keyboardKeyDownMove() {
             move(0);
         }, 450);
 
-    } else if (retryMsg.style.display === 'block' && keyboardKeyMove === 13) {
+    } else if (retryMsg.style.display === 'block' && event.keyCode === 13) {
 
         location.reload();
 
@@ -281,7 +282,31 @@ function bombing() {
 
     }    
 
-}    
+}
+
+/* let gameRunning = true;
+
+function pauseGame() {
+
+    if (gameRunning) {
+
+        for (let i = 0; i < shots.length; i++) shots[i].style.animationPlayState = 'paused';
+        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animationPlayState = 'paused';
+        if (moonBoss) moonBoss.animationPlayState = 'paused';
+        controlsAllowed = false;
+        gameRunning = false;
+
+    } else {
+
+        for (let i = 0; i < shots.length; i++) shots[i].style.animationPlayState = 'running';
+        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animationPlayState = 'running';
+        if (moonBoss) moonBoss.animationPlayState = 'running';
+        controlsAllowed = true;
+        gameRunning = true;
+
+    }
+
+} */
 
 let keyShot = false;
 let keyBomb = false;
@@ -289,6 +314,12 @@ let keyMoveDown = false;
 let keyMoveUp = false;
 
 window.addEventListener('keydown', () => {
+
+    /* if (event.keyCode === 27) {
+
+        pauseGame();
+
+    } */
 
     if (event.keyCode === 13) {
 
@@ -414,7 +445,8 @@ const openStage = setTimeout(() => {
         
         gameBoard.removeChild(stage1_1);
         controlsAllowed = true;
-        generatePlanets00()
+        gameLoop();
+        generatePlanets();
 
     }, 1900);
 
@@ -423,12 +455,11 @@ const openStage = setTimeout(() => {
 // Declarações dos sprites
 
 let crashedPlanets = 0;
-let generatePlanets;
 
 function planetGenerator(p) {
 
     let planetPosition = Math.trunc(Math.random() * 5);
-    let planetType = Math.trunc(Math.random() * 3);
+    let planetType = 0 // Math.trunc(Math.random() * 3);
     let planetEnemy = document.createElement('img');
     planetEnemy.src = `../img/planet-${planetType}.gif`;
     planetEnemy.classList.add('planets');
@@ -441,41 +472,11 @@ function planetGenerator(p) {
 }
 
 let intervalPlanets = 2000
-let generatePlanets0;
-let generatePlanets1;
-let generatePlanets2;
+let generatePlanetsInterval;
 
-function generatePlanets00() {
+function generatePlanets() {
 
-    generatePlanets0 = setInterval(() => {
-
-    if (!gameOver && !stageComplete) {
-    
-        planetGenerator(0);
-
-    }
-        
-    }, intervalPlanets);
-
-}
-
-function generatePlanets01() {
-
-    generatePlanets1 = setInterval(() => {
-
-    if (!gameOver && !stageComplete) {
-    
-        planetGenerator(0);
-
-    }
-        
-    }, intervalPlanets);
-
-}
-
-function generatePlanets02() {
-
-    generatePlanets2 = setInterval(() => {
+    generatePlanetsInterval = setInterval(() => {
 
     if (!gameOver && !stageComplete) {
     
@@ -497,29 +498,48 @@ function colisionShots() {
     shots = document.querySelectorAll('.shots');
     planetsTotal = document.querySelectorAll('.planets');
     moonBoss = document.querySelector('.moon-boss');
+    heartCat = document.querySelectorAll('.heart-active');
 
-    for (let a = 0; a < shots.length; a++) {
-        if (shots[a].offsetLeft > 1200) {
-            gameBoard.removeChild(shots[a]);
+    for (let b = 0; b < planetsTotal.length; b++) {
+
+        if (planetsTotal[b].offsetLeft < -55) {
+            planetsTotal[b].remove();
+            hpCat--;
+
+            if (hpCat === 2) {
+
+                heartStatus.innerHTML = `<img src="../img/heart-active.png" alt="heart" class="heart-active"> <img src="../img/heart-active.png" alt="heart" class="heart-active">`;
+
+            } else if (hpCat === 1) {
+            
+                heartStatus.innerHTML = `<img src="../img/heart-active.png" alt="heart" class="heart-active">`;
+
+            } else if (hpCat <= 0) {
+
+                heartStatus.innerHTML = '';
+
+            }
+
         }
+
     }
 
-    heartCat = document.querySelectorAll('.heart-active');
-    for (let b = 0; b < planetsTotal.length; b++) {
-        if (planetsTotal[b].offsetLeft < -55) {
-            gameBoard.removeChild(planetsTotal[b]);
-            hpCat--
-            if (heartCat[0]) {
-                heartStatus.removeChild(heartCat[0]);
-            }
-        }
+    if (moonBoss && moonBoss.offsetLeft < -600) {
+
+        hpCat = 0;
+        heartStatus.innerHTML = '';
+
     }
 
     for (let i = 0; i < shots.length; i++) {
+
+        if (shots[i].offsetLeft > 1200) {
+            shots[i].remove();
+        }
     
         for (let j = 0; j < planetsTotal.length; j++) {
         
-            if (shots[i] && planetsTotal[j]) {
+            if (shots[i] && planetsTotal[j] && !gameOver) {
     
                 if (((shots[i].offsetLeft <= (planetsTotal[j].offsetLeft + 120)) && (shots[i].offsetLeft + 14) >= planetsTotal[j].offsetLeft) && (shots[i].offsetTop <= (planetsTotal[j].offsetTop + 120) && ((shots[i].offsetTop + 14) >= planetsTotal[j].offsetTop))) {
 
@@ -595,60 +615,57 @@ function colisionShots() {
 
         }
 
-        if (shots[i] && moonBoss) {
+        if (shots[i] && moonBoss && !gameOver) {
 
             if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft) && (shots[i].offsetTop <= (moonBoss.offsetTop + 472) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 120)) && !bossVunerable) {
 
-                gameBoard.removeChild(shots[i]);
+                shots[i].remove();
 
-            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && ((shots[i].offsetTop + 14) < moonBoss.offsetTop + 120) && !bossVunerable) {
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 340)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && ((shots[i].offsetTop + 14) < moonBoss.offsetTop + 120) && !bossVunerable) {
 
                 if (hpRotateTop > 1) {
 
                     hpRotateTop--;
-                    gameBoard.removeChild(shots[i]);
+                    shots[i].remove();
 
                 } else {
 
-                    gameBoard.removeChild(shots[i]);
+                    shots[i].remove();
                     moonBossSkill(0, bossRage);
 
                 }
 
-            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 392)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && (shots[i].offsetTop > (moonBoss.offsetTop + 472)) && !bossVunerable) {
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 340)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 120) && (shots[i].offsetTop > (moonBoss.offsetTop + 472)) && !bossVunerable) {
 
                 if (hpRotateBottom > 1) {
 
                     hpRotateBottom--;
-                    gameBoard.removeChild(shots[i]);
+                    shots[i].remove();
 
                 } else {
 
-                    gameBoard.removeChild(shots[i]);
+                    shots[i].remove();
                     moonBossSkill(1, bossRage);
 
                 }
 
-            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 592)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 230) && (shots[i].offsetTop <= (moonBoss.offsetTop + 352) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 240)) && bossVunerable) {
+            } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 340)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 230) && (shots[i].offsetTop <= (moonBoss.offsetTop + 352) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 240)) && bossVunerable) {
 
                 if (shots[i].classList.contains('shot-0')) {
 
-                    gameBoard.removeChild(shots[i]);
-                    bossColision(1);
+                    bossColision(i, 1);
 
                 }
 
                 if (shots[i].classList.contains('shot-1')) {
 
-                    gameBoard.removeChild(shots[i]);
-                    bossColision(3);
+                    bossColision(i, 3);
 
                 }
 
                 if (shots[i].classList.contains('shot-2')) {
 
-                    gameBoard.removeChild(shots[i]);
-                    bossColision(5);
+                    bossColision(i, 5);
 
                 }
 
@@ -669,34 +686,32 @@ function gameLoop() {
 
 }
 
-gameLoop();
-
 function planetColision(a, b, x) {
 
-    gameBoard.removeChild(shots[a]);
+    shots[a].remove();
     planetsTotal[b].setAttribute('data-hp', `${String(Number(planetsTotal[b].dataset.hp) - shotDMG[x])}`);
-
+    
     if ((Number(planetsTotal[b].dataset.hp)) <= 0) {
         
-        gameBoard.removeChild(planetsTotal[b]);
+        planetsTotal[b].remove();
         planetsTotal[b] = false;
         crashedPlanets++;
 
-        if (crashedPlanets === 10) {
+        if (crashedPlanets === 1) {
 
-            clearInterval(generatePlanets0);
+            clearInterval(generatePlanetsInterval);
             intervalPlanets = 1500;
-            generatePlanets01()
+            generatePlanets();
 
-        } else if (crashedPlanets === 20) {
+        } else if (crashedPlanets === 2) {
 
-            clearInterval(generatePlanets1);
+            clearInterval(generatePlanetsInterval);
             intervalPlanets = 1000;
-            generatePlanets02()
+            generatePlanets();
 
-        } else if (crashedPlanets === 35) {
+        } else if (crashedPlanets === 3) {
 
-            clearInterval(generatePlanets2);
+            clearInterval(generatePlanetsInterval);
 
             setTimeout(() => {
 
@@ -720,7 +735,7 @@ function colisionBomb() {
 
     if (bombValue === 1) {
         for (let j = 0; j < planetsTotal.length; j++) {
-            gameBoard.removeChild(planetsTotal[j]);
+            planetsTotal[j].remove();
         }
     }
 
@@ -753,7 +768,7 @@ function warningBoss() {
         
     }, 2900);
 
-    clearTimeout(openStage)
+    clearTimeout(openStage);
 
 };
 
@@ -768,8 +783,9 @@ function moonBossAppears() {
 
 };
 
-function bossColision(x) {
+function bossColision(a, x) {
 
+    shots[a].remove();
     hpMoonBoss -= x;
 
     valueBarrHpBoss = valueBarrHpBoss - (x * (100 / (hpMoonBossFixed)));
@@ -802,7 +818,7 @@ function bossColision(x) {
 
     if (hpMoonBoss <= 0) {
 
-        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animation = '';
+        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].remove();
         gameOver = true;
 
         clearTimeout(moveAnimationBoss);
@@ -828,7 +844,7 @@ function bossColision(x) {
             
         }, 1700);
 
-        stageClear()
+        stageClear();
 
     }
 
@@ -845,15 +861,15 @@ function moonBossSkill(x, rage) {
     moonBoss.style.animation = `rotate-center-${x} ${0.5 - (rage * 0.1)}s linear 10`;
 
     planetGenerator((rage * 0.4) + 0.1);
-    planetGenerator((rage * 0.4) + 0.2);
-    planetGenerator((rage * 0.4) + 0.3);
+    planetGenerator((rage * 0.4) + 0.1);
+    planetGenerator((rage * 0.4) + 0.1);
     
     moveAnimationBoss = setTimeout(() => {
         
-        moonBoss.style.animation = `move-boss ${10 - (rage * 2)}s 1 linear`;
+        moonBoss.style.animation = `move-boss ${12 - (rage * 2)}s 1 linear`;
         bossVunerable = false;
         
-    }, ((6 - (rage + 1)) * 1000) + 500);
+    }, ((6 - (rage + 1)) * 1000));
 
 }
 
@@ -866,6 +882,9 @@ function stageClear() {
         missionComplete.classList.add('stage-clear');
         gameBoard.appendChild(missionComplete);
 
+        stageComplete = true;
+        controlsAllowed = false;
+
         setTimeout(() => {
 
             gameBoard.removeChild(missionComplete);
@@ -874,10 +893,7 @@ function stageClear() {
 
     }, 3000);
     
-    setTimeout(() => {
-        
-        stageComplete = true;
-        controlsAllowed = false;
+    setTimeout(() => { 
 
         msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
                                     <h2>HP:.....${pointHpCat}pts</h2>
@@ -885,7 +901,7 @@ function stageClear() {
                                     <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
                                     <h1>TOTAL: ${qtPointsFinal}pts</h1>
                                     <a href="../map/map.html" class="button-stage-complete">NEXT STAGE</a>
-                                    <a href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`
+                                    <a href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`;
         msgPointsFinal.style.display = 'block';
 
         if (qtPointsFinal >= 10000) {
@@ -925,19 +941,15 @@ function gameOverVerification() {
 
         gameOver = true;
 
-        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animation = '';
+        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animationPlayState = 'paused';
 
-        if (gameOver) {
+        clearTimeout(moveAnimationBoss);
+        if (moonBoss) moonBoss.style.animationPlayState = 'paused';
 
-            clearTimeout(warningBoss);
-            clearTimeout(moonBossAppears);
+        if (gameOver && hpCat <= 0) {
 
-            if (hpCat <= 0) {
-
-                retryMsg.style.display = 'block'
-                controlsAllowed = false;
-
-            }
+            retryMsg.style.display = 'block';
+            controlsAllowed = false;
                 
         }
 
@@ -974,5 +986,5 @@ setInterval(() => {
 /* heartStatus.innerHTML = "" */
 
 setTimeout(() => {
-    console.log(Number(planetsTotal[0].dataset.hp)) ;
+    console.log(Number(planetsTotal[0].dataset.hp));
 }, 5000);
