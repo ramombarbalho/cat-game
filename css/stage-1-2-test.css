@@ -395,7 +395,7 @@
     top: 0;
     left: 1200px;
     z-index: -1;
-    animation: move-boss 14s 1 linear;
+    animation: move-boss 30s 1 linear;
 }
 
 @keyframes move-boss {
