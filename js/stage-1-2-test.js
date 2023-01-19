@@ -574,12 +574,6 @@ function colisionShots() {
 
                     warningBoss();
 
-                    setTimeout(() => {
-
-                        moonBossAppears();
-
-                    }, 4000);
-
                 }, 2000);
 
             }
@@ -717,12 +711,6 @@ function planetColision(a, b) {
 
                 warningBoss();
 
-                setTimeout(() => {
-
-                    moonBossAppears();
-
-                }, 4000);
-
             }, 2000);
 
         }
@@ -754,6 +742,8 @@ function warningBoss() {
     warning.classList.add('warning');
     gameBoard.appendChild(warning);
 
+    clearInterval(randomNumbers);
+
     setTimeout(() => {
 
         boxBarrHpBoss.style.display = 'block';
@@ -772,7 +762,12 @@ function warningBoss() {
 
     }, 2900);
 
-    clearInterval(randomNumbers);
+    setTimeout(() => {
+
+        moonBossAppears();
+
+    }, 4000);
+
 
 }
 
@@ -784,6 +779,38 @@ function moonBossAppears() {
     moonBossEntrance.src = '../img/moon-boss.png';
     moonBossEntrance.classList.add('moon-boss');
     gameBoard.appendChild(moonBossEntrance);
+
+    let numbers = [];
+
+    let r, n, p;
+
+    r = 3;
+
+    for (let i = 0; i < r; i++) {
+
+        do {
+
+            n = Math.trunc(Math.random() * 5);
+            p = numbers.includes(n);
+
+            if (!p) {
+
+                numbers.push(n);
+
+            }
+            
+        }
+
+        while (p);
+
+    }
+
+    planetType = Math.trunc(Math.random() * 3);
+    planetGenerator(planetType, numbers[0], 0);
+    planetType = Math.trunc(Math.random() * 3);
+    planetGenerator(planetType, numbers[1], 0);
+    planetType = Math.trunc(Math.random() * 3);
+    planetGenerator(planetType, numbers[2], 0);
 
 }
 
