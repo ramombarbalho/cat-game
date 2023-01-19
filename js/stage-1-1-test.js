@@ -617,22 +617,18 @@ function planetColision(a, b) {
 
         }
         
-        if (crashedPlanets >= 35) {
+        if (crashedPlanets >= 35 && planetsTotalTurn.length === 0) {
 
-            if (planetsTotalTurn.length === 0) {
+            pointHpCat = hpCat * 1500;
+            pointQtBomb = qtBomb * 4000;
+            pointQtShotHaduken = qtShotHaduken * 100;
+            qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
 
-                pointHpCat = hpCat * 1500;
-                pointQtBomb = qtBomb * 4000;
-                pointQtShotHaduken = qtShotHaduken * 100;
-                qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
+            setTimeout(() => {
 
-                setTimeout(() => {
+                stageClear();
 
-                    stageClear();
-
-                }, 2000);
-
-            }
+            }, 2000);
 
         }
 
@@ -647,6 +643,41 @@ function colisionBomb() {
         for (let j = 0; j < planetsTotal.length; j++) {
 
             planetsTotal[j].remove();
+            crashedPlanets++;
+            planetsTotalTurn = document.querySelectorAll('.planets');
+
+            if (crashedPlanets === 10) {
+
+                clearInterval(generatePlanetsInterval);
+                intervalPlanets = 1500;
+                generatePlanets();
+
+            } else if (crashedPlanets === 20) {
+
+                clearInterval(generatePlanetsInterval);
+                intervalPlanets = 1000;
+                generatePlanets();
+
+            } else if (crashedPlanets === 35) {
+
+                clearInterval(generatePlanetsInterval);
+
+            }
+            
+            if (crashedPlanets >= 35 && planetsTotalTurn.length === 0) {
+
+                pointHpCat = hpCat * 1500;
+                pointQtBomb = qtBomb * 4000;
+                pointQtShotHaduken = qtShotHaduken * 100;
+                qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
+
+                setTimeout(() => {
+
+                    stageClear();
+
+                }, 2000);
+
+            }
 
         }
 

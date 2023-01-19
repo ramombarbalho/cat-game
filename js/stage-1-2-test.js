@@ -726,6 +726,18 @@ function colisionBomb() {
         for (let j = 0; j < planetsTotal.length; j++) {
 
             planetsTotal[j].remove();
+            crashedPlanets++;
+            planetsTotalTurn = document.querySelectorAll('.planets');
+
+            if (planetsTotalTurn.length === 0 && !moonBoss && planetsLaunched >= 6) {
+
+                setTimeout(() => {
+
+                    warningBoss();
+
+                }, 2000);
+
+            }
             
         }
 
