@@ -4,15 +4,28 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: black;
+    user-select: none;
+    overflow: hidden;
+}
+
+.game-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .game-board {
     background-image: linear-gradient( #5a23a1, #25b3df);
+    border: 3px solid rgb(255, 0, 234);
     position: relative;
     margin: auto;
-    border: 3px solid rgb(255, 0, 234);
     width: 1200px;
-    height: 720px;
-    overflow: hidden;
+    height: 600px;
     z-index: 0;
+    overflow: hidden;
 }
 
 .game-status {
@@ -21,10 +34,11 @@
     margin: auto;
     display: flex;
     align-items: center;
-    border-top: 3px solid rgb(255, 0, 234);
+    border: 3px solid rgb(255, 0, 234);
     width: 1200px;
     height: 120px;
     z-index: 3;
+    overflow: hidden;
 }
 
 .cat {

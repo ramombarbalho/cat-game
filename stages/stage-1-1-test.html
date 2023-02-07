@@ -12,28 +12,32 @@
 </head>
 <body>
 
-    <div class="game-board">
+    <div class="game-box">
+        
+        <div class="game-board">
+            
+            <div class="arrow-1" onmousedown="move(0)"></div>
+            <div class="arrow-2" onmousedown="move(1)"></div>
+            <div class="arrow-3" onmousedown="move(2)"></div>
+            <div class="arrow-4" onmousedown="move(3)"></div>
+            <div class="arrow-5" onmousedown="move(4)"></div>
 
-        <img src="../img/cat.gif" alt="cat" class="cat">
-        <img src="../img/cat-shadow.png" alt="shadow-move" class="shadow-move">
-        <img src="../img/charge1.gif" alt="charge1" class="charge1">
-        <img src="../img/charge2.gif" alt="charge2" class="charge2">
-        <div class="arrow-1" onmousedown="move(0)"></div>
-        <div class="arrow-2" onmousedown="move(1)"></div>
-        <div class="arrow-3" onmousedown="move(2)"></div>
-        <div class="arrow-4" onmousedown="move(3)"></div>
-        <div class="arrow-5" onmousedown="move(4)"></div>
+            <img draggable="false" src="../img/cat.gif" alt="cat" class="cat" style="user-select: none;
+            pointer-events: none;">
+            <img draggable="false" src="../img/cat-shadow.png" alt="shadow-move" class="shadow-move">
+            <img draggable="false" src="../img/charge1.gif" alt="charge1" class="charge1">
+            <img draggable="false" src="../img/charge2.gif" alt="charge2" class="charge2">
 
-        <div class="retry-msg">
+            <div class="retry-msg">
 
-            <!-- <img src="../img/game-over.png" alt="game over" class="game-over-msg"> -->
-            <h1 class="text-game-over">GAME OVER</h1>
-            <img src="../img/cat-game-over.png" alt="sad cat" class="cat-game-over">
-            <a href="#" class="button-retry" onclick="retry()" onmouseover="catThumbsUp()" onmouseout="catSad()">TRY AGAIN!!</a>
+                <!-- <img src="../img/game-over.png" alt="game over" class="game-over-msg"> -->
+                <h1 class="text-game-over">GAME OVER</h1>
+                <img draggable="false" src="../img/cat-game-over.png" alt="sad cat" class="cat-game-over">
+                <a draggable="false" href="#" class="button-retry" onclick="retry()" onmouseover="catThumbsUp()" onmouseout="catSad()">TRY AGAIN!!</a>
 
-        </div>
+            </div>
 
-        <div class="points-final">
+            <div class="points-final"></div>
 
         </div>
 
@@ -42,41 +46,41 @@
             <div class="box-hearts">
 
                 <div class="heart-status">
-                    <img src="../img/heart-active.png" alt="heart" class="heart-active">
-                    <img src="../img/heart-active.png" alt="heart" class="heart-active">
-                    <img src="../img/heart-active.png" alt="heart" class="heart-active">
+                    <img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">
+                    <img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">
+                    <img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">
                 </div>
 
             </div>
 
-        <div class="box-bomb" onclick="bombing()">
+            <div class="box-bomb" onclick="bombing()">
 
-            <img src="../img/bomb.webp" alt="bomb" class="bomb-stts">
-            <img src="../img/no-allowed.png" alt="no allowed" class="no-allowed">
-            <div class="cooldown-bomb"></div>
+                <img draggable="false" src="../img/bomb.webp" alt="bomb" class="bomb-stts">
+                <img draggable="false" src="../img/no-allowed.png" alt="no allowed" class="no-allowed">
+                <div class="cooldown-bomb"></div>
 
-        </div>
+            </div>
 
-        <div class="box-shot"> <!-- style="display: none;" -->
+            <div class="box-shot"> <!-- style="display: none;" -->
 
-            <img src="../img/shot-0.png" alt="shot-0" class="shot-haduken-stts">
-            <span class="qt-shot-haduken"></span>
+                <img draggable="false" src="../img/shot-0.png" alt="shot-0" class="shot-haduken-stts">
+                <span class="qt-shot-haduken"></span>
 
-        </div>
+            </div>
 
-        <div class="box-barr-hp-boss">
+            <div class="box-barr-hp-boss">
 
-            <div class="barr-hp-boss"></div>
+                <div class="barr-hp-boss"></div>
+
+            </div>
 
         </div>
 
     </div>
 
-    </div>
+    <div style="width: 1200px;">
 
-    <div style="margin: auto; width: 1200px;">
-
-        <h2 style="text-align: justify; font-family: Courier, monospace;" class="texto">hp </h1>
+        <h2 style="color: white; text-align: justify; font-family: Courier, monospace;" class="texto">hp </h1>
 
     </div>
 

@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: black;
+    background-color: #7f00ff;
     user-select: none;
     overflow: hidden;
 }
@@ -46,19 +46,6 @@ body {
     position: absolute;
     top: 240px;
     z-index: 1;
-    animation: cat-entrance 2.8s;
-}
-
-@keyframes cat-entrance {
-
-    0% {
-        left: -240px;
-    }
-
-    100% {
-        left: 0px;
-    }
-
 }
 
 .shadow-move {
@@ -218,7 +205,7 @@ body {
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
 } */
 
-@keyframes move0 {
+@keyframes move1 {
 
     100% {
         top: 0px;
@@ -226,7 +213,7 @@ body {
 
 }
 
-@keyframes move1 {
+@keyframes move2 {
     
     100% {
         top: 120px;
@@ -234,7 +221,7 @@ body {
 
 }
 
-@keyframes move2 {
+@keyframes move3 {
     
     100% {
         top: 240px;
@@ -242,7 +229,7 @@ body {
 
 }
 
-@keyframes move3 {
+@keyframes move4 {
     
     100% {
         top: 360px;
@@ -250,7 +237,7 @@ body {
 
 }
 
-@keyframes move4 {
+@keyframes move5 {
     
     100% {
         top: 480px;
@@ -258,7 +245,7 @@ body {
 
 }
 
-@keyframes move0-charge {
+@keyframes move1-charge {
     
     100% {
         top: -20px;
@@ -266,7 +253,7 @@ body {
 
 }
 
-@keyframes move1-charge {
+@keyframes move2-charge {
     
     100% {
         top: 100px;
@@ -274,7 +261,7 @@ body {
 
 }
 
-@keyframes move2-charge {
+@keyframes move3-charge {
     
     100% {
         top: 220px;
@@ -282,7 +269,7 @@ body {
 
 }
 
-@keyframes move3-charge {
+@keyframes move4-charge {
     
     100% {
         top: 340px;
@@ -290,7 +277,7 @@ body {
 
 }
 
-@keyframes move4-charge {
+@keyframes move5-charge {
     
     100% {
         top: 460px;
@@ -338,27 +325,139 @@ body {
 
 }
 
-.shots {
+.shot-position-1 {
     position: absolute;
-    z-index: -1;
-}
-
-.shot-0 {
     height: 50px;
     left: 140px;
-    animation: shot-move 3.9s linear;
+    animation: shot-move 2s linear;
+    top: 35px;
+    z-index: 5;
 }
 
-.shot-1 {
-    height: 75px;
+.shot-position-2 {
+    position: absolute;
+    height: 50px;
     left: 140px;
-    animation: shot-move 3.2s linear;
+    animation: shot-move 2s linear;
+    top: 155px;
+    z-index: 5;
 }
 
-.shot-2 {
-    height: 100px;
+.shot-position-3 {
+    position: absolute;
+    height: 50px;
     left: 140px;
-    animation: shot-move 2.5s linear;
+    animation: shot-move 2s linear;
+    top: 275px;
+    z-index: 5;
+}
+
+.shot-position-4 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 395px;
+    z-index: 5;
+}
+
+.shot-position-5 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 2s linear;
+    top: 515px;
+    z-index: 5;
+}
+
+.shot-2-position-1 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 35px;
+    z-index: 5;
+}
+
+.shot-2-position-2 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 155px;
+    z-index: 5;
+}
+
+.shot-2-position-3 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 275px;
+    z-index: 5;
+}
+
+.shot-2-position-4 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 395px;
+    z-index: 5;
+}
+
+.shot-2-position-5 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.7s linear;
+    top: 515px;
+    z-index: 5;
+}
+
+.shot-3-position-1 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 35px;
+    z-index: 5;
+}
+
+.shot-3-position-2 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 155px;
+    z-index: 5;
+}
+
+.shot-3-position-3 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 275px;
+    z-index: 5;
+}
+
+.shot-3-position-4 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 395px;
+    z-index: 5;
+}
+
+.shot-3-position-5 {
+    position: absolute;
+    height: 50px;
+    left: 140px;
+    animation: shot-move 1.4s linear;
+    top: 515px;
+    z-index: 5;
 }
 
 @keyframes shot-move {
@@ -367,25 +466,181 @@ body {
         left: 180px;
     }
     100% {
-        left: 2100px;
-    }
-
-}
-
-.planets {
-    position: absolute;
-    height: 120px;
-    right: -125px;
-    z-index: -1;
-}
-
-@keyframes move-planet {
-    
-    0% {
         left: 1200px;
     }
+
+}
+
+.planet-01-y1 {
+    height: 120px;
+    position: absolute;
+    top: 0;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-01 3s 1 linear;
+}
+
+.planet-01-y2 {
+    height: 120px;
+    position: absolute;
+    top: 119px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-01 3s 1 linear;
+}
+
+.planet-01-y3 {
+    height: 120px;
+    position: absolute;
+    top: 238px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-01 3s 1 linear;
+}
+
+.planet-01-y4 {
+    height: 120px;
+    position: absolute;
+    top: 357px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-01 3s 1 linear;
+}
+
+.planet-01-y5 {
+    height: 120px;
+    position: absolute;
+    top: 476px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-01 3s 1 linear;
+}
+
+.colunm {
+    height: 600px;
+    position: absolute;
+    top: 0px;
+    right: -250px;
+    z-index: -1;
+    animation: move-planet-01 5s 1 linear;
+}
+
+@keyframes move-planet-01 {
+    
     100% {
-        left: -250px;
+        right: 1200px;
+    }
+
+}
+
+.planet-03-y1 {
+    height: 120px;
+    position: absolute;
+    top: 0;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-03 5s 1 linear;
+}
+
+.planet-03-y2 {
+    height: 120px;
+    position: absolute;
+    top: 119px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-03 5s 1 linear;
+}
+
+.planet-03-y3 {
+    height: 120px;
+    position: absolute;
+    top: 238px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-03 5s 1 linear;
+}
+
+.planet-03-y4 {
+    height: 120px;
+    position: absolute;
+    top: 357px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-03 5s 1 linear;
+}
+
+.planet-03-y5 {
+    height: 120px;
+    position: absolute;
+    top: 476px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-03 5s 1 linear;
+}
+
+@keyframes move-planet-03 {
+    
+    0% {
+        right: -125px;
+    }
+    100% {
+        right: 1200px;
+    }
+
+}
+
+.planet-05-y1 {
+    height: 120px;
+    position: absolute;
+    top: 0;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-05 7s 1 linear;
+}
+
+.planet-05-y2 {
+    height: 120px;
+    position: absolute;
+    top: 119px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-05 7s 1 linear;
+}
+
+.planet-05-y3 {
+    height: 120px;
+    position: absolute;
+    top: 238px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-05 7s 1 linear;
+}
+
+.planet-05-y4 {
+    height: 120px;
+    position: absolute;
+    top: 357px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-05 7s 1 linear;
+}
+
+.planet-05-y5 {
+    height: 120px;
+    position: absolute;
+    top: 476px;
+    right: -125px;
+    z-index: -1;
+    animation: move-planet-05 7s 1 linear;
+}
+
+@keyframes move-planet-05 {
+    
+    0% {
+        right: -125px;
+    }
+    100% {
+        right: 1200px;
     }
 
 }
@@ -394,39 +649,20 @@ body {
     height: 592px;
     position: absolute;
     top: 0;
-    left: 1200px;
+    right: -575px;
     z-index: -1;
-    animation: move-boss 14s 1 linear;
+    animation: move-boss-01 12s 1 linear;
 }
 
-@keyframes move-boss {
+@keyframes move-boss-01 {
     
-    100% {
-        left: -675px;
-    }
-
-}
-
-@keyframes rotate-center-0 {
-
     0% {
-        transform: rotate(0);
+        right: -700px;
     }
     100% {
-        transform: rotate(360deg);
+        right: 1200px;
     }
-    
-}
 
-@keyframes rotate-center-1 {
-
-    0% {
-        transform: rotate(360deg);
-    }
-    100% {
-        transform: rotate(0);
-    }
-    
 }
 
 .explosion-planet {
@@ -448,11 +684,8 @@ body {
 .stage-start {
     position: absolute;
     width: 500px;
-    transform: translate(-26%, -50%);
-    animation: stage-start-move 2s 1 linear;
-    z-index: 0;
-    user-select: none;
-    pointer-events: none;
+    transform: translate(-26%, -68%);
+    animation: stage-start-move 2s;
 }
 
 @keyframes stage-start-move {
@@ -488,6 +721,8 @@ body {
     animation: warning-move 3s;
 }
 
+
+
 @keyframes warning-move {
 
     0% {
@@ -508,38 +743,6 @@ body {
 
     100% {
         opacity: 0;
-    }
-
-}
-
-.stage-clear {  
-    position: absolute;
-    width: 800px;
-    left: 26%;
-    top: -13%;
-    animation: stage-clear-move 4s;
-}
-
-@keyframes stage-clear-move {
-
-    0% {
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 1;
-    }
-
-    50% {
-        transform: rotate(0);
-        top: 13%;
-        left: 26%;
-    }
-
-    100% {
-        transform: rotate(360deg);
-        top: 13%;
-        left: 125%;
     }
 
 }
@@ -582,6 +785,14 @@ body {
     z-index: -1;
 }
 
+.mission-complete {
+    position: absolute;
+    width: 900px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-38%, -66%);
+}
+
 .retry-msg {
     background-color: black;
     width: 500px;
@@ -591,7 +802,7 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-26%, -50%);
+    transform: translate(-26%, -65%);
     border: solid 1px black;
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
@@ -658,7 +869,7 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-26%, -50%);
+    transform: translate(-26%, -62%);
     border: solid 1px black;
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
@@ -705,28 +916,6 @@ body {
     color: gold;
 }
 
-.gundam-boss {
-    height: 280px;
-    position: absolute;
-    top: 120px;
-    right: 0;
-    /* animation: movegundam 5s infinite; */
-}
-
-@keyframes movegundam {
-
-    0% {
-        top: 0;
-    }
-    50% {
-        top: 480px;
-    }
-    100% {
-        top: 0;
-    }
-
-}
-
 .charge1 {
     height: 160px;
     position: absolute;
@@ -745,22 +934,50 @@ body {
     z-index: 1;
 }
 
-.planet-dead {
+.gundam-boss {
+    height: 280px;
     position: absolute;
-    height: 120px;
-    animation: planet-end 0.4s 1 linear;
-    opacity: 0;
-    z-index: -1;
+    top: 120px;
+    right: 0;
+    /* animation: movegundam 5s infinite; */
 }
 
-@keyframes planet-end {
-
+@keyframes move-gundam {
+    
     0% {
         opacity: 1;
     }
 
+    20% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
     100% {
         opacity: 0;
+    }
+
+}
+
+@keyframes transition-gundam {
+    
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
     }
 
 }

@@ -470,7 +470,7 @@ let planetsLaunched = 0;
 
 function planetGenerator(t, p, v) {
 
-    let planetEnemy = document.createElement('img');
+    /* let planetEnemy = document.createElement('img');
     planetEnemy.src = `../img/planet-${t}.gif`;
     planetEnemy.classList.add('planets');
     planetEnemy.classList.add(`planet-${t}`);
@@ -478,7 +478,7 @@ function planetGenerator(t, p, v) {
     planetEnemy.style.animation = `move-planet ${(t * 2) + 3 - v}s 1 linear`;
     planetEnemy.setAttribute('data-hp', `${(t * 2) + 1}`);
     gameBoard.appendChild(planetEnemy);
-    planetsLaunched++;
+    planetsLaunched++; */
 
 }
 
@@ -521,12 +521,34 @@ function generatePlanets() {
 
             }
 
-            planetType = Math.trunc(Math.random() * 3);
-            planetGenerator(planetType, numbers[0], 0);
-            planetType = Math.trunc(Math.random() * 3);
-            planetGenerator(planetType, numbers[1], 0);
-            planetType = Math.trunc(Math.random() * 3);
-            planetGenerator(planetType, numbers[2], 0);
+            let numbers2 = [];
+
+            let q, w, e;
+
+            q = 3;
+
+            for (let i = 0; i < q; i++) {
+
+                do {
+
+                    w = Math.trunc(Math.random() * 3);
+                    e = numbers2.includes(w);
+
+                    if (!e) {
+
+                        numbers2.push(w);
+
+                    }
+                    
+                }
+
+                while (e);
+
+            }
+
+            planetGenerator(numbers2[0], numbers[0], 0);
+            planetGenerator(numbers2[1], numbers[1], 0);
+            planetGenerator(numbers2[2], numbers[2], 0);
 
         }
 
@@ -667,15 +689,7 @@ function colisionShots() {
 
             } else if (((shots[i].offsetLeft <= (moonBoss.offsetLeft + 340)) && (shots[i].offsetLeft + 14) >= moonBoss.offsetLeft + 230) && (shots[i].offsetTop <= (moonBoss.offsetTop + 352) && ((shots[i].offsetTop + 14) >= moonBoss.offsetTop + 240)) && bossVunerable) {
 
-                for (let m = 0; m < 3; m++) {
-
-                    if (shots[i].classList.contains(`shot-${m}`)) {
-
-                        bossColision(i);
-
-                    }
-
-                }
+                bossColision(i);  
 
             }
 
@@ -747,6 +761,12 @@ function colisionBomb() {
 
 // Padrão Warning
 
+setTimeout(() => {
+
+    warningBoss();
+    
+}, 3000);
+
 function warningBoss() {
 
     const warning = document.createElement('img');
@@ -778,7 +798,7 @@ function warningBoss() {
 
         moonBossAppears();
 
-    }, 4000);
+    }, 3000);
 
 
 }
@@ -817,14 +837,38 @@ function moonBossAppears() {
 
     }
 
-    planetType = Math.trunc(Math.random() * 3);
-    planetGenerator(planetType, numbers[0], 0);
-    planetType = Math.trunc(Math.random() * 3);
-    planetGenerator(planetType, numbers[1], 0);
-    planetType = Math.trunc(Math.random() * 3);
-    planetGenerator(planetType, numbers[2], 0);
+    let numbers2 = [];
+
+    let q, w, e;
+
+    q = 3;
+
+    for (let i = 0; i < q; i++) {
+
+        do {
+
+            w = Math.trunc(Math.random() * 3);
+            e = numbers2.includes(w);
+
+            if (!e) {
+
+                numbers2.push(w);
+
+            }
+            
+        }
+
+        while (e);
+
+    }
+
+    planetGenerator(numbers2[0], numbers[0], 0);
+    planetGenerator(numbers2[1], numbers[1], 0);
+    planetGenerator(numbers2[2], numbers[2], 0);
 
 }
+
+let possibleShots = 10;
 
 function bossColision(a) {
 
@@ -832,6 +876,7 @@ function bossColision(a) {
     valueBarrHpBoss = valueBarrHpBoss - (Number(shots[a].dataset.dmg) * (100 / (hpMoonBossFixed)));
     barrHpBoss.style.width = `${valueBarrHpBoss}%`;
     shots[a].remove();
+    possibleShots -= Number(shots[a].dataset.dmg);
 
     if (valueBarrHpBoss <= 0) {
 
@@ -839,34 +884,33 @@ function bossColision(a) {
         
     }
 
+    if (possibleShots <= 0) {
+
+        clearTimeout(moveAnimationBoss);
+        moonBoss.style.animation = `move-boss ${28 - (bossRage * 2)}s 1 linear`;
+        bossVunerable = false;
+        possibleShots = 10;
+
+    }
+
     if (hpMoonBoss <= 30 && bossRage === 0) {
 
         moonBoss.src = `../img/moon-boss-10.png`;
         bossRage = 1;
-        clearTimeout(moveAnimationBoss);
-        moonBoss.style.animation = `move-boss ${28 - (bossRage * 2)}s 1 linear`;
-        bossVunerable = false;
 
     } else if (hpMoonBoss <= 20 && bossRage === 1) {
 
         moonBoss.src = `../img/moon-boss-20.png`;
         bossRage = 2;
-        clearTimeout(moveAnimationBoss);
-        moonBoss.style.animation = `move-boss ${28 - (bossRage * 2)}s 1 linear`;
-        bossVunerable = false;
 
     } else if (hpMoonBoss <= 10 && bossRage === 2) {
 
         moonBoss.src = `../img/moon-boss-30.png`;
         bossRage = 3;
-        clearTimeout(moveAnimationBoss);
-        moonBoss.style.animation = `move-boss ${28 - (bossRage * 2)}s 1 linear`;
-        bossVunerable = false;
 
-    } else if (hpMoonBoss <= 0  && bossRage === 3) {
+    } else if (hpMoonBoss <= 0) {
 
         for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].remove();
-        gameOver = true;
 
         clearTimeout(moveAnimationBoss);
 
@@ -893,7 +937,11 @@ function bossColision(a) {
 
         setTimeout(() => {
 
-            stageClear();
+            if (!gameOver) {
+
+                stageClear();
+
+            };
 
         }, 3000);
 
@@ -936,17 +984,40 @@ function moonBossSkill(x, rage) {
 
     }
 
-    planetType = Math.trunc(Math.random() * 3);
-    planetGenerator(planetType, numbers[0], (rage * 0.4) + 0.1);
-    planetType = Math.trunc(Math.random() * 3);
-    planetGenerator(planetType, numbers[1], (rage * 0.4) + 0.1);
-    planetType = Math.trunc(Math.random() * 3);
-    planetGenerator(planetType, numbers[2], (rage * 0.4) + 0.1);
+    let numbers2 = [];
+
+    let q, w, e;
+
+    q = 3;
+
+    for (let i = 0; i < q; i++) {
+
+        do {
+
+            w = Math.trunc(Math.random() * 3);
+            e = numbers2.includes(w);
+
+            if (!e) {
+
+                numbers2.push(w);
+
+            }
+            
+        }
+
+        while (e);
+
+    }
+
+    planetGenerator(numbers2[0], numbers[0], (rage * 0.4) + 0.1);
+    planetGenerator(numbers2[1], numbers[1], (rage * 0.4) + 0.1);
+    planetGenerator(numbers2[2], numbers[2], (rage * 0.4) + 0.1);
 
     moveAnimationBoss = setTimeout(() => {
 
         moonBoss.style.animation = `move-boss ${28 - (rage * 2)}s 1 linear`;
         bossVunerable = false;
+        possibleShots = 10;
 
     }, (7500 - (rage * 1500)));
 

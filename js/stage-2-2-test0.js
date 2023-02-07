@@ -28,11 +28,19 @@ let gameOver = false;
 let controlsAllowed = false;
 let stageComplete = false;
 
+let hpGundamBoss = 1000;
+let gundamVunerable = true;
+let hpMoonBossFixed = hpGundamBoss;
+let boxBarrHpBoss = document.querySelector('.box-barr-hp-boss');
+let barrHpBoss = document.querySelector('.barr-hp-boss');
+let valueBarrHpBoss = 100;
+let valueSkill = 0;
+
 function move(x) {
 
     if (controlsAllowed) {
 
-        cat.style.animation = `move${x} 0.09s 1 forwards`;
+        cat.style.animation = `move${x} 0.09s 1`;
         shadowMove.style.display = 'block';
         charge1.style.animation = `move${x}-charge 0.09s 1`;
         charge2.style.animation = `move${x}-charge 0.09s 1`;
@@ -563,11 +571,10 @@ function planetGenerator(t, p, v, m2, m3) {
     if (t === 0) missileType1(t, v);
     if (t === 1) missileType2(t, v, m2, m3);
     if (t === 2) missileType3(t, p, v, m3);
+    if (t === 3) missileType1Boss(t, v);
     planetsLaunched++;
 
 }
-
-// let planets0;
 
 function missileType1(t, v) {
 
@@ -614,9 +621,20 @@ function missileType3(t, p, v, m3) {
 
 }
 
+function missileType1Boss(t, v) {
+
+    let planetEnemy0 = planetEnemy;
+    planetEnemy.src = `../img/planet-${0}.gif`;
+    planetEnemy0.style.left = `${gundamBoss.offsetLeft + 200}px`;
+    planetEnemy0.style.animation = `move-planet-01-boss ${2}s 1 ease-in-out forwards`;
+    planetEnemy0.setAttribute('data-hp', `2`);
+    gameBoard.appendChild(planetEnemy0);
+
+}
+
 function generatePlanets() {
 
-    generatePlanetsInterval = setInterval(() => {
+    /* generatePlanetsInterval = setInterval(() => {
 
         planetType = Math.trunc(Math.random() * 3);
         planetPosition = Math.trunc(Math.random() * 5);
@@ -635,7 +653,7 @@ function generatePlanets() {
 
         }
 
-    }, intervalPlanets);
+    }, intervalPlanets); */
 
 }
 
@@ -648,6 +666,7 @@ function colisionShots() {
 
     shots = document.querySelectorAll('.shots');
     planets = document.querySelectorAll('.planets');
+    gundamBoss = document.querySelector('.gundam-boss');
     heartCat = document.querySelectorAll('.heart-active');
 
     for (let b = 0; b < planets.length; b++) {
@@ -762,11 +781,30 @@ function colisionShots() {
 
                     planetColision(i, j);
 
-                } else if ((shots[i].classList.contains('shot-2') && (shots[i].offsetLeft <= (planets[j].offsetLeft + 70)) && (shots[i].offsetLeft + 75) >= planets[j].offsetLeft) && (shots[i].offsetTop <= (planets[j].offsetTop + 98) && ((shots[i].offsetTop + 72) >= planets[j].offsetTop))) {
+                } else if ((shots[i].classList.contains('shot-2') && (shots[i].offsetLeft <= (planets[j].offsetLeft + 70)) && (shots[i].offsetLeft + 65) >= planets[j].offsetLeft) && (shots[i].offsetTop <= (planets[j].offsetTop + 98) && ((shots[i].offsetTop + 72) >= planets[j].offsetTop))) {
 
                     planetColision(i, j);
 
                 }
+
+            }
+
+        }
+
+        if (shots[i] && gundamBoss && !gameOver) {
+
+            if (((shots[i].classList.contains('shot-0') &&  shots[i].offsetLeft <= (gundamBoss.offsetLeft + 205)) && (shots[i].offsetLeft + 14) >= gundamBoss.offsetLeft + 130) && (shots[i].offsetTop <= (gundamBoss.offsetTop + 240) && ((shots[i].offsetTop + 22) >= gundamBoss.offsetTop)) && gundamVunerable) {
+
+                bossColision(i);
+            
+            } else if (((shots[i].classList.contains('shot-1') &&  shots[i].offsetLeft <= (gundamBoss.offsetLeft + 205)) && (shots[i].offsetLeft + 84) >= gundamBoss.offsetLeft + 130) && (shots[i].offsetTop <= (gundamBoss.offsetTop + 240) && ((shots[i].offsetTop + 44) >= gundamBoss.offsetTop)) && gundamVunerable) {
+
+                bossColision(i);
+                
+
+            } else if (((shots[i].classList.contains('shot-2') &&  shots[i].offsetLeft <= (gundamBoss.offsetLeft + 205)) && (shots[i].offsetLeft + 74) >= gundamBoss.offsetLeft + 130) && (shots[i].offsetTop <= (gundamBoss.offsetTop + 240) && ((shots[i].offsetTop + 72) >= gundamBoss.offsetTop)) && gundamVunerable) {
+
+                bossColision(i);
 
             }
 
@@ -901,6 +939,177 @@ function colisionBomb() {
 
 }
 
+setTimeout(() => {
+
+    warningBoss();
+    
+}, 5000);
+
+function warningBoss() {
+
+    controlsAllowed = false;
+    clearInterval(chargeInterval);
+    clearInterval(consecutivesShots);
+    keyShotCharge = false;
+    keyShotMultiple = false;
+    keyBomb = false;
+    keyMoveDown = false;
+    keyMoveUp = false;
+
+    const warning = document.createElement('img');
+    warning.src = '../img/warning.png';
+    warning.classList.add('warning');
+    gameBoard.appendChild(warning);
+
+    setTimeout(() => {
+
+        gundamAppears();
+        boxBarrHpBoss.style.display = 'block';
+        gameBoard.removeChild(warning);
+
+        setTimeout(() => {
+
+            barrHpBoss.style.width = '100%';
+
+            setTimeout(() => {
+
+                controlsAllowed = true;
+
+            }, 2000);
+
+        }, 3000);
+
+    }, 3000);
+
+}
+
+let gundamBoss;
+
+function gundamAppears() {
+
+    let gundamBossEntrance = document.createElement('img');
+    gundamBossEntrance.src = '../img/gundam-boss.gif';
+    gundamBossEntrance.classList.add('gundam-boss');
+    gameBoard.appendChild(gundamBossEntrance);
+
+    setTimeout(() => {
+
+        setInterval(() => {
+        
+            gundamPhase01();
+            
+        }, 2000);
+
+    }, 3000);
+
+}
+
+function bossColision(a) {
+
+    hpGundamBoss -= Number(shots[a].dataset.dmg);
+    valueBarrHpBoss = valueBarrHpBoss - (Number(shots[a].dataset.dmg) * (100 / (hpMoonBossFixed)));
+    barrHpBoss.style.width = `${valueBarrHpBoss}%`;
+    shots[a].remove();
+
+    if (valueBarrHpBoss <= 0) {
+
+        barrHpBoss.style.width = '0%';
+        
+    }
+
+    if (hpGundamBoss <= 0) {
+
+        for (let j = 0; j < planets.length; j++) planets[j].remove();
+
+        clearTimeout(generatePlanetsInterval);
+
+        pointHpCat = hpCat * 1500;
+        pointQtBomb = qtBomb * 4000;
+        pointQtShotHaduken = qtShotHaduken * 100;
+        qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
+
+        let explosionMoonBoos = document.createElement('img');
+        explosionMoonBoos.src = '../img/boss-explosion.gif';
+        explosionMoonBoos.classList.add('boss-explosion');
+        explosionMoonBoos.style.top = `${gundamBoss.offsetTop - 85}px`;
+        explosionMoonBoos.style.left = `${gundamBoss.offsetLeft + 25}px`;
+        explosionMoonBoos.style.width = '325px';
+        explosionMoonBoos.style.height = '360px';
+        gameBoard.appendChild(explosionMoonBoos);
+
+        gameBoard.removeChild(gundamBoss);
+        gundamBoss = false;
+
+        setTimeout(() => {
+
+            gameBoard.removeChild(explosionMoonBoos);
+
+        }, 1700);
+
+        setTimeout(() => {
+
+            if (!gameOver) {
+
+                stageClear();
+
+            };
+
+        }, 3000);
+
+    }
+
+}
+
+function gundamPhase01() {
+
+    let gundamPosition = Math.floor(Math.random() * 4);
+
+    let numbers = [];
+
+    let r, n, p;
+
+    r = 2;
+
+    for (let i = 0; i < r; i++) {
+
+        do {
+
+            n = Math.floor(Math.random() * 2);
+            p = numbers.includes(n);
+
+            if (!p) {
+
+                numbers.push(n);
+
+            }
+            
+        }
+
+        while (p);
+
+    }
+
+    gundamBoss.style.animation = 'move-gundam 0.5s';
+    gundamVunerable = false;
+    
+    setTimeout(() => {
+        
+        gundamBoss.style.animation = 'transition-gundam 0.2s';
+        gundamBoss.style.top = `${gundamPosition * 120}px`;
+
+        planetGenerator(3, gundamPosition + numbers[0], 0);
+
+        setTimeout(() => {
+
+            planetGenerator(3, (gundamPosition + numbers[1]), 0);
+            gundamVunerable = true;
+
+        }, 200);
+
+    }, 480);
+
+}
+
 function stageClear() {
 
     const missionComplete = document.createElement('img');
@@ -1019,3 +1228,180 @@ setInterval(() => {
 //
 //
 //
+
+/* let colunm;
+
+const colisaoColunm = setInterval(() => {
+    
+    colunm = document.querySelector('.colunm');
+
+    if (shot01Left >= 140 && colunmLeft >= 140) {
+
+        if (shot01Left >= colunmLeft) {
+
+            let shot01Left = document.querySelector('.shot-position-1')
+            gameBoard.removeChild(shot01Left)
+
+        }
+
+    }
+
+}, 10);
+
+const bombColunm = setInterval(() => {
+
+    if (bombValue == 1) {
+        
+        gameBoard.removeChild(colunm);
+
+    }
+
+}, 100);
+ */
+// Padrão 1
+
+//
+//
+//
+//
+    
+    /* const moveGundam_01 = setInterval(() => {
+
+        if (hpGundamBoss > 0 && valueSkill < 5) {
+
+            valueSkill++
+            gundamPosition = Math.floor(Math.random() * 4) + 1
+            
+            if (gundamPosition == 1) {
+                
+                gundamBoss.style.animation = "move-gundam 0.5s"
+
+                setTimeout(() => {
+
+                    gundamBoss.style.animation = "transition-gundam 0.2s"
+                    gundamBoss.style.top = "0px"
+                    
+                }, 480);
+
+                setTimeout(() => {
+
+                    if (valueSkill < 5) {
+
+                        gameBoard.appendChild(planet01Y1)
+                        gameBoard.appendChild(planet01Y2)
+
+                    }
+                    
+                }, 2000);
+
+            }
+
+            if (gundamPosition == 2) {
+
+                gundamBoss.style.animation = "move-gundam 0.5s"
+                
+                setTimeout(() => {
+                    
+                    gundamBoss.style.animation = "transition-gundam 0.2s"
+                    gundamBoss.style.top = "120px"
+                    
+                }, 480);
+
+                setTimeout(() => {
+
+                    if (valueSkill < 5) {
+
+                        gameBoard.appendChild(planet01Y3)
+                        gameBoard.appendChild(planet01Y2)
+
+                    }
+                    
+                }, 2000);
+                
+            }
+
+            if (gundamPosition == 3) {
+
+                gundamBoss.style.animation = "move-gundam 0.5s"
+                
+                setTimeout(() => {
+
+                    gundamBoss.style.animation = "transition-gundam 0.2s"
+                    gundamBoss.style.top = "240px"
+                    
+                }, 480);
+
+                setTimeout(() => {
+
+                    if (valueSkill < 5) {
+
+                        gameBoard.appendChild(planet01Y3)
+                        gameBoard.appendChild(planet01Y4)
+
+                    }
+                    
+                }, 2000);
+                
+            }
+
+            if (gundamPosition == 4) {
+                
+                gundamBoss.style.animation = "move-gundam 0.5s"
+                
+                setTimeout(() => {
+
+                    gundamBoss.style.animation = "transition-gundam 0.2s"
+                    gundamBoss.style.top = "360px"
+                    
+                }, 480);
+                
+                setTimeout(() => {
+
+                    if (valueSkill < 5) {
+
+                        gameBoard.appendChild(planet01Y5)
+                        gameBoard.appendChild(planet01Y4)
+
+                    }
+                    
+                }, 2000);
+
+            }
+
+            if (valueSkill == 5) {
+
+                gundamSkill()
+        
+            }
+
+        }
+    
+    }, 2000);
+    
+}
+
+function gundamSkill() {
+
+    gundamBoss.style.animation = "move-gundam 0.5s";
+            
+    setTimeout(() => {
+        
+        gundamBoss.style.animation = "transition-gundam 0.2s"
+        gundamBoss.src = '../img/gundamm.gif';
+        
+    }, 480);
+
+    setTimeout(() => {
+
+        gameBoard.appendChild(colunm)
+        gundamBoss.src = '../img/gundam-boss.gif'
+        
+    }, 2500);
+
+    setTimeout(() => {
+
+        gundamVunerable = true;
+        
+    }, 3500);
+
+} */

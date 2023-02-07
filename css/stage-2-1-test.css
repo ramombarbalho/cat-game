@@ -4,15 +4,28 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: #7f00ff;
+    user-select: none;
+    overflow: hidden;
+}
+
+.game-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .game-board {
     background-image: linear-gradient( #5a23a1, #25b3df);
+    border: 3px solid rgb(255, 0, 234);
     position: relative;
     margin: auto;
-    border: 3px solid rgb(255, 0, 234);
     width: 1200px;
-    height: 720px;
-    overflow: hidden;
+    height: 600px;
     z-index: 0;
+    overflow: hidden;
 }
 
 .game-status {
@@ -21,10 +34,11 @@
     margin: auto;
     display: flex;
     align-items: center;
-    border-top: 3px solid rgb(255, 0, 234);
+    border: 3px solid rgb(255, 0, 234);
     width: 1200px;
     height: 120px;
     z-index: 3;
+    overflow: hidden;
 }
 
 .cat {
@@ -32,6 +46,19 @@
     position: absolute;
     top: 240px;
     z-index: 1;
+    animation: cat-entrance 2.8s;
+}
+
+@keyframes cat-entrance {
+
+    0% {
+        left: -240px;
+    }
+
+    100% {
+        left: 0px;
+    }
+
 }
 
 .shadow-move {
@@ -76,7 +103,27 @@
     cursor: pointer;
 }
 
+.box-shot {
+    position: relative;
+    background-image: linear-gradient(to bottom right, rgb(58, 28, 107), rgb(178, 174, 238));
+    width: 120px;
+    height: 119px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid black;
+}
+
 .cooldown-bomb {
+    position: absolute;
+    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.97), rgba(43, 43, 43, 0.97), rgba(107, 107, 107, 0.97));
+    bottom: 0;
+    border-top: 1px solid rgb(105, 105, 105);
+    width: 100%;
+}
+
+.cooldown-m {
     position: absolute;
     background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.97), rgba(43, 43, 43, 0.97), rgba(107, 107, 107, 0.97));
     bottom: 0;
@@ -104,7 +151,7 @@
     width: 65px;
 }
 
-.no-allowed {
+.no-allowed-b {
     width: 20%;
     position: absolute;
     top: 7%;
@@ -113,15 +160,13 @@
     z-index: 1;
 }
 
-.box-shot {
-    background-image: linear-gradient(to bottom right, rgb(58, 28, 107), rgb(178, 174, 238));
-    width: 120px;
-    height: 119px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-right: 1px solid black;
+.no-allowed-m {
+    width: 20%;
+    position: absolute;
+    top: 7%;
+    left: 73%;
+    display: none;
+    z-index: 1;
 }
 
 .shot-haduken-stts {
@@ -191,7 +236,7 @@
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
 } */
 
-@keyframes move1 {
+@keyframes move0 {
 
     100% {
         top: 0px;
@@ -199,7 +244,7 @@
 
 }
 
-@keyframes move2 {
+@keyframes move1 {
     
     100% {
         top: 120px;
@@ -207,7 +252,7 @@
 
 }
 
-@keyframes move3 {
+@keyframes move2 {
     
     100% {
         top: 240px;
@@ -215,7 +260,7 @@
 
 }
 
-@keyframes move4 {
+@keyframes move3 {
     
     100% {
         top: 360px;
@@ -223,7 +268,7 @@
 
 }
 
-@keyframes move5 {
+@keyframes move4 {
     
     100% {
         top: 480px;
@@ -231,7 +276,7 @@
 
 }
 
-@keyframes move1-charge {
+@keyframes move0-charge {
     
     100% {
         top: -20px;
@@ -239,7 +284,7 @@
 
 }
 
-@keyframes move2-charge {
+@keyframes move1-charge {
     
     100% {
         top: 100px;
@@ -247,7 +292,7 @@
 
 }
 
-@keyframes move3-charge {
+@keyframes move2-charge {
     
     100% {
         top: 220px;
@@ -255,7 +300,7 @@
 
 }
 
-@keyframes move4-charge {
+@keyframes move3-charge {
     
     100% {
         top: 340px;
@@ -263,7 +308,7 @@
 
 }
 
-@keyframes move5-charge {
+@keyframes move4-charge {
     
     100% {
         top: 460px;
@@ -311,139 +356,27 @@
 
 }
 
-.shot-position-1 {
+.shots {
     position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 35px;
-    z-index: 5;
+    z-index: -1;
 }
 
-.shot-position-2 {
-    position: absolute;
+.shot-0 {
     height: 50px;
     left: 140px;
-    animation: shot-move 2s linear;
-    top: 155px;
-    z-index: 5;
+    animation: shot-move 3.9s linear;
 }
 
-.shot-position-3 {
-    position: absolute;
-    height: 50px;
+.shot-1 {
+    height: 75px;
     left: 140px;
-    animation: shot-move 2s linear;
-    top: 275px;
-    z-index: 5;
+    animation: shot-move 3.2s linear;
 }
 
-.shot-position-4 {
-    position: absolute;
-    height: 50px;
+.shot-2 {
+    height: 100px;
     left: 140px;
-    animation: shot-move 2s linear;
-    top: 395px;
-    z-index: 5;
-}
-
-.shot-position-5 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 2s linear;
-    top: 515px;
-    z-index: 5;
-}
-
-.shot-2-position-1 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 35px;
-    z-index: 5;
-}
-
-.shot-2-position-2 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 155px;
-    z-index: 5;
-}
-
-.shot-2-position-3 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 275px;
-    z-index: 5;
-}
-
-.shot-2-position-4 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 395px;
-    z-index: 5;
-}
-
-.shot-2-position-5 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.7s linear;
-    top: 515px;
-    z-index: 5;
-}
-
-.shot-3-position-1 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 35px;
-    z-index: 5;
-}
-
-.shot-3-position-2 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 155px;
-    z-index: 5;
-}
-
-.shot-3-position-3 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 275px;
-    z-index: 5;
-}
-
-.shot-3-position-4 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 395px;
-    z-index: 5;
-}
-
-.shot-3-position-5 {
-    position: absolute;
-    height: 50px;
-    left: 140px;
-    animation: shot-move 1.4s linear;
-    top: 515px;
-    z-index: 5;
+    animation: shot-move 2.5s linear;
 }
 
 @keyframes shot-move {
@@ -452,181 +385,97 @@
         left: 180px;
     }
     100% {
-        left: 1200px;
+        left: 2100px;
     }
 
 }
 
-.planet-01-y1 {
-    height: 120px;
+.planets {
     position: absolute;
-    top: 0;
+    height: 120px;
     right: -125px;
     z-index: -1;
-    animation: move-planet-01 3s 1 linear;
 }
 
-.planet-01-y2 {
-    height: 120px;
+.planets-shadow {
     position: absolute;
-    top: 119px;
+    height: 120px;
     right: -125px;
     z-index: -1;
-    animation: move-planet-01 3s 1 linear;
 }
 
-.planet-01-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
+@keyframes move-planet {
+    
+    0% {
+        left: 1200px;
+    }
+    100% {
+        left: -250px;
+    }
+
 }
 
-.planet-01-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
+@keyframes move-planet-00 {
+    
+    0% {
+        left: 1200px;
+    }
+    100% {
+        left: 800px;
+    }
 
-.planet-01-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-01 3s 1 linear;
-}
-
-.colunm {
-    height: 600px;
-    position: absolute;
-    top: 0px;
-    right: -250px;
-    z-index: -1;
-    animation: move-planet-01 5s 1 linear;
 }
 
 @keyframes move-planet-01 {
     
-    100% {
-        right: 1200px;
-    }
-
-}
-
-.planet-03-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-.planet-03-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-03 5s 1 linear;
-}
-
-@keyframes move-planet-03 {
-    
     0% {
-        right: -125px;
+        left: 800px;
+        filter: grayscale(0%);
     }
+
     100% {
-        right: 1200px;
+        left: -250px;
+        filter: grayscale(0%);
     }
 
 }
 
-.planet-05-y1 {
-    height: 120px;
-    position: absolute;
-    top: 0;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
+@keyframes direction-0 {
 
-.planet-05-y2 {
-    height: 120px;
-    position: absolute;
-    top: 119px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y3 {
-    height: 120px;
-    position: absolute;
-    top: 238px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y4 {
-    height: 120px;
-    position: absolute;
-    top: 357px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-.planet-05-y5 {
-    height: 120px;
-    position: absolute;
-    top: 476px;
-    right: -125px;
-    z-index: -1;
-    animation: move-planet-05 7s 1 linear;
-}
-
-@keyframes move-planet-05 {
-    
-    0% {
-        right: -125px;
-    }
     100% {
-        right: 1200px;
+        top: 0px;
+    }
+
+}
+
+@keyframes direction-1 {
+
+    100% {
+        top: 117px;
+    }
+
+}
+
+@keyframes direction-2 {
+
+    100% {
+        top: 237px;
+    }
+
+}
+
+@keyframes direction-3 {
+
+    100% {
+        top: 357px;
+    }
+
+}
+
+@keyframes direction-4 {
+
+    100% {
+        top: 477px;
     }
 
 }
@@ -635,20 +484,39 @@
     height: 592px;
     position: absolute;
     top: 0;
-    right: -575px;
+    left: 1200px;
     z-index: -1;
-    animation: move-boss-01 12s 1 linear;
+    animation: move-boss 14s 1 linear;
 }
 
-@keyframes move-boss-01 {
+@keyframes move-boss {
     
-    0% {
-        right: -700px;
-    }
     100% {
-        right: 1200px;
+        left: -675px;
     }
 
+}
+
+@keyframes rotate-center-0 {
+
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    
+}
+
+@keyframes rotate-center-1 {
+
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
+    
 }
 
 .explosion-planet {
@@ -670,8 +538,11 @@
 .stage-start {
     position: absolute;
     width: 500px;
-    transform: translate(-26%, -68%);
-    animation: stage-start-move 2s;
+    transform: translate(-26%, -50%);
+    animation: stage-start-move 2s 1 linear;
+    z-index: 0;
+    user-select: none;
+    pointer-events: none;
 }
 
 @keyframes stage-start-move {
@@ -707,8 +578,6 @@
     animation: warning-move 3s;
 }
 
-
-
 @keyframes warning-move {
 
     0% {
@@ -729,6 +598,38 @@
 
     100% {
         opacity: 0;
+    }
+
+}
+
+.stage-clear {  
+    position: absolute;
+    width: 800px;
+    left: 26%;
+    top: -13%;
+    animation: stage-clear-move 4s;
+}
+
+@keyframes stage-clear-move {
+
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: rotate(0);
+        top: 13%;
+        left: 26%;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        top: 13%;
+        left: 125%;
     }
 
 }
@@ -771,14 +672,6 @@
     z-index: -1;
 }
 
-.mission-complete {
-    position: absolute;
-    width: 900px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-38%, -66%);
-}
-
 .retry-msg {
     background-color: black;
     width: 500px;
@@ -788,7 +681,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-26%, -65%);
+    transform: translate(-26%, -50%);
     border: solid 1px black;
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
@@ -855,7 +748,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-26%, -62%);
+    transform: translate(-26%, -50%);
     border: solid 1px black;
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
@@ -902,6 +795,28 @@
     color: gold;
 }
 
+.gundam-boss {
+    height: 280px;
+    position: absolute;
+    top: 120px;
+    right: 0;
+    /* animation: movegundam 5s infinite; */
+}
+
+@keyframes movegundam {
+
+    0% {
+        top: 0;
+    }
+    50% {
+        top: 480px;
+    }
+    100% {
+        top: 0;
+    }
+
+}
+
 .charge1 {
     height: 160px;
     position: absolute;
@@ -920,50 +835,22 @@
     z-index: 1;
 }
 
-.gundam-boss {
-    height: 280px;
+.planet-dead {
     position: absolute;
-    top: 120px;
-    right: 0;
-    /* animation: movegundam 5s infinite; */
+    height: 120px;
+    animation: planet-end 0.4s 1 linear;
+    opacity: 0;
+    z-index: -1;
 }
 
-@keyframes move-gundam {
-    
+@keyframes planet-end {
+
     0% {
         opacity: 1;
     }
 
-    20% {
-        opacity: 0.4;
-    }
-
-    50% {
-        opacity: 0;
-    }
-
     100% {
         opacity: 0;
-    }
-
-}
-
-@keyframes transition-gundam {
-    
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 0;
-    }
-
-    70% {
-        opacity: 0.4;
-    }
-
-    100% {
-        opacity: 1;
     }
 
 }

@@ -5,9 +5,9 @@
 }
 
 body {
-    background-color: black;
+    background-color: #7f00ff;
     user-select: none;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .game-box {
@@ -103,7 +103,27 @@ body {
     cursor: pointer;
 }
 
+.box-shot {
+    position: relative;
+    background-image: linear-gradient(to bottom right, rgb(58, 28, 107), rgb(178, 174, 238));
+    width: 120px;
+    height: 119px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid black;
+}
+
 .cooldown-bomb {
+    position: absolute;
+    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.97), rgba(43, 43, 43, 0.97), rgba(107, 107, 107, 0.97));
+    bottom: 0;
+    border-top: 1px solid rgb(105, 105, 105);
+    width: 100%;
+}
+
+.cooldown-m {
     position: absolute;
     background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.97), rgba(43, 43, 43, 0.97), rgba(107, 107, 107, 0.97));
     bottom: 0;
@@ -131,7 +151,7 @@ body {
     width: 65px;
 }
 
-.no-allowed {
+.no-allowed-b {
     width: 20%;
     position: absolute;
     top: 7%;
@@ -140,15 +160,13 @@ body {
     z-index: 1;
 }
 
-.box-shot {
-    background-image: linear-gradient(to bottom right, rgb(58, 28, 107), rgb(178, 174, 238));
-    width: 120px;
-    height: 119px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-right: 1px solid black;
+.no-allowed-m {
+    width: 20%;
+    position: absolute;
+    top: 7%;
+    left: 73%;
+    display: none;
+    z-index: 1;
 }
 
 .shot-haduken-stts {
@@ -379,6 +397,13 @@ body {
     z-index: -1;
 }
 
+.planets-shadow {
+    position: absolute;
+    height: 120px;
+    right: -125px;
+    z-index: -1;
+}
+
 @keyframes move-planet {
     
     0% {
@@ -386,6 +411,88 @@ body {
     }
     100% {
         left: -250px;
+    }
+
+}
+
+@keyframes move-planet-00 {
+    
+    0% {
+        left: 1200px;
+    }
+    100% {
+        left: 800px;
+    }
+
+}
+
+@keyframes move-planet-01 {
+    
+    0% {
+        left: 800px;
+        filter: grayscale(0%);
+    }
+
+    100% {
+        left: -250px;
+        filter: grayscale(0%);
+    }
+
+}
+
+@keyframes move-planet-01-boss {
+    
+    0% {
+        left: 950px;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        left: -250px;
+    }
+
+}
+
+@keyframes direction-0 {
+
+    100% {
+        top: 0px;
+    }
+
+}
+
+@keyframes direction-1 {
+
+    100% {
+        top: 117px;
+    }
+
+}
+
+@keyframes direction-2 {
+
+    100% {
+        top: 237px;
+    }
+
+}
+
+@keyframes direction-3 {
+
+    100% {
+        top: 357px;
+    }
+
+}
+
+@keyframes direction-4 {
+
+    100% {
+        top: 477px;
     }
 
 }
@@ -485,7 +592,7 @@ body {
     left: 50%;
     top: 50%;
     transform: translate(-35%, -78%);
-    animation: warning-move 3s;
+    animation: warning-move 3s forwards;
 }
 
 @keyframes warning-move {
@@ -561,7 +668,7 @@ body {
     right: 0;
     height: 100%;
     box-shadow: -1px 0 0.75em rgba(0, 0, 0, 0.3);
-    animation: full-boss-hp 2s 1;
+    animation: full-boss-hp 2s 3s 1;
 }
 
 @keyframes full-boss-hp {
@@ -705,14 +812,6 @@ body {
     color: gold;
 }
 
-.gundam-boss {
-    height: 280px;
-    position: absolute;
-    top: 120px;
-    right: 0;
-    /* animation: movegundam 5s infinite; */
-}
-
 @keyframes movegundam {
 
     0% {
@@ -761,6 +860,67 @@ body {
 
     100% {
         opacity: 0;
+    }
+
+}
+
+.gundam-boss {
+    height: 280px;
+    position: absolute;
+    top: 120px;
+    left: 888px;
+    z-index: -1;
+    animation: gundam-entrance 3s ease-out forwards;
+}
+
+@keyframes gundam-entrance {
+
+    0% {
+        left: 1200px
+    }
+
+    100% {
+        left: 888px;
+    }
+
+}
+
+@keyframes move-gundam {
+    
+    0% {
+        opacity: 1;
+    }
+
+    20% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
+
+@keyframes transition-gundam {
+    
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
     }
 
 }

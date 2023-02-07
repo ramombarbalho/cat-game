@@ -28,6 +28,8 @@ let pointQtBomb = 0;
 let qtPointsFinal = 0;
 let stageComplete = false;
 
+window.addEventListener("contextmenu", (e) => {e.preventDefault()});
+
 // Funções que fazem a movimentação do personagem com o mouse
 
 function move(x) {
@@ -137,7 +139,7 @@ function keyboardKeyDownMove() {
 
         move(3);
 
-        slideMove3_1 = setTimeout(() => {
+        slideMove3_2 = setTimeout(() => {
             move(2);
         }, 200);
 
@@ -167,6 +169,7 @@ function keyboardKeyDownShot() {
         shot0.classList.add(`shot-${chargeValue}`);
         shot0.style.top = `${(catPosition * 120) + 35}px`;
         shot0.setAttribute('data-dmg', '1');
+        shot0.setAttribute('draggable', 'false');
         gameBoard.appendChild(shot0);
         qtShotHaduken--;
         txtQtShotHaduken.innerHTML = `${qtShotHaduken}`;
@@ -175,6 +178,8 @@ function keyboardKeyDownShot() {
     }
 
 }
+
+let chargeInterval;
 
 function keyboardKeyUpShot() {
 
@@ -190,6 +195,7 @@ function keyboardKeyUpShot() {
         shot1.classList.add(`shot-${chargeValue}`);
         shot1.style.top = `${(catPosition * 120) + 25}px`;
         shot1.setAttribute('data-dmg', '3');
+        shot1.setAttribute('draggable', 'false');
         gameBoard.appendChild(shot1);
         qtShotHaduken--;
         txtQtShotHaduken.innerHTML = `${qtShotHaduken}`;
@@ -205,6 +211,7 @@ function keyboardKeyUpShot() {
         shot2.classList.add(`shot-${chargeValue}`);
         shot2.style.top = `${(catPosition * 120) + 10}px`;
         shot2.setAttribute('data-dmg', '5');
+        shot2.setAttribute('draggable', 'false');
         gameBoard.appendChild(shot2);
         qtShotHaduken--;
         txtQtShotHaduken.innerHTML = `${qtShotHaduken}`;
@@ -243,6 +250,7 @@ function bombing() {
         let explosionBomb = document.createElement('img');
         explosionBomb.src = '../img/bomb-explosion.gif';
         explosionBomb.classList.add('bomb-explosion');
+        explosionBomb.setAttribute('draggable', 'false');
         gameBoard.appendChild(explosionBomb);
         bomb = false;
         let boxBomb = document.querySelector('.box-bomb');
@@ -357,6 +365,15 @@ window.addEventListener('keydown', () => {
 
 });
 
+let slideMove0_1;
+let slideMove1_2;
+let slideMove2_3;
+let slideMove3_4;
+let slideMove4_3;
+let slideMove3_2;
+let slideMove2_1;
+let slideMove1_0;
+
 window.addEventListener('keyup', () => {
 
     if (!controlsAllowed) return;
@@ -402,7 +419,7 @@ window.addEventListener('keyup', () => {
 
         if (catPosition === 3) {
 
-            clearTimeout(slideMove3_1);
+            clearTimeout(slideMove3_2);
             clearTimeout(slideMove2_1);
             clearTimeout(slideMove1_0);
 
@@ -428,6 +445,7 @@ const openStage = setTimeout(() => {
     const stage1_1 = document.createElement('img');
     stage1_1.src = '../img/stage_1-1.png';
     stage1_1.classList.add('stage-start');
+    stage1_1.setAttribute('draggable', 'false');
     gameBoard.appendChild(stage1_1);
 
     setTimeout(() => {
@@ -455,10 +473,10 @@ function planetGenerator(t, p, v) {
     let planetEnemy = document.createElement('img');
     planetEnemy.src = `../img/planet-${t}.gif`;
     planetEnemy.classList.add('planets');
-    planetEnemy.classList.add(`planet-${t}`);
     planetEnemy.style.top = `${(p * 120) - 3}px`;
     planetEnemy.style.animation = `move-planet ${(t * 2) + 3 - v}s 1 linear`;
     planetEnemy.setAttribute('data-hp', `${(t * 2) + 1}`);
+    planetEnemy.setAttribute('draggable', 'false');
     gameBoard.appendChild(planetEnemy);
     planetsLaunched++;
 
@@ -506,11 +524,11 @@ function colisionShots() {
 
             if (hpCat === 2) {
 
-                heartStatus.innerHTML = `<img src="../img/heart-active.png" alt="heart" class="heart-active"> <img src="../img/heart-active.png" alt="heart" class="heart-active">`;
+                heartStatus.innerHTML = `<img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active"> <img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">`;
 
             } else if (hpCat === 1) {
 
-                heartStatus.innerHTML = `<img src="../img/heart-active.png" alt="heart" class="heart-active">`;
+                heartStatus.innerHTML = `<img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">`;
 
             } else if (hpCat <= 0) {
 
@@ -527,7 +545,11 @@ function colisionShots() {
 
                 setTimeout(() => {
 
-                    stageClear();
+                    if (!gameOver) {
+
+                        stageClear();
+
+                    };
 
                 }, 2000);
 
@@ -549,25 +571,17 @@ function colisionShots() {
 
             if (shots[i] && planetsTotal[j] && !gameOver) {
 
-                if (((shots[i].offsetLeft <= (planetsTotal[j].offsetLeft + 120)) && (shots[i].offsetLeft + 14) >= planetsTotal[j].offsetLeft) && (shots[i].offsetTop <= (planetsTotal[j].offsetTop + 120) && ((shots[i].offsetTop + 14) >= planetsTotal[j].offsetTop))) {
+                if ((shots[i].classList.contains('shot-0') && (shots[i].offsetLeft <= (planetsTotal[j].offsetLeft + 70)) && (shots[i].offsetLeft + 5) >= planetsTotal[j].offsetLeft) && (shots[i].offsetTop <= (planetsTotal[j].offsetTop + 98) && ((shots[i].offsetTop + 22) >= planetsTotal[j].offsetTop))) {
 
-                    for (let m = 0; m < 3; m++) {
+                    planetColision(i, j);
 
-                        if (shots[i].classList.contains(`shot-${m}`)) {
+                } else if ((shots[i].classList.contains('shot-1') && (shots[i].offsetLeft <= (planetsTotal[j].offsetLeft + 70)) && (shots[i].offsetLeft + 75) >= planetsTotal[j].offsetLeft) && (shots[i].offsetTop <= (planetsTotal[j].offsetTop + 98) && ((shots[i].offsetTop + 44) >= planetsTotal[j].offsetTop))) {
 
-                            for (let n = 0; n < 3; n++) {
+                    planetColision(i, j);
 
-                                if (planetsTotal[j].classList.contains(`planet-${n}`)) {
+                } else if ((shots[i].classList.contains('shot-2') && (shots[i].offsetLeft <= (planetsTotal[j].offsetLeft + 70)) && (shots[i].offsetLeft + 75) >= planetsTotal[j].offsetLeft) && (shots[i].offsetTop <= (planetsTotal[j].offsetTop + 98) && ((shots[i].offsetTop + 72) >= planetsTotal[j].offsetTop))) {
 
-                                    planetColision(i, j);
-
-                                }
-
-                            }
-
-                        }
-
-                    }
+                    planetColision(i, j);
 
                 }
 
@@ -594,6 +608,13 @@ function planetColision(a, b) {
     shots[a].remove();
 
     if ((Number(planetsTotal[b].dataset.hp)) <= 0) {
+
+        /* let planetDead = document.createElement('img');
+        planetDead.src = planetsTotal[b].src;
+        planetDead.classList.add('planet-dead');
+        planetDead.style.top = `${planetsTotal[b].offsetTop}px`;
+        planetDead.style.left = `${planetsTotal[b].offsetLeft}px`;
+        gameBoard.appendChild(planetDead); */
 
         planetsTotal[b].remove();
         crashedPlanets++;
@@ -626,7 +647,11 @@ function planetColision(a, b) {
 
             setTimeout(() => {
 
-                stageClear();
+                if (!gameOver) {
+
+                    stageClear();
+
+                };
 
             }, 2000);
 
@@ -673,7 +698,11 @@ function colisionBomb() {
 
                 setTimeout(() => {
 
-                    stageClear();
+                    if (!gameOver) {
+
+                        stageClear();
+
+                    };
 
                 }, 2000);
 
@@ -690,6 +719,7 @@ function stageClear() {
     let missionComplete = document.createElement('img');
     missionComplete.src = '../img/stage-clear.png';
     missionComplete.classList.add('stage-clear');
+    missionComplete.setAttribute('draggable', 'false');
     gameBoard.appendChild(missionComplete);
     
     keyboardKeyUpShot();
@@ -709,8 +739,8 @@ function stageClear() {
                                     <h2>BOMB:...${pointQtBomb}pts</h2>
                                     <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
                                     <h1>TOTAL: ${qtPointsFinal}pts</h1>
-                                    <a href="../stages/stage-1-2-test.html" class="button-stage-complete">NEXT STAGE</a>
-                                    <a href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`;
+                                    <a draggable="false" href="../stages/stage-1-2-test.html" class="button-stage-complete">NEXT STAGE</a>
+                                    <a draggable="false" href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`;
 
         msgPointsFinal.style.display = 'block';
 
@@ -719,6 +749,7 @@ function stageClear() {
             let perfectStage = document.createElement('img');
             perfectStage.src = '../img/cat-perfect-stage.jpg';
             perfectStage.classList.add('perfect-stage');
+            perfectStage.setAttribute('draggable', 'false');
             msgPointsFinal.appendChild(perfectStage);
 
             let perfectStageMsg = document.createElement('div');
@@ -760,6 +791,9 @@ function gameOverVerification() {
             
             for (let i = 0; i < shots.length; i++) shots[i].style.animationPlayState = 'paused';
 
+            charge1.style.display = 'none';
+            charge2.style.display = 'none';
+            clearInterval(chargeInterval);
             retryMsg.style.display = 'block';
             controlsAllowed = false;
 
