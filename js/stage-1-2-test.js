@@ -174,7 +174,7 @@ function keyboardKeyDownShot() {
     if (chargeValue === 0) {
 
         let shot0 = document.createElement('img');
-        shot0.src = `../img/shot-${chargeValue}.png`;
+        shot0.src = `../img/shot-${chargeValue}.gif`;
         shot0.classList.add('shots');
         shot0.classList.add(`shot-${chargeValue}`);
         shot0.style.top = `${(catPosition * 120) + 35}px`;
@@ -470,7 +470,7 @@ let planetsLaunched = 0;
 
 function planetGenerator(t, p, v) {
 
-    /* let planetEnemy = document.createElement('img');
+    let planetEnemy = document.createElement('img');
     planetEnemy.src = `../img/planet-${t}.gif`;
     planetEnemy.classList.add('planets');
     planetEnemy.classList.add(`planet-${t}`);
@@ -478,7 +478,7 @@ function planetGenerator(t, p, v) {
     planetEnemy.style.animation = `move-planet ${(t * 2) + 3 - v}s 1 linear`;
     planetEnemy.setAttribute('data-hp', `${(t * 2) + 1}`);
     gameBoard.appendChild(planetEnemy);
-    planetsLaunched++; */
+    planetsLaunched++;
 
 }
 
@@ -761,11 +761,11 @@ function colisionBomb() {
 
 // Padrão Warning
 
-setTimeout(() => {
+/* setTimeout(() => {
 
     warningBoss();
     
-}, 3000);
+}, 3000); */
 
 function warningBoss() {
 

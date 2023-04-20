@@ -572,6 +572,7 @@ function planetGenerator(t, p, v, m2, m3) {
     if (t === 1) missileType2(t, v, m2, m3);
     if (t === 2) missileType3(t, p, v, m3);
     if (t === 3) missileType1Boss(t, v);
+    if (t === 4) missileType2Boss(t, v);
     planetsLaunched++;
 
 }
@@ -624,10 +625,29 @@ function missileType3(t, p, v, m3) {
 function missileType1Boss(t, v) {
 
     let planetEnemy0 = planetEnemy;
-    planetEnemy.src = `../img/planet-${0}.gif`;
+    planetEnemy0.src = `../img/planet-${0}.gif`;
     planetEnemy0.style.left = `${gundamBoss.offsetLeft + 200}px`;
     planetEnemy0.style.animation = `move-planet-01-boss ${2}s 1 ease-in-out forwards`;
     planetEnemy0.setAttribute('data-hp', `2`);
+    gameBoard.appendChild(planetEnemy0);
+
+}
+
+let direction = 0;
+
+function missileType2Boss(t, v) {
+
+    let planetEnemy0 = planetEnemy;
+    planetEnemy0.src = `../img/planet-${0}.gif`;
+    planetEnemy0.style.top = `${gundamBoss.offsetTop - 3}px`;
+    planetEnemy0.style.left = `${gundamBoss.offsetLeft + 200}px`;
+    planetEnemy0.setAttribute('data-hp', `999`);
+    planetEnemy0.style.filter = 'grayscale(100%)';
+    planetEnemy0.style.animation = `move-planet-02-boss 2s 1 ease-out forwards, move-planet-03-boss 2s ${3 + (0.5 * v)}s 1 ease-in-out forwards, direction-${direction} 0.8s ${0.5}s 1 ease-in-out forwards`;
+    direction++;
+    setTimeout(() => {
+        planetEnemy0.setAttribute('data-hp', `2`);
+    }, 3000 + (v * 500));
     gameBoard.appendChild(planetEnemy0);
 
 }
@@ -984,6 +1004,7 @@ function warningBoss() {
 }
 
 let gundamBoss;
+let intervalGundamPattern01
 
 function gundamAppears() {
 
@@ -994,11 +1015,11 @@ function gundamAppears() {
 
     setTimeout(() => {
 
-        setInterval(() => {
+        intervalGundamPattern01 = setInterval(() => {
         
-            gundamPhase01();
+            gundamPattern02();
             
-        }, 2000);
+        }, 4000);
 
     }, 3000);
 
@@ -1060,7 +1081,7 @@ function bossColision(a) {
 
 }
 
-function gundamPhase01() {
+function gundamPattern01() {
 
     let gundamPosition = Math.floor(Math.random() * 4);
 
@@ -1105,6 +1126,57 @@ function gundamPhase01() {
             gundamVunerable = true;
 
         }, 200);
+
+    }, 480);
+
+}
+
+function gundamPattern02() {
+
+    let gundamPosition = Math.floor(Math.random() * 4);
+
+    let numbers = [];
+
+    let r, n, p;
+
+    r = 5;
+
+    for (let i = 0; i < r; i++) {
+
+        do {
+
+            n = Math.floor(Math.random() * 5);
+            p = numbers.includes(n);
+
+            if (!p) {
+
+                numbers.push(n);
+
+            }
+            
+        }
+
+        while (p);
+
+    }
+
+    gundamBoss.style.animation = 'move-gundam 0.5s';
+    gundamVunerable = false;
+    
+    setTimeout(() => {
+        
+        gundamBoss.style.animation = 'transition-gundam 0.2s';
+        gundamBoss.style.top = `${gundamPosition * 120}px`;
+
+        planetGenerator(4, 0, numbers[0]);
+        planetGenerator(4, 1, numbers[1]);
+        planetGenerator(4, 2, numbers[2]);
+        planetGenerator(4, 3, numbers[3]);
+        planetGenerator(4, 4, numbers[4]);
+
+        direction = 0;
+        gundamVunerable = true;
+        /* clearInterval(intervalGundamPattern01); */
 
     }, 480);
 

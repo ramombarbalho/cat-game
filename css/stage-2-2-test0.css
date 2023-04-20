@@ -457,6 +457,37 @@ body {
 
 }
 
+@keyframes move-planet-02-boss {
+    
+    0% {
+        left: 950px;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 800px;
+    }
+
+}
+
+@keyframes move-planet-03-boss {
+    
+    0% {
+        left: 800px;
+        filter: grayscale(0%);
+    }
+
+    100% {
+        left: -250px;
+        filter: grayscale(0%);
+    }
+
+}
+
 @keyframes direction-0 {
 
     100% {
