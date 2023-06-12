@@ -10,138 +10,98 @@
         <title>Cat Game</title>
     </head>
     <body>
-        <div class="game-box">
+        <div class="game-container">
             <div class="loading">
-                LOADING...<img src="../img/loading-cat.gif" />
+                <span class="loader"></span>
+                <br />
+                LOADING
             </div>
 
-            <div class="game-board hidden">
-                <img
-                    draggable="false"
-                    src="../img/cat.gif"
-                    alt="cat"
-                    class="cat"
-                    style="
-                        user-select: none;
-                        pointer-events: none;
-                        top: 240px;
-                        left: 0px;
-                    "
-                />
-                <img
-                    draggable="false"
-                    src="../img/cat-shadow.png"
-                    alt="shadow-move"
-                    class="shadow-move"
-                />
-                <img
-                    draggable="false"
-                    src="../img/charge1.gif"
-                    alt="charge1"
-                    class="charge1"
-                    style="top: 220px; left: 130px"
-                />
-                <img
-                    draggable="false"
-                    src="../img/charge2.gif"
-                    alt="charge2"
-                    class="charge2"
-                    style="top: 220px; left: 130px"
-                />
-
-                <div class="retry-msg hidden">
-                    <h1 class="text-game-over">GAME OVER</h1>
-                    <img
-                        draggable="false"
-                        src="../img/cat-game-over.png"
-                        alt="sad cat"
-                        class="cat-game-over"
-                    />
-                    <a draggable="false" href="#" class="button-retry"
-                        >TRY AGAIN!!</a
-                    >
-                </div>
-
-                <div class="points-final hidden">
-                    <h2>POINTS:</h2>
-                    <br />
-                    <h2>HP:.....${pointHpCat}pts</h2>
-                    <h2>BOMB:...${pointQtBomb}pts</h2>
-                    <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
-                    <h1>TOTAL: ${qtPointsFinal}pts</h1>
-                    <a
-                        draggable="false"
-                        href="../stages/stage-1-2-test.html"
-                        class="button-stage-complete"
-                        >NEXT STAGE</a
-                    >
-                    <a
-                        draggable="false"
-                        href="#"
-                        class="button-stage-complete retry-retry"
-                        >RETRY</a
-                    >
-                </div>
-            </div>
-
-            <div class="game-status hidden">
-                <div class="box-hearts">
-                    <div class="heart-status">
+            <div class="game-content hidden">
+                <div class="game-board" style="height: 600px">
+                    <div class="retry-msg hidden">
+                        <h1 class="text-game-over">GAME OVER</h1>
                         <img
                             draggable="false"
-                            src="../img/heart-active.png"
-                            alt="heart"
-                            class="heart-active"
+                            src="../img/cat-game-over.png"
+                            alt="sad cat"
+                            class="cat-game-over"
                         />
-                        <img
+                        <a draggable="false" href="#" class="btn-retry">TRY AGAIN!!</a>
+                    </div>
+
+                    <div class="points-final hidden">
+                        <h2>POINTS:</h2>
+                        <br />
+                        <h2>HP:.....${pointHpCat}pts</h2>
+                        <h2>BOMB:...${pointQtBomb}pts</h2>
+                        <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
+                        <h1>TOTAL: ${qtPointsFinal}pts</h1>
+                        <a
                             draggable="false"
-                            src="../img/heart-active.png"
-                            alt="heart"
-                            class="heart-active"
-                        />
-                        <img
-                            draggable="false"
-                            src="../img/heart-active.png"
-                            alt="heart"
-                            class="heart-active"
-                        />
+                            href="../stages/stage-1-2-test.html"
+                            class="button-stage-complete"
+                            >NEXT STAGE</a
+                        >
+                        <a draggable="false" href="#" class="button-stage-complete retry-retry"
+                            >RETRY</a
+                        >
                     </div>
                 </div>
 
-                <div class="box-bomb">
-                    <img
-                        draggable="false"
-                        src="../img/bomb.webp"
-                        alt="bomb"
-                        class="bomb-stts"
-                    />
-                    <img
-                        draggable="false"
-                        src="../img/no-allowed.png"
-                        alt="no allowed"
-                        class="no-allowed"
-                    />
-                    <div class="cooldown-bomb"></div>
-                </div>
+                <div class="game-status">
+                    <div class="box-hearts">
+                        <div class="heart-status">
+                            <img
+                                draggable="false"
+                                src="../img/heart-active.png"
+                                alt="heart"
+                                class="heart-active"
+                            />
+                            <img
+                                draggable="false"
+                                src="../img/heart-active.png"
+                                alt="heart"
+                                class="heart-active"
+                            />
+                            <img
+                                draggable="false"
+                                src="../img/heart-active.png"
+                                alt="heart"
+                                class="heart-active"
+                            />
+                        </div>
+                    </div>
 
-                <div class="box-shot">
-                    <!-- style="display: none;" -->
+                    <div class="box-bomb">
+                        <img
+                            draggable="false"
+                            src="../img/bomb.webp"
+                            alt="bomb"
+                            class="bomb-stts"
+                        />
+                        <img
+                            draggable="false"
+                            src="../img/no-allowed.png"
+                            alt="no allowed"
+                            class="no-allowed"
+                        />
+                        <div class="cooldown-bomb"></div>
+                    </div>
 
-                    <img
-                        draggable="false"
-                        src="../img/shot-0.gif"
-                        alt="shot-0"
-                        class="shot-haduken-stts"
-                    />
-                    <span class="qt-shot-haduken"></span>
-                </div>
+                    <div class="box-shot"></div>
 
-                <div class="box-barr-hp-boss">
-                    <div class="barr-hp-boss"></div>
+                    <div class="box-barr-hp-boss">
+                        <div class="barr-hp-boss"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="game-assets hidden">
+            <div class="game-assets">
+                <img src="../img/cat.gif" />
+                <img src="../img/charge-1.gif" />
+                <img src="../img/charge-2.gif" />
+                <img src="../img/shot-0.gif" />
                 <img src="../img/shot-1.gif" />
                 <img src="../img/shot-2.gif" />
                 <img src="../img/bomb-explosion.gif" />
@@ -154,19 +114,6 @@
                 <img src="../img/cat-thumbs-up.png" />
                 <img src="../img/cat-perfect-stage.jpg" />
             </div>
-        </div>
-
-        <div style="width: 1200px">
-            <h2
-                style="
-                    color: white;
-                    text-align: justify;
-                    font-family: Courier, monospace;
-                "
-                class="texto"
-            >
-                hp
-            </h2>
         </div>
     </body>
 </html>

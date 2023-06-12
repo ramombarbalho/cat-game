@@ -5,36 +5,20 @@ window.addEventListener('contextmenu', e => {
 });
 
 window.addEventListener('load', () => {
-    // Declarações iniciais
-
-    const loadingGame = document.querySelector('.loading');
-    loadingGame.classList.add('hidden');
+    document.querySelector('.loading').classList.add('hidden');
+    document.querySelector('.game-content').classList.remove('hidden');
     const gameBoard = document.querySelector('.game-board');
     gameBoard.classList.remove('hidden');
-    const gameStatus = document.querySelector('.game-status');
-    gameStatus.classList.remove('hidden');
     const heartStatus = document.querySelector('.heart-status');
     const boxBomb = document.querySelector('.box-bomb');
-    const cat = document.querySelector('.cat');
-    // const shadowMove = document.querySelector('.shadow-move');
-    const chargeAnimations = [
-        document.querySelector('.charge1'),
-        document.querySelector('.charge2'),
-    ];
-    const txtQtShotHaduken = document.querySelector('.qt-shot-haduken');
     const retryMsg = document.querySelector('.retry-msg');
-    const btnRetry = document.querySelector('.button-retry');
+    const btnRetry = document.querySelector('.btn-retry');
+    console.log(btnRetry);
     const imgCatGameOver = document.querySelector('.cat-game-over');
     const msgPointsFinal = document.querySelector('.points-final');
 
-    let hpCat = 3;
-    let chargeValue = 0;
-    let chargeInterval;
-    let qtShotHaduken = 150;
-    txtQtShotHaduken.innerHTML = `${qtShotHaduken}`;
-    let bomb = true;
-    let qtBomb = 1;
-    let bombValue = 0;
+    let shotsLaunched = 0;
+    let bombLaunched = 1;
     let controlsAllowed = false;
     let gameOver = false;
     let pointHpCat = 0;
@@ -43,139 +27,171 @@ window.addEventListener('load', () => {
     let qtPointsFinal = 0;
     let stageComplete = false;
 
-    // Funções que fazem a movimentação do personagem com o mouse
-
-    function shooting() {
-        const shot = document.createElement('img');
-        shot.src = `../img/shot-${chargeValue}.gif`;
-        shot.classList.add('shots');
-        shot.classList.add(`shot-${chargeValue}`);
-        shot.style.top = `${
-            parseInt(cat.style.top, 10) + (40 - chargeValue * 15)
-        }px`;
-        shot.style.left = `${parseInt(cat.style.left, 10) + 200}px`;
-        shot.setAttribute('data-dmg', `${2 * chargeValue + 1}`);
-        shot.setAttribute('draggable', 'false');
-        gameBoard.appendChild(shot);
-        qtShotHaduken--;
-        txtQtShotHaduken.innerHTML = `${qtShotHaduken}`;
-    }
-
-    function normalShot() {
-        if (chargeValue === 0) {
-            shooting(chargeValue);
-            chargeInterval = setInterval(chargingBeam, 600);
+    class Sprite {
+        constructor(data) {
+            this.height = data.height;
+            this.top = data.top;
+            this.left = data.left;
+            this.el = document.createElement('img');
+            this.el.src = `../img/${data.src}`;
+            this.el.classList.add('sprite');
+            this.el.setAttribute('draggable', 'false');
+            this.el.style.height = data.height + 'px';
+            this.el.style.top = data.top + 'px';
+            this.el.style.left = data.left + 'px';
         }
     }
 
-    function chargeShot() {
-        if (chargeValue === 0) {
-            clearInterval(chargeInterval);
-        } else {
-            shooting(chargeValue);
-            chargeAnimations[chargeValue - 1].style.display = 'none';
-            chargeValue = 0;
-            clearInterval(chargeInterval);
+    class Shot extends Sprite {
+        constructor(data) {
+            super(data);
+            this.chargeValue = data.chargeValue;
+            this.el.classList.add('shots');
+            this.el.classList.add(`shot-${this.chargeValue}`);
+            this.el.setAttribute('data-dmg', `${2 * this.chargeValue + 1}`);
+            gameBoard.appendChild(this.el);
         }
     }
 
-    function chargingBeam() {
-        chargeValue++;
-        if (chargeValue === 1) {
-            chargeAnimations[0].style.display = 'block';
-        } else {
-            chargeValue = 2;
-            chargeAnimations[0].style.display = 'none';
-            chargeAnimations[1].style.display = 'block';
+    class ChargeAnimation extends Sprite {
+        constructor(data) {
+            super(data);
+            this.el.style.display = 'none';
+            gameBoard.appendChild(this.el);
         }
     }
 
-    function bombing() {
-        if (!bomb || !controlsAllowed) return;
-
-        bombValue = 1;
-        const explosionBomb = document.createElement('img');
-        explosionBomb.src = '../img/bomb-explosion.gif';
-        explosionBomb.classList.add('bomb-explosion');
-        explosionBomb.setAttribute('draggable', 'false');
-        gameBoard.appendChild(explosionBomb);
-        bomb = false;
-        boxBomb.style.cursor = 'not-allowed';
-        const cooldownBomb = document.querySelector('.cooldown-bomb');
-        cooldownBomb.style.animation = 'cooldown-efect 20s 1 linear';
-        const noAllowed = document.querySelector('.no-allowed');
-        noAllowed.style.display = 'block';
-
-        setTimeout(() => {
-            bombValue = 0;
-            gameBoard.removeChild(explosionBomb);
-        }, 350);
-
-        setTimeout(() => {
-            boxBomb.style.cursor = 'pointer';
-            cooldownBomb.style.animation = 'none';
-            noAllowed.style.display = 'none';
-            bomb = true;
-        }, 20000);
+    class Bomb extends Sprite {
+        constructor(data) {
+            super(data);
+            this.el.style.width = data.width + 'px';
+            gameBoard.appendChild(this.el);
+        }
     }
 
-    /* let gameRunning = true;
+    class Player extends Sprite {
+        constructor(data) {
+            super(data);
+            this.hp = 3;
+            this.chargeValue = 0;
+            this.chargeInterval;
+            this.bombAvaliable = true;
+            this.bombActive = false;
+            this.chargeAnimation = new ChargeAnimation({
+                src: 'charge-1.gif',
+                height: this.height + this.height / 3,
+                top: this.top - this.height / 8,
+                left: this.left + this.height * 2 * 0.525,
+            });
+            this.el.classList.add('cat-entrance');
+            gameBoard.appendChild(this.el);
+        }
 
-function pauseGame() {
+        shooting() {
+            new Shot({
+                src: `shot-${this.chargeValue}.gif`,
+                height: 50 + this.chargeValue * 25,
+                top: this.top + this.height / 2 - (50 + this.chargeValue * 25) / 2,
+                left: this.left + this.height * 2 * 0.875,
+                chargeValue: this.chargeValue,
+            });
+            shotsLaunched++;
+        }
 
-    if (gameRunning) {
+        chargingBeam() {
+            this.chargeValue++;
+            if (this.chargeValue === 1) {
+                this.chargeAnimation.el.style.display = 'block';
+            } else {
+                this.chargeAnimation.el.src = '../img/charge-2.gif';
+                this.chargeValue = 2;
+            }
+        }
 
-        for (let i = 0; i < shots.length; i++) shots[i].style.animationPlayState = 'paused';
-        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animationPlayState = 'paused';
-        if (moonBoss) moonBoss.animationPlayState = 'paused';
-        controlsAllowed = false;
-        gameRunning = false;
+        normalShot() {
+            if (this.chargeValue === 0) {
+                this.shooting(this.chargeValue);
+                this.chargeInterval = setInterval(() => this.chargingBeam(), 600);
+            }
+        }
 
-    } else {
+        chargedShot() {
+            if (this.chargeValue === 0) {
+                clearInterval(this.chargeInterval);
+            } else {
+                this.shooting(this.chargeValue);
+                this.chargeAnimation.el.style.display = 'none';
+                this.chargeAnimation.el.src = '../img/charge-1.gif';
+                this.chargeValue = 0;
+                clearInterval(this.chargeInterval);
+            }
+        }
 
-        for (let i = 0; i < shots.length; i++) shots[i].style.animationPlayState = 'running';
-        for (let j = 0; j < planetsTotal.length; j++) planetsTotal[j].style.animationPlayState = 'running';
-        if (moonBoss) moonBoss.animationPlayState = 'running';
-        controlsAllowed = true;
-        gameRunning = true;
+        bombing() {
+            if (!this.bombAvaliable || !controlsAllowed) return;
 
+            const bomb = new Bomb({
+                src: 'bomb-explosion.gif',
+                height: 600,
+                width: 1200,
+                top: 0,
+                left: 0,
+            });
+
+            this.bombAvaliable = false;
+            this.bombActive = true;
+            boxBomb.style.cursor = 'not-allowed';
+            const cooldownBomb = document.querySelector('.cooldown-bomb');
+            cooldownBomb.style.animation = 'cooldown-efect 20s 1 linear';
+            const noAllowed = document.querySelector('.no-allowed');
+            noAllowed.style.display = 'block';
+
+            setTimeout(() => {
+                this.bombActive = false;
+                gameBoard.removeChild(bomb.el);
+            }, 350);
+
+            setTimeout(() => {
+                this.bombAvaliable = true;
+                boxBomb.style.cursor = 'pointer';
+                cooldownBomb.style.animation = 'none';
+                noAllowed.style.display = 'none';
+            }, 20000);
+        }
     }
 
-} */
+    const cat = new Player({
+        src: 'cat.gif',
+        height: 120,
+        top: (parseInt(gameBoard.style.height) - 120) / 2,
+        left: 0,
+    });
 
     const keys = [];
-    const speedCat = 12;
+    const speedCat = 11;
 
     const movingCat = () => {
         if (!controlsAllowed) return;
 
         if (keys.includes('Numpad8')) {
-            cat.style.top = parseInt(cat.style.top, 10) - speedCat + 'px';
-            chargeAnimations[0].style.top =
-                parseInt(cat.style.top, 10) - 20 + 'px';
-            chargeAnimations[1].style.top =
-                parseInt(cat.style.top, 10) - 20 + 'px';
+            cat.top = cat.top - speedCat;
+            cat.el.style.top = cat.top + 'px';
+            cat.chargeAnimation.el.style.top = cat.top - cat.height / 8 + 'px';
         }
         if (keys.includes('Numpad5')) {
-            cat.style.top = parseInt(cat.style.top, 10) + speedCat + 'px';
-            chargeAnimations[0].style.top =
-                parseInt(cat.style.top, 10) - 20 + 'px';
-            chargeAnimations[1].style.top =
-                parseInt(cat.style.top, 10) - 20 + 'px';
+            cat.top = cat.top + speedCat;
+            cat.el.style.top = cat.top + 'px';
+            cat.chargeAnimation.el.style.top = cat.top - cat.height / 8 + 'px';
         }
         if (keys.includes('Numpad4')) {
-            cat.style.left = parseInt(cat.style.left, 10) - speedCat + 'px';
-            chargeAnimations[0].style.left =
-                parseInt(cat.style.left, 10) + 130 + 'px';
-            chargeAnimations[1].style.left =
-                parseInt(cat.style.left, 10) + 130 + 'px';
+            cat.left = cat.left - speedCat;
+            cat.el.style.left = cat.left + 'px';
+            cat.chargeAnimation.el.style.left = cat.left + cat.height * 2 * 0.525 + 'px';
         }
         if (keys.includes('Numpad6')) {
-            cat.style.left = parseInt(cat.style.left, 10) + speedCat + 'px';
-            chargeAnimations[0].style.left =
-                parseInt(cat.style.left, 10) + 130 + 'px';
-            chargeAnimations[1].style.left =
-                parseInt(cat.style.left, 10) + 130 + 'px';
+            cat.left = cat.left + speedCat;
+            cat.el.style.left = cat.left + 'px';
+            cat.chargeAnimation.el.style.left = cat.left + cat.height * 2 * 0.525 + 'px';
         }
     };
 
@@ -193,15 +209,12 @@ function pauseGame() {
         }
         if (code === 'KeyH' && !keys.includes(code)) {
             keys.push(code);
-            normalShot();
+            cat.normalShot();
         }
-        if (code === 'Space' && !keys.includes(code) && bomb) {
+        if (code === 'Space' && !keys.includes(code) && cat.bombAvaliable) {
             keys.push(code);
-            bombing();
+            cat.bombing();
         }
-        // if (code === 'Enter' && retryMsg.style.display === 'block') {
-        //     location.reload();
-        // }
     });
 
     window.addEventListener('keyup', ({ code }) => {
@@ -212,11 +225,9 @@ function pauseGame() {
             keys.splice(keyPressed, 1);
         }
         if (code === 'KeyH') {
-            chargeShot();
+            cat.chargedShot();
         }
     });
-
-    // Padrão Stage 1-1
 
     const openStage = setTimeout(() => {
         const stage1_1 = document.createElement('img');
@@ -228,39 +239,44 @@ function pauseGame() {
         setTimeout(() => {
             gameBoard.removeChild(stage1_1);
             controlsAllowed = true;
-            gameLoop();
+            gameLoop(/* 0 */);
             generatePlanets();
         }, 1900);
     }, 1000);
 
-    // Declarações dos sprites
-
-    let planetPosition;
-    let planetType;
     let crashedPlanets = 0;
     let intervalPlanets = 2000;
     let generatePlanetsInterval;
     let planetsLaunched = 0;
 
-    function planetGenerator(t, p, v) {
-        const planetEnemy = document.createElement('img');
-        planetEnemy.src = `../img/planet-${t}.gif`;
-        planetEnemy.classList.add('planets');
-        planetEnemy.style.top = `${p * 120 - 3}px`;
-        planetEnemy.style.animation = `move-planet ${t * 2 + 3 - v}s 1 linear`;
-        planetEnemy.setAttribute('data-hp', `${t * 2 + 1}`);
-        planetEnemy.setAttribute('draggable', 'false');
-        gameBoard.appendChild(planetEnemy);
-        planetsLaunched++;
+    class Enemy extends Sprite {
+        constructor(data) {
+            super(data);
+            this.el.classList.add('planets');
+            this.el.style.animation = `move-planet ${
+                +this.el.getAttribute('src').slice(14, 15) * 2 + 3 /* v */
+            }s 1 linear`;
+            this.el.setAttribute(
+                'data-hp',
+                `${+this.el.getAttribute('src').slice(14, 15) * 2 + 1}`,
+            );
+            gameBoard.appendChild(this.el);
+        }
     }
 
     function generatePlanets() {
         if (gameOver || stageComplete) return;
 
         generatePlanetsInterval = setInterval(() => {
-            planetPosition = Math.trunc(Math.random() * 5);
-            planetType = Math.trunc(Math.random() * 3);
-            planetGenerator(planetType, planetPosition, 0);
+            const position = Math.trunc(Math.random() * 5);
+            const type = Math.trunc(Math.random() * 3);
+            new Enemy({
+                src: `planet-${type}.gif`,
+                height: 120,
+                top: position * 120 - 3,
+                left: 1200,
+            });
+            planetsLaunched++;
         }, intervalPlanets);
     }
 
@@ -275,23 +291,22 @@ function pauseGame() {
         for (let b = 0; b < planetsTotal.length; b++) {
             if (planetsTotal[b].offsetLeft < -55) {
                 planetsTotal[b].remove();
-                hpCat--;
+                cat.hp--;
                 planetsTotalTurn = document.querySelectorAll('.planets');
 
-                if (hpCat === 2) {
+                if (cat.hp === 2) {
                     heartStatus.innerHTML = `<img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active"> <img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">`;
-                } else if (hpCat === 1) {
+                } else if (cat.hp === 1) {
                     heartStatus.innerHTML = `<img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">`;
-                } else if (hpCat <= 0) {
+                } else if (cat.hp <= 0) {
                     heartStatus.innerHTML = '';
                 }
 
                 if (planetsTotalTurn.length === 0 && crashedPlanets >= 2) {
-                    pointHpCat = hpCat * 1500;
-                    pointQtBomb = qtBomb * 4000;
-                    pointQtShotHaduken = qtShotHaduken * 100;
-                    qtPointsFinal =
-                        pointHpCat + pointQtBomb + pointQtShotHaduken;
+                    pointHpCat = cat.hp * 1500;
+                    pointQtBomb = bombLaunched * 4000;
+                    pointQtShotHaduken = shotsLaunched * 100;
+                    qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
 
                     setTimeout(() => {
                         if (!gameOver) {
@@ -311,8 +326,7 @@ function pauseGame() {
                 if (shots[i] && planetsTotal[j] && !gameOver) {
                     if (
                         shots[i].classList.contains('shot-0') &&
-                        shots[i].offsetLeft <=
-                            planetsTotal[j].offsetLeft + 70 &&
+                        shots[i].offsetLeft <= planetsTotal[j].offsetLeft + 70 &&
                         shots[i].offsetLeft + 5 >= planetsTotal[j].offsetLeft &&
                         shots[i].offsetTop <= planetsTotal[j].offsetTop + 98 &&
                         shots[i].offsetTop + 22 >= planetsTotal[j].offsetTop
@@ -320,20 +334,16 @@ function pauseGame() {
                         planetColision(i, j);
                     } else if (
                         shots[i].classList.contains('shot-1') &&
-                        shots[i].offsetLeft <=
-                            planetsTotal[j].offsetLeft + 70 &&
-                        shots[i].offsetLeft + 75 >=
-                            planetsTotal[j].offsetLeft &&
+                        shots[i].offsetLeft <= planetsTotal[j].offsetLeft + 70 &&
+                        shots[i].offsetLeft + 75 >= planetsTotal[j].offsetLeft &&
                         shots[i].offsetTop <= planetsTotal[j].offsetTop + 98 &&
                         shots[i].offsetTop + 44 >= planetsTotal[j].offsetTop
                     ) {
                         planetColision(i, j);
                     } else if (
                         shots[i].classList.contains('shot-2') &&
-                        shots[i].offsetLeft <=
-                            planetsTotal[j].offsetLeft + 70 &&
-                        shots[i].offsetLeft + 75 >=
-                            planetsTotal[j].offsetLeft &&
+                        shots[i].offsetLeft <= planetsTotal[j].offsetLeft + 70 &&
+                        shots[i].offsetLeft + 75 >= planetsTotal[j].offsetLeft &&
                         shots[i].offsetTop <= planetsTotal[j].offsetTop + 98 &&
                         shots[i].offsetTop + 72 >= planetsTotal[j].offsetTop
                     ) {
@@ -347,10 +357,7 @@ function pauseGame() {
     function planetColision(a, b) {
         planetsTotal[b].setAttribute(
             'data-hp',
-            `${String(
-                Number(planetsTotal[b].dataset.hp) -
-                    Number(shots[a].dataset.dmg),
-            )}`,
+            `${String(Number(planetsTotal[b].dataset.hp) - Number(shots[a].dataset.dmg))}`,
         );
         shots[a].remove();
 
@@ -372,9 +379,9 @@ function pauseGame() {
             }
 
             if (crashedPlanets >= 35 && planetsTotalTurn.length === 0) {
-                pointHpCat = hpCat * 1500;
-                pointQtBomb = qtBomb * 4000;
-                pointQtShotHaduken = qtShotHaduken * 100;
+                pointHpCat = cat.hp * 1500;
+                pointQtBomb = bombLaunched * 4000;
+                pointQtShotHaduken = shotsLaunched * 100;
                 qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
 
                 setTimeout(() => {
@@ -387,7 +394,7 @@ function pauseGame() {
     }
 
     function colisionBomb() {
-        if (bombValue === 1) {
+        if (cat.bombActive) {
             for (let j = 0; j < planetsTotal.length; j++) {
                 planetsTotal[j].remove();
                 crashedPlanets++;
@@ -406,11 +413,10 @@ function pauseGame() {
                 }
 
                 if (crashedPlanets >= 2 && planetsTotalTurn.length === 0) {
-                    pointHpCat = hpCat * 1500;
-                    pointQtBomb = qtBomb * 4000;
-                    pointQtShotHaduken = qtShotHaduken * 100;
-                    qtPointsFinal =
-                        pointHpCat + pointQtBomb + pointQtShotHaduken;
+                    pointHpCat = cat.hp * 1500;
+                    pointQtBomb = bombLaunched * 4000;
+                    pointQtShotHaduken = shotsLaunched * 100;
+                    qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
 
                     setTimeout(() => {
                         if (!gameOver) {
@@ -429,7 +435,7 @@ function pauseGame() {
         missionComplete.setAttribute('draggable', 'false');
         gameBoard.appendChild(missionComplete);
 
-        chargeShot();
+        cat.chargedShot();
         stageComplete = true;
         controlsAllowed = false;
 
@@ -443,8 +449,8 @@ function pauseGame() {
             //                                 <h2>BOMB:...${pointQtBomb}pts</h2>
             //                                 <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
             //                                 <h1>TOTAL: ${qtPointsFinal}pts</h1>
-            //                                 <a draggable="false" href="../stages/stage-1-2-test.html" class="button-stage-complete">NEXT STAGE</a>
-            //                                 <a draggable="false" href="#" class="button-stage-complete" onclick="retry()">RETRY</a>`;
+            //                                 <a draggable="false" href="../stages/stage-1-2-test.html" class="butnstage-complete">NEXT STAGE</a>
+            //                                 <a draggable="false" href="#" class="butnstage-complete" onclick="retry()">RETRY</a>`;
 
             msgPointsFinal.classList.remove('hidden');
 
@@ -463,7 +469,26 @@ function pauseGame() {
         }, 3000);
     }
 
-    // Verificação Game Over
+    function gameOverVerification() {
+        if (gameOver) return;
+
+        if (cat.hp <= 0 || stageComplete) {
+            clearInterval(generatePlanetsInterval);
+            gameOver = true;
+
+            for (let j = 0; j < planetsTotal.length; j++)
+                planetsTotal[j].style.animationPlayState = 'paused';
+
+            if (gameOver && cat.hp <= 0) {
+                for (let i = 0; i < shots.length; i++) shots[i].style.animationPlayState = 'paused';
+
+                cat.chargeAnimation.el.style.display = 'none';
+                clearInterval(cat.chargeInterval);
+                retryMsg.classList.remove('hidden');
+                controlsAllowed = false;
+            }
+        }
+    }
 
     function catThumbsUp() {
         imgCatGameOver.src = '../img/cat-thumbs-up.png';
@@ -473,65 +498,29 @@ function pauseGame() {
         imgCatGameOver.src = '../img/cat-game-over.png';
     }
 
-    function gameOverVerification() {
-        if (gameOver) return;
-
-        if (hpCat <= 0 || stageComplete) {
-            gameOver = true;
-
-            for (let j = 0; j < planetsTotal.length; j++)
-                planetsTotal[j].style.animationPlayState = 'paused';
-
-            if (gameOver && hpCat <= 0) {
-                for (let i = 0; i < shots.length; i++)
-                    shots[i].style.animationPlayState = 'paused';
-
-                chargeAnimations[0].style.display = 'none';
-                chargeAnimations[1].style.display = 'none';
-                clearInterval(chargeInterval);
-                retryMsg.classList.remove('hidden');
-                controlsAllowed = false;
-            }
-        }
-    }
-
     function retry() {
         location.reload();
     }
 
-    boxBomb.addEventListener('click', bombing);
-    btnRetry.addEventListener('click', retry);
+    boxBomb.addEventListener('click', cat.bombing.bind(cat));
     btnRetry.addEventListener('mouseover', catThumbsUp);
     btnRetry.addEventListener('mouseout', catSad);
+    btnRetry.addEventListener('click', retry);
     document.querySelector('.retry-retry').addEventListener('click', retry);
 
-    function gameLoop() {
+    class Game {
+        constructor() {}
+    }
+
+    // let lastTime;
+
+    function gameLoop(/* timeStamp */) {
+        // const deltaTime = timeStamp - lastTime;
+        // lastTime = timeStamp;
         colisionShots();
         colisionBomb();
         gameOverVerification();
         movingCat();
         requestAnimationFrame(gameLoop);
     }
-
-    //
-    //
-    //
-    //
-    // Console Auxiliar
-
-    // const texto = document.querySelector('.texto');
-
-    // setInterval(() => {
-    //   texto.innerHTML = `hpCat:...........${hpCat} <br>
-    //                       planetsLive:.....${planetsTotal.length} <br>
-    //                       shotsLive:.......${shots.length} <br>
-    //                       crashedPlanets:..${crashedPlanets} <br>
-    //                       planetsLaunched:.${planetsLaunched} <br>`;
-    // }, 500);
-
-    // Console Auxiliar
-    //
-    //
-    //
-    //
 });

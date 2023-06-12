@@ -10,57 +10,81 @@ body {
     overflow: hidden;
 }
 
-.game-box {
+.game-container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 1200px;
+    height: 720px;
+    border: 3px solid rgb(255, 0, 234);
+    overflow: hidden;
+}
+
+.game-assets {
+    border: 1px solid white;
+    margin-top: 50vh;
 }
 
 .loading {
-    width: 1200px;
-    height: 720px;
-    border: 3px solid white;
+    width: 100%;
+    height: 100%;
     background-color: black;
     color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    z-index: -5;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-block;
+    border-top: 3px solid #fff;
+    border-right: 3px solid transparent;
+    box-sizing: border-box;
+    animation: loader-rotation 1s linear infinite;
+}
+
+@keyframes loader-rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .game-board {
-    background-image: linear-gradient(#5a23a1, #25b3df);
-    border: 3px solid rgb(255, 0, 234);
     position: relative;
-    margin: auto;
-    width: 1200px;
-    height: 600px;
-    z-index: 0;
-    overflow: hidden;
+    background-image: linear-gradient(#5a23a1, #25b3df);
+    width: 100%;
 }
 
 .game-status {
-    background-image: linear-gradient(
-        to right,
-        rgba(255, 255, 0, 0.7),
-        rgba(255, 0, 0, 0.7)
-    );
+    background-image: linear-gradient(to right, rgba(255, 255, 0, 0.7), rgba(255, 0, 0, 0.7));
     position: relative;
     margin: auto;
     display: flex;
     align-items: center;
-    border: 3px solid rgb(255, 0, 234);
-    width: 1200px;
-    height: 120px;
-    z-index: 3;
+    border-top: 2px solid rgb(255, 0, 234);
+    width: 100%;
+    height: fit-content;
+    z-index: 5;
     overflow: hidden;
 }
 
-.cat {
-    height: 120px;
+.sprite {
     position: absolute;
+    user-select: none;
+    pointer-events: none;
     z-index: 1;
+}
+
+.cat-entrance {
     animation: cat-entrance 2.8s;
 }
 
@@ -72,29 +96,6 @@ body {
     100% {
         left: 0px;
     }
-}
-
-.shadow-move {
-    height: 120px;
-    width: 240px;
-    position: absolute;
-    top: 240px;
-    display: none;
-    z-index: 0;
-}
-
-.charge1 {
-    height: 160px;
-    position: absolute;
-    display: none;
-    z-index: 1;
-}
-
-.charge2 {
-    height: 160px;
-    position: absolute;
-    display: none;
-    z-index: 1;
 }
 
 .box-hearts {
@@ -129,11 +130,7 @@ body {
 
 .box-bomb {
     position: relative;
-    background-image: linear-gradient(
-        to bottom right,
-        rgb(60, 60, 60),
-        rgb(170, 170, 170)
-    );
+    background-image: linear-gradient(to bottom right, rgb(60, 60, 60), rgb(170, 170, 170));
     width: 120px;
     height: 119px;
     display: flex;
@@ -141,6 +138,10 @@ body {
     align-items: center;
     border-right: 1px solid black;
     cursor: pointer;
+}
+
+.box-bomb:hover {
+    background-image: linear-gradient(to bottom right, rgb(83, 83, 83), rgb(223, 223, 223));
 }
 
 .cooldown-bomb {
@@ -166,14 +167,6 @@ body {
     }
 }
 
-.box-bomb:hover {
-    background-image: linear-gradient(
-        to bottom right,
-        rgb(83, 83, 83),
-        rgb(223, 223, 223)
-    );
-}
-
 .bomb-stts {
     width: 65px;
 }
@@ -188,11 +181,7 @@ body {
 }
 
 .box-shot {
-    background-image: linear-gradient(
-        to bottom right,
-        rgb(58, 28, 107),
-        rgb(178, 174, 238)
-    );
+    background-image: linear-gradient(to bottom right, rgb(58, 28, 107), rgb(178, 174, 238));
     width: 120px;
     height: 119px;
     display: flex;
@@ -214,24 +203,15 @@ body {
     text-shadow: 2px 2px 2px black;
 }
 
-.shots {
-    position: absolute;
-    z-index: 1;
-}
-
 .shot-0 {
-    height: 50px;
-    transform: translateY(-5px);
     animation: shot-move 2.2s linear;
 }
 
 .shot-1 {
-    height: 75px;
     animation: shot-move 2s linear;
 }
 
 .shot-2 {
-    height: 100px;
     animation: shot-move 1.6s linear;
 }
 
@@ -241,13 +221,6 @@ body {
     }
 }
 
-.planets {
-    position: absolute;
-    height: 120px;
-    right: -125px;
-    z-index: -1;
-}
-
 @keyframes move-planet {
     0% {
         left: 1200px;
@@ -255,22 +228,6 @@ body {
     100% {
         left: -250px;
     }
-}
-
-.explosion-planet {
-    position: absolute;
-    height: 120px;
-    width: 100px;
-    z-index: -1;
-}
-
-.bomb-explosion {
-    position: absolute;
-    width: 1200px;
-    height: 599px;
-    top: 0;
-    left: 0;
-    z-index: 5;
 }
 
 .stage-start {
@@ -346,7 +303,6 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-26%, -50%);
-    border: solid 1px black;
     border-radius: 30px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     z-index: 5;
@@ -377,7 +333,7 @@ body {
     margin-bottom: 50px;
 }
 
-.button-retry {
+.btn-retry {
     font-family: Courier, monospace;
     background-color: rgb(255, 255, 255);
     font-weight: bolder;
@@ -388,12 +344,12 @@ body {
     margin: auto;
     padding: 10px;
     text-decoration: none;
+    cursor: pointer;
 }
 
-.button-retry:hover {
+.btn-retry:hover {
     background-color: rgb(64, 255, 121);
     box-shadow: inset 1px 1px 30px rgb(255, 255, 255);
-    cursor: pointer;
 }
 
 .points-final {
