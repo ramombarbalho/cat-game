@@ -9,23 +9,41 @@ window.addEventListener('load', () => {
     document.querySelector('.game-content').classList.remove('hidden');
     const gameBoard = document.querySelector('.game-board');
     gameBoard.classList.remove('hidden');
-    const heartStatus = document.querySelector('.heart-status');
     const boxBomb = document.querySelector('.box-bomb');
     const retryMsg = document.querySelector('.retry-msg');
     const btnRetry = document.querySelector('.btn-retry');
-    console.log(btnRetry);
     const imgCatGameOver = document.querySelector('.cat-game-over');
     const msgPointsFinal = document.querySelector('.points-final');
 
-    let shotsLaunched = 0;
-    let bombLaunched = 1;
-    let controlsAllowed = false;
-    let gameOver = false;
-    let pointHpCat = 0;
-    let pointQtShotHaduken = 0;
-    let pointQtBomb = 0;
     let qtPointsFinal = 0;
-    let stageComplete = false;
+
+    class InputHandler {
+        constructor(game) {
+            this.game = game;
+            window.addEventListener('keydown', ({ code }) => {
+                if ((code === 'Numpad8' || code === 'Numpad5' || code === 'Numpad4' || code === 'Numpad6') && !this.game.keys.includes(code)) {
+                    this.game.keys.push(code);
+                }
+                if (code === 'KeyH' && !this.game.keys.includes(code)) {
+                    this.game.keys.push(code);
+                    this.game.player.regularShoot();
+                }
+                if (code === 'Space' && !this.game.keys.includes(code) && this.game.player.bombAvaliable) {
+                    this.game.keys.push(code);
+                    this.game.player.bombing();
+                }
+            });
+            window.addEventListener('keyup', ({ code }) => {
+                const keyPressed = this.game.keys.indexOf(code);
+                if (keyPressed > -1) {
+                    this.game.keys.splice(keyPressed, 1);
+                }
+                if (code === 'KeyH') {
+                    this.game.player.chargedShoot();
+                }
+            });
+        }
+    }
 
     class Sprite {
         constructor(data) {
@@ -36,20 +54,26 @@ window.addEventListener('load', () => {
             this.el.src = `../img/${data.src}`;
             this.el.classList.add('sprite');
             this.el.setAttribute('draggable', 'false');
-            this.el.style.height = data.height + 'px';
-            this.el.style.top = data.top + 'px';
-            this.el.style.left = data.left + 'px';
+            this.el.style.height = this.height + 'px';
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.left + 'px';
         }
     }
 
-    class Shot extends Sprite {
+    class Projectile extends Sprite {
         constructor(data) {
             super(data);
-            this.chargeValue = data.chargeValue;
-            this.el.classList.add('shots');
-            this.el.classList.add(`shot-${this.chargeValue}`);
-            this.el.setAttribute('data-dmg', `${2 * this.chargeValue + 1}`);
+            this.chargeType = data.chargeType;
+            this.dmg = 2 * this.chargeType + 1;
+            this.speedX = 14 + this.chargeType * 2;
+            this.markForDeletion = false;
             gameBoard.appendChild(this.el);
+            this.width = this.el.getBoundingClientRect().width;
+        }
+
+        update() {
+            this.left += this.speedX;
+            this.el.style.left = this.left + 'px';
         }
     }
 
@@ -58,25 +82,38 @@ window.addEventListener('load', () => {
             super(data);
             this.el.style.display = 'none';
             gameBoard.appendChild(this.el);
+            this.width = this.el.getBoundingClientRect().width;
         }
     }
 
     class Bomb extends Sprite {
         constructor(data) {
             super(data);
-            this.el.style.width = data.width + 'px';
+            this.width = data.width;
+            this.el.style.width = this.width + 'px';
             gameBoard.appendChild(this.el);
         }
     }
 
     class Player extends Sprite {
-        constructor(data) {
+        constructor(game, data) {
             super(data);
+            this.game = game;
             this.hp = 3;
+            this.speedY = 0;
+            this.speedX = 0;
+            this.maxSpeed = 11;
+            this.projectiles = [];
+            this.chargingBeam = false;
             this.chargeValue = 0;
-            this.chargeInterval;
+            this.chargeTimer = 0;
+            this.chargeInterval = 600;
+            this.bombEl = null;
             this.bombAvaliable = true;
             this.bombActive = false;
+            this.bombTimer = 0;
+            this.bombInterval = 350;
+            this.bombCooldownInterval = 10000;
             this.chargeAnimation = new ChargeAnimation({
                 src: 'charge-1.gif',
                 height: this.height + this.height / 3,
@@ -85,149 +122,248 @@ window.addEventListener('load', () => {
             });
             this.el.classList.add('cat-entrance');
             gameBoard.appendChild(this.el);
+            this.width = this.el.getBoundingClientRect().width;
         }
 
-        shooting() {
-            new Shot({
-                src: `shot-${this.chargeValue}.gif`,
-                height: 50 + this.chargeValue * 25,
-                top: this.top + this.height / 2 - (50 + this.chargeValue * 25) / 2,
-                left: this.left + this.height * 2 * 0.875,
-                chargeValue: this.chargeValue,
-            });
-            shotsLaunched++;
+        moviment() {
+            if (!game.controlsAllowed) return;
+
+            if (this.game.keys.includes('Numpad8') && this.game.keys.includes('Numpad5')) this.speedY = 0;
+            else if (this.game.keys.includes('Numpad8')) this.speedY = -this.maxSpeed;
+            else if (this.game.keys.includes('Numpad5')) this.speedY = this.maxSpeed;
+            else this.speedY = 0;
+            if (this.game.keys.includes('Numpad4') && this.game.keys.includes('Numpad6')) this.speedX = 0;
+            else if (this.game.keys.includes('Numpad4')) this.speedX = -this.maxSpeed;
+            else if (this.game.keys.includes('Numpad6')) this.speedX = this.maxSpeed;
+            else this.speedX = 0;
+
+            this.top += this.speedY;
+            this.left += this.speedX;
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.left + 'px';
+            this.chargeAnimation.el.style.top = this.top - this.height / 8 + 'px';
+            this.chargeAnimation.el.style.left = this.left + this.height * 2 * 0.525 + 'px';
         }
 
-        chargingBeam() {
-            this.chargeValue++;
-            if (this.chargeValue === 1) {
+        shooting(type) {
+            this.projectiles.push(
+                new Projectile({
+                    src: `shoot-${type}.gif`,
+                    height: 50 + type * 25,
+                    top: this.top + this.height / 2 - (50 + type * 25) / 2,
+                    left: this.left + this.height * 2 * 0.875,
+                    chargeType: type,
+                }),
+            );
+        }
+
+        chargeBeam(deltaTime) {
+            this.chargeTimer += deltaTime;
+            if (this.chargeTimer >= this.chargeInterval && this.chargeTimer < this.chargeInterval * 2 && this.chargeValue === 0) {
+                this.chargeValue = 1;
                 this.chargeAnimation.el.style.display = 'block';
-            } else {
-                this.chargeAnimation.el.src = '../img/charge-2.gif';
+            } else if (this.chargeTimer >= this.chargeInterval * 2 && this.chargeValue === 1) {
                 this.chargeValue = 2;
+                this.chargeAnimation.el.src = '../img/charge-2.gif';
             }
         }
 
-        normalShot() {
-            if (this.chargeValue === 0) {
+        regularShoot() {
+            if (!game.controlsAllowed) return;
+
+            if (this.chargeTimer < this.chargeInterval) {
                 this.shooting(this.chargeValue);
-                this.chargeInterval = setInterval(() => this.chargingBeam(), 600);
+                this.chargingBeam = true;
             }
         }
 
-        chargedShot() {
-            if (this.chargeValue === 0) {
-                clearInterval(this.chargeInterval);
-            } else {
+        chargedShoot() {
+            if (!game.controlsAllowed) return;
+
+            if (this.chargeTimer >= this.chargeInterval) {
                 this.shooting(this.chargeValue);
                 this.chargeAnimation.el.style.display = 'none';
                 this.chargeAnimation.el.src = '../img/charge-1.gif';
-                this.chargeValue = 0;
-                clearInterval(this.chargeInterval);
+            }
+
+            this.chargingBeam = false;
+            this.chargeTimer = 0;
+            this.chargeValue = 0;
+        }
+
+        bombCooldown(deltaTime) {
+            this.bombCooldownInterval -= deltaTime;
+            if (this.bombCooldownInterval <= 0) {
+                this.bombAvaliable = true;
+                this.bombCooldownInterval = 10000;
+            }
+        }
+
+        bombAnimation(deltaTime) {
+            this.bombTimer += deltaTime;
+            if (this.bombTimer >= this.bombInterval) {
+                this.bombActive = false;
+                this.bombEl.el.remove();
+                this.bombEl = null;
+                this.bombTimer = 0;
             }
         }
 
         bombing() {
-            if (!this.bombAvaliable || !controlsAllowed) return;
+            if (!this.bombAvaliable || !game.controlsAllowed) return;
 
-            const bomb = new Bomb({
+            this.bombEl = new Bomb({
                 src: 'bomb-explosion.gif',
-                height: 600,
-                width: 1200,
+                height: this.game.height,
+                width: this.game.width,
                 top: 0,
                 left: 0,
             });
 
             this.bombAvaliable = false;
             this.bombActive = true;
-            boxBomb.style.cursor = 'not-allowed';
-            const cooldownBomb = document.querySelector('.cooldown-bomb');
-            cooldownBomb.style.animation = 'cooldown-efect 20s 1 linear';
-            const noAllowed = document.querySelector('.no-allowed');
-            noAllowed.style.display = 'block';
 
-            setTimeout(() => {
-                this.bombActive = false;
-                gameBoard.removeChild(bomb.el);
-            }, 350);
-
-            setTimeout(() => {
-                this.bombAvaliable = true;
-                boxBomb.style.cursor = 'pointer';
-                cooldownBomb.style.animation = 'none';
-                noAllowed.style.display = 'none';
-            }, 20000);
+            // boxBomb.style.cursor = 'not-allowed';
+            // const cooldownBomb = document.querySelector('.cooldown-bomb');
+            // cooldownBomb.style.animation = 'cooldown-efect 20s 1 linear';
+            // const noAllowed = document.querySelector('.no-allowed');
+            // noAllowed.style.display = 'block';
         }
     }
 
-    const cat = new Player({
-        src: 'cat.gif',
-        height: 120,
-        top: (parseInt(gameBoard.style.height) - 120) / 2,
-        left: 0,
-    });
+    class Enemy extends Sprite {
+        constructor(data) {
+            super(data);
+            this.enemyType = data.enemyType;
+            this.hp = this.enemyType * 2 + 1;
+            this.speedX = 10 / (this.enemyType + 1);
+            this.markForDeletion = false;
+            gameBoard.appendChild(this.el);
+            this.width = this.el.getBoundingClientRect().width;
+        }
 
-    const keys = [];
-    const speedCat = 11;
+        update() {
+            this.left -= this.speedX;
+            this.el.style.left = this.left + 'px';
+        }
+    }
 
-    const movingCat = () => {
-        if (!controlsAllowed) return;
+    class Game {
+        constructor() {
+            this.width = gameBoard.getBoundingClientRect().width;
+            this.height = gameBoard.getBoundingClientRect().height;
+            this.input = new InputHandler(this);
+            this.player = new Player(this, {
+                src: 'cat.gif',
+                height: 120,
+                top: (this.height - 120) / 2,
+                left: 0,
+            });
+            this.keys = [];
+            this.enemies = [];
+            this.enemyTimer = 0;
+            this.enemyInterval = 2000;
+            this.controlsAllowed = false;
+            this.gameOver = false;
+            this.stageComplete = false;
+        }
 
-        if (keys.includes('Numpad8')) {
-            cat.top = cat.top - speedCat;
-            cat.el.style.top = cat.top + 'px';
-            cat.chargeAnimation.el.style.top = cat.top - cat.height / 8 + 'px';
+        addEnemy() {
+            const position = Math.trunc(Math.random() * 5);
+            const type = Math.trunc(Math.random() * 3);
+            this.enemies.push(
+                new Enemy({
+                    src: `planet-${type}.gif`,
+                    height: 120,
+                    top: position * 120 - 3,
+                    left: this.width,
+                    enemyType: type,
+                }),
+            );
         }
-        if (keys.includes('Numpad5')) {
-            cat.top = cat.top + speedCat;
-            cat.el.style.top = cat.top + 'px';
-            cat.chargeAnimation.el.style.top = cat.top - cat.height / 8 + 'px';
-        }
-        if (keys.includes('Numpad4')) {
-            cat.left = cat.left - speedCat;
-            cat.el.style.left = cat.left + 'px';
-            cat.chargeAnimation.el.style.left = cat.left + cat.height * 2 * 0.525 + 'px';
-        }
-        if (keys.includes('Numpad6')) {
-            cat.left = cat.left + speedCat;
-            cat.el.style.left = cat.left + 'px';
-            cat.chargeAnimation.el.style.left = cat.left + cat.height * 2 * 0.525 + 'px';
-        }
-    };
 
-    window.addEventListener('keydown', ({ code }) => {
-        if (!controlsAllowed) return;
+        clearEnemiesOffScreen() {
+            this.enemies = this.enemies.filter(enemy => {
+                if (enemy.left + 120 < 0) {
+                    this.deletElement(enemy);
+                }
+                return !enemy.markForDeletion;
+            });
+        }
 
-        if (
-            (code === 'Numpad8' ||
-                code === 'Numpad5' ||
-                code === 'Numpad4' ||
-                code === 'Numpad6') &&
-            !keys.includes(code)
-        ) {
-            keys.push(code);
+        clearShootsOffScreen() {
+            this.player.projectiles = this.player.projectiles.filter(projectile => {
+                if (projectile.left > this.width) {
+                    this.deletElement(projectile);
+                }
+                return !projectile.markForDeletion;
+            });
         }
-        if (code === 'KeyH' && !keys.includes(code)) {
-            keys.push(code);
-            cat.normalShot();
-        }
-        if (code === 'Space' && !keys.includes(code) && cat.bombAvaliable) {
-            keys.push(code);
-            cat.bombing();
-        }
-    });
 
-    window.addEventListener('keyup', ({ code }) => {
-        if (!controlsAllowed) return;
+        checkCollision(rect1, rect2) {
+            return (
+                rect1.left < rect2.left + rect2.width &&
+                rect1.left + rect1.width > rect2.left &&
+                rect1.top < rect2.top + rect2.height &&
+                rect1.top + rect1.height > rect2.top
+            );
+        }
 
-        const keyPressed = keys.indexOf(code);
-        if (keyPressed > -1) {
-            keys.splice(keyPressed, 1);
+        update(deltaTime) {
+            this.player.moviment();
+            if (this.player.chargingBeam) this.player.chargeBeam(deltaTime);
+            if (this.player.bombActive) this.player.bombAnimation(deltaTime);
+            else if (!this.player.bombActive && !this.player.bombAvaliable) this.player.bombCooldown(deltaTime);
+            this.player.projectiles.forEach(projectile => {
+                projectile.update();
+                this.clearShootsOffScreen();
+            });
+            this.enemies.forEach(enemy => {
+                enemy.update();
+                this.clearEnemiesOffScreen();
+                if (this.checkCollision(this.player, enemy)) {
+                    this.deletElement(enemy);
+                }
+                this.player.projectiles.forEach(projectile => {
+                    if (this.checkCollision(projectile, enemy)) {
+                        this.deletElement(projectile);
+                        enemy.hp -= projectile.dmg;
+                        if (enemy.hp <= 0) {
+                            this.deletElement(enemy);
+                        }
+                    }
+                });
+                if (this.player.bombActive) {
+                    this.deletElement(enemy);
+                }
+            });
+            if (this.enemyTimer > this.enemyInterval) {
+                this.addEnemy();
+                this.enemyTimer = 0;
+            } else {
+                this.enemyTimer += deltaTime;
+            }
+            this.gameOverVerification();
         }
-        if (code === 'KeyH') {
-            cat.chargedShot();
+
+        deletElement(el) {
+            el.markForDeletion = true;
+            el.el.remove();
         }
-    });
+
+        gameOverVerification() {
+            if (this.gameOver) return;
+
+            if (this.player.hp <= 0 || this.stageComplete) {
+                this.gameOver = true;
+                this.player.chargeAnimation.el.style.display = 'none';
+                retryMsg.classList.remove('hidden');
+                this.controlsAllowed = false;
+            }
+        }
+    }
+
+    const game = new Game();
 
     const openStage = setTimeout(() => {
         const stage1_1 = document.createElement('img');
@@ -238,195 +374,10 @@ window.addEventListener('load', () => {
 
         setTimeout(() => {
             gameBoard.removeChild(stage1_1);
-            controlsAllowed = true;
-            gameLoop(/* 0 */);
-            generatePlanets();
+            game.controlsAllowed = true;
+            gameLoop(0);
         }, 1900);
     }, 1000);
-
-    let crashedPlanets = 0;
-    let intervalPlanets = 2000;
-    let generatePlanetsInterval;
-    let planetsLaunched = 0;
-
-    class Enemy extends Sprite {
-        constructor(data) {
-            super(data);
-            this.el.classList.add('planets');
-            this.el.style.animation = `move-planet ${
-                +this.el.getAttribute('src').slice(14, 15) * 2 + 3 /* v */
-            }s 1 linear`;
-            this.el.setAttribute(
-                'data-hp',
-                `${+this.el.getAttribute('src').slice(14, 15) * 2 + 1}`,
-            );
-            gameBoard.appendChild(this.el);
-        }
-    }
-
-    function generatePlanets() {
-        if (gameOver || stageComplete) return;
-
-        generatePlanetsInterval = setInterval(() => {
-            const position = Math.trunc(Math.random() * 5);
-            const type = Math.trunc(Math.random() * 3);
-            new Enemy({
-                src: `planet-${type}.gif`,
-                height: 120,
-                top: position * 120 - 3,
-                left: 1200,
-            });
-            planetsLaunched++;
-        }, intervalPlanets);
-    }
-
-    let shots;
-    let planetsTotal;
-    let planetsTotalTurn;
-
-    function colisionShots() {
-        shots = document.querySelectorAll('.shots');
-        planetsTotal = document.querySelectorAll('.planets');
-
-        for (let b = 0; b < planetsTotal.length; b++) {
-            if (planetsTotal[b].offsetLeft < -55) {
-                planetsTotal[b].remove();
-                cat.hp--;
-                planetsTotalTurn = document.querySelectorAll('.planets');
-
-                if (cat.hp === 2) {
-                    heartStatus.innerHTML = `<img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active"> <img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">`;
-                } else if (cat.hp === 1) {
-                    heartStatus.innerHTML = `<img draggable="false" src="../img/heart-active.png" alt="heart" class="heart-active">`;
-                } else if (cat.hp <= 0) {
-                    heartStatus.innerHTML = '';
-                }
-
-                if (planetsTotalTurn.length === 0 && crashedPlanets >= 2) {
-                    pointHpCat = cat.hp * 1500;
-                    pointQtBomb = bombLaunched * 4000;
-                    pointQtShotHaduken = shotsLaunched * 100;
-                    qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
-
-                    setTimeout(() => {
-                        if (!gameOver) {
-                            stageClear();
-                        }
-                    }, 2000);
-                }
-            }
-        }
-
-        for (let i = 0; i < shots.length; i++) {
-            if (shots[i].offsetLeft > 1200) {
-                shots[i].remove();
-            }
-
-            for (let j = 0; j < planetsTotal.length; j++) {
-                if (shots[i] && planetsTotal[j] && !gameOver) {
-                    if (
-                        shots[i].classList.contains('shot-0') &&
-                        shots[i].offsetLeft <= planetsTotal[j].offsetLeft + 70 &&
-                        shots[i].offsetLeft + 5 >= planetsTotal[j].offsetLeft &&
-                        shots[i].offsetTop <= planetsTotal[j].offsetTop + 98 &&
-                        shots[i].offsetTop + 22 >= planetsTotal[j].offsetTop
-                    ) {
-                        planetColision(i, j);
-                    } else if (
-                        shots[i].classList.contains('shot-1') &&
-                        shots[i].offsetLeft <= planetsTotal[j].offsetLeft + 70 &&
-                        shots[i].offsetLeft + 75 >= planetsTotal[j].offsetLeft &&
-                        shots[i].offsetTop <= planetsTotal[j].offsetTop + 98 &&
-                        shots[i].offsetTop + 44 >= planetsTotal[j].offsetTop
-                    ) {
-                        planetColision(i, j);
-                    } else if (
-                        shots[i].classList.contains('shot-2') &&
-                        shots[i].offsetLeft <= planetsTotal[j].offsetLeft + 70 &&
-                        shots[i].offsetLeft + 75 >= planetsTotal[j].offsetLeft &&
-                        shots[i].offsetTop <= planetsTotal[j].offsetTop + 98 &&
-                        shots[i].offsetTop + 72 >= planetsTotal[j].offsetTop
-                    ) {
-                        planetColision(i, j);
-                    }
-                }
-            }
-        }
-    }
-
-    function planetColision(a, b) {
-        planetsTotal[b].setAttribute(
-            'data-hp',
-            `${String(Number(planetsTotal[b].dataset.hp) - Number(shots[a].dataset.dmg))}`,
-        );
-        shots[a].remove();
-
-        if (Number(planetsTotal[b].dataset.hp) <= 0) {
-            planetsTotal[b].remove();
-            crashedPlanets++;
-            planetsTotalTurn = document.querySelectorAll('.planets');
-
-            if (crashedPlanets === 10) {
-                clearInterval(generatePlanetsInterval);
-                intervalPlanets = 1500;
-                generatePlanets();
-            } else if (crashedPlanets === 20) {
-                clearInterval(generatePlanetsInterval);
-                intervalPlanets = 1000;
-                generatePlanets();
-            } else if (crashedPlanets === 35) {
-                clearInterval(generatePlanetsInterval);
-            }
-
-            if (crashedPlanets >= 35 && planetsTotalTurn.length === 0) {
-                pointHpCat = cat.hp * 1500;
-                pointQtBomb = bombLaunched * 4000;
-                pointQtShotHaduken = shotsLaunched * 100;
-                qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
-
-                setTimeout(() => {
-                    if (!gameOver) {
-                        stageClear();
-                    }
-                }, 2000);
-            }
-        }
-    }
-
-    function colisionBomb() {
-        if (cat.bombActive) {
-            for (let j = 0; j < planetsTotal.length; j++) {
-                planetsTotal[j].remove();
-                crashedPlanets++;
-                planetsTotalTurn = document.querySelectorAll('.planets');
-
-                if (crashedPlanets === 10) {
-                    clearInterval(generatePlanetsInterval);
-                    intervalPlanets = 1500;
-                    generatePlanets();
-                } else if (crashedPlanets === 20) {
-                    clearInterval(generatePlanetsInterval);
-                    intervalPlanets = 1000;
-                    generatePlanets();
-                } else if (crashedPlanets === 35) {
-                    clearInterval(generatePlanetsInterval);
-                }
-
-                if (crashedPlanets >= 2 && planetsTotalTurn.length === 0) {
-                    pointHpCat = cat.hp * 1500;
-                    pointQtBomb = bombLaunched * 4000;
-                    pointQtShotHaduken = shotsLaunched * 100;
-                    qtPointsFinal = pointHpCat + pointQtBomb + pointQtShotHaduken;
-
-                    setTimeout(() => {
-                        if (!gameOver) {
-                            stageClear();
-                        }
-                    }, 2000);
-                }
-            }
-        }
-    }
 
     function stageClear() {
         const missionComplete = document.createElement('img');
@@ -435,9 +386,9 @@ window.addEventListener('load', () => {
         missionComplete.setAttribute('draggable', 'false');
         gameBoard.appendChild(missionComplete);
 
-        cat.chargedShot();
-        stageComplete = true;
-        controlsAllowed = false;
+        this.player.chargeAnimation.el.style.display = 'none';
+        game.stageComplete = true;
+        game.controlsAllowed = false;
 
         setTimeout(() => {
             gameBoard.removeChild(missionComplete);
@@ -447,7 +398,7 @@ window.addEventListener('load', () => {
             //   msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
             //                                 <h2>HP:.....${pointHpCat}pts</h2>
             //                                 <h2>BOMB:...${pointQtBomb}pts</h2>
-            //                                 <h2>SHOTS:..${pointQtShotHaduken}pts</h2>
+            //                                 <h2>SHoOTS:..${pointQtShootHaduken}pts</h2>
             //                                 <h1>TOTAL: ${qtPointsFinal}pts</h1>
             //                                 <a draggable="false" href="../stages/stage-1-2-test.html" class="butnstage-complete">NEXT STAGE</a>
             //                                 <a draggable="false" href="#" class="butnstage-complete" onclick="retry()">RETRY</a>`;
@@ -469,27 +420,6 @@ window.addEventListener('load', () => {
         }, 3000);
     }
 
-    function gameOverVerification() {
-        if (gameOver) return;
-
-        if (cat.hp <= 0 || stageComplete) {
-            clearInterval(generatePlanetsInterval);
-            gameOver = true;
-
-            for (let j = 0; j < planetsTotal.length; j++)
-                planetsTotal[j].style.animationPlayState = 'paused';
-
-            if (gameOver && cat.hp <= 0) {
-                for (let i = 0; i < shots.length; i++) shots[i].style.animationPlayState = 'paused';
-
-                cat.chargeAnimation.el.style.display = 'none';
-                clearInterval(cat.chargeInterval);
-                retryMsg.classList.remove('hidden');
-                controlsAllowed = false;
-            }
-        }
-    }
-
     function catThumbsUp() {
         imgCatGameOver.src = '../img/cat-thumbs-up.png';
     }
@@ -502,25 +432,18 @@ window.addEventListener('load', () => {
         location.reload();
     }
 
-    boxBomb.addEventListener('click', cat.bombing.bind(cat));
+    boxBomb.addEventListener('click', game.player.bombing.bind(game.player));
     btnRetry.addEventListener('mouseover', catThumbsUp);
     btnRetry.addEventListener('mouseout', catSad);
     btnRetry.addEventListener('click', retry);
     document.querySelector('.retry-retry').addEventListener('click', retry);
 
-    class Game {
-        constructor() {}
-    }
+    let lastTime = 0;
 
-    // let lastTime;
-
-    function gameLoop(/* timeStamp */) {
-        // const deltaTime = timeStamp - lastTime;
-        // lastTime = timeStamp;
-        colisionShots();
-        colisionBomb();
-        gameOverVerification();
-        movingCat();
+    function gameLoop(timeStamp) {
+        const deltaTime = timeStamp - lastTime;
+        lastTime = timeStamp;
+        game.update(deltaTime);
         requestAnimationFrame(gameLoop);
     }
 });
