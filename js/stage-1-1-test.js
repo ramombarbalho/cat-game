@@ -5,32 +5,23 @@ window.addEventListener('contextmenu', e => {
 });
 
 window.addEventListener('load', () => {
-    document.querySelector('.loading').classList.add('hidden');
-    document.querySelector('.game-content').classList.remove('hidden');
-    const gameBoard = document.querySelector('.game-board');
-    gameBoard.classList.remove('hidden');
-    const boxBomb = document.querySelector('.box-bomb');
-    const retryMsg = document.querySelector('.retry-msg');
-    const btnRetry = document.querySelector('.btn-retry');
-    const imgCatGameOver = document.querySelector('.cat-game-over');
-    const msgPointsFinal = document.querySelector('.points-final');
-
-    let qtPointsFinal = 0;
-
     class InputHandler {
         constructor(game) {
             this.game = game;
-            window.addEventListener('keydown', ({ code }) => {
-                if ((code === 'Numpad8' || code === 'Numpad5' || code === 'Numpad4' || code === 'Numpad6') && !this.game.keys.includes(code)) {
-                    this.game.keys.push(code);
+            window.addEventListener('keydown', e => {
+                if ((e.code === 'Numpad8' || e.code === 'Numpad5' || e.code === 'Numpad4' || e.code === 'Numpad6') && !this.game.keys.includes(e.code)) {
+                    this.game.keys.push(e.code);
                 }
-                if (code === 'KeyH' && !this.game.keys.includes(code)) {
-                    this.game.keys.push(code);
+                if (e.code === 'KeyH' && !this.game.keys.includes(e.code)) {
+                    this.game.keys.push(e.code);
                     this.game.player.regularShoot();
                 }
-                if (code === 'Space' && !this.game.keys.includes(code) && this.game.player.bombAvaliable) {
-                    this.game.keys.push(code);
-                    this.game.player.bombing();
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    if (!this.game.keys.includes(e.code)) {
+                        this.game.keys.push(e.code);
+                        this.game.player.bombing();
+                    }
                 }
             });
             window.addEventListener('keyup', ({ code }) => {
@@ -46,7 +37,8 @@ window.addEventListener('load', () => {
     }
 
     class Sprite {
-        constructor(data) {
+        constructor(game, data) {
+            this.game = game;
             this.height = data.height;
             this.top = data.top;
             this.left = data.left;
@@ -60,14 +52,104 @@ window.addEventListener('load', () => {
         }
     }
 
+    class UI {
+        constructor(game) {
+            this.game = game;
+            this.startMsg = null;
+            this.stageClearMsg = null;
+            this.boxMsg = null;
+            this.catGameOverImg = null;
+            this.btnRetry = null;
+        }
+
+        startGameMsg() {
+            this.startMsg = new Sprite(this.game, {
+                src: 'stage_1-1.png',
+                height: 350,
+            });
+
+            this.startMsg.el.classList.add('stage-start');
+            this.game.gameBoard.appendChild(this.startMsg.el);
+
+            setTimeout(() => {
+                this.startMsg.el.remove();
+                this.startMsg = null;
+                this.game.controlsAllowed = true;
+            }, 2000);
+        }
+
+        stageClearGameMsg() {
+            this.stageClearMsg = new Sprite(this.game, {
+                src: 'stage-clear.png',
+                height: 400,
+            });
+
+            this.stageClearMsg.el.classList.add('stage-clear');
+            this.game.gameBoard.appendChild(this.stageClearMsg.el);
+            this.game.stageComplete = true;
+
+            setTimeout(() => {
+                this.createBoxMsg('STAGECLEAR');
+            }, 3000);
+
+            setTimeout(() => {
+                this.stageClearMsg.el.remove();
+                this.stageClearMsg = null;
+            }, 4000);
+        }
+
+        createBoxMsg(state) {
+            this.game.player.chargedShoot();
+            this.game.controlsAllowed = false;
+            this.boxMsg = document.createElement('div');
+            this.boxMsg.classList.add('box-msg');
+
+            if (state === 'GAMEOVER') {
+                this.boxMsg.innerHTML = `<div class="box-msg-content">
+                            <h1 class="text-game-over">GAME OVER</h1>
+                            <img draggable="false" src="../img/cat-game-over.png" class="cat-game-over-img" />
+                            <a href="#" class="btn-retry btn-box-msg">TRY AGAIN!!</a>
+                        </div>`;
+                this.game.gameBoard.appendChild(this.boxMsg);
+                this.catGameOverImg = document.querySelector('.cat-game-over-img');
+                this.btnRetry = document.querySelector('.btn-retry');
+                this.btnRetry.addEventListener('mouseover', this.catThumbsUp);
+                this.btnRetry.addEventListener('mouseout', this.catSad);
+            } else if (state === 'STAGECLEAR') {
+                this.boxMsg.innerHTML = `<div class="box-msg-content">
+                            <h1 class="text-stage-clear">STAGE CLEAR</h1>
+                            <h2>HP:........1000pts</h2>
+                            <h2>BOMB:......1000pts</h2>
+                            <h2>SHOOTS:....1000pts</h2>
+                            <h1>TOTAL:..3000pts</h1>
+                            <div>
+                                <a href="../stages/stage-1-2-test.html" class="btn-box-msg">NEXT STAGE</a>
+                                <a href="#" class="btn-retry btn-box-msg">RETRY</a>
+                            </div>
+                        </div>`;
+                this.game.gameBoard.appendChild(this.boxMsg);
+                this.btnRetry = document.querySelector('.btn-retry');
+            }
+            this.btnRetry.addEventListener('click', this.game.retry);
+        }
+
+        catThumbsUp = () => {
+            this.catGameOverImg.src = '../img/cat-thumbs-up.png';
+        };
+
+        catSad = () => {
+            this.catGameOverImg.src = '../img/cat-game-over.png';
+        };
+    }
+
     class Projectile extends Sprite {
-        constructor(data) {
-            super(data);
+        constructor(game, data) {
+            super(game, data);
             this.chargeType = data.chargeType;
             this.dmg = 2 * this.chargeType + 1;
             this.speedX = 14 + this.chargeType * 2;
             this.markForDeletion = false;
-            gameBoard.appendChild(this.el);
+            this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
         }
 
@@ -78,28 +160,27 @@ window.addEventListener('load', () => {
     }
 
     class ChargeAnimation extends Sprite {
-        constructor(data) {
-            super(data);
+        constructor(game, data) {
+            super(game, data);
             this.el.style.display = 'none';
-            gameBoard.appendChild(this.el);
+            this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
         }
     }
 
     class Bomb extends Sprite {
-        constructor(data) {
-            super(data);
+        constructor(game, data) {
+            super(game, data);
             this.width = data.width;
             this.el.style.width = this.width + 'px';
-            gameBoard.appendChild(this.el);
+            this.game.gameBoard.appendChild(this.el);
         }
     }
 
     class Player extends Sprite {
         constructor(game, data) {
-            super(data);
-            this.game = game;
-            this.hp = 3;
+            super(game, data);
+            this.hp = 1;
             this.speedY = 0;
             this.speedX = 0;
             this.maxSpeed = 11;
@@ -113,20 +194,19 @@ window.addEventListener('load', () => {
             this.bombActive = false;
             this.bombTimer = 0;
             this.bombInterval = 350;
-            this.bombCooldownInterval = 10000;
-            this.chargeAnimation = new ChargeAnimation({
+            this.bombCooldownInterval = 5000;
+            this.chargeAnimation = new ChargeAnimation(this.game, {
                 src: 'charge-1.gif',
                 height: this.height + this.height / 3,
                 top: this.top - this.height / 8,
                 left: this.left + this.height * 2 * 0.525,
             });
-            this.el.classList.add('cat-entrance');
-            gameBoard.appendChild(this.el);
+            this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
         }
 
         moviment() {
-            if (!game.controlsAllowed) return;
+            if (!this.game.controlsAllowed) return;
 
             if (this.game.keys.includes('Numpad8') && this.game.keys.includes('Numpad5')) this.speedY = 0;
             else if (this.game.keys.includes('Numpad8')) this.speedY = -this.maxSpeed;
@@ -147,7 +227,7 @@ window.addEventListener('load', () => {
 
         shooting(type) {
             this.projectiles.push(
-                new Projectile({
+                new Projectile(this.game, {
                     src: `shoot-${type}.gif`,
                     height: 50 + type * 25,
                     top: this.top + this.height / 2 - (50 + type * 25) / 2,
@@ -169,7 +249,7 @@ window.addEventListener('load', () => {
         }
 
         regularShoot() {
-            if (!game.controlsAllowed) return;
+            if (!this.game.controlsAllowed) return;
 
             if (this.chargeTimer < this.chargeInterval) {
                 this.shooting(this.chargeValue);
@@ -178,7 +258,7 @@ window.addEventListener('load', () => {
         }
 
         chargedShoot() {
-            if (!game.controlsAllowed) return;
+            if (!this.game.controlsAllowed) return;
 
             if (this.chargeTimer >= this.chargeInterval) {
                 this.shooting(this.chargeValue);
@@ -195,7 +275,9 @@ window.addEventListener('load', () => {
             this.bombCooldownInterval -= deltaTime;
             if (this.bombCooldownInterval <= 0) {
                 this.bombAvaliable = true;
-                this.bombCooldownInterval = 10000;
+                this.bombCooldownInterval = 5000;
+                const noAllowed = document.querySelector('.no-allowed');
+                noAllowed.style.display = 'none';
             }
         }
 
@@ -210,9 +292,9 @@ window.addEventListener('load', () => {
         }
 
         bombing() {
-            if (!this.bombAvaliable || !game.controlsAllowed) return;
+            if (!this.bombAvaliable || !this.game.controlsAllowed) return;
 
-            this.bombEl = new Bomb({
+            this.bombEl = new Bomb(this.game, {
                 src: 'bomb-explosion.gif',
                 height: this.game.height,
                 width: this.game.width,
@@ -226,19 +308,19 @@ window.addEventListener('load', () => {
             // boxBomb.style.cursor = 'not-allowed';
             // const cooldownBomb = document.querySelector('.cooldown-bomb');
             // cooldownBomb.style.animation = 'cooldown-efect 20s 1 linear';
-            // const noAllowed = document.querySelector('.no-allowed');
-            // noAllowed.style.display = 'block';
+            const noAllowed = document.querySelector('.no-allowed');
+            noAllowed.style.display = 'block';
         }
     }
 
     class Enemy extends Sprite {
-        constructor(data) {
-            super(data);
+        constructor(game, data) {
+            super(game, data);
             this.enemyType = data.enemyType;
             this.hp = this.enemyType * 2 + 1;
             this.speedX = 10 / (this.enemyType + 1);
             this.markForDeletion = false;
-            gameBoard.appendChild(this.el);
+            this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
         }
 
@@ -250,8 +332,13 @@ window.addEventListener('load', () => {
 
     class Game {
         constructor() {
-            this.width = gameBoard.getBoundingClientRect().width;
-            this.height = gameBoard.getBoundingClientRect().height;
+            document.querySelector('.loading').remove();
+            document.querySelector('.game-content').classList.remove('hidden');
+            this.gameBoard = document.querySelector('.game-board');
+            this.gameBoard.classList.remove('hidden');
+            this.width = this.gameBoard.getBoundingClientRect().width;
+            this.height = this.gameBoard.getBoundingClientRect().height;
+            this.ui = new UI(this);
             this.input = new InputHandler(this);
             this.player = new Player(this, {
                 src: 'cat.gif',
@@ -261,18 +348,21 @@ window.addEventListener('load', () => {
             });
             this.keys = [];
             this.enemies = [];
+            this.crashedEnemies = 2;
             this.enemyTimer = 0;
             this.enemyInterval = 2000;
             this.controlsAllowed = false;
             this.gameOver = false;
             this.stageComplete = false;
+            this.state = 'STARTSTAGE';
+            this.ui.startGameMsg();
         }
 
         addEnemy() {
             const position = Math.trunc(Math.random() * 5);
             const type = Math.trunc(Math.random() * 3);
             this.enemies.push(
-                new Enemy({
+                new Enemy(this, {
                     src: `planet-${type}.gif`,
                     height: 120,
                     top: position * 120 - 3,
@@ -323,6 +413,7 @@ window.addEventListener('load', () => {
                 this.clearEnemiesOffScreen();
                 if (this.checkCollision(this.player, enemy)) {
                     this.deletElement(enemy);
+                    this.player.hp--;
                 }
                 this.player.projectiles.forEach(projectile => {
                     if (this.checkCollision(projectile, enemy)) {
@@ -330,18 +421,22 @@ window.addEventListener('load', () => {
                         enemy.hp -= projectile.dmg;
                         if (enemy.hp <= 0) {
                             this.deletElement(enemy);
+                            this.crashedEnemies++;
                         }
                     }
                 });
                 if (this.player.bombActive) {
                     this.deletElement(enemy);
+                    this.crashedEnemies++;
                 }
             });
-            if (this.enemyTimer > this.enemyInterval) {
-                this.addEnemy();
-                this.enemyTimer = 0;
-            } else {
-                this.enemyTimer += deltaTime;
+            if (!this.gameOver && !this.stageComplete && this.controlsAllowed) {
+                if (this.enemyTimer > this.enemyInterval) {
+                    this.addEnemy();
+                    this.enemyTimer = 0;
+                } else {
+                    this.enemyTimer += deltaTime;
+                }
             }
             this.gameOverVerification();
         }
@@ -351,92 +446,24 @@ window.addEventListener('load', () => {
             el.el.remove();
         }
 
-        gameOverVerification() {
-            if (this.gameOver) return;
+        retry() {
+            location.reload();
+        }
 
-            if (this.player.hp <= 0 || this.stageComplete) {
+        gameOverVerification() {
+            if (this.gameOver || this.stageComplete) return;
+
+            if (this.player.hp <= 0) {
                 this.gameOver = true;
-                this.player.chargeAnimation.el.style.display = 'none';
-                retryMsg.classList.remove('hidden');
-                this.controlsAllowed = false;
+                this.ui.createBoxMsg('GAMEOVER');
+            } else if (this.crashedEnemies >= 3) {
+                this.stageComplete = true;
+                this.ui.stageClearGameMsg();
             }
         }
     }
 
     const game = new Game();
-
-    const openStage = setTimeout(() => {
-        const stage1_1 = document.createElement('img');
-        stage1_1.src = '../img/stage_1-1.png';
-        stage1_1.classList.add('stage-start');
-        stage1_1.setAttribute('draggable', 'false');
-        gameBoard.appendChild(stage1_1);
-
-        setTimeout(() => {
-            gameBoard.removeChild(stage1_1);
-            game.controlsAllowed = true;
-            gameLoop(0);
-        }, 1900);
-    }, 1000);
-
-    function stageClear() {
-        const missionComplete = document.createElement('img');
-        missionComplete.src = '../img/stage-clear.png';
-        missionComplete.classList.add('stage-clear');
-        missionComplete.setAttribute('draggable', 'false');
-        gameBoard.appendChild(missionComplete);
-
-        this.player.chargeAnimation.el.style.display = 'none';
-        game.stageComplete = true;
-        game.controlsAllowed = false;
-
-        setTimeout(() => {
-            gameBoard.removeChild(missionComplete);
-        }, 3500);
-
-        setTimeout(() => {
-            //   msgPointsFinal.innerHTML = `<h2>POINTS:</h1> <br>
-            //                                 <h2>HP:.....${pointHpCat}pts</h2>
-            //                                 <h2>BOMB:...${pointQtBomb}pts</h2>
-            //                                 <h2>SHoOTS:..${pointQtShootHaduken}pts</h2>
-            //                                 <h1>TOTAL: ${qtPointsFinal}pts</h1>
-            //                                 <a draggable="false" href="../stages/stage-1-2-test.html" class="butnstage-complete">NEXT STAGE</a>
-            //                                 <a draggable="false" href="#" class="butnstage-complete" onclick="retry()">RETRY</a>`;
-
-            msgPointsFinal.classList.remove('hidden');
-
-            if (qtPointsFinal >= 10000) {
-                const perfectStage = document.createElement('img');
-                perfectStage.src = '../img/cat-perfect-stage.jpg';
-                perfectStage.classList.add('perfect-stage');
-                perfectStage.setAttribute('draggable', 'false');
-                msgPointsFinal.appendChild(perfectStage);
-
-                const perfectStageMsg = document.createElement('div');
-                perfectStageMsg.classList.add('perfect-stage-msg');
-                perfectStageMsg.innerHTML = `<h2><b>YOU ARE AWESOME!!</b></h2>`;
-                msgPointsFinal.appendChild(perfectStageMsg);
-            }
-        }, 3000);
-    }
-
-    function catThumbsUp() {
-        imgCatGameOver.src = '../img/cat-thumbs-up.png';
-    }
-
-    function catSad() {
-        imgCatGameOver.src = '../img/cat-game-over.png';
-    }
-
-    function retry() {
-        location.reload();
-    }
-
-    boxBomb.addEventListener('click', game.player.bombing.bind(game.player));
-    btnRetry.addEventListener('mouseover', catThumbsUp);
-    btnRetry.addEventListener('mouseout', catSad);
-    btnRetry.addEventListener('click', retry);
-    document.querySelector('.retry-retry').addEventListener('click', retry);
 
     let lastTime = 0;
 
@@ -446,4 +473,6 @@ window.addEventListener('load', () => {
         game.update(deltaTime);
         requestAnimationFrame(gameLoop);
     }
+
+    gameLoop(0);
 });
