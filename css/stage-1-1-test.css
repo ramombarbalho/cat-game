@@ -58,22 +58,10 @@ body {
 }
 
 .game-board {
+    width: 100%;
+    height: 600px;
     position: relative;
     background-image: linear-gradient(#5a23a1, #25b3df);
-    height: 600px;
-    width: 1200px;
-}
-
-.game-status {
-    background-image: linear-gradient(to right, rgba(255, 255, 0, 0.7), rgba(255, 0, 0, 0.7));
-    position: relative;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    border-top: 1px solid black;
-    width: 100%;
-    height: fit-content;
-    z-index: 5;
     overflow: hidden;
 }
 
@@ -84,91 +72,78 @@ body {
     z-index: 1;
 }
 
+.game-status-barr {
+    width: 100%;
+    height: 120px;
+    background-image: linear-gradient(to bottom right, rgb(107, 107, 107), rgb(228, 228, 228));
+    display: flex;
+    border-top: 1px solid black;
+    z-index: 5;
+    overflow: hidden;
+}
+
 .box-hearts {
     width: 240px;
-    height: 119px;
-    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 5px;
+    padding-left: 40px;
     background-image: linear-gradient(
         to bottom right,
-        rgba(255, 0, 0, 0.7),
-        rgba(255, 166, 0, 0.7),
-        rgba(255, 255, 0, 0.7),
-        rgba(0, 128, 0, 0.7),
-        rgba(0, 0, 255, 0.7),
-        rgba(76, 0, 130, 0.7),
-        rgba(238, 130, 238, 0.7)
+        rgb(255, 75, 75),
+        rgb(255, 196, 85),
+        rgb(255, 255, 110),
+        rgb(69, 255, 69),
+        rgb(107, 107, 255),
+        rgb(176, 65, 255),
+        rgb(255, 176, 255)
     );
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-right: 1px solid black;
 }
 
-.heart-status {
-    width: 183px;
-    height: 60px;
-    display: inline-block;
+.heart-icon {
+    width: 50px;
 }
 
-.heart-active {
-    width: 57px;
-}
-
-.box-bomb {
-    position: relative;
-    background-image: linear-gradient(to bottom right, rgb(60, 60, 60), rgb(170, 170, 170));
+.box-skill {
     width: 120px;
-    height: 119px;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: linear-gradient(to bottom right, rgb(53, 255, 137), rgb(255, 255, 255));
     border-right: 1px solid black;
-    cursor: pointer;
 }
 
-.box-bomb:hover {
-    background-image: linear-gradient(to bottom right, rgb(83, 83, 83), rgb(223, 223, 223));
+.bomb-icon {
+    width: 65px;
 }
 
-.cooldown-bomb {
+/* .cooldown-bomb {
     position: absolute;
     background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.97), rgba(43, 43, 43, 0.97), rgba(107, 107, 107, 0.97));
     bottom: 0;
     border-top: 1px solid rgb(105, 105, 105);
     width: 100%;
-}
+} */
 
-@keyframes cooldown-efect {
+/* @keyframes cooldown-efect {
     0% {
         height: 100%;
     }
     100% {
         height: 0%;
     }
-}
+} */
 
-.bomb-stts {
-    width: 65px;
-}
-
-.no-allowed {
+.not-allowed {
     width: 20%;
     position: absolute;
     top: 7%;
     left: 73%;
     display: none;
     z-index: 1;
-}
-
-.box-shoot {
-    background-image: linear-gradient(to bottom right, rgb(58, 28, 107), rgb(178, 174, 238));
-    width: 120px;
-    height: 119px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-right: 1px solid black;
 }
 
 .stage-start {
@@ -289,6 +264,19 @@ body {
 
 .btn-box-msg:hover {
     background-color: rgb(135, 255, 171);
+}
+
+.rectangle-border {
+    position: absolute;
+    border: 2px solid black;
+    z-index: 1;
+}
+
+.circle-border {
+    position: absolute;
+    border: 2px solid white;
+    border-radius: 50%;
+    z-index: 1;
 }
 
 .hidden {

@@ -1,6 +1,6 @@
 {
     "proseWrap": "always",
-    "printWidth": 160,
+    "printWidth": 180,
     "tabWidth": 4,
     "singleQuote": true,
     "arrowParens": "avoid",
