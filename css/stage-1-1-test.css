@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,6 +7,7 @@
 }
 
 body {
+    font-family: 'Press Start 2P', sans-serif;
     background-color: black;
     user-select: none;
 }
@@ -112,7 +115,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(to bottom right, rgb(53, 255, 137), rgb(255, 255, 255));
+    background-image: linear-gradient(to bottom right, rgb(107, 107, 107), rgb(228, 228, 228));
     border-right: 1px solid black;
 }
 
@@ -212,11 +215,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Courier, monospace;
     background-color: black;
     color: white;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
-    padding: 25px;
+    padding: 40px 25px;
     border-radius: 20px;
     animation: transition-msg 1s;
     z-index: 5;
@@ -240,30 +242,28 @@ body {
     }
 }
 
-.text-game-over {
-    color: rgb(255, 50, 0);
-    font-size: 3.5em;
-}
-
-.text-stage-clear {
-    font-size: 3.5em;
-}
-
 .cat-game-over-img {
-    width: 200px;
+    width: 240px;
 }
 
 .btn-box-msg {
     padding: 5px;
     border-radius: 7px;
+    color: black;
     background-color: rgb(255, 255, 255);
     font-weight: bolder;
     cursor: pointer;
     text-decoration: none;
 }
 
-.btn-box-msg:hover {
+.btn-box-msg:visited {
+    color: black;
+}
+
+.btn-box-msg:active {
     background-color: rgb(135, 255, 171);
+    transform: translateY(2px);
+    color: black;
 }
 
 .rectangle-border {
@@ -272,11 +272,33 @@ body {
     z-index: 1;
 }
 
-.circle-border {
-    position: absolute;
-    border: 2px solid white;
+.hitbox-circle-white {
+    border: 3px solid white;
     border-radius: 50%;
-    z-index: 1;
+}
+
+.hitbox-circle-green {
+    border: 3px solid rgb(0, 255, 0);
+    border-radius: 50%;
+}
+
+.hitbox-circle-red {
+    border: 3px solid red;
+    border-radius: 50%;
+}
+
+.overlay-paused {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: rgba(10, 10, 10, 0.5);
+    z-index: 10;
 }
 
 .hidden {

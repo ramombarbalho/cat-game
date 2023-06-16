@@ -14,6 +14,7 @@ window.addEventListener('load', () => {
                 }
                 if (e.code === 'KeyH' && !this.game.keys.includes(e.code)) {
                     this.game.keys.push(e.code);
+                    this.game.player.chargingBeam = true;
                     if (this.game.controlsAllowed) this.game.player.regularShoot();
                 }
                 if (e.code === 'Space') {
@@ -23,18 +24,14 @@ window.addEventListener('load', () => {
                         if (this.game.controlsAllowed) this.game.player.bombing();
                     }
                 }
-                if (e.code === 'KeyD') {
-                    if (!this.game.keys.includes(e.code)) {
-                        this.game.keys.push(e.code);
-                        this.game.debugMode = !this.game.debugMode;
-                        this.game.switchDebugMode();
-                    }
+                if (e.code === 'Numpad0' && !this.game.keys.includes(e.code)) {
+                    this.game.keys.push(e.code);
+                    this.game.debugMode = !this.game.debugMode;
+                    this.game.switchDebugMode();
                 }
-                if (e.code === 'Enter') {
-                    if (!this.game.keys.includes(e.code)) {
-                        this.game.keys.push(e.code);
-                        if (this.game.state === 'GAMERUNNING' || this.game.state === 'PAUSED') this.game.pauseGame();
-                    }
+                if (e.code === 'NumpadDivide' && !this.game.keys.includes(e.code)) {
+                    this.game.keys.push(e.code);
+                    if (this.game.state === 'GAMERUNNING' || this.game.state === 'PAUSED') this.game.ui.pauseGame();
                 }
             });
             window.addEventListener('keyup', ({ code }) => {
@@ -43,7 +40,7 @@ window.addEventListener('load', () => {
                     this.game.keys.splice(keyPressed, 1);
                 }
                 if (code === 'KeyH') {
-                    if (this.game.controlsAllowed) this.game.player.chargedShoot();
+                    this.game.player.chargingBeam = false;
                 }
             });
         }
@@ -57,8 +54,7 @@ window.addEventListener('load', () => {
             this.top = data.top;
             this.left = data.left;
             this.el = document.createElement('div');
-            this.el.classList.add(`circle-border`);
-            // if (this.game.debugMode) this.el.classList.add(`${data.boxType}-border`);
+            this.el.classList.add('sprite', `hitbox-${data.boxType}`);
             this.el.style.height = this.height + 'px';
             this.el.style.width = this.width + 'px';
             this.el.style.top = this.top + 'px';
@@ -71,16 +67,11 @@ window.addEventListener('load', () => {
         constructor(game, data) {
             this.game = game;
             this.height = data.height;
-            this.top = data.top;
-            this.left = data.left;
-            this.boxType = data.boxType;
             this.el = document.createElement('img');
-            this.el.src = `../img/${data.src}`;
+            this.el.src = `../img/${data.src[0]}`;
             this.el.classList.add('sprite');
-            this.el.setAttribute('draggable', 'false');
             this.el.style.height = this.height + 'px';
-            this.el.style.top = this.top + 'px';
-            this.el.style.left = this.left + 'px';
+            this.el.setAttribute('draggable', 'false');
             this.hitBoxEl = null;
         }
 
@@ -102,6 +93,7 @@ window.addEventListener('load', () => {
         constructor(game) {
             this.game = game;
             this.startMsg = null;
+            this.overlayPaused = null;
             this.stageClearMsg = null;
             this.boxMsg = null;
             this.catGameOverImg = null;
@@ -110,7 +102,7 @@ window.addEventListener('load', () => {
             this.heartsBox = null;
             this.heartsImg = [null, null, null];
             this.skillBoxes = [null, null];
-            this.initStatusBarr();
+            this.initGameUi();
         }
 
         updateHeart() {
@@ -124,13 +116,17 @@ window.addEventListener('load', () => {
             }
         }
 
-        initStatusBarr() {
+        initGameUi() {
             this.statusBarr = document.createElement('div');
             this.statusBarr.classList.add('game-status-barr');
             this.game.gameContent.appendChild(this.statusBarr);
             this.heartsBox = document.createElement('div');
             this.heartsBox.classList.add('box-hearts');
             this.statusBarr.appendChild(this.heartsBox);
+            this.overlayPaused = document.createElement('div');
+            this.overlayPaused.classList.add('overlay-paused', 'hidden');
+            this.game.gameBoard.appendChild(this.overlayPaused);
+            this.overlayPaused.innerHTML = '<p style="font-size: 20px">PAUSED</p>';
             for (let i = 0; i < this.game.player.hp; i++) {
                 this.heartsImg[i] = document.createElement('img');
                 this.heartsImg[i].classList.add('heart-icon');
@@ -145,15 +141,27 @@ window.addEventListener('load', () => {
             }
         }
 
+        pauseGame() {
+            if (this.game.state === 'GAMERUNNING') {
+                this.game.state = 'PAUSED';
+                this.game.controlsAllowed = false;
+                this.overlayPaused.classList.remove('hidden');
+            } else if (this.game.state === 'PAUSED') {
+                this.game.state = 'GAMERUNNING';
+                this.game.controlsAllowed = true;
+                this.overlayPaused.classList.add('hidden');
+            }
+        }
+
         startGameMsg() {
             this.startMsg = new Sprite(this.game, {
-                src: 'stage_1-1.png',
+                src: ['stage_1-1.png'],
                 height: 350,
-                boxType: 'rectangle',
             });
 
             this.startMsg.el.classList.add('stage-start');
             this.game.gameBoard.appendChild(this.startMsg.el);
+            this.game.state = 'OPENINGSTAGE';
 
             setTimeout(() => {
                 this.startMsg.el.remove();
@@ -165,16 +173,14 @@ window.addEventListener('load', () => {
 
         stageClearGameMsg() {
             this.stageClearMsg = new Sprite(this.game, {
-                src: 'stage-clear.png',
+                src: ['stage-clear.png'],
                 height: 400,
-                boxType: 'rectangle',
             });
 
             this.stageClearMsg.el.classList.add('stage-clear');
             this.game.gameBoard.appendChild(this.stageClearMsg.el);
 
             setTimeout(() => {
-                this.game.player.chargedShoot();
                 this.createBoxMsg();
             }, 3000);
 
@@ -191,7 +197,7 @@ window.addEventListener('load', () => {
 
             if (this.game.state === 'GAMEOVER') {
                 this.boxMsg.innerHTML = `<div class="box-msg-content">
-                                            <h1 class="text-game-over">GAME OVER</h1>
+                                            <h1 style="color: #ff3200">GAME OVER</h1>
                                             <img draggable="false" src="../img/cat-game-over.png" class="cat-game-over-img" />
                                             <a draggable="false" href="#" class="btn-retry btn-box-msg">TRY AGAIN!!</a>
                                         </div>`;
@@ -203,10 +209,10 @@ window.addEventListener('load', () => {
             } else if (this.game.state === 'STAGECLEAR') {
                 this.boxMsg.innerHTML = `<div class="box-msg-content">
                                             <h1 class="text-stage-clear">STAGE CLEAR</h1>
-                                            <h2>HP:........1000pts</h2>
-                                            <h2>BOMB:......1000pts</h2>
-                                            <h2>SHOOTS:....1000pts</h2>
-                                            <h1>TOTAL:..3000pts</h1>
+                                            <h3>HP:.......1000pts</h3>
+                                            <h3>BOMB:.....1000pts</h3>
+                                            <h3>SHOOTS:...1000pts</h3>
+                                            <h2>TOTAL:.3000pts</h2>
                                             <div>
                                                 <a draggable="false" href="../stages/stage-1-2-test.html" class="btn-box-msg">NEXT STAGE</a>
                                                 <a draggable="false" href="#" class="btn-retry btn-box-msg">RETRY</a>
@@ -231,7 +237,16 @@ window.addEventListener('load', () => {
     class Projectile extends Sprite {
         constructor(game, data) {
             super(game, data);
-            this.chargeType = data.chargeType;
+            this.player = this.game.player;
+            this.top =
+                this.player.top +
+                this.player.height / 2 -
+                (this.player.height / 5.2 + (this.player.chargeValue * this.player.height) / 4.8 + (this.player.height / 4.8) * this.player.chargeValue) / 2;
+            this.left = this.player.left + this.player.height * 2 * 0.875;
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.player.left + 'px';
+            this.chargeType = this.player.chargeValue;
+            this.el.src = `../img/${data.src[this.chargeType]}`;
             this.dmg = 2 * this.chargeType + 1;
             this.speedX = 14 + this.chargeType * 2;
             this.markForDeletion = false;
@@ -242,7 +257,7 @@ window.addEventListener('load', () => {
             this.hitBox = {
                 radius: this.radius,
                 y: this.top + this.radius,
-                x: this.left + this.radius,
+                x: this.left + this.width / 2,
             };
 
             this.hitBoxDebugData = {
@@ -250,7 +265,7 @@ window.addEventListener('load', () => {
                 width: 2 * this.hitBox.radius,
                 top: this.hitBox.y - this.hitBox.radius,
                 left: this.hitBox.x - this.hitBox.radius,
-                boxType: 'circle',
+                boxType: 'circle-green',
             };
 
             if (this.game.debugMode) this.createHitBoxDebug(this.hitBoxDebugData);
@@ -258,7 +273,7 @@ window.addEventListener('load', () => {
 
         update() {
             this.left += this.speedX;
-            this.hitBox.x = this.left + this.hitBox.radius;
+            this.hitBox.x = this.left + this.width / 2;
             this.el.style.left = this.left + 'px';
             this.hitBoxDebugData.top = this.hitBox.y - this.hitBox.radius;
             this.hitBoxDebugData.left = this.hitBox.x - this.hitBox.radius;
@@ -269,36 +284,36 @@ window.addEventListener('load', () => {
     class ChargeAnimation extends Sprite {
         constructor(game, data) {
             super(game, data);
-            this.el.style.display = 'none';
             this.game.gameBoard.appendChild(this.el);
-            this.width = this.el.getBoundingClientRect().width;
-
-            // this.hitBox = {
-            //     el: new HitBoxDebug(this.game, {
-            //         height: this.height,
-            //         width: this.height,
-            //         top: this.top,
-            //         left: this.left,
-            //         boxType: 'circle',
-            //     }),
-            // };
+            this.el.style.display = 'none';
         }
     }
 
     class Bomb extends Sprite {
         constructor(game, data) {
             super(game, data);
-            this.width = data.width;
-            this.el.style.width = this.width + 'px';
+            this.top = 0;
+            this.left = 0;
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.left + 'px';
             this.game.gameBoard.appendChild(this.el);
+            this.width = this.game.width;
+            this.el.style.width = this.width + 'px';
         }
     }
 
     class Enemy extends Sprite {
         constructor(game, data) {
             super(game, data);
-            this.enemyType = data.enemyType;
-            this.hp = this.enemyType * 2 + 1;
+            this.enemyType = Math.floor(Math.random() * 3);
+            this.height = this.height + this.height * this.enemyType * 0.7;
+            this.el.style.height = this.height + 'px';
+            this.top = Math.floor(Math.random() * (this.game.height - this.height + 1));
+            this.left = this.game.width;
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.left + 'px';
+            this.el.src = `../img/${data.src[this.enemyType]}`;
+            this.hp = this.enemyType * 2 + 3;
             this.speedX = 10 / (this.enemyType + 1);
             this.markForDeletion = false;
             this.game.gameBoard.appendChild(this.el);
@@ -308,7 +323,7 @@ window.addEventListener('load', () => {
             this.hitBox = {
                 radius: this.radius,
                 y: this.top + this.radius,
-                x: this.left + this.radius,
+                x: this.left + this.width / 2,
             };
 
             this.hitBoxDebugData = {
@@ -316,7 +331,7 @@ window.addEventListener('load', () => {
                 width: 2 * this.hitBox.radius,
                 top: this.hitBox.y - this.hitBox.radius,
                 left: this.hitBox.x - this.hitBox.radius,
-                boxType: 'circle',
+                boxType: 'circle-red',
             };
 
             if (this.game.debugMode) this.createHitBoxDebug(this.hitBoxDebugData);
@@ -324,7 +339,7 @@ window.addEventListener('load', () => {
 
         update() {
             this.left -= this.speedX;
-            this.hitBox.x = this.left + this.hitBox.radius;
+            this.hitBox.x = this.left + this.width / 2;
             this.el.style.left = this.left + 'px';
             this.hitBoxDebugData.top = this.hitBox.y - this.hitBox.radius;
             this.hitBoxDebugData.left = this.hitBox.x - this.hitBox.radius;
@@ -335,6 +350,11 @@ window.addEventListener('load', () => {
     class Player extends Sprite {
         constructor(game, data) {
             super(game, data);
+            this.top = (this.game.height - this.height) / 2;
+            this.left = 0;
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.left + 'px';
+            this.el.src = `../img/${data.src[0]}`;
             this.hp = 3;
             this.speedY = 0;
             this.speedX = 0;
@@ -365,16 +385,15 @@ window.addEventListener('load', () => {
                 width: 2 * this.hitBox.radius,
                 top: this.hitBox.y - this.hitBox.radius,
                 left: this.hitBox.x - this.hitBox.radius,
-                boxType: 'circle',
+                boxType: 'circle-white',
             };
 
             this.chargeAnimation = new ChargeAnimation(this.game, {
-                src: 'charge-1.gif',
+                src: ['charge-1.gif', 'charge-2'],
                 height: this.height + this.height / 3,
-                top: this.top - this.height / 8,
-                left: this.left + this.height * 2 * 0.525,
-                boxType: 'circle',
             });
+            this.chargeAnimation.el.style.top = this.top - this.height / 8 + 'px';
+            this.chargeAnimation.el.style.left = this.left + this.height * 2 * 0.525 + 'px';
 
             if (this.game.debugMode) this.createHitBoxDebug(this.hitBoxDebugData);
         }
@@ -405,27 +424,27 @@ window.addEventListener('load', () => {
             // this.chargeAnimation.hitBox.el.el.style.left = this.left + this.height * 2 * 0.525 + 'px';
         }
 
-        shooting(type) {
+        shooting() {
             this.projectiles.push(
                 new Projectile(this.game, {
-                    src: `shoot-${type}.gif`,
-                    height: this.height / 5.2 + (type * this.height) / 4.8 + (this.height / 4.8) * type,
-                    top: this.top + this.height / 2 - (this.height / 5.2 + (type * this.height) / 4.8 + (this.height / 4.8) * type) / 2,
-                    left: this.left + this.height * 2 * 0.875,
-                    chargeType: type,
-                    boxType: 'circle',
+                    src: ['shoot-0.gif', 'shoot-1.gif', 'shoot-2.gif'],
+                    height: this.height / 5.2 + (this.chargeValue * this.height) / 4.8 + (this.height / 4.8) * this.chargeValue,
                 }),
             );
         }
 
         chargeBeam(deltaTime) {
-            this.chargeTimer += deltaTime;
-            if (this.chargeTimer >= this.chargeInterval && this.chargeTimer < this.chargeInterval * 2 && this.chargeValue === 0) {
-                this.chargeValue = 1;
-                this.chargeAnimation.el.style.display = 'block';
-            } else if (this.chargeTimer >= this.chargeInterval * 2 && this.chargeValue === 1) {
-                this.chargeValue = 2;
-                this.chargeAnimation.el.src = '../img/charge-2.gif';
+            if (this.chargingBeam) {
+                this.chargeTimer += deltaTime;
+                if (this.chargeTimer >= this.chargeInterval && this.chargeTimer < this.chargeInterval * 2 && this.chargeValue === 0) {
+                    this.chargeValue = 1;
+                    this.chargeAnimation.el.style.display = 'block';
+                } else if (this.chargeTimer >= this.chargeInterval * 2 && this.chargeValue === 1) {
+                    this.chargeValue = 2;
+                    this.chargeAnimation.el.src = '../img/charge-2.gif';
+                }
+            } else if (this.chargeTimer > 0) {
+                this.chargedShoot();
             }
         }
 
@@ -442,8 +461,6 @@ window.addEventListener('load', () => {
                 this.chargeAnimation.el.style.display = 'none';
                 this.chargeAnimation.el.src = '../img/charge-1.gif';
             }
-
-            this.chargingBeam = false;
             this.chargeTimer = 0;
             this.chargeValue = 0;
         }
@@ -472,12 +489,8 @@ window.addEventListener('load', () => {
             if (!this.bombAvaliable) return;
 
             this.bombEl = new Bomb(this.game, {
-                src: 'bomb-explosion.gif',
+                src: ['bomb-explosion.gif'],
                 height: this.game.height,
-                width: this.game.width,
-                top: 0,
-                left: 0,
-                boxType: 'rectangle',
             });
 
             this.bombAvaliable = false;
@@ -511,28 +524,19 @@ window.addEventListener('load', () => {
             this.hitBoxElements = [];
             this.input = new InputHandler(this);
             this.player = new Player(this, {
-                src: 'cat.gif',
-                height: 240,
-                top: (this.height - 240) / 2,
-                left: 0,
-                boxType: 'circle',
+                src: ['cat.gif'],
+                height: 120,
             });
             this.ui = new UI(this);
+            this.state = '';
             this.ui.startGameMsg();
-            this.state = 'OPENINGSTAGE';
         }
 
         addEnemy() {
-            const top = Math.floor(Math.random() * (this.height - 120 + 1));
-            const type = Math.floor(Math.random() * 3);
             this.enemies.push(
                 new Enemy(this, {
-                    src: `planet-${type}.gif`,
+                    src: ['planet-0.gif', 'planet-1.gif', 'planet-2.gif'],
                     height: 120,
-                    top,
-                    left: this.width,
-                    enemyType: type,
-                    boxType: 'circle',
                 }),
             );
         }
@@ -582,16 +586,6 @@ window.addEventListener('load', () => {
             return distance < circ.radius;
         }
 
-        pauseGame() {
-            if (this.state === 'GAMERUNNING') {
-                this.state = 'PAUSED';
-                this.controlsAllowed = false;
-            } else if (this.state === 'PAUSED') {
-                this.state = 'GAMERUNNING';
-                this.controlsAllowed = true;
-            }
-        }
-
         switchDebugMode() {
             // [this.player, this.player.chargeAnimation, this.player.bombEl, ...this.player.projectiles, ...this.enemies, this.ui.startMsg, this.ui.stageClearMsg]
             [this.player, ...this.player.projectiles, ...this.enemies].forEach(sprite => {
@@ -606,7 +600,7 @@ window.addEventListener('load', () => {
             if (this.state === 'GAMEOVER' || this.state === 'PAUSED') return;
 
             if (this.controlsAllowed) this.player.moviment();
-            if (this.player.chargingBeam) this.player.chargeBeam(deltaTime);
+            if (this.controlsAllowed) this.player.chargeBeam(deltaTime);
             if (this.player.bombActive) this.player.bombAnimation(deltaTime);
             else if (!this.player.bombActive && !this.player.bombAvaliable) this.player.bombCooldown(deltaTime);
             this.player.projectiles.forEach((projectile, _, arrProjectiles) => {
@@ -659,7 +653,7 @@ window.addEventListener('load', () => {
             if (this.player.hp <= 0) {
                 this.state = 'GAMEOVER';
                 this.ui.createBoxMsg();
-            } else if (this.crashedEnemies >= 3) {
+            } else if (this.crashedEnemies >= 10) {
                 this.state = 'STAGECLEAR';
                 this.ui.stageClearGameMsg();
             }
@@ -671,6 +665,7 @@ window.addEventListener('load', () => {
     let lastTime = 0;
 
     function gameLoop(timeStamp) {
+        // console.log(game.state);
         if (game.state === 'GAMEOVER') return;
         const deltaTime = timeStamp - lastTime;
         lastTime = timeStamp;
