@@ -9,39 +9,26 @@ window.addEventListener('load', () => {
         constructor(game) {
             this.game = game;
             window.addEventListener('keydown', e => {
-                if ((e.code === 'Numpad8' || e.code === 'Numpad5' || e.code === 'Numpad4' || e.code === 'Numpad6') && !this.game.keys.includes(e.code)) {
+                if ((e.code === 'Numpad8' || e.code === 'Numpad5' || e.code === 'Numpad4' || e.code === 'Numpad6' || e.code === 'KeyH') && !this.game.keys.includes(e.code)) {
                     this.game.keys.push(e.code);
-                }
-                if (e.code === 'KeyH' && !this.game.keys.includes(e.code)) {
-                    this.game.keys.push(e.code);
-                    this.game.player.chargingBeam = true;
-                    if (this.game.controlsAllowed) this.game.player.regularShoot();
-                }
-                if (e.code === 'Space') {
+                } else if (e.code === 'Space') {
                     e.preventDefault();
                     if (!this.game.keys.includes(e.code)) {
                         this.game.keys.push(e.code);
                         if (this.game.controlsAllowed) this.game.player.bombing();
                     }
-                }
-                if (e.code === 'Numpad0' && !this.game.keys.includes(e.code)) {
+                } else if (e.code === 'NumpadDivide' && !this.game.keys.includes(e.code)) {
+                    this.game.keys.push(e.code);
+                    if (this.game.state === 'GAMERUNNING' || this.game.state === 'PAUSED') this.game.pauseGame();
+                } else if (e.code === 'Numpad0' && !this.game.keys.includes(e.code)) {
                     this.game.keys.push(e.code);
                     this.game.debugMode = !this.game.debugMode;
                     this.game.switchDebugMode();
                 }
-                if (e.code === 'NumpadDivide' && !this.game.keys.includes(e.code)) {
-                    this.game.keys.push(e.code);
-                    if (this.game.state === 'GAMERUNNING' || this.game.state === 'PAUSED') this.game.ui.pauseGame();
-                }
             });
             window.addEventListener('keyup', ({ code }) => {
-                const keyPressed = this.game.keys.indexOf(code);
-                if (keyPressed > -1) {
-                    this.game.keys.splice(keyPressed, 1);
-                }
-                if (code === 'KeyH') {
-                    this.game.player.chargingBeam = false;
-                }
+                const keyIndex = this.game.keys.indexOf(code);
+                if (keyIndex > -1) this.game.keys.splice(keyIndex, 1);
             });
         }
     }
@@ -92,9 +79,10 @@ window.addEventListener('load', () => {
     class UI {
         constructor(game) {
             this.game = game;
-            this.startMsg = null;
-            this.overlayPaused = null;
+            this.openingStageMsg = null;
+            this.openingStageMsgCountdown = 2200;
             this.stageClearMsg = null;
+            this.stageClearMsgCountdown = 3600;
             this.boxMsg = null;
             this.catGameOverImg = null;
             this.btnRetry = null;
@@ -102,18 +90,12 @@ window.addEventListener('load', () => {
             this.heartsBox = null;
             this.heartsImg = [null, null, null];
             this.skillBoxes = [null, null];
+            this.skillBoxesCooldown = [null, null];
+            this.skillCooldownCountdown = [5000, 5000];
+            this.skillCooldownCountdownInit = [...this.skillCooldownCountdown];
+            this.skillBoxesNotAllowed = [null, null];
+            this.overlayPaused = null;
             this.initGameUi();
-        }
-
-        updateHeart() {
-            for (let i = 3; i > 0; i--) {
-                if (i > this.game.player.hp) {
-                    if (this.heartsImg[i - 1]) {
-                        this.heartsImg[i - 1].remove();
-                        this.heartsImg[i - 1] = null;
-                    }
-                }
-            }
         }
 
         initGameUi() {
@@ -138,56 +120,86 @@ window.addEventListener('load', () => {
                 this.skillBoxes[i] = document.createElement('div');
                 this.skillBoxes[i].classList.add('box-skill');
                 this.statusBarr.appendChild(this.skillBoxes[i]);
+                if (this.game.player.skills[i]) {
+                    const skillEl = new Sprite(this.game, this.game.player.skills[i]);
+                    this.skillBoxes[i].appendChild(skillEl.el);
+                }
+                this.skillBoxesCooldown[i] = document.createElement('div');
+                this.skillBoxesCooldown[i].classList.add('cooldown-bomb', 'hidden');
+                this.skillBoxes[i].appendChild(this.skillBoxesCooldown[i]);
+                this.skillBoxesNotAllowed[i] = new Sprite(this.game, {
+                    src: ['not-allowed.png'],
+                    height: 25,
+                });
+                this.skillBoxesNotAllowed[i].el.classList.add('not-allowed', 'hidden');
+                this.skillBoxes[i].appendChild(this.skillBoxesNotAllowed[i].el);
             }
         }
 
-        pauseGame() {
-            if (this.game.state === 'GAMERUNNING') {
-                this.game.state = 'PAUSED';
-                this.game.controlsAllowed = false;
-                this.overlayPaused.classList.remove('hidden');
-            } else if (this.game.state === 'PAUSED') {
-                this.game.state = 'GAMERUNNING';
-                this.game.controlsAllowed = true;
-                this.overlayPaused.classList.add('hidden');
+        updateHeart() {
+            for (let i = 3; i > 0; i--) {
+                if (i > this.game.player.hp) {
+                    if (this.heartsImg[i - 1]) {
+                        this.heartsImg[i - 1].remove();
+                        this.heartsImg[i - 1] = null;
+                    }
+                }
             }
         }
 
-        startGameMsg() {
-            this.startMsg = new Sprite(this.game, {
-                src: ['stage_1-1.png'],
-                height: 350,
-            });
-
-            this.startMsg.el.classList.add('stage-start');
-            this.game.gameBoard.appendChild(this.startMsg.el);
-            this.game.state = 'OPENINGSTAGE';
-
-            setTimeout(() => {
-                this.startMsg.el.remove();
-                this.startMsg = null;
-                this.game.controlsAllowed = true;
-                this.game.state = 'GAMERUNNING';
-            }, 2000);
+        bombCooldown(deltaTime) {
+            if (this.skillCooldownCountdown[0] <= 0) {
+                this.skillCooldownCountdown[0] = this.skillCooldownCountdownInit[0];
+                this.skillBoxesCooldown[0].classList.add('hidden');
+                this.skillBoxesNotAllowed[0].el.classList.add('hidden');
+                this.skillBoxesCooldown[0].style.height = '100%';
+                this.game.player.skillAvaliable[0] = true;
+            } else {
+                this.skillCooldownCountdown[0] -= deltaTime;
+                const heightPercent = this.skillCooldownCountdown[0] / this.skillCooldownCountdownInit[0];
+                this.skillBoxesCooldown[0].style.height = heightPercent * 100 + '%';
+            }
         }
 
-        stageClearGameMsg() {
-            this.stageClearMsg = new Sprite(this.game, {
-                src: ['stage-clear.png'],
-                height: 400,
-            });
+        handleOverlayPauseGame() {
+            if (this.game.state === 'GAMERUNNING') this.overlayPaused.classList.add('hidden');
+            else if (this.game.state === 'PAUSED') this.overlayPaused.classList.remove('hidden');
+        }
 
-            this.stageClearMsg.el.classList.add('stage-clear');
-            this.game.gameBoard.appendChild(this.stageClearMsg.el);
+        openingStage(deltaTime) {
+            if (!this.openingStageMsg) {
+                this.openingStageMsg = new Sprite(this.game, {
+                    src: ['stage_1-1.png'],
+                    height: 350,
+                });
+                this.openingStageMsg.el.classList.add('stage-start');
+                this.game.gameBoard.appendChild(this.openingStageMsg.el);
+            } else if (this.openingStageMsgCountdown <= 0) {
+                this.openingStageMsg.el.remove();
+                this.openingStageMsg = null;
+                this.game.controlsAllowed = true;
+                this.game.state = 'GAMERUNNING';
+            } else {
+                this.openingStageMsgCountdown -= deltaTime;
+            }
+        }
 
-            setTimeout(() => {
+        stageClear(deltaTime) {
+            if (!this.stageClearMsg) {
+                this.stageClearMsg = new Sprite(this.game, {
+                    src: ['stage-clear.png'],
+                    height: 400,
+                });
+
+                this.stageClearMsg.el.classList.add('stage-clear');
+                this.game.gameBoard.appendChild(this.stageClearMsg.el);
+            } else if (this.stageClearMsgCountdown <= 0) {
                 this.createBoxMsg();
-            }, 3000);
-
-            setTimeout(() => {
                 this.stageClearMsg.el.remove();
                 this.stageClearMsg = null;
-            }, 4000);
+            } else {
+                this.stageClearMsgCountdown -= deltaTime;
+            }
         }
 
         createBoxMsg() {
@@ -213,10 +225,8 @@ window.addEventListener('load', () => {
                                             <h3>BOMB:.....1000pts</h3>
                                             <h3>SHOOTS:...1000pts</h3>
                                             <h2>TOTAL:.3000pts</h2>
-                                            <div>
-                                                <a draggable="false" href="../stages/stage-1-2-test.html" class="btn-box-msg">NEXT STAGE</a>
-                                                <a draggable="false" href="#" class="btn-retry btn-box-msg">RETRY</a>
-                                            </div>
+                                            <a draggable="false" href="../stages/stage-1-2-test.html" class="btn-box-msg">NEXT STAGE</a>
+                                            <a draggable="false" href="#" class="btn-retry btn-box-msg">RETRY</a>
                                         </div>`;
                 this.game.gameBoard.appendChild(this.boxMsg);
                 this.btnRetry = document.querySelector('.btn-retry');
@@ -247,7 +257,7 @@ window.addEventListener('load', () => {
             this.el.style.left = this.player.left + 'px';
             this.chargeType = this.player.chargeValue;
             this.el.src = `../img/${data.src[this.chargeType]}`;
-            this.dmg = 2 * this.chargeType + 1;
+            this.dmg = 2 ** (this.chargeType + 1) - 1;
             this.speedX = 14 + this.chargeType * 2;
             this.markForDeletion = false;
             this.game.gameBoard.appendChild(this.el);
@@ -360,16 +370,15 @@ window.addEventListener('load', () => {
             this.speedX = 0;
             this.maxSpeed = 11;
             this.projectiles = [];
-            this.chargingBeam = false;
             this.chargeValue = 0;
             this.chargeTimer = 0;
             this.chargeInterval = 600;
+            this.skills = [{ src: ['bomb.webp'], height: 90 }, false];
+            this.skillAvaliable = [true, false];
             this.bombEl = null;
-            this.bombAvaliable = true;
             this.bombActive = false;
             this.bombTimer = 0;
             this.bombInterval = 350;
-            this.bombCooldownInterval = 5000;
             this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
 
@@ -420,8 +429,6 @@ window.addEventListener('load', () => {
             if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.x - this.radius + 'px';
             this.chargeAnimation.el.style.top = this.top - this.height / 8 + 'px';
             this.chargeAnimation.el.style.left = this.left + this.height * 2 * 0.525 + 'px';
-            // this.chargeAnimation.hitBox.el.el.style.top = this.top - this.height / 8 + 'px';
-            // this.chargeAnimation.hitBox.el.el.style.left = this.left + this.height * 2 * 0.525 + 'px';
         }
 
         shooting() {
@@ -433,74 +440,56 @@ window.addEventListener('load', () => {
             );
         }
 
-        chargeBeam(deltaTime) {
-            if (this.chargingBeam) {
-                this.chargeTimer += deltaTime;
-                if (this.chargeTimer >= this.chargeInterval && this.chargeTimer < this.chargeInterval * 2 && this.chargeValue === 0) {
+        beam(deltaTime) {
+            if (this.game.keys.includes('KeyH')) {
+                if (this.chargeTimer === 0) {
+                    this.shooting();
+                } else if (this.chargeTimer >= this.chargeInterval && this.chargeTimer < this.chargeInterval * 2 && this.chargeValue === 0) {
                     this.chargeValue = 1;
                     this.chargeAnimation.el.style.display = 'block';
                 } else if (this.chargeTimer >= this.chargeInterval * 2 && this.chargeValue === 1) {
                     this.chargeValue = 2;
                     this.chargeAnimation.el.src = '../img/charge-2.gif';
                 }
+                this.chargeTimer += deltaTime;
             } else if (this.chargeTimer > 0) {
                 this.chargedShoot();
-            }
-        }
-
-        regularShoot() {
-            if (this.chargeTimer < this.chargeInterval) {
-                this.shooting(this.chargeValue);
-                this.chargingBeam = true;
+                this.chargeTimer = 0;
+                this.chargeValue = 0;
             }
         }
 
         chargedShoot() {
-            if (this.chargeTimer >= this.chargeInterval) {
-                this.shooting(this.chargeValue);
+            if (this.chargeValue > 0) {
+                this.shooting();
                 this.chargeAnimation.el.style.display = 'none';
                 this.chargeAnimation.el.src = '../img/charge-1.gif';
-            }
-            this.chargeTimer = 0;
-            this.chargeValue = 0;
-        }
-
-        bombCooldown(deltaTime) {
-            this.bombCooldownInterval -= deltaTime;
-            if (this.bombCooldownInterval <= 0) {
-                this.bombAvaliable = true;
-                this.bombCooldownInterval = 5000;
-                // const noAllowed = document.querySelector('.not-allowed');
-                // noAllowed.style.display = 'none';
-            }
-        }
-
-        bombAnimation(deltaTime) {
-            this.bombTimer += deltaTime;
-            if (this.bombTimer >= this.bombInterval) {
-                this.bombActive = false;
-                this.bombEl.el.remove();
-                this.bombEl = null;
-                this.bombTimer = 0;
             }
         }
 
         bombing() {
-            if (!this.bombAvaliable) return;
+            if (!this.skillAvaliable[0]) return;
 
             this.bombEl = new Bomb(this.game, {
                 src: ['bomb-explosion.gif'],
                 height: this.game.height,
             });
 
-            this.bombAvaliable = false;
+            this.skillAvaliable[0] = false;
             this.bombActive = true;
+            this.game.ui.skillBoxesCooldown[0].classList.remove('hidden');
+            this.game.ui.skillBoxesNotAllowed[0].el.classList.remove('hidden');
+        }
 
-            // boxBomb.style.cursor = 'not-allowed';
-            // const cooldownBomb = document.querySelector('.cooldown-bomb');
-            // cooldownBomb.style.animation = 'cooldown-efect 20s 1 linear';
-            // const noAllowed = document.querySelector('.not-allowed');
-            // noAllowed.style.display = 'block';
+        bombAnimation(deltaTime) {
+            if (this.bombTimer >= this.bombInterval) {
+                this.bombActive = false;
+                this.bombEl.el.remove();
+                this.bombEl = null;
+                this.bombTimer = 0;
+            } else {
+                this.bombTimer += deltaTime;
+            }
         }
     }
 
@@ -528,8 +517,7 @@ window.addEventListener('load', () => {
                 height: 120,
             });
             this.ui = new UI(this);
-            this.state = '';
-            this.ui.startGameMsg();
+            this.state = 'OPENINGSTAGE';
         }
 
         addEnemy() {
@@ -586,8 +574,19 @@ window.addEventListener('load', () => {
             return distance < circ.radius;
         }
 
+        pauseGame() {
+            if (this.state === 'GAMERUNNING') {
+                this.state = 'PAUSED';
+                this.controlsAllowed = false;
+            } else if (this.state === 'PAUSED') {
+                this.state = 'GAMERUNNING';
+                this.controlsAllowed = true;
+            }
+            this.ui.handleOverlayPauseGame();
+        }
+
         switchDebugMode() {
-            // [this.player, this.player.chargeAnimation, this.player.bombEl, ...this.player.projectiles, ...this.enemies, this.ui.startMsg, this.ui.stageClearMsg]
+            // [this.player, this.player.chargeAnimation, this.player.bombEl, ...this.player.projectiles, ...this.enemies, this.ui.openingStageMsg, this.ui.stageClearMsg]
             [this.player, ...this.player.projectiles, ...this.enemies].forEach(sprite => {
                 if (sprite) {
                     if (this.debugMode) sprite.createHitBoxDebug();
@@ -599,10 +598,13 @@ window.addEventListener('load', () => {
         update(deltaTime) {
             if (this.state === 'GAMEOVER' || this.state === 'PAUSED') return;
 
+            if (this.state === 'OPENINGSTAGE') this.ui.openingStage(deltaTime);
+            if (this.state === 'STAGECLEAR') this.ui.stageClear(deltaTime);
             if (this.controlsAllowed) this.player.moviment();
-            if (this.controlsAllowed) this.player.chargeBeam(deltaTime);
+            if (this.controlsAllowed) this.player.beam(deltaTime);
             if (this.player.bombActive) this.player.bombAnimation(deltaTime);
-            else if (!this.player.bombActive && !this.player.bombAvaliable) this.player.bombCooldown(deltaTime);
+            if (!this.player.skillAvaliable[0]) this.ui.bombCooldown(deltaTime);
+
             this.player.projectiles.forEach((projectile, _, arrProjectiles) => {
                 projectile.update();
                 this.clearSpriteOffScreen(projectile, arrProjectiles);
@@ -655,7 +657,6 @@ window.addEventListener('load', () => {
                 this.ui.createBoxMsg();
             } else if (this.crashedEnemies >= 10) {
                 this.state = 'STAGECLEAR';
-                this.ui.stageClearGameMsg();
             }
         }
     }
