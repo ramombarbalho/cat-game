@@ -54,8 +54,13 @@ window.addEventListener('load', () => {
         constructor(game, data) {
             this.game = game;
             this.height = data.height;
+            this.src = data.src;
             this.el = document.createElement('img');
-            this.el.src = `../img/${data.src[0]}`;
+            if (this.src[0]) this.el.src = `../img/${this.src[0]}`;
+            else {
+                this.el.src = '../img/__blank.png';
+                this.el.style.display = 'none';
+            }
             this.el.classList.add('sprite');
             this.el.style.height = this.height + 'px';
             this.el.setAttribute('draggable', 'false');
@@ -244,71 +249,50 @@ window.addEventListener('load', () => {
         };
     }
 
-    class Projectile extends Sprite {
+    class Explosion {
         constructor(game, data) {
-            super(game, data);
-            this.player = this.game.player;
-            this.top =
-                this.player.top +
-                this.player.height / 2 -
-                (this.player.height / 5.2 + (this.player.chargeValue * this.player.height) / 4.8 + (this.player.height / 4.8) * this.player.chargeValue) / 2;
-            this.left = this.player.left + this.player.height * 2 * 0.875;
-            this.el.style.top = this.top + 'px';
-            this.el.style.left = this.player.left + 'px';
-            this.chargeType = this.player.chargeValue;
-            this.el.src = `../img/${data.src[this.chargeType]}`;
-            this.dmg = 2 ** (this.chargeType + 1) - 1;
-            this.speedX = 14 + this.chargeType * 2;
+            this.game = game;
+            this.frameY = 0;
+            this.maxFramesY = data.maxFramesY;
+            this.frameX = 0;
+            this.maxFramesX = data.maxFramesX;
             this.markForDeletion = false;
+
+            this.height = data.height;
+            this.top = data.enemy.top + data.enemy.height / 2 - this.height / 2;
+
+            this.el = document.createElement('div');
+            this.sprite = new Sprite(this.game, { src: [data.src], height: this.height });
             this.game.gameBoard.appendChild(this.el);
-            this.width = this.el.getBoundingClientRect().width;
+            this.el.appendChild(this.sprite.el);
 
-            this.radius = 0.5 * this.height;
-            this.hitBox = {
-                radius: this.radius,
-                y: this.top + this.radius,
-                x: this.left + this.width / 2,
-            };
+            this.sprite.top = -this.frameY * this.height;
+            this.sprite.el.style.height = this.height + 'px';
+            this.sprite.el.style.top = this.sprite.top + 'px';
+            this.sprite.width = Math.round(this.sprite.el.getBoundingClientRect().width);
+            this.sprite.el.style.width = this.sprite.width + 'px';
 
-            this.hitBoxDebugData = {
-                height: 2 * this.hitBox.radius,
-                width: 2 * this.hitBox.radius,
-                top: this.hitBox.y - this.hitBox.radius,
-                left: this.hitBox.x - this.hitBox.radius,
-                boxType: 'circle-green',
-            };
+            this.width = this.sprite.width / this.maxFramesX;
+            this.left = data.enemy.left + data.enemy.width / 2 - this.width / 2;
 
-            if (this.game.debugMode) this.createHitBoxDebug(this.hitBoxDebugData);
-        }
-
-        update() {
-            this.left += this.speedX;
-            this.hitBox.x = this.left + this.width / 2;
-            this.el.style.left = this.left + 'px';
-            this.hitBoxDebugData.top = this.hitBox.y - this.hitBox.radius;
-            this.hitBoxDebugData.left = this.hitBox.x - this.hitBox.radius;
-            if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.x - this.radius + 'px';
-        }
-    }
-
-    class ChargeAnimation extends Sprite {
-        constructor(game, data) {
-            super(game, data);
-            this.game.gameBoard.appendChild(this.el);
-            this.el.style.display = 'none';
-        }
-    }
-
-    class Bomb extends Sprite {
-        constructor(game, data) {
-            super(game, data);
-            this.top = 0;
-            this.left = 0;
+            this.el.classList.add('explosion');
+            this.el.style.height = this.height + 'px';
             this.el.style.top = this.top + 'px';
-            this.el.style.left = this.left + 'px';
-            this.game.gameBoard.appendChild(this.el);
-            this.width = this.game.width;
             this.el.style.width = this.width + 'px';
+            this.el.style.left = this.left + 'px';
+
+            this.sprite.left = -this.frameX * this.width;
+            this.sprite.el.style.left = this.sprite.left + 'px';
+        }
+
+        update(arrExplosions) {
+            if (this.frameX <= this.maxFramesX) {
+                this.sprite.left = -this.frameX * this.width;
+                this.sprite.el.style.left = this.sprite.left + 'px';
+                this.frameX++;
+            } else {
+                this.game.deletElement(this, arrExplosions);
+            }
         }
     }
 
@@ -357,6 +341,53 @@ window.addEventListener('load', () => {
         }
     }
 
+    class Projectile extends Sprite {
+        constructor(game, data) {
+            super(game, data);
+            this.player = this.game.player;
+            this.top =
+                this.player.top +
+                this.player.height / 2 -
+                (this.player.height / 5.2 + (this.player.chargeValue * this.player.height) / 4.8 + (this.player.height / 4.8) * this.player.chargeValue) / 2;
+            this.left = this.player.left + this.player.height * 2 * 0.875;
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.player.left + 'px';
+            this.chargeType = this.player.chargeValue;
+            this.el.src = `../img/${this.src[this.chargeType]}`;
+            this.dmg = 2 ** (this.chargeType + 1) - 1;
+            this.speedX = 14 + this.chargeType * 2;
+            this.markForDeletion = false;
+            this.game.gameBoard.appendChild(this.el);
+            this.width = this.el.getBoundingClientRect().width;
+
+            this.radius = 0.5 * this.height;
+            this.hitBox = {
+                radius: this.radius,
+                y: this.top + this.radius,
+                x: this.left + this.width / 2,
+            };
+
+            this.hitBoxDebugData = {
+                height: 2 * this.hitBox.radius,
+                width: 2 * this.hitBox.radius,
+                top: this.hitBox.y - this.hitBox.radius,
+                left: this.hitBox.x - this.hitBox.radius,
+                boxType: 'circle-green',
+            };
+
+            if (this.game.debugMode) this.createHitBoxDebug(this.hitBoxDebugData);
+        }
+
+        update() {
+            this.left += this.speedX;
+            this.hitBox.x = this.left + this.width / 2;
+            this.el.style.left = this.left + 'px';
+            this.hitBoxDebugData.top = this.hitBox.y - this.hitBox.radius;
+            this.hitBoxDebugData.left = this.hitBox.x - this.hitBox.radius;
+            if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.x - this.radius + 'px';
+        }
+    }
+
     class Player extends Sprite {
         constructor(game, data) {
             super(game, data);
@@ -375,10 +406,7 @@ window.addEventListener('load', () => {
             this.chargeInterval = 600;
             this.skills = [{ src: ['bomb.webp'], height: 90 }, false];
             this.skillAvaliable = [true, false];
-            this.bombEl = null;
-            this.bombActive = false;
-            this.bombTimer = 0;
-            this.bombInterval = 350;
+            this.bomb = null;
             this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
 
@@ -397,10 +425,12 @@ window.addEventListener('load', () => {
                 boxType: 'circle-white',
             };
 
-            this.chargeAnimation = new ChargeAnimation(this.game, {
-                src: ['charge-1.gif', 'charge-2'],
+            this.chargeAnimation = new Sprite(this.game, {
+                src: [false, 'charge-1.gif', 'charge-2.gif'],
                 height: this.height + this.height / 3,
             });
+            this.game.gameBoard.appendChild(this.chargeAnimation.el);
+
             this.chargeAnimation.el.style.top = this.top - this.height / 8 + 'px';
             this.chargeAnimation.el.style.left = this.left + this.height * 2 * 0.525 + 'px';
 
@@ -446,50 +476,49 @@ window.addEventListener('load', () => {
                     this.shooting();
                 } else if (this.chargeTimer >= this.chargeInterval && this.chargeTimer < this.chargeInterval * 2 && this.chargeValue === 0) {
                     this.chargeValue = 1;
+                    this.chargeAnimation.el.src = `../img/${this.chargeAnimation.src[this.chargeValue]}`;
                     this.chargeAnimation.el.style.display = 'block';
                 } else if (this.chargeTimer >= this.chargeInterval * 2 && this.chargeValue === 1) {
                     this.chargeValue = 2;
-                    this.chargeAnimation.el.src = '../img/charge-2.gif';
+                    this.chargeAnimation.el.src = `../img/${this.chargeAnimation.src[this.chargeValue]}`;
                 }
                 this.chargeTimer += deltaTime;
             } else if (this.chargeTimer > 0) {
                 this.chargedShoot();
                 this.chargeTimer = 0;
-                this.chargeValue = 0;
             }
         }
 
         chargedShoot() {
             if (this.chargeValue > 0) {
                 this.shooting();
+                this.chargeValue = 0;
                 this.chargeAnimation.el.style.display = 'none';
-                this.chargeAnimation.el.src = '../img/charge-1.gif';
+                this.chargeAnimation.el.src = '../img/__blank.png';
             }
         }
 
         bombing() {
             if (!this.skillAvaliable[0]) return;
 
-            this.bombEl = new Bomb(this.game, {
-                src: ['bomb-explosion.gif'],
-                height: this.game.height,
-            });
+            this.game.explosions.push(
+                new Explosion(this.game, {
+                    src: ['bomb-spritesheet.png'],
+                    height: this.game.height,
+                    maxFramesY: 1,
+                    maxFramesX: 7,
+                    enemy: {
+                        top: 0,
+                        left: 0,
+                        height: this.game.height,
+                        width: this.game.width,
+                    },
+                }),
+            );
 
             this.skillAvaliable[0] = false;
-            this.bombActive = true;
             this.game.ui.skillBoxesCooldown[0].classList.remove('hidden');
             this.game.ui.skillBoxesNotAllowed[0].el.classList.remove('hidden');
-        }
-
-        bombAnimation(deltaTime) {
-            if (this.bombTimer >= this.bombInterval) {
-                this.bombActive = false;
-                this.bombEl.el.remove();
-                this.bombEl = null;
-                this.bombTimer = 0;
-            } else {
-                this.bombTimer += deltaTime;
-            }
         }
     }
 
@@ -505,6 +534,7 @@ window.addEventListener('load', () => {
             this.height = this.gameBoard.getBoundingClientRect().height;
             this.keys = [];
             this.enemies = [];
+            this.explosions = [];
             this.crashedEnemies = 0;
             this.enemyTimer = 0;
             this.enemyInterval = 2000;
@@ -538,6 +568,7 @@ window.addEventListener('load', () => {
             element.el.remove();
             if (element.constructor.name === 'Projectile') this.player.projectiles = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'Enemy') this.enemies = arr.filter(el => !el.markForDeletion);
+            if (element.constructor.name === 'Explosion') this.explosions = arr.filter(el => !el.markForDeletion);
         }
 
         collisionRectangleRectangle(rect1, rect2) {
@@ -586,7 +617,7 @@ window.addEventListener('load', () => {
         }
 
         switchDebugMode() {
-            // [this.player, this.player.chargeAnimation, this.player.bombEl, ...this.player.projectiles, ...this.enemies, this.ui.openingStageMsg, this.ui.stageClearMsg]
+            // [this.player, this.player.chargeAnimation, this.player.bomb, ...this.player.projectiles, ...this.enemies, this.ui.openingStageMsg, this.ui.stageClearMsg]
             [this.player, ...this.player.projectiles, ...this.enemies].forEach(sprite => {
                 if (sprite) {
                     if (this.debugMode) sprite.createHitBoxDebug();
@@ -602,7 +633,6 @@ window.addEventListener('load', () => {
             if (this.state === 'STAGECLEAR') this.ui.stageClear(deltaTime);
             if (this.controlsAllowed) this.player.moviment();
             if (this.controlsAllowed) this.player.beam(deltaTime);
-            if (this.player.bombActive) this.player.bombAnimation(deltaTime);
             if (!this.player.skillAvaliable[0]) this.ui.bombCooldown(deltaTime);
 
             this.player.projectiles.forEach((projectile, _, arrProjectiles) => {
@@ -613,6 +643,15 @@ window.addEventListener('load', () => {
                 enemy.update();
                 this.clearSpriteOffScreen(enemy, arrEnemies);
                 if (this.collisionCircleCircle(this.player.hitBox, enemy.hitBox)) {
+                    this.explosions.push(
+                        new Explosion(this, {
+                            src: ['explosion-spritesheet.png'],
+                            height: 147,
+                            maxFramesY: 1,
+                            maxFramesX: 31,
+                            enemy,
+                        }),
+                    );
                     this.deletElement(enemy, arrEnemies);
                     if (this.state === 'GAMERUNNING') {
                         this.player.hp--;
@@ -624,16 +663,36 @@ window.addEventListener('load', () => {
                         this.deletElement(projectile, arrProjectiles);
                         enemy.hp -= projectile.dmg;
                         if (enemy.hp <= 0) {
+                            this.explosions.push(
+                                new Explosion(this, {
+                                    src: ['explosion-spritesheet.png'],
+                                    height: 147,
+                                    maxFramesY: 1,
+                                    maxFramesX: 31,
+                                    enemy,
+                                }),
+                            );
                             this.deletElement(enemy, arrEnemies);
                             this.crashedEnemies++;
                         }
                     }
                 });
-                if (this.player.bombActive) {
+                if (this.explosions.some(explosion => explosion.sprite.el.getAttribute('src') === '../img/bomb-spritesheet.png')) {
+                    this.explosions.push(
+                        new Explosion(this, {
+                            src: ['explosion-spritesheet.png'],
+                            height: 147,
+                            maxFramesY: 1,
+                            maxFramesX: 31,
+                            enemy,
+                        }),
+                    );
                     this.deletElement(enemy, arrEnemies);
                     this.crashedEnemies++;
                 }
             });
+            this.explosions.forEach((explosion, _, arrExplosions) => explosion.update(arrExplosions));
+
             if (this.state === 'GAMERUNNING') {
                 if (this.enemyTimer > this.enemyInterval) {
                     this.addEnemy();
@@ -642,7 +701,7 @@ window.addEventListener('load', () => {
                     this.enemyTimer += deltaTime;
                 }
             }
-            this.gameOverVerification();
+            // this.gameOverVerification();
         }
 
         retry() {
