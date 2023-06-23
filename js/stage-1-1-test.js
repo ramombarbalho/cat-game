@@ -1,8 +1,6 @@
 'use strict';
 
-window.addEventListener('contextmenu', e => {
-    e.preventDefault();
-});
+window.addEventListener('contextmenu', e => e.preventDefault());
 
 window.addEventListener('load', () => {
     class InputHandler {
@@ -128,7 +126,7 @@ window.addEventListener('load', () => {
                     this.skillBoxes[i].appendChild(skillEl.el);
                 }
                 this.skillBoxesCooldown[i] = document.createElement('div');
-                this.skillBoxesCooldown[i].classList.add('cooldown-bomb', 'hidden');
+                this.skillBoxesCooldown[i].classList.add('cooldown-box-skill', 'hidden');
                 this.skillBoxes[i].appendChild(this.skillBoxesCooldown[i]);
                 this.skillBoxesNotAllowed[i] = new Sprite(this.game, {
                     sources: ['not-allowed.png'],
@@ -397,16 +395,25 @@ window.addEventListener('load', () => {
     class SkillBomb {
         constructor(game, key) {
             this.game = game;
-            this.icon = { sources: ['bomb.webp'], heights: [90] };
+            this.icon = { sources: ['skill-ziggs.png'], heights: [75] };
             this.key = key;
+            this.top = this.game.player.top;
+            this.left = this.game.player.left + this.game.player.width - this.game.player.hitBox.width;
+            this.width = 0;
+            this.speedY = -28;
+            this.speedX = 15;
             this.cooldown = 5000;
             this.avaliable = true;
+            this.active = false;
+            this.frames = 28;
+            this.framesCounter = this.frames;
+            this.skill = null;
 
             this.explosion = {
                 height: this.game.height,
-                src: 'bomb-spritesheet.png',
+                src: 'ziggs-bomb-explosion-spritesheet.png',
                 maxFramesY: 1,
-                maxFramesX: 7,
+                maxFramesX: 14,
                 position: {
                     top: this.game.top,
                     left: this.game.left,
@@ -416,11 +423,41 @@ window.addEventListener('load', () => {
             };
         }
 
-        active(i) {
-            this.game.explosions.push(new Explosion(this.game, this.explosion));
+        activeSkill(i) {
+            this.skill = new Sprite(this.game, {
+                sources: ['skill-ziggs.png'],
+                heights: [75],
+            });
+            this.active = true;
+            this.top = this.game.player.top;
+            this.left = this.game.player.left + this.game.player.width - this.game.player.hitBox.width;
+            this.game.gameBoard.appendChild(this.skill.el);
+            this.width = this.skill.el.getBoundingClientRect().width;
+            if (this.left + this.width >= this.game.left + this.game.width) this.left = this.game.left + this.game.width - this.width;
+            this.skill.el.style.top = this.top + 'px';
+            this.skill.el.style.left = this.left + 'px';
             this.game.ui.skillBoxesCooldown[i].classList.remove('hidden');
             this.game.ui.skillBoxesNotAllowed[i].el.classList.remove('hidden');
             this.avaliable = false;
+        }
+
+        update() {
+            if (this.framesCounter <= 0) {
+                this.skill.el.remove();
+                this.skill = null;
+                this.active = false;
+                this.framesCounter = this.frames;
+                this.speedY = -28;
+                this.game.explosions.push(new Explosion(this.game, this.explosion));
+            } else {
+                this.speedY += this.game.gravity;
+                this.top += this.speedY;
+                this.left += this.speedX;
+                if (this.left + this.width >= this.game.left + this.game.width) this.left = this.game.left + this.game.width - this.width;
+                this.skill.el.style.top = this.top + 'px';
+                this.skill.el.style.left = this.left + 'px';
+                this.framesCounter--;
+            }
         }
     }
 
@@ -453,8 +490,8 @@ window.addEventListener('load', () => {
             this.dboostVelX = 0;
             this.invencible = false;
             this.invencibleTimer = 2000;
-            this.skills = [new SkillBomb(this.game, 'Space')];
-            this.skillsKeys = this.skills.map(skill => skill.key);
+            this.skills = [];
+            this.skillsKeys = [];
             this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
 
@@ -490,9 +527,9 @@ window.addEventListener('load', () => {
             this.top += this.speedY;
             this.left += this.speedX;
             if (this.top + this.height * 0.255 < this.game.top) this.top = this.game.top - this.height * 0.255;
-            if (this.top - this.height * 0.255 + this.height > this.game.top + this.game.height) this.top = this.game.top + this.game.height - this.height + this.height * 0.255;
+            if (this.top + this.height * 0.745 > this.game.top + this.game.height) this.top = this.game.top + this.game.height - this.height * 0.745;
             if (this.left + this.width * 0.42 < this.game.left) this.left = this.game.left - this.width * 0.42;
-            if (this.left + this.width * 0.755 > this.game.left + this.game.width) this.left = this.game.left + this.game.width - this.width * 0.755;
+            if (this.left + this.width * 0.76 > this.game.left + this.game.width) this.left = this.game.left + this.game.width - this.width * 0.76;
             this.hitBox.y = this.top + this.height * 0.255;
             this.hitBox.x = this.left + this.width * 0.42;
             this.el.style.top = this.top + 'px';
@@ -508,11 +545,11 @@ window.addEventListener('load', () => {
         moviment() {
             if (this.game.keys.includes('Numpad8') && this.game.keys.includes('Numpad5')) this.speedY = 0;
             else if (this.game.keys.includes('Numpad8') && this.top + this.height * 0.255 > this.game.top) this.speedY = -this.maxSpeed;
-            else if (this.game.keys.includes('Numpad5') && this.top - this.height * 0.255 + this.height < this.game.top + this.game.height) this.speedY = this.maxSpeed;
+            else if (this.game.keys.includes('Numpad5') && this.top + this.height * 0.745 < this.game.top + this.game.height) this.speedY = this.maxSpeed;
             else this.speedY = 0;
             if (this.game.keys.includes('Numpad4') && this.game.keys.includes('Numpad6')) this.speedX = 0;
             else if (this.game.keys.includes('Numpad4') && this.left + this.width * 0.42 > this.game.left) this.speedX = -this.maxSpeed;
-            else if (this.game.keys.includes('Numpad6') && this.left + this.width * 0.755 < this.game.left + this.game.width) this.speedX = this.maxSpeed;
+            else if (this.game.keys.includes('Numpad6') && this.left + this.width * 0.76 < this.game.left + this.game.width) this.speedX = this.maxSpeed;
             else this.speedX = 0;
 
             if (this.speedY || this.speedX) this.update();
@@ -521,7 +558,7 @@ window.addEventListener('load', () => {
         shooting() {
             this.projectiles.push(
                 new Projectile(this.game, {
-                    sources: ['shoot-0.gif', 'shoot-1.gif', 'shoot-2.gif'],
+                    sources: ['shoot-0.png', 'shoot-1.gif', 'shoot-2.gif'],
                     heights: [this.height * (1 / 6) + this.chargeValue * this.height * (11 / 24)],
                 }),
             );
@@ -553,7 +590,7 @@ window.addEventListener('load', () => {
 
         useSkill(i) {
             if (!this.skills[i].avaliable) return;
-            this.skills[i].active(i);
+            this.skills[i].activeSkill(i);
         }
 
         dboost() {
@@ -587,10 +624,9 @@ window.addEventListener('load', () => {
         invencibleMode(deltaTime) {
             if (this.invencibleTimer > 0) {
                 this.invencibleTimer -= deltaTime;
-                if (this.el.style.opacity === '0') this.el.style.opacity = '1';
-                else this.el.style.opacity = '0';
+                this.el.style.visibility = this.el.style.visibility !== 'hidden' ? 'hidden' : 'visible';
             } else {
-                this.el.style.opacity = '1';
+                this.el.style.visibility = 'visible';
                 this.invencible = false;
                 this.invencibleTimer = 2000;
             }
@@ -609,6 +645,7 @@ window.addEventListener('load', () => {
             this.width = this.gameBoard.getBoundingClientRect().width;
             this.top = 0;
             this.left = 0;
+            this.gravity = 2;
             this.keys = [];
             this.enemies = [];
             this.explosions = [];
@@ -623,9 +660,11 @@ window.addEventListener('load', () => {
             this.hitBoxElements = [];
             this.input = new InputHandler(this);
             this.player = new Player(this, {
-                sources: ['cat-golden.gif'],
+                sources: ['cat-pirate.gif'],
                 heights: [120],
             });
+            this.player.skills.push(new SkillBomb(this, 'Space'));
+            this.player.skills.map(skill => this.player.skillsKeys.push(skill.key));
             this.ui = new UI(this);
             this.state = 'OPENINGSTAGE';
         }
@@ -735,6 +774,7 @@ window.addEventListener('load', () => {
 
             this.player.skills.forEach((skill, i) => {
                 if (!skill.avaliable) this.ui.skillCooldownHandler(deltaTime, i);
+                if (skill.active) skill.update();
             });
 
             this.player.projectiles.forEach((projectile, _, arrProjectiles) => {
@@ -746,11 +786,9 @@ window.addEventListener('load', () => {
                 enemy.update();
                 this.clearSpriteOffScreen(enemy, arrEnemies);
                 if (this.collisionRectangleCircle(this.player.hitBox, enemy.hitBox) && !this.player.invencible) {
-                    this.explosions.push(new Explosion(this, enemy.explosion));
-                    this.player.calcDboost(enemy);
-                    this.deletElement(enemy, arrEnemies);
                     if (this.state === 'GAMERUNNING') {
                         this.player.hp--;
+                        this.player.calcDboost(enemy);
                         this.player.dboosting = true;
                         this.ui.updateHeart();
                     }
@@ -766,7 +804,7 @@ window.addEventListener('load', () => {
                         }
                     }
                 });
-                if (this.explosions.some(explosion => explosion.sprite.el.getAttribute('src') === '../assets/bomb-spritesheet.png')) {
+                if (this.explosions.some(explosion => explosion.sprite.el.getAttribute('src') === '../assets/ziggs-bomb-explosion-spritesheet.png')) {
                     this.explosions.push(new Explosion(this, enemy.explosion));
                     this.deletElement(enemy, arrEnemies);
                     this.crashedEnemies++;
