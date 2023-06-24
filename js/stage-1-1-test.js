@@ -85,6 +85,8 @@ window.addEventListener('load', () => {
             this.openingStageMsgCountdown = 2200;
             this.stageClearMsg = null;
             this.stageClearMsgCountdown = 3600;
+            this.warningMsg = null;
+            this.warningMsgCountdown = 3000;
             this.boxMsg = null;
             this.catGameOverImg = null;
             this.btnRetry = null;
@@ -95,6 +97,8 @@ window.addEventListener('load', () => {
             this.skillBoxesCooldown = [...this.skillBoxes];
             this.skillBoxesNotAllowed = [...this.skillBoxes];
             this.skillCooldownTimer = this.game.player.skills.map(skill => skill.cooldown);
+            this.scoreLabel = null;
+            this.scorePoints = null;
             this.overlayPaused = null;
             this.initGameUi();
         }
@@ -102,10 +106,16 @@ window.addEventListener('load', () => {
         initGameUi() {
             this.statusBarr = document.createElement('div');
             this.statusBarr.classList.add('game-status-barr');
-            this.game.gameContent.appendChild(this.statusBarr);
+            this.game.gameContainer.appendChild(this.statusBarr);
             this.heartsBox = document.createElement('div');
             this.heartsBox.classList.add('box-hearts');
             this.statusBarr.appendChild(this.heartsBox);
+            this.scoreLabel = document.createElement('p');
+            this.scoreLabel.classList.add('score-label');
+            this.game.gameBoard.appendChild(this.scoreLabel);
+            this.scoreLabel.innerHTML = 'SCORE: <span class="score-points"></span>';
+            this.scorePoints = document.querySelector('.score-points');
+            this.scorePoints.textContent = this.game.score;
             this.overlayPaused = document.createElement('div');
             this.overlayPaused.classList.add('overlay-paused', 'hidden');
             this.game.gameBoard.appendChild(this.overlayPaused);
@@ -168,6 +178,7 @@ window.addEventListener('load', () => {
         }
 
         openingStage(deltaTime) {
+            if (deltaTime > 1000 / 30) deltaTime = 1000 / 60;
             if (!this.openingStageMsg) {
                 this.openingStageMsg = new Sprite(this.game, {
                     sources: ['stage_1-1.png'],
@@ -197,6 +208,23 @@ window.addEventListener('load', () => {
                 this.stageClearMsg = null;
             } else {
                 this.stageClearMsgCountdown -= deltaTime;
+            }
+        }
+
+        warning(deltaTime) {
+            if (!this.warningMsg) {
+                this.warningMsg = new Sprite(this.game, {
+                    sources: ['warning.png'],
+                    heights: [220],
+                });
+
+                this.warningMsg.el.classList.add('warning');
+                this.game.gameBoard.appendChild(this.warningMsg.el);
+            } else if (this.warningMsgCountdown <= 0) {
+                this.warningMsg.el.remove();
+                this.warningMsg = null;
+            } else {
+                this.warningMsgCountdown -= deltaTime;
             }
         }
 
@@ -301,6 +329,7 @@ window.addEventListener('load', () => {
             this.el.src = `../assets/${this.src}`;
             this.hp = this.enemyType * 3 + 3;
             this.speedX = 10 / (this.enemyType + 1);
+            this.points = this.enemyType + 2;
             this.markForDeletion = false;
             this.game.gameBoard.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
@@ -402,11 +431,15 @@ window.addEventListener('load', () => {
             this.width = 0;
             this.speedY = -28;
             this.speedX = 15;
+            this.rotate = 270;
             this.cooldown = 5000;
             this.avaliable = true;
             this.active = false;
-            this.frames = 28;
-            this.framesCounter = this.frames;
+            this.lauching = false;
+            this.dmg = 6;
+            this.dmgFrames = 1;
+            this.framesLauching = 28;
+            this.framesLauchingCounter = this.framesLauching;
             this.skill = null;
 
             this.explosion = {
@@ -428,7 +461,7 @@ window.addEventListener('load', () => {
                 sources: ['skill-ziggs.png'],
                 heights: [75],
             });
-            this.active = true;
+            this.lauching = true;
             this.top = this.game.player.top;
             this.left = this.game.player.left + this.game.player.width - this.game.player.hitBox.width;
             this.game.gameBoard.appendChild(this.skill.el);
@@ -436,27 +469,41 @@ window.addEventListener('load', () => {
             if (this.left + this.width >= this.game.left + this.game.width) this.left = this.game.left + this.game.width - this.width;
             this.skill.el.style.top = this.top + 'px';
             this.skill.el.style.left = this.left + 'px';
+            this.skill.el.style.rotate = this.rotate + 'deg';
             this.game.ui.skillBoxesCooldown[i].classList.remove('hidden');
             this.game.ui.skillBoxesNotAllowed[i].el.classList.remove('hidden');
             this.avaliable = false;
         }
 
+        dmgSkill() {
+            if (this.dmgFrames <= 0) {
+                this.dmgFrames = 1;
+                this.active = false;
+            } else {
+                this.dmgFrames--;
+            }
+        }
+
         update() {
-            if (this.framesCounter <= 0) {
+            if (this.framesLauchingCounter <= 0) {
                 this.skill.el.remove();
                 this.skill = null;
-                this.active = false;
-                this.framesCounter = this.frames;
+                this.lauching = false;
+                this.framesLauchingCounter = this.framesLauching;
                 this.speedY = -28;
+                this.rotate = 270;
                 this.game.explosions.push(new Explosion(this.game, this.explosion));
+                this.active = true;
             } else {
                 this.speedY += this.game.gravity;
                 this.top += this.speedY;
                 this.left += this.speedX;
+                this.rotate += this.speedX * 1.1;
                 if (this.left + this.width >= this.game.left + this.game.width) this.left = this.game.left + this.game.width - this.width;
                 this.skill.el.style.top = this.top + 'px';
                 this.skill.el.style.left = this.left + 'px';
-                this.framesCounter--;
+                this.skill.el.style.rotate = this.rotate + 'deg';
+                this.framesLauchingCounter--;
             }
         }
     }
@@ -635,12 +682,11 @@ window.addEventListener('load', () => {
 
     class Game {
         constructor() {
-            document.querySelector('.loading').remove();
-            this.gameContent = document.querySelector('.game-content');
-            this.gameContent.classList.remove('hidden');
-            this.gameBoard = document.createElement('div');
-            this.gameBoard.classList.add('game-board');
-            this.gameContent.appendChild(this.gameBoard);
+            this.gameContainer = document.querySelector('.game-container');
+            this.gameLoading = document.querySelector('.game-loading');
+            this.gameLoading.classList.add('hidden');
+            this.gameBoard = document.querySelector('.game-board');
+            this.gameBoard.classList.remove('hidden');
             this.height = this.gameBoard.getBoundingClientRect().height;
             this.width = this.gameBoard.getBoundingClientRect().width;
             this.top = 0;
@@ -649,10 +695,13 @@ window.addEventListener('load', () => {
             this.keys = [];
             this.enemies = [];
             this.explosions = [];
-            this.crashedEnemies = 0;
             this.enemyTimer = 0;
             this.enemyInterval = 2000;
-            this.enemyGoal = 6;
+            this.score = 0;
+            this.scoreGoal = 50;
+            this.bossStage = false;
+            this.bossAppears = false;
+            this.bossDefeated = !this.bossStage;
             this.pauseGameCooldown = 1000;
             this.pauseGameTimer = this.pauseGameCooldown;
             this.pauseAllowed = true;
@@ -660,7 +709,7 @@ window.addEventListener('load', () => {
             this.hitBoxElements = [];
             this.input = new InputHandler(this);
             this.player = new Player(this, {
-                sources: ['cat-pirate.gif'],
+                sources: ['cat-pumpkin.gif'],
                 heights: [120],
             });
             this.player.skills.push(new SkillBomb(this, 'Space'));
@@ -745,6 +794,11 @@ window.addEventListener('load', () => {
             });
         }
 
+        scoreUp(points) {
+            this.score += points;
+            this.ui.scorePoints.textContent = this.score;
+        }
+
         update(deltaTime) {
             if (this.state === 'OPENINGSTAGE') this.ui.openingStage(deltaTime);
 
@@ -761,6 +815,8 @@ window.addEventListener('load', () => {
 
             if (this.state === 'STAGECLEAR') this.ui.stageClear(deltaTime);
 
+            if (this.state === 'WARNING') this.ui.warning(deltaTime);
+
             if (this.state === 'GAMEOVER' || this.state === 'PAUSED' || this.state === 'OPENINGSTAGE') return;
 
             if (!this.player.dboosting) {
@@ -774,7 +830,8 @@ window.addEventListener('load', () => {
 
             this.player.skills.forEach((skill, i) => {
                 if (!skill.avaliable) this.ui.skillCooldownHandler(deltaTime, i);
-                if (skill.active) skill.update();
+                if (skill.lauching) skill.update();
+                if (skill.active) skill.dmgSkill();
             });
 
             this.player.projectiles.forEach((projectile, _, arrProjectiles) => {
@@ -788,8 +845,8 @@ window.addEventListener('load', () => {
                 if (this.collisionRectangleCircle(this.player.hitBox, enemy.hitBox) && !this.player.invencible) {
                     if (this.state === 'GAMERUNNING') {
                         this.player.hp--;
-                        this.player.calcDboost(enemy);
                         this.player.dboosting = true;
+                        this.player.calcDboost(enemy);
                         this.ui.updateHeart();
                     }
                 }
@@ -798,22 +855,27 @@ window.addEventListener('load', () => {
                         enemy.hp -= projectile.dmg;
                         this.deletElement(projectile, arrProjectiles);
                         if (enemy.hp <= 0) {
+                            this.scoreUp(enemy.points);
                             this.explosions.push(new Explosion(this, enemy.explosion));
                             this.deletElement(enemy, arrEnemies);
-                            this.crashedEnemies++;
                         }
                     }
                 });
-                if (this.explosions.some(explosion => explosion.sprite.el.getAttribute('src') === '../assets/ziggs-bomb-explosion-spritesheet.png')) {
-                    this.explosions.push(new Explosion(this, enemy.explosion));
-                    this.deletElement(enemy, arrEnemies);
-                    this.crashedEnemies++;
-                }
+                this.player.skills.forEach(skill => {
+                    if (skill.active) {
+                        enemy.hp -= skill.dmg;
+                        if (enemy.hp <= 0) {
+                            this.scoreUp(enemy.points);
+                            this.explosions.push(new Explosion(this, enemy.explosion));
+                            this.deletElement(enemy, arrEnemies);
+                        }
+                    }
+                });
             });
 
             this.explosions.forEach((explosion, _, arrExplosions) => explosion.update(arrExplosions));
 
-            if (this.state === 'GAMERUNNING' && this.crashedEnemies < this.enemyGoal) {
+            if (this.state === 'GAMERUNNING' && this.score < this.scoreGoal) {
                 if (this.enemyTimer > this.enemyInterval) {
                     this.addEnemy();
                     this.enemyTimer = 0;
@@ -829,20 +891,26 @@ window.addEventListener('load', () => {
 
         gameStateHandler() {
             if (this.state === 'OPENINGSTAGE') {
-                if (this.ui.openingStageMsgCountdown <= 0) {
+                if (!this.ui.openingStageMsg) {
                     this.state = 'GAMERUNNING';
                 }
             } else if (this.state === 'GAMERUNNING') {
                 if (this.player.hp <= 0) {
                     this.state = 'GAMEOVER';
                     this.ui.createBoxMsg();
-                } else if (this.crashedEnemies >= this.enemyGoal && this.enemies.length === 0) {
-                    this.state = 'STAGECLEAR';
+                } else if (this.score >= this.scoreGoal && this.enemies.length === 0) {
+                    if (this.bossStage && !this.bossAppears) this.state = 'WARNING';
+                    else if (this.bossDefeated) this.state = 'STAGECLEAR';
                 }
             } else if (this.state === 'STAGECLEAR') {
-                if (this.ui.stageClearMsgCountdown <= 0) {
+                if (!this.ui.stageClearMsg) {
                     this.ui.createBoxMsg();
                     this.state = 'GAMEOVER';
+                }
+            } else if (this.state === 'WARNING') {
+                if (!this.ui.warningMsg) {
+                    this.bossAppears = true;
+                    this.state = 'GAMERUNNING';
                 }
             }
         }

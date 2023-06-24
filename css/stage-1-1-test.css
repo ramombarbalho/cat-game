@@ -23,17 +23,7 @@ body {
     overflow: hidden;
 }
 
-.game-content {
-    width: 100%;
-    height: 100%;
-}
-
-.game-assets {
-    border: 1px solid white;
-    margin-top: 50vh;
-}
-
-.loading {
+.game-loading {
     width: 100%;
     height: 100%;
     background-color: black;
@@ -65,12 +55,41 @@ body {
     }
 }
 
+.game-title-screen {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: -5;
+}
+
+.game-overworld {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: -5;
+}
+
 .game-board {
     position: relative;
     width: 100%;
     height: 83.34%;
     background-image: linear-gradient(#5a23a1, #25b3df);
     overflow: hidden;
+}
+
+.game-assets {
+    border: 1px solid white;
+    margin-top: 100vh;
 }
 
 .sprite {
@@ -83,6 +102,14 @@ body {
 .explosion {
     position: fixed;
     overflow: hidden;
+}
+
+.score-label {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    color: white;
+    z-index: 5;
 }
 
 .game-status-barr {
@@ -142,7 +169,7 @@ body {
 
 .not-allowed {
     top: 7%;
-    left: 7%;
+    left: 73%;
     z-index: 1;
 }
 
@@ -198,6 +225,37 @@ body {
     }
     100% {
         left: 132%;
+        opacity: 0;
+    }
+}
+
+.warning {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: warning-move 3s 1 forwards;
+    z-index: 5;
+}
+
+@keyframes warning-move {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 1;
+    }
+
+    100% {
         opacity: 0;
     }
 }
@@ -303,3 +361,12 @@ body {
 .hidden {
     display: none;
 }
+
+/* .test {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12rem;
+    color: white;
+} */
