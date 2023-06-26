@@ -18,7 +18,7 @@ body {
 }
 
 .game-board {
-    background-image: linear-gradient( #5a23a1, #25b3df);
+    background-image: linear-gradient(#5a23a1, #25b3df);
     border: 3px solid rgb(255, 0, 234);
     position: relative;
     margin: auto;
@@ -50,7 +50,6 @@ body {
 }
 
 @keyframes cat-entrance {
-
     0% {
         left: -240px;
     }
@@ -58,7 +57,6 @@ body {
     100% {
         left: 0px;
     }
-
 }
 
 .shadow-move {
@@ -74,7 +72,16 @@ body {
     width: 240px;
     height: 119px;
     background-color: white;
-    background-image: linear-gradient(to bottom right, rgba(255, 0, 0, 0.7),rgba(255, 166, 0, 0.7),rgba(255, 255, 0, 0.7),rgba(0, 128, 0, 0.7),rgba(0, 0, 255, 0.7),rgba(76, 0, 130, 0.7),rgba(238, 130, 238, 0.7));
+    background-image: linear-gradient(
+        to bottom right,
+        rgba(255, 0, 0, 0.7),
+        rgba(255, 166, 0, 0.7),
+        rgba(255, 255, 0, 0.7),
+        rgba(0, 128, 0, 0.7),
+        rgba(0, 0, 255, 0.7),
+        rgba(76, 0, 130, 0.7),
+        rgba(238, 130, 238, 0.7)
+    );
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,7 +119,6 @@ body {
 }
 
 @keyframes cooldown-efect {
-
     0% {
         height: 100%;
     }
@@ -120,7 +126,6 @@ body {
     100% {
         height: 0%;
     }
-
 }
 
 .box-bomb:hover {
@@ -219,123 +224,93 @@ body {
 } */
 
 @keyframes move0 {
-
     100% {
         top: 0px;
     }
-
 }
 
 @keyframes move1 {
-    
     100% {
         top: 120px;
     }
-
 }
 
 @keyframes move2 {
-    
     100% {
         top: 240px;
     }
-
 }
 
 @keyframes move3 {
-    
     100% {
         top: 360px;
     }
-
 }
 
 @keyframes move4 {
-    
     100% {
         top: 480px;
     }
-
 }
 
 @keyframes move0-charge {
-    
     100% {
         top: -20px;
     }
-
 }
 
 @keyframes move1-charge {
-    
     100% {
         top: 100px;
     }
-
 }
 
 @keyframes move2-charge {
-    
     100% {
         top: 220px;
     }
-
 }
 
 @keyframes move3-charge {
-    
     100% {
         top: 340px;
     }
-
 }
 
 @keyframes move4-charge {
-    
     100% {
         top: 460px;
     }
-
 }
 
 @keyframes shadow-move-1 {
-    
     100% {
         top: 0px;
     }
-
 }
 
 @keyframes shadow-move-2 {
-    
     100% {
         top: 120px;
     }
-
 }
 
 @keyframes shadow-move-3 {
-    
     100% {
         top: 240px;
     }
-
 }
 
 @keyframes shadow-move-4 {
-    
     100% {
         top: 360px;
     }
-
 }
 
 @keyframes shadow-move-5 {
-    
     100% {
         top: 480px;
     }
-
 }
 
 .shots {
@@ -362,14 +337,12 @@ body {
 }
 
 @keyframes shot-move {
-
     0% {
         left: 180px;
     }
     100% {
         left: 2100px;
     }
-
 }
 
 .planets {
@@ -393,14 +366,12 @@ body {
 }
 
 @keyframes move-planet {
-    
     0% {
         left: 1200px;
     }
     100% {
         left: -250px;
     }
-
 }
 
 .moon-boss {
@@ -413,33 +384,27 @@ body {
 }
 
 @keyframes move-boss {
-    
     100% {
         left: -675px;
     }
-
 }
 
 @keyframes rotate-center-0 {
-
     0% {
         transform: rotate(0);
     }
     100% {
         transform: rotate(360deg);
     }
-    
 }
 
 @keyframes rotate-center-1 {
-
     0% {
         transform: rotate(360deg);
     }
     100% {
         transform: rotate(0);
     }
-    
 }
 
 .explosion-planet {
@@ -466,7 +431,6 @@ body {
 }
 
 @keyframes stage-start-move {
-
     0% {
         left: 125%;
         top: 50%;
@@ -486,10 +450,9 @@ body {
         left: 125%;
         top: 50%;
     }
-
 }
 
-.warning {  
+.warning {
     position: absolute;
     width: 800px;
     left: 50%;
@@ -499,7 +462,6 @@ body {
 }
 
 @keyframes warning-move {
-
     0% {
         opacity: 0;
     }
@@ -519,10 +481,9 @@ body {
     100% {
         opacity: 0;
     }
-
 }
 
-.stage-clear {  
+.stage-clear {
     position: absolute;
     width: 800px;
     left: 26%;
@@ -531,7 +492,6 @@ body {
 }
 
 @keyframes stage-clear-move {
-
     0% {
         opacity: 0;
     }
@@ -551,7 +511,6 @@ body {
         top: 10%;
         left: 125%;
     }
-
 }
 
 .box-barr-hp-boss {
@@ -570,12 +529,12 @@ body {
     position: absolute;
     right: 0;
     height: 100%;
+    width: 100%;
     box-shadow: -1px 0 0.75em rgba(0, 0, 0, 0.3);
     animation: full-boss-hp 2s 1;
 }
 
 @keyframes full-boss-hp {
-
     0% {
         width: 0%;
     }
@@ -583,7 +542,6 @@ body {
     100% {
         width: 100%;
     }
-
 }
 
 .boss-explosion {
@@ -611,14 +569,12 @@ body {
 }
 
 @keyframes transition-msg {
-
     0% {
         opacity: 0;
     }
     100% {
         opacity: 1;
     }
-
 }
 
 .text-game-over {
@@ -724,7 +680,6 @@ body {
 }
 
 @keyframes movegundam {
-
     0% {
         top: 0;
     }
@@ -734,7 +689,6 @@ body {
     100% {
         top: 0;
     }
-
 }
 
 .charge1 {
