@@ -100,6 +100,9 @@ window.addEventListener('load', () => {
             this.skillBoxesCooldown = [...this.skillBoxes];
             this.skillBoxesNotAllowed = [...this.skillBoxes];
             this.skillCooldownTimer = this.game.player.skills.map(skill => skill.cooldown);
+            this.hpBossBarr = null;
+            this.hpBossEl = null;
+            this.hpBossElValue = 0;
             this.scoreLabel = null;
             this.scorePoints = null;
             this.overlayPaused = null;
@@ -120,7 +123,7 @@ window.addEventListener('load', () => {
             this.scorePoints = document.querySelector('.score-points');
             this.scorePoints.textContent = this.game.score;
             this.overlayPaused = document.createElement('div');
-            this.overlayPaused.classList.add('overlay-paused', 'hidden');
+            this.overlayPaused.classList.add('overlay', 'overlay-paused', 'hidden');
             this.game.gameBoard.appendChild(this.overlayPaused);
             this.overlayPaused.innerHTML = '<p style="font-size: 20px">PAUSED</p>';
             for (let i = 0; i < this.game.player.hp; i++) {
@@ -178,16 +181,33 @@ window.addEventListener('load', () => {
             else if (this.game.state === 'PAUSED') this.overlayPaused.classList.remove('hidden');
         }
 
-        overlayTransitionIn(deltaTime) {
+        addOverlayTransition(deltaTime, e) {
             if (!this.overlayTransition) {
                 this.overlayTransition = document.createElement('div');
-                this.overlayTransition.classList.add('overlay-transition');
-                this.game.gameBoard.appendChild(this.overlayTransition);
+                this.overlayTransition.classList.add('overlay', 'overlay-transition', `transition-${e}`);
+                this.game.gameContainer.appendChild(this.overlayTransition);
+                this.overlayTransitionCountdown = 800;
             } else if (this.overlayTransitionCountdown <= 0) {
                 this.overlayTransition.remove();
                 this.overlayTransition = null;
             } else {
                 this.overlayTransitionCountdown -= deltaTime;
+            }
+        }
+
+        addHpBossBarr() {
+            this.hpBossBarr = document.createElement('div');
+            this.hpBossBarr.classList.add('hp-boss-barr');
+            this.statusBarr.appendChild(this.hpBossBarr);
+            this.hpBossEl = document.createElement('div');
+            this.hpBossEl.classList.add('hp-boss-el');
+            this.hpBossBarr.appendChild(this.hpBossEl);
+        }
+
+        fillHpBossEl() {
+            if (this.hpBossElValue < 100) {
+                this.hpBossElValue += 1;
+                this.hpBossEl.style.width = this.hpBossElValue + '%';
             }
         }
 
@@ -242,6 +262,7 @@ window.addEventListener('load', () => {
                                              <span class="game-text warning-msg-text">n</span>
                                              <span class="game-text warning-msg-text">g</span>`;
                 this.game.gameBoard.appendChild(this.warningMsg);
+                this.addHpBossBarr();
             } else if (this.warningMsgCountdown <= 0) {
                 this.warningMsg.remove();
                 this.warningMsg = null;
@@ -272,7 +293,7 @@ window.addEventListener('load', () => {
                                             <h3>BOMB:.....1000pts</h3>
                                             <h3>SHOOTS:...1000pts</h3>
                                             <h2>TOTAL:.3000pts</h2>
-                                            <a draggable="false" href="../stages/stage-1-2-test.html" class="btn-box-msg">NEXT STAGE</a>
+                                            <a draggable="false" href="../stages/stage-1-2-beta.html" class="btn-box-msg">NEXT STAGE</a>
                                             <a draggable="false" href="#" class="btn-retry btn-box-msg">RETRY</a>
                                         </div>`;
                 this.game.gameBoard.appendChild(this.boxMsg);
@@ -716,6 +737,91 @@ window.addEventListener('load', () => {
         }
     }
 
+    class MoonBoss extends Sprite {
+        constructor(game, data) {
+            super(game, data);
+            this.top = this.game.top;
+            this.left = this.game.width;
+            this.el.style.height = this.height + 'px';
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.left + 'px';
+            this.hp = 40;
+            this.speedX = 4;
+            this.rotate = 0;
+            this.rotateSpeed = -5;
+            this.vunerable = false;
+            this.game.gameBoard.appendChild(this.el);
+            this.width = this.el.getBoundingClientRect().width;
+            this.dmgHitBoxEl = null;
+
+            this.radius = 0.5 * this.height;
+            this.hitBox = {
+                radius: this.radius,
+                y: this.top + this.radius,
+                x: this.left + this.width / 2,
+                height: 2 * this.radius,
+                width: 2 * this.radius,
+                top: this.top,
+                left: this.left,
+                boxType: 'circle-red',
+            };
+
+            this.dmgRadius = 0.073 * this.height;
+            this.dmgHitBox = {
+                radius: this.dmgRadius,
+                y: this.top + this.dmgRadius,
+                x: this.left + this.width / 2,
+                height: 2 * this.dmgRadius,
+                width: 2 * this.dmgRadius,
+                top: this.top + this.height / 2 - this.dmgRadius,
+                left: this.left + this.width / 2 - this.dmgRadius,
+                boxType: 'circle-red',
+            };
+
+            if (this.game.debugMode) this.addHitBoxDebug();
+            if (this.game.debugMode) this.addDmgHitBoxDebug();
+        }
+
+        entrance() {
+            this.left -= this.speedX;
+            if (this.left <= this.game.width - this.width) {
+                this.speedX = 0;
+                this.game.ui.fillHpBossEl();
+            }
+            this.hitBox.x = this.left + this.width / 2;
+            this.dmgHitBox.x = this.left + this.width / 2;
+            this.el.style.left = this.left + 'px';
+            if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.x - this.radius + 'px';
+            if (this.dmgHitBoxEl) this.dmgHitBoxEl.el.style.left = this.dmgHitBox.x - this.dmgRadius + 'px';
+        }
+
+        skill01() {
+            this.rotate += this.rotateSpeed;
+            this.el.style.rotate = this.rotate + 'deg';
+        }
+
+        update() {
+            this.left -= this.speedX;
+            this.hitBox.x = this.left + this.width / 2;
+            this.el.style.left = this.left + 'px';
+            this.explosion.position.left = this.left;
+            if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.x - this.radius + 'px';
+        }
+
+        addDmgHitBoxDebug = () => {
+            this.dmgHitBoxEl = new HitBoxDebug(this.game, this.dmgHitBox);
+            this.game.hitBoxElements.push(this.dmgHitBoxEl.el);
+        };
+
+        removeDmgBoxDebug = () => {
+            if (this.dmgHitBoxEl) {
+                this.game.hitBoxElements.forEach(el => el.remove());
+                this.game.hitBoxElements.lenght = 0;
+                this.dmgHitBoxEl = null;
+            }
+        };
+    }
+
     class Game {
         constructor() {
             this.gameContainer = document.querySelector('.game-container');
@@ -737,8 +843,8 @@ window.addEventListener('load', () => {
             this.enemyInterval = 2000;
             this.score = 0;
             this.scoreGoal = 10;
+            this.boss = null;
             this.bossStage = false;
-            this.bossAppears = false;
             this.bossDefeated = !this.bossStage;
             this.pauseGameCooldown = 2000;
             this.pauseGameTimer = this.pauseGameCooldown;
@@ -746,7 +852,7 @@ window.addEventListener('load', () => {
             this.debugMode = false;
             this.hitBoxElements = [];
             this.input = new InputHandler(this);
-            this.player = new Player(this, { sources: ['cat-demonic.gif'], heights: [120] });
+            this.player = new Player(this, { sources: ['cat-gb.gif'], heights: [120] });
             this.player.skills.push(new SkillBomb(this, 'Space'));
             this.player.skills.map(skill => this.player.skillsKeys.push(skill.key));
             this.ui = new UI(this);
@@ -817,10 +923,15 @@ window.addEventListener('load', () => {
         }
 
         switchDebugMode() {
-            [this.player, ...this.player.projectiles, ...this.enemies, ...this.coins].forEach(sprite => {
+            [this.player, ...this.player.projectiles, ...this.enemies, ...this.coins, this.boss].forEach(sprite => {
                 if (sprite) {
-                    if (this.debugMode) sprite.addHitBoxDebug();
-                    else sprite.removeHitBoxDebug();
+                    if (this.debugMode) {
+                        sprite.addHitBoxDebug();
+                        if (sprite.dmgHitBox) sprite.addDmgHitBoxDebug();
+                    } else {
+                        sprite.removeHitBoxDebug();
+                        if (sprite.dmgHitBox) sprite.removeDmgBoxDebug();
+                    }
                 }
             });
         }
@@ -834,7 +945,7 @@ window.addEventListener('load', () => {
         update(deltaTime) {
             if (deltaTime > 1000 / 30) deltaTime = 1000 / this.fps;
 
-            if (this.state === 'TRANSITIONIN') this.ui.overlayTransitionIn(deltaTime);
+            if (this.state === 'TRANSITIONIN') this.ui.addOverlayTransition(deltaTime, 'in');
 
             if (this.state === 'OPENINGSTAGE') this.ui.openingStage(deltaTime);
 
@@ -851,9 +962,16 @@ window.addEventListener('load', () => {
 
             if (this.state === 'STAGECLEAR') this.ui.stageClear(deltaTime);
 
-            if (this.state === 'WARNING') this.ui.warning(deltaTime);
+            if (this.state === 'WARNING') {
+                if (!this.boss) this.ui.warning(deltaTime);
+                if (!this.ui.warningMsg) {
+                    if (!this.boss) {
+                        this.boss = new MoonBoss(this, { sources: ['moon-boss.png'], heights: [this.height] });
+                    } else this.boss.entrance();
+                }
+            }
 
-            if (this.state === 'GAMEOVER' || this.state === 'PAUSED' || this.state === 'OPENINGSTAGE') return;
+            if (this.state !== 'GAMERUNNING' && this.state !== 'STAGECLEAR') return;
 
             if (!this.player.dboosting) {
                 this.player.moviment();
@@ -921,6 +1039,17 @@ window.addEventListener('load', () => {
                 if (!coin.markForDeletion) coin.timer();
             });
 
+            if (this.boss) {
+                if (this.collisionRectangleCircle(this.player.hitBox, this.boss.hitBox) && !this.player.invencible) {
+                    if (this.state === 'GAMERUNNING') {
+                        this.player.hp--;
+                        this.player.dboosting = true;
+                        this.player.calcDboost(this.boss);
+                        this.ui.updateHeart();
+                    }
+                }
+            }
+
             if (this.state === 'GAMERUNNING' && this.score < this.scoreGoal) {
                 if (this.enemyTimer > this.enemyInterval) {
                     this.addEnemy();
@@ -942,15 +1071,15 @@ window.addEventListener('load', () => {
                 }
             } else if (this.state === 'OPENINGSTAGE') {
                 if (!this.ui.openingStageMsg) {
-                    this.state = 'GAMERUNNING';
+                    if (!this.bossStage) this.state = 'GAMERUNNING';
+                    else this.state = 'WARNING';
                 }
             } else if (this.state === 'GAMERUNNING') {
-                if (this.player.hp <= 0) {
+                if (this.score >= this.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0 && this.bossDefeated) {
+                    this.state = 'STAGECLEAR';
+                } else if (this.player.hp <= 0) {
                     this.state = 'GAMEOVER';
                     this.ui.createBoxMsg();
-                } else if (this.score >= this.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0) {
-                    if (this.bossStage && !this.bossAppears) this.state = 'WARNING';
-                    else if (this.bossDefeated) this.state = 'STAGECLEAR';
                 }
             } else if (this.state === 'STAGECLEAR') {
                 if (!this.ui.stageClearMsg) {
@@ -958,8 +1087,7 @@ window.addEventListener('load', () => {
                     this.state = 'GAMEOVER';
                 }
             } else if (this.state === 'WARNING') {
-                if (!this.ui.warningMsg) {
-                    this.bossAppears = true;
+                if (this.ui.hpBossElValue === 100) {
                     this.state = 'GAMERUNNING';
                 }
             }
