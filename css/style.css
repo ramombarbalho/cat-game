@@ -25,13 +25,15 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 1200px;
-    height: 720px;
+    /* width: 1200px;
+    height: 720px; */
     border: 3px solid rgb(255, 0, 234);
+    display: flex;
     overflow: hidden;
 }
 
 .game-loading {
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: black;
@@ -41,6 +43,8 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 10;
+    width: 1200px;
+    height: 720px;
 }
 
 .loader {
@@ -69,6 +73,7 @@ body {
 }
 
 .game-title {
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: black;
@@ -77,33 +82,37 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: -5;
 }
 
 .game-overworld {
-    width: 100%;
-    height: 100%;
-    background-color: black;
+    position: relative;
+    /* width: 100%;
+    height: 100%; */
+    background-color: rgb(0, 127, 255);
     color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: -5;
+    gap: 10px;
+    width: 1200px;
+    height: 720px;
 }
 
 .game-board {
     position: relative;
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
     overflow: hidden;
+    width: 1200px;
+    height: 720px;
 }
 
 .game-running-area {
     position: relative;
     width: 100%;
     height: 83.34%;
-    background-image: linear-gradient(#5a23a1, #25b3df);
+    background-image: linear-gradient(#00ff00, #00ff00);
     overflow: hidden;
 }
 
@@ -169,7 +178,7 @@ body {
 }
 
 .explosion {
-    position: fixed;
+    position: absolute;
     overflow: hidden;
     z-index: 2;
 }
@@ -224,7 +233,7 @@ body {
     color: white;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
     padding: 40px 25px;
-    border-radius: 20px;
+    border-radius: 8px;
     animation: transition-msg 1s;
     overflow: hidden;
     z-index: 4;
@@ -253,7 +262,7 @@ body {
 
 .btn-box-msg {
     padding: 5px;
-    border-radius: 7px;
+    border-radius: 4px;
     color: black;
     background-color: rgb(255, 255, 255);
     font-weight: bolder;
@@ -300,7 +309,7 @@ body {
 }
 
 .overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -433,7 +442,7 @@ body {
 }
 
 .stage-clear-msg-text {
-    position: fixed;
+    position: absolute;
     left: 0;
     top: -8em;
     transform: scaleX(-1);
@@ -551,7 +560,7 @@ body {
 }
 
 .warning-msg-text {
-    position: fixed;
+    position: absolute;
     left: 0;
     opacity: 0;
     animation: warning-msg-text-move 0.25s ease-in forwards;
@@ -603,29 +612,16 @@ body {
     display: none;
 }
 
-.overlay-test {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background-color: rgba(0, 0, 0, 0);
-    z-index: 10;
-}
-
 .btn-test {
     font-size: 1.5rem;
     height: 50px;
     width: 100px;
+    color: black;
     background-color: rgb(230, 230, 230);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
