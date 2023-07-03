@@ -111,6 +111,7 @@ body {
     position: absolute;
     user-select: none;
     pointer-events: none;
+    box-sizing: border-box;
     z-index: 1;
 }
 
