@@ -6,15 +6,17 @@ window.addEventListener('load', () => {
     const STAGES_LIST = [
         {
             title: '0-0',
+            enemyGroup: null,
             bossStage: false,
             bossId: null,
-            enemyIntervalFrames: 0,
+            enemyIntervalFrames: null,
             scoreGoal: 0,
             isClear: true,
             backgroundImage: 'linear-gradient(#7f55ff, #7f55ff)',
         },
         {
             title: '1-1',
+            enemyGroup: [0],
             bossStage: false,
             bossId: null,
             enemyIntervalFrames: 120,
@@ -24,6 +26,7 @@ window.addEventListener('load', () => {
         },
         {
             title: '1-2',
+            enemyGroup: null,
             bossStage: true,
             bossId: 0,
             enemyIntervalFrames: null,
@@ -52,9 +55,10 @@ window.addEventListener('load', () => {
     };
 
     const INIT_PLAYER_STATE = {
+        height: 120,
         hp: 3,
         skills: [0, 0],
-        skin: 'pirate',
+        skin: 'pumpkin',
         speed: 11,
         chargeFramesInterval: 36,
         dboostDistance: 150,
@@ -111,15 +115,10 @@ window.addEventListener('load', () => {
     }
 
     class Sprite {
-        constructor(gameBoard, data) {
+        constructor(gameBoard) {
             this.gameBoard = gameBoard;
-            this.heights = data.heights;
-            this.sources = data.sources;
-            this.height = this.heights[0];
             this.el = document.createElement('img');
             this.el.classList.add('sprite');
-            this.el.style.height = this.height + 'px';
-            this.el.src = `./src/assets/${this.sources[0]}`;
             this.el.setAttribute('draggable', 'false');
             this.hitBoxEl = null;
         }
@@ -281,14 +280,18 @@ window.addEventListener('load', () => {
                 this.skillBoxes[i].classList.add('box-skill');
                 this.statusBarr.appendChild(this.skillBoxes[i]);
                 if (this.gameBoard.player.skills[i]) {
-                    const skillEl = new Sprite(this.gameBoard, this.gameBoard.player.skills[i].icon);
+                    const skillEl = new Sprite(this.gameBoard);
+                    skillEl.el.style.height = this.gameBoard.player.skills[i].icon.height + 'px';
+                    skillEl.el.src = `./src/assets/${this.gameBoard.player.skills[i].icon.src}`;
                     skillEl.el.style.filter = 'drop-shadow(4px 4px 4px black)';
                     this.skillBoxes[i].appendChild(skillEl.el);
                 }
                 this.skillBoxesCooldown[i] = document.createElement('div');
                 this.skillBoxesCooldown[i].classList.add('cooldown-box-skill', 'hidden');
                 this.skillBoxes[i].appendChild(this.skillBoxesCooldown[i]);
-                this.skillBoxesNotAllowed[i] = new Sprite(this.gameBoard, { sources: ['not-allowed.png'], heights: [25] });
+                this.skillBoxesNotAllowed[i] = new Sprite(this.gameBoard);
+                this.skillBoxesNotAllowed[i].el.style.height = 25 + 'px';
+                this.skillBoxesNotAllowed[i].el.src = './src/assets/not-allowed.png';
                 this.skillBoxesNotAllowed[i].el.classList.add('not-allowed', 'hidden');
                 this.skillBoxes[i].appendChild(this.skillBoxesNotAllowed[i].el);
                 this.skillCooldownFrames[i] = this.gameBoard.player.skills[i].cooldown;
@@ -445,7 +448,6 @@ window.addEventListener('load', () => {
                 });
             }
             this.btnRetry.addEventListener('click', () => {
-                console.log(console);
                 if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.ui.overlayTransition) return;
                 this.gameBoard.game.gameTransitionLoop();
             });
@@ -471,10 +473,13 @@ window.addEventListener('load', () => {
 
             this.height = data.height;
             this.top = data.position.top + data.position.height / 2 - this.height / 2;
+            this.src = data.src;
 
             this.el = document.createElement('div');
             this.el.classList.add('explosion');
-            this.sprite = new Sprite(this.gameBoard, { sources: [data.src], heights: [this.height] });
+            this.sprite = new Sprite(this.gameBoard);
+            this.sprite.el.style.height = this.height;
+            this.sprite.el.src = `./src/assets/${this.src}`;
             this.gameBoard.gameRunningArea.appendChild(this.el);
             this.el.appendChild(this.sprite.el);
 
@@ -508,17 +513,18 @@ window.addEventListener('load', () => {
     }
 
     class EnemyPlanet extends Sprite {
-        constructor(gameBoard, data) {
-            super(gameBoard, data);
+        constructor(gameBoard) {
+            super(gameBoard);
             this.enemyType = Math.floor(Math.random() * 4);
+            this.heights = [120, 200, 280, 360];
+            this.sources = ['planet-0.gif', 'planet-1.gif', 'planet-2.gif', 'planet-3.gif'];
             this.height = this.heights[this.enemyType];
             this.top = Math.floor(Math.random() * (this.gameBoard.gameRunningHeight - this.height + 1));
             this.left = this.gameBoard.gameRunningWidth;
-            this.src = this.sources[this.enemyType];
             this.el.style.height = this.height + 'px';
             this.el.style.top = this.top + 'px';
             this.el.style.left = this.left + 'px';
-            this.el.src = `./src/assets/${this.src}`;
+            this.el.src = `./src/assets/${this.sources[this.enemyType]}`;
             this.hp = this.enemyType * 3 + 3;
             this.speedX = 10 / (this.enemyType + 1);
             this.dropRate = 0.2 + this.enemyType * 0.1;
@@ -565,19 +571,23 @@ window.addEventListener('load', () => {
         }
     }
 
+    const ENEMY_LIST = [EnemyPlanet];
+
     class Projectile extends Sprite {
-        constructor(gameBoard, data) {
-            super(gameBoard, data);
-            this.chargeType = this.gameBoard.player.chargeValue;
+        constructor(gameBoard, player) {
+            super(gameBoard);
+            this.player = player;
+            this.height = this.player.height * (1 / 6) + this.player.chargeValue * this.player.height * (11 / 24);
+            this.sources = ['shoot-0.png', 'shoot-1.gif', 'shoot-2.gif'];
             this.top = this.gameBoard.player.top + this.gameBoard.player.height / 2 - this.height / 2;
             this.left = this.gameBoard.player.left + this.gameBoard.player.width * 0.8;
-            this.src = this.sources[this.chargeType];
+            this.el.style.height = this.height + 'px';
             this.el.style.top = this.top + 'px';
             this.el.style.left = this.gameBoard.player.left + 'px';
             this.el.style.zIndex = '3';
-            this.el.src = `./src/assets/${this.src}`;
-            this.dmg = 2 ** (this.chargeType + 1) - 1;
-            this.speedX = 14 + this.chargeType * 2;
+            this.el.src = `./src/assets/${this.sources[this.player.chargeValue]}`;
+            this.dmg = 2 ** (this.player.chargeValue + 1) - 1;
+            this.speedX = 14 + this.player.chargeValue * 2;
             this.markForDeletion = false;
             this.gameBoard.gameRunningArea.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
@@ -599,7 +609,7 @@ window.addEventListener('load', () => {
 
         update() {
             this.left += this.speedX;
-            this.hitBox.left = this.left;
+            this.hitBox.left = this.left + this.width / 2 - this.radius;
             this.hitBox.x = this.left + this.width / 2;
             this.el.style.left = this.left + 'px';
             if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.x - this.hitBox.radius + 'px';
@@ -610,7 +620,7 @@ window.addEventListener('load', () => {
         constructor(gameBoard, player) {
             this.gameBoard = gameBoard;
             this.player = player;
-            this.icon = { sources: ['skill-ziggs.png'], heights: [75] };
+            this.icon = { src: 'skill-ziggs.png', height: 75 };
             this.top = this.player.top;
             this.left = this.player.left + this.player.width - this.player.width * 0.34;
             this.width = 0;
@@ -642,7 +652,9 @@ window.addEventListener('load', () => {
         }
 
         activeSkill(i) {
-            this.skillAnimation = new Sprite(this.gameBoard, { sources: ['skill-ziggs.png'], heights: [75] });
+            this.skillAnimation = new Sprite(this.gameBoard);
+            this.skillAnimation.el.style.height = 75 + 'px';
+            this.skillAnimation.el.src = './src/assets/skill-ziggs.png';
             this.lauching = true;
             this.top = this.player.top;
             this.left = this.player.left + this.player.width - this.player.hitBox.width;
@@ -691,16 +703,36 @@ window.addEventListener('load', () => {
         }
     }
 
+    const SKILL_LIST = [SkillBomb];
+
+    class ChargeAnimation extends Sprite {
+        constructor(gameBoard, player) {
+            super(gameBoard);
+            this.player = player;
+            this.height = this.player.height + this.player.height / 3;
+            this.sources = ['__blank.png', 'charge-1.gif', 'charge-2.gif'];
+            this.el.style.height = this.height + 'px';
+            this.el.src = `./src/assets/${this.sources[this.player.chargeValue]}`;
+            this.el.style.display = 'none';
+            this.el.style.top = this.top - this.height * 0.125 + 'px';
+            this.el.style.left = this.left + this.width * 0.31 + 'px';
+            this.el.style.zIndex = '3';
+            this.gameBoard.gameRunningArea.appendChild(this.el);
+        }
+    }
+
     class Player extends Sprite {
-        constructor(gameBoard, data) {
-            super(gameBoard, data);
+        constructor(gameBoard) {
+            super(gameBoard);
+            this.height = this.gameBoard.game.playerState.height;
             this.top = (this.gameBoard.gameRunningHeight - this.height) / 2;
             this.left = this.gameBoard.left;
-            this.src = this.sources[0];
+            this.src = `./src/assets/cat-${this.gameBoard.game.playerState.skin}.gif`;
+            this.el.style.height = this.height + 'px';
             this.el.style.top = this.top + 'px';
             this.el.style.left = this.left + 'px';
             this.el.style.zIndex = '3';
-            this.el.src = `./src/assets/${this.src}`;
+            this.el.src = this.src;
             this.hp = this.gameBoard.game.playerState.hp;
             this.speedY = 0;
             this.speedX = 0;
@@ -711,6 +743,7 @@ window.addEventListener('load', () => {
             this.untargetableFrames = this.gameBoard.game.playerState.untargetableFrames;
             this.gameBoard.gameRunningArea.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
+            this.chargeAnimation = new ChargeAnimation(this.gameBoard, this);
             this.state = 'JUST_HANGING_AROUND';
 
             this.dboost = {
@@ -730,13 +763,6 @@ window.addEventListener('load', () => {
                 left: this.left + this.width * 0.42,
                 boxType: 'rectangle-white',
             };
-
-            this.chargeAnimation = new Sprite(this.gameBoard, { sources: ['charge-1.gif', 'charge-2.gif'], heights: [this.height + this.height / 3] });
-            this.chargeAnimation.el.style.display = 'none';
-            this.chargeAnimation.el.style.top = this.top - this.height * 0.125 + 'px';
-            this.chargeAnimation.el.style.left = this.left + this.width * 0.31 + 'px';
-            this.chargeAnimation.el.style.zIndex = '3';
-            this.gameBoard.gameRunningArea.appendChild(this.chargeAnimation.el);
 
             if (this.gameBoard.debugMode) this.addHitBoxDebug();
         }
@@ -776,12 +802,7 @@ window.addEventListener('load', () => {
         }
 
         shooting() {
-            this.gameBoard.projectiles.push(
-                new Projectile(this.gameBoard, {
-                    sources: ['shoot-0.png', 'shoot-1.gif', 'shoot-2.gif'],
-                    heights: [this.height * (1 / 6) + this.chargeValue * this.height * (11 / 24)],
-                }),
-            );
+            this.gameBoard.projectiles.push(new Projectile(this.gameBoard, this));
         }
 
         beam() {
@@ -793,12 +814,12 @@ window.addEventListener('load', () => {
                     this.chargeFrames < this.gameBoard.game.playerState.chargeFramesInterval * 2 &&
                     this.chargeValue === 0
                 ) {
+                    this.chargeValue = 1;
                     this.chargeAnimation.el.src = `./src/assets/${this.chargeAnimation.sources[this.chargeValue]}`;
                     this.chargeAnimation.el.style.display = 'block';
-                    this.chargeValue = 1;
                 } else if (this.chargeFrames >= this.gameBoard.game.playerState.chargeFramesInterval * 2 && this.chargeValue === 1) {
-                    this.chargeAnimation.el.src = `./src/assets/${this.chargeAnimation.sources[this.chargeValue]}`;
                     this.chargeValue = 2;
+                    this.chargeAnimation.el.src = `./src/assets/${this.chargeAnimation.sources[this.chargeValue]}`;
                 }
                 this.chargeFrames++;
             } else if (this.chargeFrames > 0) {
@@ -806,7 +827,7 @@ window.addEventListener('load', () => {
                     this.shooting();
                     this.chargeValue = 0;
                     this.chargeAnimation.el.style.display = 'none';
-                    this.chargeAnimation.el.src = './src/assets/__blank.png';
+                    this.chargeAnimation.el.src = `./src/assets/${this.chargeAnimation.sources[this.chargeValue]}`;
                 }
                 this.chargeFrames = 0;
             }
@@ -857,12 +878,16 @@ window.addEventListener('load', () => {
     }
 
     class Coin extends Sprite {
-        constructor(gameBoard, data, enemy) {
-            super(gameBoard, data);
+        constructor(gameBoard, enemy) {
+            super(gameBoard);
             this.gameBoard = gameBoard;
+            this.height = 50;
+            this.src = './src/assets/coin.gif';
+            this.el.style.height = this.height + 'px';
+            this.el.src = this.src;
             this.gameBoard.gameRunningArea.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
-            this.top = enemy.top + enemy.height / 2 - this.heights / 2;
+            this.top = enemy.top + enemy.height / 2 - this.height / 2;
             this.left = enemy.left + enemy.width / 2 - this.width / 2;
             this.el.style.top = this.top + 'px';
             this.el.style.left = this.left + 'px';
@@ -893,13 +918,16 @@ window.addEventListener('load', () => {
     }
 
     class MoonBoss extends Sprite {
-        constructor(gameBoard, data) {
-            super(gameBoard, data);
+        constructor(gameBoard) {
+            super(gameBoard);
+            this.height = this.gameBoard.gameRunningHeight;
             this.top = this.gameBoard.top;
             this.left = this.gameBoard.gameRunningWidth;
+            this.src = './src/assets/moon-boss.png';
             this.el.style.height = this.height + 'px';
             this.el.style.top = this.top + 'px';
             this.el.style.left = this.left + 'px';
+            this.el.src = this.src;
             this.hp = 40;
             this.speedX = 4;
             this.rotate = 0;
@@ -993,6 +1021,8 @@ window.addEventListener('load', () => {
         };
     }
 
+    const BOSS_LIST = [MoonBoss];
+
     class Title {
         constructor(game) {
             this.game = game;
@@ -1008,6 +1038,7 @@ window.addEventListener('load', () => {
             this.game = game;
             this.screen = document.createElement('div');
             this.screen.classList.add('game-overworld');
+            this.screen.style.display = 'none';
             this.game.gameContainer.appendChild(this.screen);
             this.ui = new OverworldUI(this);
         }
@@ -1018,6 +1049,7 @@ window.addEventListener('load', () => {
             this.game = game;
             this.screen = document.createElement('div');
             this.screen.classList.add('game-board');
+            this.screen.style.display = 'none';
             this.game.gameContainer.appendChild(this.screen);
             this.gameRunningArea = document.createElement('div');
             this.gameRunningArea.classList.add('game-running-area');
@@ -1054,10 +1086,6 @@ window.addEventListener('load', () => {
             this.ui = new GameBoardUI(this);
         }
 
-        addEnemy() {
-            this.enemies.push(new EnemyPlanet(this, { sources: ['planet-0.gif', 'planet-1.gif', 'planet-2.gif', 'planet-3.gif'], heights: [120, 200, 280, 360] }));
-        }
-
         clearSpriteOffScreen(sprite, arr) {
             if (sprite.left > this.gameRunningWidth + sprite.width * 0.1 || sprite.left + sprite.width * 1.1 < 0) this.deletElement(sprite, arr);
         }
@@ -1067,6 +1095,7 @@ window.addEventListener('load', () => {
             element.el.remove();
             if (element.constructor.name === 'Projectile') this.projectiles = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'EnemyPlanet') this.enemies = arr.filter(el => !el.markForDeletion);
+            if (element.constructor.name === 'EnemyTest') this.enemies = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'Explosion') this.explosions = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'Coin') this.coins = arr.filter(el => !el.markForDeletion);
         }
@@ -1217,7 +1246,7 @@ window.addEventListener('load', () => {
                         this.deletElement(projectile, arrProjectiles);
                         if (enemy.hp <= 0) {
                             this.scoreUp(enemy.points);
-                            if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, { sources: ['coin.gif'], heights: [50] }, enemy));
+                            if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, enemy));
                             this.explosions.push(new Explosion(this, enemy.explosion));
                             this.deletElement(enemy, arrEnemies);
                         }
@@ -1228,7 +1257,7 @@ window.addEventListener('load', () => {
                         enemy.hp -= skill.dmg;
                         if (enemy.hp <= 0) {
                             this.scoreUp(enemy.points);
-                            if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, { sources: ['coin.gif'], heights: [50] }, enemy));
+                            if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, enemy));
                             this.explosions.push(new Explosion(this, enemy.explosion));
                             this.deletElement(enemy, arrEnemies);
                         }
@@ -1259,7 +1288,7 @@ window.addEventListener('load', () => {
 
             if (this.state === 'GAME_RUNNING' && this.score < this.scoreGoal && !this.bossStage) {
                 if (this.enemyIntervalFrames <= 0) {
-                    this.addEnemy();
+                    this.enemies.push(this.game.addEnemy());
                     this.enemyIntervalFrames = this.game.stages[this.game.stageId].enemyIntervalFrames;
                 } else {
                     this.enemyIntervalFrames--;
@@ -1354,27 +1383,40 @@ window.addEventListener('load', () => {
 
         switchScreens() {
             [this.title, this.overworld, this.gameBoard].forEach(view => {
-                // view.screen.style.display = 'none';
-                view.screen.style.outline = 'none';
+                view.screen.style.display = 'none';
+                // view.screen.style.outline = 'none';
                 view.screen.style.zIndex = '-1';
             });
             if (this.activeScreen === 'TITLE') {
-                // this.title.screen.style.display = 'flex';
-                this.title.screen.style.outline = '5px solid white';
+                this.title.screen.style.display = 'flex';
+                // this.title.screen.style.outline = '5px solid white';
                 this.title.screen.style.zIndex = '0';
             } else if (this.activeScreen === 'OVERWORLD') {
-                // this.overworld.screen.style.display = 'flex';
-                this.overworld.screen.style.outline = '5px solid white';
+                this.overworld.screen.style.display = 'flex';
+                // this.overworld.screen.style.outline = '5px solid white';
                 this.overworld.screen.style.zIndex = '0';
                 this.resetStateGameRunningArea();
                 this.gameBoard.ui.clearGameBoardUI();
             } else if (this.activeScreen === 'GAME_BOARD') {
-                // this.gameBoard.screen.style.display = 'block';
-                this.gameBoard.screen.style.outline = '5px solid white';
+                this.gameBoard.screen.style.display = 'block';
+                // this.gameBoard.screen.style.outline = '5px solid white';
                 this.gameBoard.screen.style.zIndex = '0';
                 this.updateGameBoard();
                 this.gameBoardLoop();
             }
+        }
+
+        addPlayerSkills(id) {
+            return new SKILL_LIST[id](this.gameBoard, this.gameBoard.player);
+        }
+
+        addEnemy() {
+            const rng = Math.floor(Math.random() * this.stages[this.stageId].enemyGroup.length);
+            return new ENEMY_LIST[this.stages[this.stageId].enemyGroup[rng]](this.gameBoard);
+        }
+
+        addBoss(id) {
+            return new BOSS_LIST[id](this.gameBoard);
         }
 
         resetStateGameRunningArea() {
@@ -1389,7 +1431,7 @@ window.addEventListener('load', () => {
             this.gameBoard.bossDefeated = false;
             this.gameBoard.pauseGameFrames = this.config.pauseGameFrames;
             this.gameBoard.pauseAllowed = true;
-            this.gameBoard.gameRunningArea.style.backgroundImage = this.stages[0].backgroundImage;
+            this.gameBoard.gameRunningArea.style.backgroundImage = '';
         }
 
         updateGameBoardContext() {
@@ -1400,16 +1442,8 @@ window.addEventListener('load', () => {
             this.gameBoard.gameRunningArea.style.backgroundImage = this.stages[this.stageId].backgroundImage;
         }
 
-        addPlayerSkills(id) {
-            if (id === 0) return new SkillBomb(this.gameBoard, this.gameBoard.player);
-        }
-
-        addBoss(id) {
-            if (id === 0) return new MoonBoss(this.gameBoard, { sources: ['moon-boss.png'], heights: [this.gameBoard.gameRunningHeight] });
-        }
-
         updateGameBoardPlayer() {
-            this.gameBoard.player = new Player(this.gameBoard, { sources: [`cat-${this.playerState.skin}.gif`], heights: [120] });
+            this.gameBoard.player = new Player(this.gameBoard);
             this.gameBoard.player.top = (this.gameBoard.gameRunningHeight - this.gameBoard.player.height) / 2;
             this.gameBoard.player.left = this.gameBoard.left;
             this.gameBoard.player.hp = this.playerState.hp;
