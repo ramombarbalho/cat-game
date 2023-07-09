@@ -20,7 +20,13 @@ window.addEventListener('load', () => {
             bossStage: false,
             bossId: null,
             enemyIntervalFrames: 120,
-            scoreGoal: 5,
+            scoreGoal: 10,
+            breakPoint: {
+                score: 5,
+                enemyGroup: [1],
+                enemyIntervalFrames: 60,
+            },
+            breakPointActive: false,
             isClear: false,
             backgroundImage: 'linear-gradient(#5a23a1, #25b3df)',
         },
@@ -38,11 +44,8 @@ window.addEventListener('load', () => {
 
     const INIT_CONFIG = {
         gameHeight: 720,
-        gameWidth: 1200,
-        keysMain: ['Numpad8', 'Numpad5', 'Numpad4', 'Numpad6', 'KeyH'], // up, down, left, right, shot
-        keysSkill: ['KeyJ', 'KeyM'], // skill1, skill2
-        keyPause: 'NumpadDivide', // pause/unpause
-        keyDebug: 'Numpad0', // debug
+        gameWidth: 1280,
+        keys: ['Numpad8', 'Numpad5', 'Numpad4', 'Numpad6', 'KeyH', 'KeyJ', 'KeyM', 'NumpadDivide', 'Numpad0'], // up, down, left, right, shot, skill1, skill2, pause, debug
         stageId: 0,
         pauseGameFrames: 90,
         gravity: 2,
@@ -55,11 +58,11 @@ window.addEventListener('load', () => {
     };
 
     const INIT_PLAYER_STATE = {
-        height: 120,
+        height: 100,
         hp: 3,
         skills: [0, 0],
-        skin: 'pumpkin',
-        speed: 11,
+        skin: 'original',
+        speed: 9,
         chargeFramesInterval: 36,
         dboostDistance: 150,
         dboostFrames: 5,
@@ -70,24 +73,25 @@ window.addEventListener('load', () => {
         constructor(game) {
             this.game = game;
             window.addEventListener('keydown', e => {
-                if (this.game.keysMain.includes(e.code) && !this.game.keysActive.includes(e.code)) {
+                if (this.game.keys.slice(0, 5).includes(e.code) && !this.game.keysActive.includes(e.code)) {
                     this.game.keysActive.push(e.code);
-                } else if (this.game.keysSkill.includes(e.code)) {
+                } else if (this.game.keys.slice(5, 7).includes(e.code)) {
                     if (!this.game.keysActive.includes(e.code)) {
                         this.game.keysActive.push(e.code);
-                        if (this.game.state === 'GAME_RUNNING') this.game.player.useSkill(this.game.keysSkill.indexOf(e.code));
+                        if (this.game.gameBoard.state === 'GAME_RUNNING') this.game.gameBoard.player.useSkill(this.game.keys.slice(5, 7).indexOf(e.code));
                     }
-                } else if (e.code === this.game.keyPause && !this.game.keysActive.includes(e.code)) {
+                } else if (e.code === this.game.keys[7] && !this.game.keysActive.includes(e.code)) {
                     this.game.keysActive.push(e.code);
-                    if (this.game.pauseAllowed) {
-                        if (this.game.state === 'GAME_RUNNING') this.game.pauseGame();
-                        else if (this.game.state === 'PAUSED') this.game.unPauseGame();
+                    if (this.game.gameBoard.pauseAllowed) {
+                        if (this.game.gameBoard.state === 'GAME_RUNNING') this.game.gameBoard.pauseGame();
+                        else if (this.game.gameBoard.state === 'PAUSED') this.game.gameBoard.unPauseGame();
                     }
-                } else if (e.code === this.game.keyDebug && !this.game.keysActive.includes(e.code)) {
+                } else if (e.code === this.game.keys[8] && !this.game.keysActive.includes(e.code)) {
                     this.game.keysActive.push(e.code);
-                    this.game.debugMode = !this.game.debugMode;
-                    this.game.switchDebugMode();
+                    this.game.gameBoard.debugMode = !this.game.gameBoard.debugMode;
+                    this.game.gameBoard.switchDebugMode();
                 }
+                if (this.game.title.ui.overlaySetKeyIsOpen) this.game.setKey(e.code);
                 if (e.code === 'Space') e.preventDefault();
             });
             window.addEventListener('keyup', ({ code }) => {
@@ -140,10 +144,68 @@ window.addEventListener('load', () => {
     class TitleUI {
         constructor(title) {
             this.title = title;
+            this.boxOptions = null;
+            this.overlaySetKey = null;
+            this.overlaySetKeyIsOpen = false;
+            this.id = null;
+            this.labelKeyOverlayOptions = null;
             this.initTitleUI();
         }
 
         initTitleUI() {
+            this.overlaySetKey = document.createElement('div');
+            this.overlaySetKey.classList.add('overlay', 'overlay-set-key');
+            this.overlaySetKey.innerHTML = `<p style="font-size: 20px">PRESS A KEY TO SET "<span class="label-key-overlay-options"></span>"</p>`;
+            this.title.screen.appendChild(this.overlaySetKey);
+            this.labelKeyOverlayOptions = document.querySelector('.label-key-overlay-options');
+            this.overlaySetKey.style.display = 'none';
+            this.boxOptions = document.createElement('div');
+            this.boxOptions.classList.add('box-options');
+            this.boxOptions.style.display = 'none';
+            this.boxOptions.innerHTML = `<h1>OPTIONS</h1>
+                                         <div class="options-key-set">
+                                            <div class="options-row">
+                                                <h2>ACTION</h2> <h2>KEY</h2>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>UP</h3> <h3 class="label-key">${this.title.game.keys[0]}</h3> <div class="btn-set-key" data-id="0">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>DOWN</h3> <h3 class="label-key">${this.title.game.keys[1]}</h3> <div class="btn-set-key" data-id="1">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>LEFT</h3> <h3 class="label-key">${this.title.game.keys[2]}</h3> <div class="btn-set-key" data-id="2">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>RIGHT</h3> <h3 class="label-key">${this.title.game.keys[3]}</h3> <div class="btn-set-key" data-id="3">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>SHOT</h3> <h3 class="label-key">${this.title.game.keys[4]}</h3> <div class="btn-set-key" data-id="4">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>SKILL 1</h3> <h3 class="label-key">${this.title.game.keys[5]}</h3> <div class="btn-set-key" data-id="5">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>SKILL 2</h3> <h3 class="label-key">${this.title.game.keys[6]}</h3> <div class="btn-set-key" data-id="6">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>PAUSE</h3> <h3 class="label-key">${this.title.game.keys[7]}</h3> <div class="btn-set-key" data-id="7">SET</div>
+                                            </div>
+                                            <div class="options-row">
+                                                <h3>DEBUG</h3> <h3 class="label-key">${this.title.game.keys[8]}</h3> <div class="btn-set-key" data-id="8">SET</div>
+                                            </div>
+                                         </div>
+                                         <div class="btn-test btn-save">SAVE</div>`;
+            this.title.screen.appendChild(this.boxOptions);
+            document.querySelector('.btn-save').addEventListener('click', () => (this.boxOptions.style.display = 'none'));
+            this.boxOptions.querySelector('.options-key-set').addEventListener('click', ({ target }) => {
+                if (target.classList.contains('btn-set-key')) {
+                    this.labelKeyOverlayOptions.innerHTML = target.closest('.options-row').firstElementChild.innerHTML;
+                    this.overlaySetKey.style.display = 'flex';
+                    this.overlaySetKeyIsOpen = true;
+                    this.id = +target.dataset.id;
+                }
+            });
             this.btnOverworld = document.createElement('div');
             this.btnOverworld.classList.add('btn-test');
             this.btnOverworld.textContent = 'OVERWORLD';
@@ -159,7 +221,7 @@ window.addEventListener('load', () => {
             this.title.screen.appendChild(this.btnOptions);
             this.btnOptions.addEventListener('click', () => {
                 if (this.title.game.activeScreen !== 'TITLE' || this.title.game.ui.overlayTransition) return;
-                return;
+                this.boxOptions.style.display = 'flex';
             });
         }
     }
@@ -257,7 +319,7 @@ window.addEventListener('load', () => {
 
         updateGameBoardUI() {
             this.clearGameBoardUI();
-            if (!this.gameBoard.game.stages[this.gameBoard.game.stageId].bossStage) {
+            if (!this.gameBoard.stage.bossStage) {
                 this.scoreLabel = document.createElement('p');
                 this.scoreLabel.classList.add('score-label');
                 this.gameBoard.gameRunningArea.appendChild(this.scoreLabel);
@@ -352,7 +414,7 @@ window.addEventListener('load', () => {
             if (!this.openingStageMsg) {
                 this.openingStageMsg = document.createElement('div');
                 this.openingStageMsg.classList.add('opening-stage-msg');
-                this.openingStageMsg.innerHTML = `<span class="game-text opening-stage-msg-number">${this.gameBoard.game.stages[this.gameBoard.game.stageId].title}</span>
+                this.openingStageMsg.innerHTML = `<span class="game-text opening-stage-msg-number">${this.gameBoard.stage.title}</span>
                                                   <span class="game-text opening-stage-msg-text">start!</span>`;
                 this.gameBoard.gameRunningArea.appendChild(this.openingStageMsg);
             } else if (this.openingStageMsgFrames <= 0) {
@@ -416,6 +478,7 @@ window.addEventListener('load', () => {
                 this.boxMsg.innerHTML = `<div class="box-msg-content">
                                             <h1 style="color: #ff3200">GAME OVER</h1>
                                             <img draggable="false" src="./src/assets/cat-game-over.png" class="cat-game-over-img" />
+                                            <div class="btn-test btn-overworld">RETURN OVERWORLD</div>
                                             <div class="btn-test btn-retry">TRY AGAIN!!</div>
                                         </div>`;
                 this.gameBoard.gameRunningArea.appendChild(this.boxMsg);
@@ -424,6 +487,13 @@ window.addEventListener('load', () => {
                 this.btnRetry.addEventListener('mouseover', this.catThumbsUp);
                 this.btnRetry.addEventListener('mouseout', this.catSad);
             } else if (this.gameBoard.state === 'STAGE_CLEAR') {
+                if (
+                    this.gameBoard.game.stages.length > this.gameBoard.game.stageId + 1 &&
+                    this.gameBoard.game.stages[this.gameBoard.game.stageId].isClear &&
+                    !this.gameBoard.game.overworld.ui.btnStages[this.gameBoard.game.stageId]
+                ) {
+                    this.gameBoard.game.overworld.ui.btnStages.push(new BtnStage(this.gameBoard.game.overworld, this.gameBoard.game.stageId + 1));
+                }
                 this.boxMsg.innerHTML = `<div class="box-msg-content">
                                             <h1>STAGE CLEAR</h1>
                                             <h3>HP:.......1000pts</h3>
@@ -434,19 +504,15 @@ window.addEventListener('load', () => {
                                             <div class="btn-test btn-retry">RETRY</div>
                                         </div>`;
                 this.gameBoard.gameRunningArea.appendChild(this.boxMsg);
-                this.btnOverworld = document.querySelector('.btn-overworld');
                 this.btnRetry = document.querySelector('.btn-retry');
-                this.btnOverworld.addEventListener('click', () => {
-                    if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.ui.overlayTransition) return;
-                    if (this.gameBoard.game.stages.length > this.gameBoard.game.stageId + 1 && !this.gameBoard.game.stages[this.gameBoard.game.stageId].isClear) {
-                        this.gameBoard.game.overworld.ui.btnStages.push(new BtnStage(this.gameBoard.game.overworld, this.gameBoard.game.stageId + 1));
-                    }
-                    this.gameBoard.game.stages[this.gameBoard.game.stageId].isClear = true;
-                    this.gameBoard.game.stageId = 0;
-                    this.gameBoard.game.activeScreen = 'OVERWORLD';
-                    this.gameBoard.game.gameTransitionLoop();
-                });
             }
+            this.btnOverworld = document.querySelector('.btn-overworld');
+            this.btnOverworld.addEventListener('click', () => {
+                if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.ui.overlayTransition) return;
+                this.gameBoard.game.stageId = 0;
+                this.gameBoard.game.activeScreen = 'OVERWORLD';
+                this.gameBoard.game.gameTransitionLoop();
+            });
             this.btnRetry.addEventListener('click', () => {
                 if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.ui.overlayTransition) return;
                 this.gameBoard.game.gameTransitionLoop();
@@ -512,6 +578,65 @@ window.addEventListener('load', () => {
         }
     }
 
+    class EnemyTest extends Sprite {
+        constructor(gameBoard) {
+            super(gameBoard);
+            this.enemyType = Math.floor(Math.random() * 4);
+            this.heights = [120, 200, 280, 360];
+            this.sources = ['cat-thumbs-up.png', 'cat-thumbs-up.png', 'cat-thumbs-up.png', 'cat-thumbs-up.png'];
+            this.height = this.heights[this.enemyType];
+            this.top = Math.floor(Math.random() * (this.gameBoard.gameRunningHeight - this.height + 1));
+            this.left = this.gameBoard.gameRunningWidth;
+            this.el.style.height = this.height + 'px';
+            this.el.style.top = this.top + 'px';
+            this.el.style.left = this.left + 'px';
+            this.el.src = `./src/assets/${this.sources[this.enemyType]}`;
+            this.hp = this.enemyType * 3 + 3;
+            this.speedX = 10 / (this.enemyType + 1);
+            this.dropRate = 0.2 + this.enemyType * 0.1;
+            this.points = this.enemyType + 2;
+            this.markForDeletion = false;
+            this.gameBoard.gameRunningArea.appendChild(this.el);
+            this.width = this.el.getBoundingClientRect().width;
+
+            this.explosion = {
+                height: 147,
+                src: 'enemy-explosion-spritesheet.png',
+                maxFramesY: 1,
+                maxFramesX: 31,
+                position: {
+                    top: this.top,
+                    left: this.left,
+                    height: this.height,
+                    width: this.width,
+                },
+            };
+
+            this.radius = 0.5 * this.height;
+            this.hitBox = {
+                radius: this.radius,
+                y: this.top + this.radius,
+                x: this.left + this.width / 2,
+                height: 2 * this.radius,
+                width: 2 * this.radius,
+                top: this.top,
+                left: this.left,
+                boxType: 'circle-red',
+            };
+
+            if (this.gameBoard.debugMode) this.addHitBoxDebug();
+        }
+
+        update() {
+            this.left -= this.speedX;
+            this.hitBox.left = this.left;
+            this.hitBox.x = this.left + this.width / 2;
+            this.explosion.position.left = this.left;
+            this.el.style.left = this.left + 'px';
+            if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.x - this.hitBox.radius + 'px';
+        }
+    }
+
     class EnemyPlanet extends Sprite {
         constructor(gameBoard) {
             super(gameBoard);
@@ -571,7 +696,7 @@ window.addEventListener('load', () => {
         }
     }
 
-    const ENEMY_LIST = [EnemyPlanet];
+    const ENEMY_LIST = [EnemyPlanet, EnemyTest];
 
     class Projectile extends Sprite {
         constructor(gameBoard, player) {
@@ -787,14 +912,14 @@ window.addEventListener('load', () => {
         }
 
         moviment() {
-            if (this.gameBoard.keysActive.includes(this.gameBoard.keysMain[0]) && this.gameBoard.keysActive.includes(this.gameBoard.keysMain[1])) this.speedY = 0;
-            else if (this.gameBoard.keysActive.includes(this.gameBoard.keysMain[0]) && this.top + this.height * 0.255 > this.gameBoard.top) this.speedY = -this.speed;
-            else if (this.gameBoard.keysActive.includes(this.gameBoard.keysMain[1]) && this.top + this.height * 0.74 < this.gameBoard.top + this.gameBoard.gameRunningHeight)
+            if (this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[0]) && this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[1])) this.speedY = 0;
+            else if (this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[0]) && this.top + this.height * 0.255 > this.gameBoard.top) this.speedY = -this.speed;
+            else if (this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[1]) && this.top + this.height * 0.74 < this.gameBoard.top + this.gameBoard.gameRunningHeight)
                 this.speedY = this.speed;
             else this.speedY = 0;
-            if (this.gameBoard.keysActive.includes(this.gameBoard.keysMain[2]) && this.gameBoard.keysActive.includes(this.gameBoard.keysMain[3])) this.speedX = 0;
-            else if (this.gameBoard.keysActive.includes(this.gameBoard.keysMain[2]) && this.left + this.width * 0.42 > this.gameBoard.left) this.speedX = -this.speed;
-            else if (this.gameBoard.keysActive.includes(this.gameBoard.keysMain[3]) && this.left + this.width * 0.76 < this.gameBoard.left + this.gameBoard.gameRunningWidth)
+            if (this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[2]) && this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[3])) this.speedX = 0;
+            else if (this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[2]) && this.left + this.width * 0.42 > this.gameBoard.left) this.speedX = -this.speed;
+            else if (this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[3]) && this.left + this.width * 0.76 < this.gameBoard.left + this.gameBoard.gameRunningWidth)
                 this.speedX = this.speed;
             else this.speedX = 0;
 
@@ -806,7 +931,7 @@ window.addEventListener('load', () => {
         }
 
         beam() {
-            if (this.gameBoard.keysActive.includes(this.gameBoard.keysMain[4])) {
+            if (this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[4])) {
                 if (this.chargeFrames === 0) {
                     this.shooting();
                 } else if (
@@ -839,7 +964,6 @@ window.addEventListener('load', () => {
         }
 
         dboostMove() {
-            this.state = 'UNTARGETABLE';
             if (this.dboost.frames <= 0) {
                 this.dboost.active = false;
                 this.dboost.frames = this.gameBoard.game.playerState.dboostFrames;
@@ -854,6 +978,7 @@ window.addEventListener('load', () => {
         }
 
         calcDboost(enemy) {
+            this.state = 'UNTARGETABLE';
             const dy = this.hitBox.top + this.hitBox.height / 2 - enemy.hitBox.y;
             const dx = this.hitBox.left + this.hitBox.width / 2 - enemy.hitBox.x;
             const dSum = Math.abs(dy) + Math.abs(dx);
@@ -1060,28 +1185,21 @@ window.addEventListener('load', () => {
             this.screen.appendChild(this.gameRunningArea);
             this.top = 0;
             this.left = 0;
+            this.stage = null;
             this.state = this.game.config.initStageState;
             this.gravity = this.game.config.gravity;
-            this.keysMain = [...this.game.config.keysMain];
-            this.keysSkill = [...this.game.config.keysSkill];
-            this.keyPause = this.game.config.keyPause;
-            this.keyDebug = this.game.config.keyDebug;
             this.pauseGameFrames = this.game.config.pauseGameFrames;
             this.pauseAllowed = true;
             this.debugMode = false;
-            this.keysActive = [];
             this.projectiles = [];
             this.enemies = [];
             this.explosions = [];
             this.coins = [];
             this.hitBoxElements = [];
-            this.enemyIntervalFrames = null;
+            this.enemySpawnInterval = null;
             this.score = 0;
-            this.scoreGoal = null;
-            this.bossStage = null;
             this.boss = null;
             this.bossDefeated = false;
-            this.input = new InputHandler(this);
             this.player = null;
             this.ui = new GameBoardUI(this);
         }
@@ -1095,6 +1213,7 @@ window.addEventListener('load', () => {
             element.el.remove();
             if (element.constructor.name === 'Projectile') this.projectiles = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'EnemyPlanet') this.enemies = arr.filter(el => !el.markForDeletion);
+            if (element.constructor.name === 'EnemyTest') this.enemies = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'EnemyTest') this.enemies = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'Explosion') this.explosions = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'Coin') this.coins = arr.filter(el => !el.markForDeletion);
@@ -1163,6 +1282,11 @@ window.addEventListener('load', () => {
         scoreUp(points) {
             this.score += points;
             this.ui.scorePoints.textContent = this.score;
+            if (this.stage.breakPoint.score <= this.score && !this.stage.breakPointActive) {
+                this.stage.breakPointActive = true;
+                this.stage.enemyGroup = this.stage.breakPoint.enemyGroup;
+                this.stage.enemyIntervalFrames = this.stage.breakPoint.enemyIntervalFrames;
+            }
         }
 
         update() {
@@ -1185,7 +1309,7 @@ window.addEventListener('load', () => {
                 if (!this.boss) this.ui.warning();
                 if (!this.ui.warningMsg) {
                     if (!this.boss) {
-                        this.boss = this.game.addBoss(this.game.stages[this.game.stageId].bossId);
+                        this.boss = this.game.addBoss(this.stage.bossId);
                         this.ui.initialBossHp = this.boss.hp;
                     } else this.boss.entrance();
                 }
@@ -1286,12 +1410,12 @@ window.addEventListener('load', () => {
                 }
             }
 
-            if (this.state === 'GAME_RUNNING' && this.score < this.scoreGoal && !this.bossStage) {
-                if (this.enemyIntervalFrames <= 0) {
+            if (this.state === 'GAME_RUNNING' && this.score < this.stage.scoreGoal && !this.stage.bossStage) {
+                if (this.enemySpawnInterval <= 0) {
                     this.enemies.push(this.game.addEnemy());
-                    this.enemyIntervalFrames = this.game.stages[this.game.stageId].enemyIntervalFrames;
+                    this.enemySpawnInterval = this.stage.enemyIntervalFrames;
                 } else {
-                    this.enemyIntervalFrames--;
+                    this.enemySpawnInterval--;
                 }
             }
         }
@@ -1303,20 +1427,21 @@ window.addEventListener('load', () => {
                 }
             } else if (this.state === 'OPENING_STAGE') {
                 if (!this.ui.openingStageMsg) {
-                    if (this.bossStage) this.state = 'WARNING';
+                    if (this.stage.bossStage) this.state = 'WARNING';
                     else this.state = 'GAME_RUNNING';
                 }
             } else if (this.state === 'GAME_RUNNING') {
                 if (this.player.hp <= 0) {
                     this.state = 'GAME_OVER';
                     this.ui.createBoxMsg();
-                } else if (this.bossStage) {
+                } else if (this.stage.bossStage) {
                     if (this.bossDefeated && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
                 } else {
-                    if (this.score >= this.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
+                    if (this.score >= this.stage.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
                 }
             } else if (this.state === 'STAGE_CLEAR') {
                 if (!this.ui.stageClearMsg) {
+                    this.game.stages[this.game.stageId].isClear = true;
                     this.ui.createBoxMsg();
                     this.state = 'GAME_OVER';
                 }
@@ -1336,6 +1461,31 @@ window.addEventListener('load', () => {
             this.overlayTransitionFrames = this.game.config.overlayTransitionFrames;
         }
 
+        switchScreens() {
+            [this.game.title, this.game.overworld, this.game.gameBoard].forEach(view => {
+                view.screen.style.display = 'none';
+                view.screen.style.outline = 'none';
+                view.screen.style.zIndex = '-1';
+            });
+            if (this.game.activeScreen === 'TITLE') {
+                this.game.title.screen.style.display = 'flex';
+                this.game.title.screen.style.outline = '5px solid white';
+                this.game.title.screen.style.zIndex = '0';
+            } else if (this.game.activeScreen === 'OVERWORLD') {
+                this.game.overworld.screen.style.display = 'flex';
+                this.game.overworld.screen.style.outline = '5px solid white';
+                this.game.overworld.screen.style.zIndex = '0';
+                this.game.resetStateGameRunningArea();
+                this.game.gameBoard.ui.clearGameBoardUI();
+            } else if (this.game.activeScreen === 'GAME_BOARD') {
+                this.game.gameBoard.screen.style.display = 'block';
+                this.game.gameBoard.screen.style.outline = '5px solid white';
+                this.game.gameBoard.screen.style.zIndex = '0';
+                this.game.updateGameBoard();
+                this.game.gameBoardLoop();
+            }
+        }
+
         update() {
             if (!this.overlayTransition) {
                 this.overlayTransition = document.createElement('div');
@@ -1353,7 +1503,7 @@ window.addEventListener('load', () => {
                     this.overlayTransitionOpacity = this.overlayTransitionOpacity + 1 / (this.game.config.overlayTransitionFrames / 2);
                 } else if (this.overlayTransitionFrames === this.game.config.overlayTransitionFrames / 2) {
                     this.overlayTransitionOpacity = 1;
-                    this.game.switchScreens();
+                    this.switchScreens();
                 } else if (this.overlayTransitionFrames < this.game.config.overlayTransitionFrames / 2) {
                     this.overlayTransitionOpacity = this.overlayTransitionOpacity - 1 / (this.game.config.overlayTransitionFrames / 2);
                 }
@@ -1374,36 +1524,27 @@ window.addEventListener('load', () => {
             this.stages = [...STAGES_LIST];
             this.stageId = this.config.stageId;
             this.playerState = INIT_PLAYER_STATE;
+            this.keys = [...this.config.keys];
+            this.keysActive = [];
             document.querySelector('.game-loading').remove();
             this.title = new Title(this);
             this.overworld = new Overworld(this);
             this.gameBoard = new GameBoard(this);
             this.ui = new GameUI(this);
+            this.input = new InputHandler(this);
         }
 
-        switchScreens() {
-            [this.title, this.overworld, this.gameBoard].forEach(view => {
-                view.screen.style.display = 'none';
-                // view.screen.style.outline = 'none';
-                view.screen.style.zIndex = '-1';
-            });
-            if (this.activeScreen === 'TITLE') {
-                this.title.screen.style.display = 'flex';
-                // this.title.screen.style.outline = '5px solid white';
-                this.title.screen.style.zIndex = '0';
-            } else if (this.activeScreen === 'OVERWORLD') {
-                this.overworld.screen.style.display = 'flex';
-                // this.overworld.screen.style.outline = '5px solid white';
-                this.overworld.screen.style.zIndex = '0';
-                this.resetStateGameRunningArea();
-                this.gameBoard.ui.clearGameBoardUI();
-            } else if (this.activeScreen === 'GAME_BOARD') {
-                this.gameBoard.screen.style.display = 'block';
-                // this.gameBoard.screen.style.outline = '5px solid white';
-                this.gameBoard.screen.style.zIndex = '0';
-                this.updateGameBoard();
-                this.gameBoardLoop();
+        setKey(key) {
+            const keyIndex = this.keys.indexOf(key);
+            if (keyIndex > -1) {
+                this.keys[keyIndex] = this.keys[this.title.ui.id];
+                this.title.ui.boxOptions.querySelector(`div[data-id="${keyIndex}"]`).previousElementSibling.innerHTML = this.keys[keyIndex];
             }
+            this.keys[this.title.ui.id] = key;
+            this.title.ui.boxOptions.querySelector(`div[data-id="${this.title.ui.id}"]`).previousElementSibling.innerHTML = key;
+            this.title.ui.labelKeyOverlayOptions.innerHTML = '';
+            this.title.ui.overlaySetKey.style.display = 'none';
+            this.title.ui.overlaySetKeyIsOpen = false;
         }
 
         addPlayerSkills(id) {
@@ -1411,8 +1552,8 @@ window.addEventListener('load', () => {
         }
 
         addEnemy() {
-            const rng = Math.floor(Math.random() * this.stages[this.stageId].enemyGroup.length);
-            return new ENEMY_LIST[this.stages[this.stageId].enemyGroup[rng]](this.gameBoard);
+            const rng = Math.floor(Math.random() * this.gameBoard.stage.enemyGroup.length);
+            return new ENEMY_LIST[this.gameBoard.stage.enemyGroup[rng]](this.gameBoard);
         }
 
         addBoss(id) {
@@ -1421,6 +1562,10 @@ window.addEventListener('load', () => {
 
         resetStateGameRunningArea() {
             this.gameBoard.gameRunningArea.innerHTML = '';
+            this.gameBoard.stage = null;
+            this.gameBoard.state = this.config.initStageState;
+            this.gameBoard.pauseGameFrames = this.config.pauseGameFrames;
+            this.gameBoard.pauseAllowed = true;
             this.gameBoard.projectiles.length = 0;
             this.gameBoard.enemies.length = 0;
             this.gameBoard.explosions.length = 0;
@@ -1429,17 +1574,13 @@ window.addEventListener('load', () => {
             this.gameBoard.score = 0;
             this.gameBoard.boss = null;
             this.gameBoard.bossDefeated = false;
-            this.gameBoard.pauseGameFrames = this.config.pauseGameFrames;
-            this.gameBoard.pauseAllowed = true;
             this.gameBoard.gameRunningArea.style.backgroundImage = '';
         }
 
         updateGameBoardContext() {
-            this.gameBoard.enemyIntervalFrames = this.stages[this.stageId].enemyIntervalFrames;
-            this.gameBoard.scoreGoal = this.stages[this.stageId].scoreGoal;
-            this.gameBoard.bossStage = this.stages[this.stageId].bossStage;
-            this.gameBoard.state = this.config.initStageState;
-            this.gameBoard.gameRunningArea.style.backgroundImage = this.stages[this.stageId].backgroundImage;
+            this.gameBoard.stage = { ...this.stages[this.stageId] };
+            this.gameBoard.enemySpawnInterval = this.gameBoard.stage.enemyIntervalFrames;
+            this.gameBoard.gameRunningArea.style.backgroundImage = this.gameBoard.stage.backgroundImage;
         }
 
         updateGameBoardPlayer() {
@@ -1448,7 +1589,7 @@ window.addEventListener('load', () => {
             this.gameBoard.player.left = this.gameBoard.left;
             this.gameBoard.player.hp = this.playerState.hp;
             this.gameBoard.player.skills.length = 0;
-            this.gameBoard.player.skills.push(this.addPlayerSkills(this.playerState.skills[0]), this.addPlayerSkills(this.playerState.skills[1]));
+            this.gameBoard.player.skills = [this.addPlayerSkills(this.playerState.skills[0]), this.addPlayerSkills(this.playerState.skills[1])];
             this.gameBoard.player.update();
         }
 

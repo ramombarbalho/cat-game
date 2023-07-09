@@ -22,7 +22,7 @@ body {
 .game-container {
     position: fixed;
     height: 720px;
-    width: 1200px;
+    width: 1280px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -103,7 +103,7 @@ body {
 
 .game-running-area {
     position: relative;
-    background-image: linear-gradient(rgb(127, 85, 255), rgb(127, 85, 255));
+    background-image: linear-gradient(#7f55ff, #7f55ff);
     overflow: hidden;
 }
 
@@ -208,6 +208,60 @@ body {
     z-index: 1;
 }
 
+.box-options {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+    background-color: black;
+    color: white;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+    padding: 25px 25px;
+    overflow: hidden;
+    z-index: 4;
+}
+
+.options-key-set {
+    width: 100%;
+}
+
+.options-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 160px 110px;
+    grid-template-rows: repeat(1, 25px);
+    align-items: center;
+    padding: 2px;
+}
+
+.btn-set-key {
+    font-size: 1.3rem;
+    margin: 1px 1px 1px 15px;
+    padding: 5px;
+    color: black;
+    background-color: rgb(230, 230, 230);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-set-key:hover {
+    background-color: white;
+}
+
+.btn-set-key:active {
+    background-color: rgb(135, 255, 171);
+    transform: translateY(2px);
+}
+
 .box-msg {
     position: absolute;
     top: 50%;
@@ -222,7 +276,6 @@ body {
     color: white;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
     padding: 25px 25px;
-    border-radius: 8px;
     animation: transition-msg 1s;
     overflow: hidden;
     z-index: 4;
@@ -251,7 +304,6 @@ body {
 
 .btn-box-msg {
     padding: 5px;
-    border-radius: 4px;
     color: black;
     background-color: rgb(255, 255, 255);
     font-weight: bolder;
@@ -304,6 +356,14 @@ body {
     width: 100%;
     height: 100%;
     z-index: 10;
+}
+
+.overlay-set-key {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: rgba(10, 10, 10, 0.8);
 }
 
 .overlay-paused {
@@ -567,7 +627,7 @@ body {
 }
 
 .btn-test {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     height: 50px;
     width: 150px;
     color: black;
@@ -575,7 +635,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    box-shadow: 0 2px 2px black;
     cursor: pointer;
 }
 
@@ -586,4 +646,5 @@ body {
 .btn-test:active {
     background-color: rgb(135, 255, 171);
     transform: translateY(2px);
+    box-shadow: none;
 }
