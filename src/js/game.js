@@ -15,6 +15,22 @@ window.addEventListener('load', () => {
             backgroundImage: 'linear-gradient(#7f55ff, #7f55ff)',
         },
         {
+            title: '1-1',
+            enemyGroup: [0],
+            bossStage: false,
+            bossId: null,
+            enemyIntervalFrames: 120,
+            scoreGoal: 50,
+            breakPoint: {
+                score: 25,
+                enemyGroup: [0],
+                enemyIntervalFrames: 60,
+            },
+            breakPointActive: false,
+            isClear: false,
+            backgroundImage: 'linear-gradient(#5a23a1, #25b3df)',
+        },
+        {
             title: '1-2',
             enemyGroup: null,
             bossStage: true,
@@ -23,22 +39,6 @@ window.addEventListener('load', () => {
             scoreGoal: null,
             isClear: false,
             backgroundImage: 'linear-gradient(#25b3df, #5a23a1)',
-        },
-        {
-            title: '1-1',
-            enemyGroup: [0],
-            bossStage: false,
-            bossId: null,
-            enemyIntervalFrames: 120,
-            scoreGoal: 10,
-            breakPoint: {
-                score: 5,
-                enemyGroup: [1],
-                enemyIntervalFrames: 60,
-            },
-            breakPointActive: false,
-            isClear: false,
-            backgroundImage: 'linear-gradient(#5a23a1, #25b3df)',
         },
     ];
 
@@ -149,10 +149,15 @@ window.addEventListener('load', () => {
             this.overlaySetKeyIsOpen = false;
             this.id = null;
             this.labelKeyOverlayOptions = null;
+            this.titleLabel = null;
             this.initTitleUI();
         }
 
         initTitleUI() {
+            this.titleLabel = document.createElement('p');
+            this.titleLabel.classList.add('score-label');
+            this.title.screen.appendChild(this.titleLabel);
+            this.titleLabel.innerHTML = 'TITLE SCREEN';
             this.overlaySetKey = document.createElement('div');
             this.overlaySetKey.classList.add('overlay', 'overlay-set-key');
             this.overlaySetKey.innerHTML = `<p style="font-size: 20px">PRESS A KEY TO SET "<span class="label-key-overlay-options"></span>"</p>`;
@@ -226,6 +231,16 @@ window.addEventListener('load', () => {
         }
     }
 
+    class BtnToBeContinued {
+        constructor(overworld) {
+            this.overworld = overworld;
+            this.btn = document.createElement('div');
+            this.btn.classList.add('btn-test');
+            this.btn.textContent = `TO BE CONTINUED!`;
+            this.overworld.screen.appendChild(this.btn);
+        }
+    }
+
     class BtnStage {
         constructor(overworld, id) {
             this.overworld = overworld;
@@ -247,10 +262,16 @@ window.addEventListener('load', () => {
         constructor(overworld) {
             this.overworld = overworld;
             this.btnStages = [];
+            this.btnToBeContinued = null;
             this.initOverworldUI();
+            this.overworldLabel = null;
         }
 
         initOverworldUI() {
+            this.overworldLabel = document.createElement('p');
+            this.overworldLabel.classList.add('score-label');
+            this.overworld.screen.appendChild(this.overworldLabel);
+            this.overworldLabel.innerHTML = 'OVERWORLD';
             this.btnTitle = document.createElement('div');
             this.btnTitle.classList.add('btn-test');
             this.btnTitle.textContent = 'TITLE';
@@ -514,6 +535,12 @@ window.addEventListener('load', () => {
                     !this.gameBoard.game.overworld.ui.btnStages[this.gameBoard.game.stageId]
                 ) {
                     this.gameBoard.game.overworld.ui.btnStages.push(new BtnStage(this.gameBoard.game.overworld, this.gameBoard.game.stageId + 1));
+                } else if (
+                    this.gameBoard.game.stages.length === this.gameBoard.game.stageId + 1 &&
+                    this.gameBoard.game.stages[this.gameBoard.game.stageId].isClear &&
+                    !this.gameBoard.game.overworld.ui.btnToBeContinued
+                ) {
+                    this.gameBoard.game.overworld.ui.btnToBeContinued = new BtnToBeContinued(this.gameBoard.game.overworld);
                 }
                 this.boxMsg.innerHTML = `<div class="box-msg-content">
                                             <h1>STAGE CLEAR</h1>
@@ -549,7 +576,7 @@ window.addEventListener('load', () => {
         };
     }
 
-    class Explosion {
+    class SpriteSheet {
         constructor(gameBoard, data) {
             this.gameBoard = gameBoard;
             this.frameY = 0;
@@ -588,72 +615,13 @@ window.addEventListener('load', () => {
             this.sprite.el.style.left = this.sprite.left + 'px';
         }
 
-        update(arrExplosions) {
+        update(arrSpriteSheets) {
             if (this.frameX <= this.maxFramesX) {
                 this.sprite.left = -this.frameX * this.width;
                 this.sprite.el.style.left = this.sprite.left + 'px';
                 this.frameX++;
             } else {
-                this.gameBoard.deletElement(this, arrExplosions);
-            }
-        }
-    }
-
-    class EnemyTest extends Sprite {
-        constructor(gameBoard) {
-            super(gameBoard);
-            this.enemyType = Math.floor(Math.random() * 4);
-            this.heights = [120, 200, 280, 360];
-            this.sources = ['cat-thumbs-up.png', 'cat-thumbs-up.png', 'cat-thumbs-up.png', 'cat-thumbs-up.png'];
-            this.height = this.heights[this.enemyType];
-            this.top = Math.floor(Math.random() * (this.gameBoard.gameRunningHeight - this.height + 1));
-            this.left = this.gameBoard.gameRunningWidth;
-            this.el.style.height = this.height + 'px';
-            this.el.style.top = this.top + 'px';
-            this.el.style.left = this.left + 'px';
-            this.el.src = `./src/assets/${this.sources[this.enemyType]}`;
-            this.hp = this.enemyType * 3 + 3;
-            this.speedX = -10 / (this.enemyType + 1);
-            this.dropRate = 0.2 + this.enemyType * 0.1;
-            this.points = this.enemyType + 2;
-            this.markForDeletion = false;
-            this.gameBoard.gameRunningArea.appendChild(this.el);
-            this.width = this.el.getBoundingClientRect().width;
-
-            this.radius = 0.5 * this.height;
-            this.hitBox = {
-                radius: this.radius,
-                height: 2 * this.radius,
-                width: 2 * this.radius,
-                top: this.top,
-                left: this.left,
-                boxType: 'circle-red',
-            };
-
-            this.explosion = {
-                height: 147,
-                src: 'enemy-explosion-spritesheet.png',
-                maxFramesY: 1,
-                maxFramesX: 31,
-                position: {
-                    height: this.hitBox.height,
-                    width: this.hitBox.width,
-                    top: this.hitBox.top,
-                    left: this.hitBox.left,
-                },
-            };
-
-            if (this.gameBoard.debugMode) this.addHitBoxDebug();
-        }
-
-        update() {
-            this.left += this.speedX;
-            this.hitBox.left = this.left;
-            this.explosion.position.left = this.left;
-            this.el.style.left = this.left + 'px';
-            if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
-            if (this.left + this.width * 1.1 < 0) {
-                this.gameBoard.deletElement(this, this.gameBoard.enemies);
+                this.gameBoard.deletElement(this, arrSpriteSheets);
             }
         }
     }
@@ -689,7 +657,7 @@ window.addEventListener('load', () => {
                 boxType: 'circle-red',
             };
 
-            this.explosion = {
+            this.spriteSheet = {
                 height: 147,
                 src: 'enemy-explosion-spritesheet.png',
                 maxFramesY: 1,
@@ -708,7 +676,7 @@ window.addEventListener('load', () => {
         update() {
             this.left += this.speedX;
             this.hitBox.left = this.left;
-            this.explosion.position.left = this.left;
+            this.spriteSheet.position.left = this.hitBox.left;
             this.el.style.left = this.left + 'px';
             if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
             if (this.left + this.width * 1.1 < 0) {
@@ -717,13 +685,14 @@ window.addEventListener('load', () => {
         }
     }
 
-    const ENEMY_LIST = [EnemyPlanet, EnemyTest];
+    const ENEMY_LIST = [EnemyPlanet];
 
     class Projectile extends Sprite {
         constructor(gameBoard, player) {
             super(gameBoard);
             this.player = player;
-            this.height = this.player.height * (1 / 6) + this.player.chargeValue * this.player.height * (11 / 24);
+            this.value = this.player.chargeValue;
+            this.height = this.player.height * (1 / 6) + this.value * this.player.height * (11 / 24);
             this.sources = ['shoot-0.png', 'shoot-1.gif', 'shoot-2.gif'];
             this.top = this.gameBoard.player.top + this.gameBoard.player.height / 2 - this.height / 2;
             this.left = this.gameBoard.player.left + this.gameBoard.player.width * 0.8;
@@ -731,9 +700,9 @@ window.addEventListener('load', () => {
             this.el.style.top = this.top + 'px';
             this.el.style.left = this.gameBoard.player.left + 'px';
             this.el.style.zIndex = '3';
-            this.el.src = `./src/assets/${this.sources[this.player.chargeValue]}`;
-            this.dmg = 2 ** (this.player.chargeValue + 1) - 1;
-            this.speedX = 14 + this.player.chargeValue * 2;
+            this.el.src = `./src/assets/${this.sources[this.value]}`;
+            this.dmg = 2 ** (this.value + 1) - 1;
+            this.speedX = 14 + this.value * 2;
             this.markForDeletion = false;
             this.gameBoard.gameRunningArea.appendChild(this.el);
             this.width = this.el.getBoundingClientRect().width;
@@ -748,12 +717,26 @@ window.addEventListener('load', () => {
                 boxType: 'circle-green',
             };
 
+            this.spriteSheet = {
+                height: this.player.height * 0.375 + this.value * 15,
+                src: `shot-${this.value}-explosion-spritesheet.png`,
+                maxFramesY: 1,
+                maxFramesX: 6,
+                position: {
+                    height: this.hitBox.height,
+                    width: this.hitBox.width,
+                    top: this.hitBox.top,
+                    left: this.hitBox.left + this.value * (this.player.height / 4),
+                },
+            };
+
             if (this.gameBoard.debugMode) this.addHitBoxDebug();
         }
 
         update() {
             this.left += this.speedX;
             this.hitBox.left = this.left + this.width / 2 - this.radius;
+            this.spriteSheet.position.left = this.hitBox.left + this.value * (this.player.height / 4);
             this.el.style.left = this.left + 'px';
             if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
             if (this.left > this.gameBoard.gameRunningWidth + this.width * 0.1) {
@@ -783,7 +766,7 @@ window.addEventListener('load', () => {
             this.framesLauchingCounter = this.framesLauching;
             this.skillAnimation = null;
 
-            this.explosion = {
+            this.spriteSheet = {
                 height: this.gameBoard.gameRunningHeight,
                 src: 'boss-explosion-spritesheet.png',
                 maxFramesY: 1,
@@ -833,7 +816,7 @@ window.addEventListener('load', () => {
                 this.framesLauchingCounter = this.framesLauching;
                 this.speedY = -28;
                 this.rotate = 270;
-                this.gameBoard.explosions.push(new Explosion(this.gameBoard, this.explosion));
+                this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, this.spriteSheet));
                 this.active = true;
             } else {
                 this.speedY += this.gameBoard.gravity;
@@ -1098,7 +1081,7 @@ window.addEventListener('load', () => {
                 boxType: 'circle-red',
             };
 
-            this.explosion = {
+            this.spriteSheet = {
                 height: 120,
                 src: 'enemy-explosion-spritesheet.png',
                 maxFramesY: 1,
@@ -1119,8 +1102,8 @@ window.addEventListener('load', () => {
             this.left += this.speedX;
             this.hitBox.top = this.topStart === -1 ? this.top + this.height - 2 * this.radius : this.top;
             this.hitBox.left = this.left;
-            this.explosion.position.top = this.hitBox.top;
-            this.explosion.position.left = this.hitBox.left;
+            this.spriteSheet.position.top = this.hitBox.top;
+            this.spriteSheet.position.left = this.hitBox.left;
             this.el.style.top = this.top + 'px';
             this.el.style.left = this.left + 'px';
             if (this.hitBoxEl) {
@@ -1145,8 +1128,8 @@ window.addEventListener('load', () => {
             this.el.style.left = this.left + 'px';
             this.el.src = this.src;
             this.hp = 40;
-            this.shieldTop = 10;
-            this.shieldBottom = 10;
+            this.balanceTop = 10;
+            this.balanceBottom = 10;
             this.speedX = -4;
             this.rotate = 0;
             this.rotateSpeed = 10;
@@ -1177,7 +1160,7 @@ window.addEventListener('load', () => {
                 boxType: 'circle-red',
             };
 
-            this.explosion = {
+            this.spriteSheet = {
                 height: this.height,
                 src: 'boss-explosion-spritesheet.png',
                 maxFramesY: 1,
@@ -1194,21 +1177,25 @@ window.addEventListener('load', () => {
             if (this.gameBoard.debugMode) this.addDmgHitBoxDebug();
         }
 
-        entrance() {
+        update() {
             this.left += this.speedX;
-            if (this.left <= this.gameBoard.gameRunningWidth - this.width) {
-                this.speedX = 0;
-                this.gameBoard.ui.fillHpBossEl();
-            }
             this.hitBox.left = this.left;
             this.dmgHitBox.left = this.left + this.width / 2 - this.dmgRadius;
-            this.explosion.position.left = this.left;
+            this.spriteSheet.position.left = this.left;
             this.el.style.left = this.left + 'px';
             if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
             if (this.dmgHitBoxEl) this.dmgHitBoxEl.el.style.left = this.dmgHitBox.left + 'px';
         }
 
-        skill01() {
+        entrance() {
+            if (this.left + this.width < this.gameBoard.gameRunningWidth) {
+                this.gameBoard.ui.fillHpBossEl();
+                return (this.speedX = -16);
+            }
+            this.update();
+        }
+
+        SKILL01() {
             this.rotate += this.rotateDirection * this.rotateSpeed;
             this.el.style.rotate = this.rotate + 'deg';
             if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) {
@@ -1224,62 +1211,77 @@ window.addEventListener('load', () => {
                     this.rotate = 0;
                     this.el.style.rotate = this.rotate + 'deg';
                     this.state = 'INVULNERABLE';
+                    this.balanceTop = 10;
+                    this.balanceBottom = 10;
                     this.projectilesPerTurn = 10;
                 }
             }
         }
 
+        SKILL02() {
+            if (this.left <= 0) this.speedX = 16;
+            else if (this.left + this.width >= this.gameBoard.gameRunningWidth) {
+                this.state = 'INVULNERABLE';
+                this.balanceTop = 10;
+                this.balanceBottom = 10;
+                this.speedX = -16;
+            }
+            this.update();
+        }
+
         collision() {
-            if (
-                this.state !== 'UNTARGETABLE' &&
-                this.gameBoard.collisionRectangleCircle(this.gameBoard.player.hitBox, this.hitBox) &&
-                this.gameBoard.player.state !== 'UNTARGETABLE'
-            ) {
+            if (this.state !== 'SKILL03' && this.gameBoard.collisionRectangleCircle(this.gameBoard.player.hitBox, this.hitBox) && this.gameBoard.player.state !== 'UNTARGETABLE') {
                 this.gameBoard.player.hp--;
                 this.gameBoard.player.dboost.active = true;
                 this.gameBoard.player.calcDboost(this);
                 this.gameBoard.ui.updateHeart();
             }
-            if (this.state === 'VULNERABLE') {
-                this.skill01();
-            }
             this.gameBoard.projectiles.forEach((projectile, _, arrProjectiles) => {
-                if (this.gameBoard.boss) {
-                    if (this.state === 'INVULNERABLE' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
-                        if (projectile.hitBox.top + projectile.hitBox.height / 2 <= this.hitBox.top + this.hitBox.height * 0.1) {
-                            this.shieldTop -= projectile.dmg;
-                            if (this.shieldTop <= 0) {
-                                this.shieldTop = 10;
-                                this.state = 'VULNERABLE';
-                                this.rotateDirection = 1;
-                            }
-                        } else if (projectile.hitBox.top + projectile.hitBox.height / 2 >= this.hitBox.top + this.hitBox.height * 0.9) {
-                            this.shieldBottom -= projectile.dmg;
-                            if (this.shieldBottom <= 0) {
-                                this.shieldBottom = 10;
-                                this.state = 'VULNERABLE';
-                                this.rotateDirection = -1;
-                            }
+                if (this.state === 'INVULNERABLE' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
+                    if (projectile.hitBox.top + projectile.hitBox.height / 2 <= this.hitBox.top + this.hitBox.height * 0.1) {
+                        this.balanceTop -= projectile.dmg;
+                        if (this.balanceTop <= 0) {
+                            const rng = Math.floor(Math.random() * (4 - 1 + 1) + 1);
+                            this.rotateDirection = 1;
+                            this.state = rng > 1 ? 'SKILL01' : 'SKILL02';
                         }
-                        this.gameBoard.deletElement(projectile, arrProjectiles);
-                    } else if (this.state === 'VULNERABLE' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)) {
-                        this.hp -= projectile.dmg;
-                        this.gameBoard.deletElement(projectile, arrProjectiles);
-                        if (this.hp < 0) this.hp = 0;
-                        this.gameBoard.ui.updateBarrBoss();
-                        if (this.hp === 0) {
-                            this.gameBoard.explosions.push(new Explosion(this.gameBoard, this.explosion));
-                            this.el.remove();
-                            this.gameBoard.boss = null;
-                            this.gameBoard.bossDefeated = true;
-                            this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
-                                this.gameBoard.explosions.push(new Explosion(this.gameBoard, enemy.explosion));
-                                this.gameBoard.deletElement(enemy, arrEnemies);
-                            });
+                    } else if (projectile.hitBox.top + projectile.hitBox.height / 2 >= this.hitBox.top + this.hitBox.height * 0.9) {
+                        this.balanceBottom -= projectile.dmg;
+                        if (this.balanceBottom <= 0) {
+                            const rng = Math.floor(Math.random() * (4 - 1 + 1) + 1);
+                            this.rotateDirection = -1;
+                            this.state = rng > 1 ? 'SKILL01' : 'SKILL02';
                         }
                     }
+                    this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, projectile.spriteSheet));
+                    this.gameBoard.deletElement(projectile, arrProjectiles);
+                } else if (this.state === 'SKILL01' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)) {
+                    this.hp -= projectile.dmg;
+                    this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, projectile.spriteSheet));
+                    this.gameBoard.deletElement(projectile, arrProjectiles);
+                    if (this.hp < 0) this.hp = 0;
+                    this.gameBoard.ui.updateBarrBoss();
+                    if (this.hp === 0) {
+                        this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, this.spriteSheet));
+                        this.el.remove();
+                        this.gameBoard.boss = null;
+                        this.gameBoard.bossDefeated = true;
+                        this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
+                            this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, enemy.spriteSheet));
+                            this.gameBoard.deletElement(enemy, arrEnemies);
+                        });
+                        return;
+                    }
+                } else if (this.state === 'SKILL02' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
+                    this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, projectile.spriteSheet));
+                    this.gameBoard.deletElement(projectile, arrProjectiles);
                 }
             });
+        }
+
+        stateHandler() {
+            if (this.state === 'INVULNERABLE') return;
+            this[`${this.state}`]();
         }
 
         addDmgHitBoxDebug = () => {
@@ -1343,7 +1345,7 @@ window.addEventListener('load', () => {
             this.debugMode = false;
             this.projectiles = [];
             this.enemies = [];
-            this.explosions = [];
+            this.spriteSheets = [];
             this.coins = [];
             this.hitBoxElements = [];
             this.enemySpawnInterval = null;
@@ -1359,9 +1361,8 @@ window.addEventListener('load', () => {
             element.el.remove();
             if (element.constructor.name === 'Projectile') this.projectiles = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'EnemyPlanet') this.enemies = arr.filter(el => !el.markForDeletion);
-            if (element.constructor.name === 'EnemyTest') this.enemies = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'MoonBossProjectile') this.enemies = arr.filter(el => !el.markForDeletion);
-            if (element.constructor.name === 'Explosion') this.explosions = arr.filter(el => !el.markForDeletion);
+            if (element.constructor.name === 'SpriteSheet') this.spriteSheets = arr.filter(el => !el.markForDeletion);
             if (element.constructor.name === 'Coin') this.coins = arr.filter(el => !el.markForDeletion);
         }
 
@@ -1499,11 +1500,12 @@ window.addEventListener('load', () => {
                 this.projectiles.forEach((projectile, _, arrProjectiles) => {
                     if (this.collisionCircleCircle(projectile.hitBox, enemy.hitBox)) {
                         enemy.hp -= projectile.dmg;
+                        this.spriteSheets.push(new SpriteSheet(this, projectile.spriteSheet));
                         this.deletElement(projectile, arrProjectiles);
                         if (enemy.hp <= 0) {
                             this.scoreUp(enemy.points);
                             if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, enemy));
-                            this.explosions.push(new Explosion(this, enemy.explosion));
+                            this.spriteSheets.push(new SpriteSheet(this, enemy.spriteSheet));
                             this.deletElement(enemy, arrEnemies);
                         }
                     }
@@ -1514,14 +1516,14 @@ window.addEventListener('load', () => {
                         if (enemy.hp <= 0) {
                             this.scoreUp(enemy.points);
                             if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, enemy));
-                            this.explosions.push(new Explosion(this, enemy.explosion));
+                            this.spriteSheets.push(new SpriteSheet(this, enemy.spriteSheet));
                             this.deletElement(enemy, arrEnemies);
                         }
                     }
                 });
             });
 
-            this.explosions.forEach((explosion, _, arrExplosions) => explosion.update(arrExplosions));
+            this.spriteSheets.forEach((spriteSheet, _, arrSpriteSheets) => spriteSheet.update(arrSpriteSheets));
 
             this.coins.forEach((coin, _, arrCoins) => {
                 if (this.collisionRectangleRectangle(this.player.hitBox, coin.hitBox)) {
@@ -1558,9 +1560,10 @@ window.addEventListener('load', () => {
                     this.state = 'GAME_OVER';
                     this.ui.createBoxMsg();
                 } else if (this.stage.bossStage) {
-                    if (this.bossDefeated && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
+                    if (this.boss) this.boss.stateHandler();
+                    if (this.bossDefeated && this.enemies.length === 0 && this.spriteSheets.length === 0) this.state = 'STAGE_CLEAR';
                 } else {
-                    if (this.score >= this.stage.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
+                    if (this.score >= this.stage.scoreGoal && this.enemies.length === 0 && this.spriteSheets.length === 0) this.state = 'STAGE_CLEAR';
                 }
             } else if (this.state === 'STAGE_CLEAR') {
                 if (!this.ui.stageClearMsg) {
@@ -1694,7 +1697,7 @@ window.addEventListener('load', () => {
             this.gameBoard.pauseAllowed = true;
             this.gameBoard.projectiles.length = 0;
             this.gameBoard.enemies.length = 0;
-            this.gameBoard.explosions.length = 0;
+            this.gameBoard.spriteSheets.length = 0;
             this.gameBoard.coins.length = 0;
             this.gameBoard.hitBoxElements.length = 0;
             this.gameBoard.score = 0;
@@ -1730,7 +1733,7 @@ window.addEventListener('load', () => {
             this.gameBoard.update();
             this.gameBoard.stateHandler();
             // console.log(this.gameBoard.state);
-            if (this.gameBoard.state === 'GAME_OVER') return;
+            if (this.gameBoard.state === 'GAME_OVER' || this.activeScreen !== 'GAME_BOARD') return;
             requestAnimationFrame(this.gameBoardLoop);
         };
 

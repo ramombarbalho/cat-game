@@ -1,3 +1,5 @@
 # cat-game
 
-game criado para estudar/praticar html/css/js 
+game inicialmente criado para estudar/praticar html/css/js
+
+em desenvolvimento...
