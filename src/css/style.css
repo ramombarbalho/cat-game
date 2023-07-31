@@ -10,12 +10,12 @@
 }
 
 html {
-    font-size: 10px;
+    font-size: 62.5%;
 }
 
 body {
     font-family: 'Press Start 2P', sans-serif;
-    background-color: rgb(41, 41, 41);
+    background-color: #292929;
     user-select: none;
 }
 
@@ -24,7 +24,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 5px solid rgb(255, 0, 0);
+    border: 5px solid #ff0000;
     overflow: hidden;
 }
 
@@ -62,7 +62,7 @@ body {
 }
 
 .game-assets {
-    border: 1px solid white;
+    border: 1px solid #fff;
     margin-top: 100vh;
 }
 
@@ -71,13 +71,13 @@ body {
     width: 100%;
     height: 100%;
     background-color: #5500ff;
-    color: white;
+    color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    outline: 5px solid white;
+    outline: 5px solid #fff;
 }
 
 .game-overworld {
@@ -96,6 +96,8 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 }
 
@@ -118,12 +120,12 @@ body {
     font-size: 2em;
     top: 5px;
     left: 5px;
-    color: white;
+    color: #fff;
     z-index: 4;
 }
 
 .game-status-barr {
-    background-image: linear-gradient(to bottom right, rgb(107, 107, 107), rgb(228, 228, 228));
+    background-image: linear-gradient(to bottom right, #6b6b6b, #e4e4e4);
     display: flex;
     z-index: 5;
     overflow: hidden;
@@ -138,15 +140,15 @@ body {
     padding-left: 45px;
     background-image: linear-gradient(
         to bottom right,
-        rgb(255, 75, 75),
-        rgb(255, 196, 85),
-        rgb(255, 255, 110),
-        rgb(69, 255, 69),
-        rgb(107, 107, 255),
-        rgb(176, 65, 255),
-        rgb(255, 176, 255)
+        #ff4b4b,
+        #ffc455,
+        #ffff6e,
+        #45ff45,
+        #6b6bff,
+        #b041ff,
+        #ffb0ff
     );
-    border-right: 1px solid black;
+    border-right: 1px solid #000;
 }
 
 .heart-icon {
@@ -160,8 +162,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(to bottom right, rgb(80, 80, 80), rgb(190, 190, 190));
-    border-right: 1px solid black;
+    background-image: linear-gradient(to bottom right, #505050, #bebebe);
+    border-right: 1px solid #000;
 }
 
 .explosion {
@@ -175,8 +177,8 @@ body {
     margin: auto;
     width: 600px;
     height: 50px;
-    background-color: rgb(230, 230, 230);
-    box-shadow: 2px 2px 8px grey;
+    background-color: #e6e6e6;
+    box-shadow: 2px 2px 8px #808080;
 }
 
 .hp-boss-el {
@@ -185,7 +187,7 @@ body {
     height: 100%;
     width: 0%;
     background-color: #ffee00;
-    box-shadow: inset 1px 1px 4px white, 1.5px 1.5px 6px rgba(0, 0, 0, 0.7);
+    box-shadow: inset 1px 1px 4px #fff, 1.5px 1.5px 6px rgba(0, 0, 0, 0.7);
 }
 
 .cooldown-box-skill {
@@ -193,7 +195,7 @@ body {
     width: 100%;
     height: 100%;
     bottom: 0;
-    border-top: 1px solid rgb(105, 105, 105);
+    border-top: 1px solid #696969;
     background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.97), rgba(43, 43, 43, 0.97), rgba(107, 107, 107, 0.97));
     cursor: not-allowed;
     z-index: 1;
@@ -217,8 +219,8 @@ body {
     align-items: center;
     justify-content: start;
     gap: 20px;
-    background-color: black;
-    color: white;
+    background-color: #000;
+    color: #fff;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
     padding: 25px 25px;
     overflow: hidden;
@@ -242,8 +244,8 @@ body {
     font-size: 1.3rem;
     margin: 1px 1px 1px 15px;
     padding: 5px;
-    color: black;
-    background-color: rgb(230, 230, 230);
+    color: #000;
+    background-color: #e6e6e6;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -251,11 +253,11 @@ body {
 }
 
 .btn-set-key:hover {
-    background-color: white;
+    background-color: #fff;
 }
 
 .btn-set-key:active {
-    background-color: rgb(135, 255, 171);
+    background-color: #87ffab;
     transform: translateY(2px);
 }
 
@@ -269,8 +271,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
-    color: white;
+    background-color: #000;
+    color: #fff;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
     padding: 25px 25px;
     animation: transition-msg 1s;
@@ -301,47 +303,53 @@ body {
 
 .btn-box-msg {
     padding: 5px;
-    color: black;
-    background-color: rgb(255, 255, 255);
+    color: #000;
+    background-color: #fff;
     font-weight: bolder;
     cursor: pointer;
     text-decoration: none;
 }
 
 .btn-box-msg:visited {
-    color: black;
+    color: #000;
 }
 
 .btn-box-msg:active {
-    background-color: rgb(135, 255, 171);
+    background-color: #87ffab;
     transform: translateY(2px);
-    color: black;
+    color: #000;
 }
 
 .hitbox-rectangle-white {
-    border: 3px solid white;
+    border: 3px solid #fff;
     z-index: 5;
 }
 
 .hitbox-rectangle-yellow {
-    border: 3px solid yellow;
+    border: 3px solid #ffff00;
     z-index: 5;
 }
 
 .hitbox-circle-white {
-    border: 3px solid white;
+    border: 3px solid #fff;
     border-radius: 50%;
     z-index: 5;
 }
 
 .hitbox-circle-green {
-    border: 3px solid rgb(0, 255, 0);
+    border: 3px solid #00ff00;
+    border-radius: 50%;
+    z-index: 5;
+}
+
+.hitbox-circle-orange {
+    border: 3px solid #ff8000;
     border-radius: 50%;
     z-index: 5;
 }
 
 .hitbox-circle-red {
-    border: 3px solid red;
+    border: 3px solid #ff0000;
     border-radius: 50%;
     z-index: 5;
 }
@@ -359,7 +367,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #fff;
     background-color: rgba(10, 10, 10, 0.8);
 }
 
@@ -369,13 +377,13 @@ body {
     gap: 10px;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #fff;
     background-color: rgba(10, 10, 10, 0.5);
 }
 
 .overlay-transition {
     opacity: 0;
-    background-color: rgb(0, 0, 0);
+    background-color: #000;
 }
 
 .game-text {
@@ -392,7 +400,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #fff;
     animation: opening-stage-msg-move 2s 1 linear forwards;
     text-shadow: 0.1rem 0.1rem 0.1rem #919191, 0.2rem 0.2rem 0.1rem #919191, 0.3rem 0.3rem 0.1rem #919191, 0.4rem 0.4rem 0.1rem #919191, 0.5rem 0.5rem 0.1rem #919191,
         0.6rem 0.6rem 0.1rem #919191, 0.7rem 0.7rem 0.1rem #919191, 0.8rem 0.8rem 0.1rem #919191, 0.9rem 0.9rem 0.1rem #919191, 1rem 1rem 0.1rem #919191;
@@ -400,7 +408,7 @@ body {
 }
 
 .opening-stage-msg-number {
-    font-size: 18.5rem;
+    font-size: 18.4rem;
 }
 
 .opening-stage-msg-text {
@@ -437,7 +445,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: #fff;
     text-shadow: 0.1rem 0.1rem 0.1rem #919191, 0.2rem 0.2rem 0.1rem #919191, 0.3rem 0.3rem 0.1rem #919191, 0.4rem 0.4rem 0.1rem #919191, 0.5rem 0.5rem 0.1rem #919191,
         0.6rem 0.6rem 0.1rem #919191, 0.7rem 0.7rem 0.1rem #919191, 0.8rem 0.8rem 0.1rem #919191, 0.9rem 0.9rem 0.1rem #919191, 1rem 1rem 0.1rem #919191;
     animation: stage-clear-msg-move 0.4s 3s ease-in forwards;
@@ -539,7 +547,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: red;
+    color: #ff0000;
     text-shadow: 0.1rem 0.1rem 0.1rem #910000, 0.2rem 0.2rem 0.1rem #910000, 0.3rem 0.3rem 0.1rem #910000, 0.4rem 0.4rem 0.1rem #910000, 0.5rem 0.5rem 0.1rem #910000,
         0.6rem 0.6rem 0.1rem #910000, 0.7rem 0.7rem 0.1rem #910000, 0.8rem 0.8rem 0.1rem #910000, 0.9rem 0.9rem 0.1rem #910000, 1rem 1rem 0.1rem #910000;
     animation: warning-msg-move 2.7s 2s ease-in forwards;
@@ -629,18 +637,18 @@ body {
     align-items: center;
     justify-content: center;
     padding: 2px;
-    color: black;
-    background-color: rgb(230, 230, 230);
-    box-shadow: 0 2px 2px black;
+    color: #000;
+    background-color: #e6e6e6;
+    box-shadow: 0 2px 2px #000;
     cursor: pointer;
 }
 
 .btn-test:hover {
-    background-color: white;
+    background-color: #fff;
 }
 
 .btn-test:active {
-    background-color: rgb(135, 255, 171);
+    background-color: #87ffab;
     transform: translateY(2px);
     box-shadow: none;
 }
