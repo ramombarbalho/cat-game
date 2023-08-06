@@ -87,8 +87,7 @@ class InputHandler {
                 }
             } else if (e.code === this.game.keys[8] && !this.game.keysActive.includes(e.code)) {
                 this.game.keysActive.push(e.code);
-                this.game.gameBoard.debugMode = !this.game.gameBoard.debugMode;
-                this.game.gameBoard.switchDebugMode();
+                if (this.game.gameBoard.stage) this.game.gameBoard.switchDebugMode();
             }
             if (this.game.title.ui.overlaySetKeyIsOpen) this.game.setKey(e.code);
             if (e.code === 'Space') e.preventDefault();
@@ -108,7 +107,7 @@ class HitBoxDebug {
         this.top = data.top;
         this.left = data.left;
         this.el = document.createElement('div');
-        this.el.classList.add('sprite', `hitbox-${data.boxType}`);
+        this.el.classList.add('game-img', `hitbox-${data.boxType}`);
         this.el.style.height = this.height + 'px';
         this.el.style.width = this.width + 'px';
         this.el.style.top = this.top + 'px';
@@ -117,12 +116,18 @@ class HitBoxDebug {
     }
 }
 
-class Sprite {
+class GameImg {
     constructor(gameBoard) {
         this.gameBoard = gameBoard;
         this.el = document.createElement('img');
-        this.el.classList.add('sprite');
+        this.el.classList.add('game-img');
         this.el.setAttribute('draggable', 'false');
+    }
+}
+
+class Sprite extends GameImg {
+    constructor(gameBoard) {
+        super(gameBoard);
         this.hitBoxEl = null;
     }
 
@@ -381,7 +386,7 @@ class GameBoardUI {
             this.skillBoxes[i].classList.add('box-skill');
             this.statusBarr.appendChild(this.skillBoxes[i]);
             if (this.gameBoard.player.skills[i]) {
-                const skillEl = new Sprite(this.gameBoard);
+                const skillEl = new GameImg(this.gameBoard);
                 skillEl.el.style.height = this.gameBoard.player.skills[i].icon.height + 'px';
                 skillEl.el.src = `./src/assets/${this.gameBoard.player.skills[i].icon.src}`;
                 skillEl.el.style.filter = 'drop-shadow(4px 4px 4px black)';
@@ -391,7 +396,7 @@ class GameBoardUI {
             this.skillBoxesCooldown[i].classList.add('cooldown-box-skill');
             this.skillBoxesCooldown[i].style.display = 'none';
             this.skillBoxes[i].appendChild(this.skillBoxesCooldown[i]);
-            this.skillBoxesNotAllowed[i] = new Sprite(this.gameBoard);
+            this.skillBoxesNotAllowed[i] = new GameImg(this.gameBoard);
             this.skillBoxesNotAllowed[i].el.style.height = 25 + 'px';
             this.skillBoxesNotAllowed[i].el.src = './src/assets/not-allowed.png';
             this.skillBoxesNotAllowed[i].el.classList.add('not-allowed');
@@ -575,7 +580,7 @@ class GameBoardUI {
     };
 }
 
-class SpriteSheet {
+class Explosion {
     constructor(gameBoard, data) {
         this.gameBoard = gameBoard;
         this.frameY = 0;
@@ -590,19 +595,19 @@ class SpriteSheet {
 
         this.el = document.createElement('div');
         this.el.classList.add('explosion');
-        this.sprite = new Sprite(this.gameBoard);
-        this.sprite.el.style.height = this.height;
-        this.sprite.el.src = `./src/assets/${this.src}`;
+        this.spriteSheet = new GameImg(this.gameBoard);
+        this.spriteSheet.el.style.height = this.height;
+        this.spriteSheet.el.src = `./src/assets/${this.src}`;
         this.gameBoard.gameRunningArea.appendChild(this.el);
-        this.el.appendChild(this.sprite.el);
+        this.el.appendChild(this.spriteSheet.el);
 
-        this.sprite.top = -this.frameY * this.height;
-        this.sprite.el.style.height = this.height + 'px';
-        this.sprite.el.style.top = this.sprite.top + 'px';
-        this.sprite.width = Math.round(this.sprite.el.getBoundingClientRect().width);
-        this.sprite.el.style.width = this.sprite.width + 'px';
+        this.spriteSheet.top = -this.frameY * this.height;
+        this.spriteSheet.el.style.height = this.height + 'px';
+        this.spriteSheet.el.style.top = this.spriteSheet.top + 'px';
+        this.spriteSheet.width = Math.round(this.spriteSheet.el.getBoundingClientRect().width);
+        this.spriteSheet.el.style.width = this.spriteSheet.width + 'px';
 
-        this.width = this.sprite.width / this.maxFramesX;
+        this.width = this.spriteSheet.width / this.maxFramesX;
         this.left = data.position.left + data.position.width / 2 - this.width / 2;
 
         this.el.style.height = this.height + 'px';
@@ -610,17 +615,17 @@ class SpriteSheet {
         this.el.style.width = this.width + 'px';
         this.el.style.left = this.left + 'px';
 
-        this.sprite.left = -this.frameX * this.width;
-        this.sprite.el.style.left = this.sprite.left + 'px';
+        this.spriteSheet.left = -this.frameX * this.width;
+        this.spriteSheet.el.style.left = this.spriteSheet.left + 'px';
     }
 
-    update(arrSpriteSheets) {
+    update(arrExplosions) {
         if (this.frameX <= this.maxFramesX) {
-            this.sprite.left = -this.frameX * this.width;
-            this.sprite.el.style.left = this.sprite.left + 'px';
+            this.spriteSheet.left = -this.frameX * this.width;
+            this.spriteSheet.el.style.left = this.spriteSheet.left + 'px';
             this.frameX++;
         } else {
-            this.gameBoard.deletElement(this, arrSpriteSheets);
+            this.gameBoard.deletElement(this, arrExplosions);
         }
     }
 }
@@ -656,7 +661,7 @@ class EnemyPlanet extends Sprite {
             boxType: 'circle-red'
         };
 
-        this.spriteSheet = {
+        this.explosion = {
             height: 147,
             src: 'enemy-explosion-spritesheet.png',
             maxFramesY: 1,
@@ -675,7 +680,7 @@ class EnemyPlanet extends Sprite {
     update() {
         this.left += this.speedX;
         this.hitBox.left = this.left;
-        this.spriteSheet.position.left = this.hitBox.left;
+        this.explosion.position.left = this.hitBox.left;
         this.el.style.left = this.left + 'px';
         if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
         if (this.left + this.width * 1.1 < 0) {
@@ -716,7 +721,7 @@ class Projectile extends Sprite {
             boxType: 'circle-green'
         };
 
-        this.spriteSheet = {
+        this.explosion = {
             height: this.player.height * 0.375 + this.value * 15,
             src: `shot-${this.value}-explosion-spritesheet.png`,
             maxFramesY: 1,
@@ -735,7 +740,7 @@ class Projectile extends Sprite {
     update() {
         this.left += this.speedX;
         this.hitBox.left = this.left + this.width / 2 - this.radius;
-        this.spriteSheet.position.left = this.hitBox.left + this.value * (this.player.height / 4);
+        this.explosion.position.left = this.hitBox.left + this.value * (this.player.height / 4);
         this.el.style.left = this.left + 'px';
         if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
         if (this.left > this.gameBoard.gameRunningWidth + this.width * 0.1) {
@@ -777,7 +782,7 @@ class SkillBomb extends Sprite {
 
         if (this.gameBoard.debugMode) this.addHitBoxDebug();
 
-        this.spriteSheet = {
+        this.explosion = {
             height: this.hitBox.height * (4 / 3),
             src: 'boss-explosion-spritesheet.png',
             maxFramesY: 1,
@@ -792,7 +797,7 @@ class SkillBomb extends Sprite {
     }
 
     activeSkill(i) {
-        this.skillAnimation = new Sprite(this.gameBoard);
+        this.skillAnimation = new GameImg(this.gameBoard);
         this.skillAnimation.el.style.height = this.height + 'px';
         this.skillAnimation.el.src = './src/assets/skill-ziggs.png';
         this.top = this.player.top;
@@ -827,12 +832,14 @@ class SkillBomb extends Sprite {
             this.framesLauchingCounter = this.framesLauching;
             this.speedAnimationY = -28;
             this.rotateAnimation = 270;
-            this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, this.spriteSheet));
+            this.gameBoard.explosions.push(new Explosion(this.gameBoard, this.explosion));
             this.active = true;
             this.hitBox.top = this.top - this.height * 1.5;
             this.hitBox.left = this.left - this.height;
-            if (this.hitBoxEl) this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
-            if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+            if (this.hitBoxEl) {
+                this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
+                this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+            }
         } else {
             this.speedAnimationY += this.gameBoard.gravity;
             this.top += this.speedAnimationY;
@@ -842,8 +849,8 @@ class SkillBomb extends Sprite {
             this.skillAnimation.el.style.top = this.top + 'px';
             this.skillAnimation.el.style.left = this.left + 'px';
             this.skillAnimation.el.style.rotate = this.rotateAnimation + 'deg';
-            this.spriteSheet.position.top = this.top - this.height * 1.5 - this.radius * (2 / 3);
-            this.spriteSheet.position.left = this.left - this.height - this.radius * (1 / 3);
+            this.explosion.position.top = this.top - this.height * 1.5 - this.radius * (2 / 3);
+            this.explosion.position.left = this.left - this.height - this.radius * (1 / 3);
             this.framesLauchingCounter--;
         }
     }
@@ -854,7 +861,7 @@ class SkillBomb extends Sprite {
             if (enemy.hp <= 0) {
                 this.gameBoard.scoreUp(enemy.points);
                 if (Math.random() < enemy.dropRate) this.gameBoard.coins.push(new Coin(this.gameBoard, enemy));
-                this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, enemy.spriteSheet));
+                this.gameBoard.explosions.push(new Explosion(this.gameBoard, enemy.explosion));
                 this.gameBoard.deletElement(enemy, this.gameBoard.enemies);
             }
         }
@@ -940,8 +947,10 @@ class Player extends Sprite {
         this.el.style.left = this.left + 'px';
         this.chargeAnimation.el.style.top = this.top - this.height * 0.125 + 'px';
         this.chargeAnimation.el.style.left = this.left + this.width * 0.31 + 'px';
-        if (this.hitBoxEl) this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
-        if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+        if (this.hitBoxEl) {
+            this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
+            this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+        }
     }
 
     moviment() {
@@ -1110,7 +1119,7 @@ class MoonBossProjectile extends Sprite {
             boxType: 'circle-red'
         };
 
-        this.spriteSheet = {
+        this.explosion = {
             height: 120,
             src: 'enemy-explosion-spritesheet.png',
             maxFramesY: 1,
@@ -1131,8 +1140,8 @@ class MoonBossProjectile extends Sprite {
         this.left += this.speedX;
         this.hitBox.top = this.topStart === -1 ? this.top + this.height - 2 * this.radius : this.top;
         this.hitBox.left = this.left;
-        this.spriteSheet.position.top = this.hitBox.top;
-        this.spriteSheet.position.left = this.hitBox.left;
+        this.explosion.position.top = this.hitBox.top;
+        this.explosion.position.left = this.hitBox.left;
         this.el.style.top = this.top + 'px';
         this.el.style.left = this.left + 'px';
         if (this.hitBoxEl) {
@@ -1189,7 +1198,7 @@ class MoonBoss extends Sprite {
             boxType: 'circle-red'
         };
 
-        this.spriteSheet = {
+        this.explosion = {
             height: this.height,
             src: 'boss-explosion-spritesheet.png',
             maxFramesY: 1,
@@ -1210,7 +1219,7 @@ class MoonBoss extends Sprite {
         this.left += this.speedX;
         this.hitBox.left = this.left;
         this.dmgHitBox.left = this.left + this.width / 2 - this.dmgRadius;
-        this.spriteSheet.position.left = this.left;
+        this.explosion.position.left = this.left;
         this.el.style.left = this.left + 'px';
         if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
         if (this.dmgHitBoxEl) this.dmgHitBoxEl.el.style.left = this.dmgHitBox.left + 'px';
@@ -1282,27 +1291,27 @@ class MoonBoss extends Sprite {
                         this.state = rng > 2 ? 'SKILL01' : 'SKILL02';
                     }
                 }
-                this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, projectile.spriteSheet));
+                this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
                 this.gameBoard.deletElement(projectile, arrProjectiles);
             } else if (this.state === 'SKILL01' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)) {
                 this.hp -= projectile.dmg;
-                this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, projectile.spriteSheet));
+                this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
                 this.gameBoard.deletElement(projectile, arrProjectiles);
                 if (this.hp < 0) this.hp = 0;
                 this.gameBoard.ui.updateBarrBoss();
                 if (this.hp === 0) {
-                    this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, this.spriteSheet));
+                    this.gameBoard.explosions.push(new Explosion(this.gameBoard, this.explosion));
                     this.el.remove();
                     this.gameBoard.boss = null;
                     this.gameBoard.bossDefeated = true;
                     this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
-                        this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, enemy.spriteSheet));
+                        this.gameBoard.explosions.push(new Explosion(this.gameBoard, enemy.explosion));
                         this.gameBoard.deletElement(enemy, arrEnemies);
                     });
                     return;
                 }
             } else if (this.state === 'SKILL02' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
-                this.gameBoard.spriteSheets.push(new SpriteSheet(this.gameBoard, projectile.spriteSheet));
+                this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
                 this.gameBoard.deletElement(projectile, arrProjectiles);
             }
         });
@@ -1377,7 +1386,7 @@ class GameBoard {
         this.debugMode = false;
         this.projectiles = [];
         this.enemies = [];
-        this.spriteSheets = [];
+        this.explosions = [];
         this.coins = [];
         this.hitBoxElements = [];
         this.enemySpawnInterval = null;
@@ -1394,7 +1403,7 @@ class GameBoard {
         if (element.constructor.name === 'Projectile') this.projectiles = arr.filter(el => !el.markForDeletion);
         if (element.constructor.name === 'EnemyPlanet') this.enemies = arr.filter(el => !el.markForDeletion);
         if (element.constructor.name === 'MoonBossProjectile') this.enemies = arr.filter(el => !el.markForDeletion);
-        if (element.constructor.name === 'SpriteSheet') this.spriteSheets = arr.filter(el => !el.markForDeletion);
+        if (element.constructor.name === 'Explosion') this.explosions = arr.filter(el => !el.markForDeletion);
         if (element.constructor.name === 'Coin') this.coins = arr.filter(el => !el.markForDeletion);
     }
 
@@ -1451,6 +1460,7 @@ class GameBoard {
     }
 
     switchDebugMode() {
+        this.debugMode = !this.debugMode;
         [this.player, ...this.projectiles, ...this.enemies, ...this.coins, this.boss, ...this.player.skills].forEach(sprite => {
             if (sprite) {
                 if (this.debugMode) {
@@ -1532,12 +1542,12 @@ class GameBoard {
             this.projectiles.forEach((projectile, _, arrProjectiles) => {
                 if (this.collisionCircleCircle(projectile.hitBox, enemy.hitBox)) {
                     enemy.hp -= projectile.dmg;
-                    this.spriteSheets.push(new SpriteSheet(this, projectile.spriteSheet));
+                    this.explosions.push(new Explosion(this, projectile.explosion));
                     this.deletElement(projectile, arrProjectiles);
                     if (enemy.hp <= 0) {
                         this.scoreUp(enemy.points);
                         if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, enemy));
-                        this.spriteSheets.push(new SpriteSheet(this, enemy.spriteSheet));
+                        this.explosions.push(new Explosion(this, enemy.explosion));
                         this.deletElement(enemy, arrEnemies);
                     }
                 }
@@ -1547,7 +1557,7 @@ class GameBoard {
             });
         });
 
-        this.spriteSheets.forEach((spriteSheet, _, arrSpriteSheets) => spriteSheet.update(arrSpriteSheets));
+        this.explosions.forEach((explosion, _, arrExplosions) => explosion.update(arrExplosions));
 
         this.coins.forEach((coin, _, arrCoins) => {
             if (this.collisionRectangleRectangle(this.player.hitBox, coin.hitBox)) {
@@ -1585,9 +1595,9 @@ class GameBoard {
                     this.ui.createBoxMsg();
                 } else if (this.stage.bossStage) {
                     if (this.boss) this.boss.stateHandler();
-                    if (this.bossDefeated && this.enemies.length === 0 && this.spriteSheets.length === 0) this.state = 'STAGE_CLEAR';
+                    if (this.bossDefeated && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
                 } else {
-                    if (this.score >= this.stage.scoreGoal && this.enemies.length === 0 && this.spriteSheets.length === 0) this.state = 'STAGE_CLEAR';
+                    if (this.score >= this.stage.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
                 }
                 break;
             case 'STAGE_CLEAR':
@@ -1605,7 +1615,7 @@ class GameBoard {
     loop = () => {
         this.update();
         this.stateHandler();
-        // console.log(this.gameBoard.state);
+        // console.log(this.state);
         if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD') return;
         requestAnimationFrame(this.loop);
     };
@@ -1730,7 +1740,7 @@ class Game {
         this.gameBoard.pauseAllowed = true;
         this.gameBoard.projectiles.length = 0;
         this.gameBoard.enemies.length = 0;
-        this.gameBoard.spriteSheets.length = 0;
+        this.gameBoard.explosions.length = 0;
         this.gameBoard.coins.length = 0;
         this.gameBoard.hitBoxElements.length = 0;
         this.gameBoard.score = 0;

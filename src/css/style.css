@@ -107,7 +107,7 @@ body {
     overflow: hidden;
 }
 
-.sprite {
+.game-img {
     position: absolute;
     user-select: none;
     pointer-events: none;
@@ -125,7 +125,7 @@ body {
 }
 
 .game-status-barr {
-    background-image: linear-gradient(to bottom right, #6b6b6b, #e4e4e4);
+    background-image: linear-gradient(to bottom right, #e4e4e4, #6b6b6b);
     display: flex;
     z-index: 5;
     overflow: hidden;
@@ -138,17 +138,8 @@ body {
     justify-content: start;
     gap: 10px;
     padding-left: 45px;
-    background-image: linear-gradient(
-        to bottom right,
-        #ff4b4b,
-        #ffc455,
-        #ffff6e,
-        #45ff45,
-        #6b6bff,
-        #b041ff,
-        #ffb0ff
-    );
-    border-right: 1px solid #000;
+    background-image: linear-gradient(to bottom right, #ff4b4b, #ffc455, #ffff6e, #45ff45, #6b6bff, #b041ff, #ffb0ff);
+    border-right: 1px solid #696969;
 }
 
 .heart-icon {
@@ -162,8 +153,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(to bottom right, #505050, #bebebe);
-    border-right: 1px solid #000;
+    background-image: linear-gradient(to bottom right, #bebebe, #505050);
+    border-right: 1px solid #696969;
 }
 
 .explosion {
