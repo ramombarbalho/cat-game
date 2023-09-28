@@ -81,10 +81,7 @@ class InputHandler {
         }
       } else if (e.code === this.game.keys[7] && !this.game.keysActive.includes(e.code)) {
         this.game.keysActive.push(e.code);
-        if (this.game.gameBoard.pauseAllowed) {
-          if (this.game.gameBoard.state === 'GAME_RUNNING') this.game.gameBoard.pauseGame();
-          else if (this.game.gameBoard.state === 'PAUSED') this.game.gameBoard.unPauseGame();
-        }
+        if (this.game.gameBoard.pauseAllowed && (this.game.gameBoard.state === 'GAME_RUNNING' || this.game.gameBoard.state === 'PAUSED')) this.game.gameBoard.pauseGame();
       } else if (e.code === this.game.keys[8] && !this.game.keysActive.includes(e.code)) {
         this.game.keysActive.push(e.code);
         if (this.game.gameBoard.stage) this.game.gameBoard.switchDebugMode();
@@ -377,7 +374,7 @@ class GameBoardUI {
     for (let i = 0; i < this.gameBoard.player.hp; i++) {
       this.heartsImg[i] = document.createElement('img');
       this.heartsImg[i].classList.add('heart-icon');
-      this.heartsImg[i].src = '../../public/heart-icon.png';
+      this.heartsImg[i].src = 'heart-icon.png';
       this.heartsImg[i].setAttribute('draggable', 'false');
       this.heartsBox.appendChild(this.heartsImg[i]);
     }
@@ -388,7 +385,7 @@ class GameBoardUI {
       if (this.gameBoard.player.skills[i]) {
         const skillEl = new GameImg(this.gameBoard);
         skillEl.el.style.height = this.gameBoard.player.skills[i].icon.height + 'px';
-        skillEl.el.src = `../../public/${this.gameBoard.player.skills[i].icon.src}`;
+        skillEl.el.src = `${this.gameBoard.player.skills[i].icon.src}`;
         skillEl.el.style.filter = 'drop-shadow(4px 4px 4px black)';
         this.skillBoxes[i].appendChild(skillEl.el);
       }
@@ -398,7 +395,7 @@ class GameBoardUI {
       this.skillBoxes[i].appendChild(this.skillBoxesCooldown[i]);
       this.skillBoxesNotAllowed[i] = new GameImg(this.gameBoard);
       this.skillBoxesNotAllowed[i].el.style.height = 25 + 'px';
-      this.skillBoxesNotAllowed[i].el.src = '../../public/not-allowed.png';
+      this.skillBoxesNotAllowed[i].el.src = 'not-allowed.png';
       this.skillBoxesNotAllowed[i].el.classList.add('not-allowed');
       this.skillBoxesNotAllowed[i].el.style.display = 'none';
       this.skillBoxes[i].appendChild(this.skillBoxesNotAllowed[i].el);
@@ -524,8 +521,8 @@ class GameBoardUI {
       this.boxMsg.innerHTML = ` <div class="box-msg-content">
                                   <h1 style="color: #ff3200">GAME OVER</h1>
                                   <div class="box-img-game-over">
-                                    <img draggable="false" src="../../public/cat-game-over.png" class="cat-game-over-img" />
-                                    <img draggable="false" src="../../public/cat-game-over-thumbs.png" class="cat-game-over-img thumbs-down" id="thumbs" />
+                                    <img draggable="false" src="cat-game-over.png" class="cat-game-over-img" />
+                                    <img draggable="false" src="cat-game-over-thumbs.png" class="cat-game-over-img thumbs-down" id="thumbs" />
                                   </div>
                                   <div class="btn-test btn-retry">TRY AGAIN!!</div>
                                   <div class="btn-test btn-overworld">RETURN OVERWORLD</div>
@@ -601,7 +598,7 @@ class Explosion {
     this.el.classList.add('explosion');
     this.spriteSheet = new GameImg(this.gameBoard);
     this.spriteSheet.el.style.height = this.height;
-    this.spriteSheet.el.src = `../../public/${this.src}`;
+    this.spriteSheet.el.src = `${this.src}`;
     this.gameBoard.gameRunningArea.appendChild(this.el);
     this.el.appendChild(this.spriteSheet.el);
 
@@ -647,7 +644,7 @@ class EnemyPlanet extends Sprite {
     this.el.style.height = this.height + 'px';
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
-    this.el.src = `../../public/${this.sources[this.enemyType]}`;
+    this.el.src = `${this.sources[this.enemyType]}`;
     this.hp = this.enemyType * 3 + 3;
     this.speedX = -10 / (this.enemyType + 1);
     this.dropRate = 0.2 + this.enemyType * 0.1;
@@ -710,7 +707,7 @@ class Projectile extends Sprite {
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.gameBoard.player.left + 'px';
     this.el.style.zIndex = '3';
-    this.el.src = `../../public/${this.sources[this.value]}`;
+    this.el.src = `${this.sources[this.value]}`;
     this.dmg = 2 ** (this.value + 1) - 1;
     this.speedX = 14 + this.value * 2;
     this.markForDeletion = false;
@@ -805,7 +802,7 @@ class SkillBomb extends Sprite {
   activeSkill(i) {
     this.skillAnimation = new GameImg(this.gameBoard);
     this.skillAnimation.el.style.height = this.height + 'px';
-    this.skillAnimation.el.src = '../../public/skill-ziggs.png';
+    this.skillAnimation.el.src = 'skill-ziggs.png';
     this.top = this.player.top;
     this.left = this.player.left + this.player.width - this.player.hitBox.width;
     this.gameBoard.gameRunningArea.appendChild(this.skillAnimation.el);
@@ -883,7 +880,7 @@ class ChargeAnimation extends Sprite {
     this.height = this.player.height + this.player.height / 3;
     this.sources = ['__blank.png', 'charge-1.gif', 'charge-2.gif'];
     this.el.style.height = this.height + 'px';
-    this.el.src = `../../public/${this.sources[this.player.chargeValue]}`;
+    this.el.src = `${this.sources[this.player.chargeValue]}`;
     this.el.style.display = 'none';
     this.el.style.top = this.top - this.height * 0.125 + 'px';
     this.el.style.left = this.left + this.width * 0.31 + 'px';
@@ -903,7 +900,7 @@ class Player extends Sprite {
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
     this.el.style.zIndex = '3';
-    this.el.src = `../../public/${this.src}`;
+    this.el.src = `${this.src}`;
     this.hp = this.gameBoard.game.playerState.hp;
     this.speedY = 0;
     this.speedX = 0;
@@ -988,11 +985,11 @@ class Player extends Sprite {
         this.chargeValue === 0
       ) {
         this.chargeValue = 1;
-        this.chargeAnimation.el.src = `../../public/${this.chargeAnimation.sources[this.chargeValue]}`;
+        this.chargeAnimation.el.src = `${this.chargeAnimation.sources[this.chargeValue]}`;
         this.chargeAnimation.el.style.display = 'block';
       } else if (this.chargeFrames >= this.gameBoard.game.playerState.chargeFramesInterval * 2 && this.chargeValue === 1) {
         this.chargeValue = 2;
-        this.chargeAnimation.el.src = `../../public/${this.chargeAnimation.sources[this.chargeValue]}`;
+        this.chargeAnimation.el.src = `${this.chargeAnimation.sources[this.chargeValue]}`;
       }
       this.chargeFrames++;
     } else if (this.chargeFrames > 0) {
@@ -1000,7 +997,7 @@ class Player extends Sprite {
         this.shooting();
         this.chargeValue = 0;
         this.chargeAnimation.el.style.display = 'none';
-        this.chargeAnimation.el.src = `../../public/${this.chargeAnimation.sources[this.chargeValue]}`;
+        this.chargeAnimation.el.src = `${this.chargeAnimation.sources[this.chargeValue]}`;
       }
       this.chargeFrames = 0;
     }
@@ -1058,7 +1055,7 @@ class Coin extends Sprite {
     this.height = 50;
     this.src = 'coin.gif';
     this.el.style.height = this.height + 'px';
-    this.el.src = `../../public/${this.src}`;
+    this.el.src = `${this.src}`;
     this.gameBoard.gameRunningArea.appendChild(this.el);
     this.width = this.el.getBoundingClientRect().width;
     this.top = enemy.top + enemy.height / 2 - this.height / 2;
@@ -1113,7 +1110,7 @@ class MoonBossProjectile extends Sprite {
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
     this.el.style.rotate = this.rotate + 'deg';
-    this.el.src = `../../public/${this.src}`;
+    this.el.src = `${this.src}`;
     this.gameBoard.gameRunningArea.appendChild(this.el);
     this.width = this.el.getBoundingClientRect().width;
 
@@ -1172,7 +1169,7 @@ class MoonBoss extends Sprite {
     this.el.style.height = this.height + 'px';
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
-    this.el.src = `../../public/${this.src}`;
+    this.el.src = `${this.src}`;
     this.hp = 40;
     this.balanceTop = 10;
     this.balanceBottom = 10;
@@ -1486,13 +1483,7 @@ class GameBoard {
   }
 
   pauseGame() {
-    if (this.state === 'GAME_RUNNING') this.state = 'PAUSED';
-    this.ui.overlayPauseGameHandler();
-    this.pauseAllowed = false;
-  }
-
-  unPauseGame() {
-    if (this.state === 'PAUSED') this.state = 'GAME_RUNNING';
+    this.state = this.state === 'PAUSED' ? 'GAME_RUNNING' : 'PAUSED';
     this.ui.overlayPauseGameHandler();
     this.pauseAllowed = false;
   }
