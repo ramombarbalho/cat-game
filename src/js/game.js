@@ -14,6 +14,16 @@ const STAGES_LIST = [
     backgroundImage: 'linear-gradient(#7f55ff, #7f55ff)'
   },
   {
+    title: '1-2',
+    enemyGroup: null,
+    bossStage: true,
+    bossId: 0,
+    enemyIntervalFrames: null,
+    scoreGoal: null,
+    isClear: false,
+    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
+  },
+  {
     title: '1-1',
     enemyGroup: [0],
     bossStage: false,
@@ -28,16 +38,6 @@ const STAGES_LIST = [
     breakPointActive: false,
     isClear: false,
     backgroundImage: 'linear-gradient(#5a23a1, #25b3df)'
-  },
-  {
-    title: '1-2',
-    enemyGroup: null,
-    bossStage: true,
-    bossId: 0,
-    enemyIntervalFrames: null,
-    scoreGoal: null,
-    isClear: false,
-    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
   }
 ];
 
@@ -49,9 +49,9 @@ const INIT_CONFIG = {
   pauseGameFrames: 90,
   gravity: 2,
   initStageState: 'TRANSITION_IN',
-  openingStageMsgFrames: 132,
+  openingStageMsgFrames: 10,
   stageClearMsgFrames: 216,
-  warningMsgFrames: 294,
+  warningMsgFrames: 10,
   coinFramesInterval: 360,
   overlayTransitionFrames: 60
 };
@@ -1177,11 +1177,11 @@ class MoonBoss extends Sprite {
     this.rotate = 0;
     this.rotateSpeed = 10;
     this.rotateDirection = 0;
-    this.projectilesPerTurn = 10;
     this.gameBoard.gameRunningArea.appendChild(this.el);
     this.width = this.el.getBoundingClientRect().width;
     this.dmgHitBoxEl = null;
     this.state = 'INVULNERABLE';
+    this.skill01ProjectilesQuantity = 10;
     this.skill03State = 's1';
 
     this.radius = 0.5 * this.height;
@@ -1239,9 +1239,25 @@ class MoonBoss extends Sprite {
     this.update();
   }
 
-  skill01() {
+  stopSkill() {
+    this.state = 'INVULNERABLE';
+    this.balanceTop = 10;
+    this.balanceBottom = 10;
+    this.speedX = -16;
+  }
+
+  rotating() {
     this.rotate += this.rotateDirection * this.rotateSpeed;
     this.el.style.rotate = this.rotate + 'deg';
+  }
+
+  stopRotating() {
+    this.rotate = 0;
+    this.el.style.rotate = this.rotate + 'deg';
+  }
+
+  skill01() {
+    this.rotating();
     if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) {
       this.gameBoard.enemies.push(
         new MoonBossProjectile(this.gameBoard, {
@@ -1250,14 +1266,11 @@ class MoonBoss extends Sprite {
           rotate: 45 + 45 * this.rotateDirection
         })
       );
-      this.projectilesPerTurn--;
-      if (this.projectilesPerTurn <= 0) {
-        this.rotate = 0;
-        this.el.style.rotate = this.rotate + 'deg';
-        this.state = 'INVULNERABLE';
-        this.balanceTop = 10;
-        this.balanceBottom = 10;
-        this.projectilesPerTurn = 10;
+      this.skill01ProjectilesQuantity--;
+      if (this.skill01ProjectilesQuantity <= 0) {
+        this.skill01ProjectilesQuantity = 10;
+        this.stopRotating();
+        this.stopSkill();
       }
     }
   }
@@ -1265,10 +1278,7 @@ class MoonBoss extends Sprite {
   skill02() {
     if (this.left <= 0) this.speedX = 16;
     else if (this.left + this.width >= this.gameBoard.gameRunningWidth) {
-      this.state = 'INVULNERABLE';
-      this.balanceTop = 10;
-      this.balanceBottom = 10;
-      this.speedX = -16;
+      this.stopSkill();
     }
     this.update();
   }
@@ -1279,27 +1289,25 @@ class MoonBoss extends Sprite {
         this.speedX = 6;
         this.update();
         if (this.left > this.gameBoard.left + this.gameBoard.gameRunningWidth * 1.3) {
-          this.speedX = -48;
           this.skill03State = 's2';
+          this.speedX = -48;
         }
         break;
       case 's2':
         this.update();
         if (this.left + this.width < this.gameBoard.left) {
+          this.skill03State = 's3';
           this.left = this.gameBoard.gameRunningWidth * 1.5;
           this.speedX = -6;
           this.gameBoard.windForceX = -6;
-          this.skill03State = 's3';
         }
         break;
       case 's3':
         this.update();
         if (this.left + this.width < this.gameBoard.gameRunningWidth) {
-          this.state = 'INVULNERABLE';
           this.skill03State = 's1';
           this.gameBoard.windForceX = 0;
-          this.balanceTop = 5;
-          this.speedX = -16;
+          this.stopSkill();
         }
         break;
     }
