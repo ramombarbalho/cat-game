@@ -444,7 +444,7 @@ class GameBoardUI {
 
   fillHpBossEl() {
     if (this.hpBossElValue < 100) {
-      this.hpBossElValue += 1;
+      this.hpBossElValue += 25;
       this.hpBossEl.style.width = this.hpBossElValue + '%';
     }
   }
@@ -1171,9 +1171,9 @@ class MoonBoss extends Sprite {
     this.el.style.left = this.left + 'px';
     this.el.src = `${this.src}`;
     this.hp = 40;
-    this.balanceTop = 10;
-    this.balanceBottom = 10;
-    this.speedX = -4;
+    this.balanceTop = 1;
+    this.balanceBottom = 1;
+    this.speedX = -16;
     this.rotate = 0;
     this.rotateSpeed = 10;
     this.rotateDirection = 0;
@@ -1234,16 +1234,16 @@ class MoonBoss extends Sprite {
   entrance() {
     if (this.left + this.width < this.gameBoard.gameRunningWidth) {
       this.gameBoard.ui.fillHpBossEl();
-      return (this.speedX = -16);
+      return (this.speedX = 0);
     }
     this.update();
   }
 
   stopSkill() {
     this.state = 'INVULNERABLE';
-    this.balanceTop = 10;
-    this.balanceBottom = 10;
-    this.speedX = -16;
+    this.balanceTop = 1;
+    this.balanceBottom = 1;
+    this.speedX = 0;
   }
 
   rotating() {
@@ -1276,11 +1276,18 @@ class MoonBoss extends Sprite {
   }
 
   skill02() {
+    this.rotating();
     if (this.left <= 0) this.speedX = 16;
-    else if (this.left + this.width >= this.gameBoard.gameRunningWidth) {
-      this.stopSkill();
-    }
     this.update();
+    if (this.left + this.width > this.gameBoard.gameRunningWidth) {
+      this.speedX = -16;
+      this.update();
+      this.speedX = 16;
+      if (this.rotate % 360 === 0) {
+        this.stopRotating();
+        this.stopSkill();
+      }
+    }
   }
 
   skill03() {
@@ -1334,7 +1341,9 @@ class MoonBoss extends Sprite {
           if (this.balanceBottom <= 0) {
             const rng = Math.floor(Math.random() * (5 - 1 + 1) + 1);
             this.rotateDirection = -1;
-            this.state = rng > 0 ? 'SKILL01' : 'SKILL02';
+
+            this.speedX = -16;
+            this.state = rng > 0 ? 'SKILL02' : 'SKILL02';
           }
         }
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
