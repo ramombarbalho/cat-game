@@ -14,16 +14,6 @@ const STAGES_LIST = [
     backgroundImage: 'linear-gradient(#7f55ff, #7f55ff)'
   },
   {
-    title: '1-2',
-    enemyGroup: null,
-    bossStage: true,
-    bossId: 0,
-    enemyIntervalFrames: null,
-    scoreGoal: null,
-    isClear: false,
-    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
-  },
-  {
     title: '1-1',
     enemyGroup: [0],
     bossStage: false,
@@ -38,6 +28,16 @@ const STAGES_LIST = [
     breakPointActive: false,
     isClear: false,
     backgroundImage: 'linear-gradient(#5a23a1, #25b3df)'
+  },
+  {
+    title: '1-2',
+    enemyGroup: null,
+    bossStage: true,
+    bossId: 0,
+    enemyIntervalFrames: null,
+    scoreGoal: null,
+    isClear: false,
+    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
   }
 ];
 
@@ -353,24 +353,32 @@ class GameBoardUI {
     }
     this.overlayPaused.innerHTML = `<p style="font-size: 20px">PAUSED</p>
                                     <div class="btn-test btn-retry">RETRY</div>
-                                    ${this.gameBoard.stage.isClear ? '<div class="btn-test btn-overworld">RETURN OVERWORLD</div>' : ''}`;
+                                    <div class="btn-test btn-overworld">RETURN OVERWORLD</div>`;
     this.btnRetry = document.querySelector('.btn-retry');
     this.btnRetry.addEventListener('click', () => {
       if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.ui.overlayTransition) return;
       this.gameBoard.game.transitionLoop();
     });
-    if (this.gameBoard.stage.isClear) {
-      this.btnOverworld = document.querySelector('.btn-overworld');
-      this.btnOverworld.addEventListener('click', () => {
-        if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.ui.overlayTransition) return;
-        this.gameBoard.game.stageId = 0;
-        this.gameBoard.game.updateActiveScreen('OVERWORLD');
-        this.gameBoard.game.transitionLoop();
-      });
-    }
+    this.btnOverworld = document.querySelector('.btn-overworld');
+    this.btnOverworld.addEventListener('click', () => {
+      if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.ui.overlayTransition) return;
+      this.gameBoard.game.stageId = 0;
+      this.gameBoard.game.updateActiveScreen('OVERWORLD');
+      this.gameBoard.game.transitionLoop();
+    });
     this.heartsBox = document.createElement('div');
     this.heartsBox.classList.add('box-hearts');
     this.statusBarr.appendChild(this.heartsBox);
+    this.renderHeartsBox();
+    this.renderSkillBoxes();
+  }
+
+  updateHeart() {
+    this.heartsBox.innerHTML = '';
+    this.renderHeartsBox();
+  }
+
+  renderHeartsBox() {
     for (let i = 0; i < this.gameBoard.player.hp; i++) {
       this.heartsImg[i] = document.createElement('img');
       this.heartsImg[i].classList.add('heart-icon');
@@ -378,6 +386,9 @@ class GameBoardUI {
       this.heartsImg[i].setAttribute('draggable', 'false');
       this.heartsBox.appendChild(this.heartsImg[i]);
     }
+  }
+
+  renderSkillBoxes() {
     for (let i = 0; i < this.gameBoard.player.skills.length; i++) {
       this.skillBoxes[i] = document.createElement('div');
       this.skillBoxes[i].classList.add('box-skill');
@@ -400,17 +411,6 @@ class GameBoardUI {
       this.skillBoxesNotAllowed[i].el.style.display = 'none';
       this.skillBoxes[i].appendChild(this.skillBoxesNotAllowed[i].el);
       this.skillCooldownFrames[i] = this.gameBoard.player.skills[i].cooldown;
-    }
-  }
-
-  updateHeart() {
-    for (let i = 3; i > 0; i--) {
-      if (i > this.gameBoard.player.hp) {
-        if (this.heartsImg[i - 1]) {
-          this.heartsImg[i - 1].remove();
-          this.heartsImg[i - 1] = null;
-        }
-      }
     }
   }
 
@@ -1171,8 +1171,8 @@ class MoonBoss extends Sprite {
     this.el.style.left = this.left + 'px';
     this.el.src = `${this.src}`;
     this.hp = 40;
-    this.balanceTop = 1;
-    this.balanceBottom = 1;
+    this.balanceTop = 10;
+    this.balanceBottom = 10;
     this.speedX = -16;
     this.rotate = 0;
     this.rotateSpeed = 10;
@@ -1241,8 +1241,8 @@ class MoonBoss extends Sprite {
 
   stopSkill() {
     this.state = 'INVULNERABLE';
-    this.balanceTop = 1;
-    this.balanceBottom = 1;
+    this.balanceTop = 10;
+    this.balanceBottom = 10;
     this.speedX = 0;
   }
 
@@ -1256,16 +1256,20 @@ class MoonBoss extends Sprite {
     this.el.style.rotate = this.rotate + 'deg';
   }
 
+  throwMeteor() {
+    this.gameBoard.enemies.push(
+      new MoonBossProjectile(this.gameBoard, {
+        top: this.rotateDirection === 1 ? this.gameBoard.gameRunningHeight : -200,
+        topStart: this.rotateDirection,
+        rotate: 45 + 45 * this.rotateDirection
+      })
+    );
+  }
+
   skill01() {
     this.rotating();
     if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) {
-      this.gameBoard.enemies.push(
-        new MoonBossProjectile(this.gameBoard, {
-          top: this.rotateDirection === 1 ? this.gameBoard.gameRunningHeight : -200,
-          topStart: this.rotateDirection,
-          rotate: 45 + 45 * this.rotateDirection
-        })
-      );
+      this.throwMeteor();
       this.skill01ProjectilesQuantity--;
       if (this.skill01ProjectilesQuantity <= 0) {
         this.skill01ProjectilesQuantity = 10;
@@ -1277,6 +1281,8 @@ class MoonBoss extends Sprite {
 
   skill02() {
     this.rotating();
+    if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) this.throwMeteor();
+    if (!this.speedX) this.speedX = -16;
     if (this.left <= 0) this.speedX = 16;
     this.update();
     if (this.left + this.width > this.gameBoard.gameRunningWidth) {
@@ -1291,9 +1297,11 @@ class MoonBoss extends Sprite {
   }
 
   skill03() {
+    this.rotating();
+    if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) this.throwMeteor();
     switch (this.skill03State) {
       case 's1':
-        this.speedX = 6;
+        this.speedX = 8;
         this.update();
         if (this.left > this.gameBoard.left + this.gameBoard.gameRunningWidth * 1.3) {
           this.skill03State = 's2';
@@ -1305,19 +1313,31 @@ class MoonBoss extends Sprite {
         if (this.left + this.width < this.gameBoard.left) {
           this.skill03State = 's3';
           this.left = this.gameBoard.gameRunningWidth * 1.5;
-          this.speedX = -6;
+          this.speedX = -8;
           this.gameBoard.windForceX = -6;
         }
         break;
       case 's3':
         this.update();
-        if (this.left + this.width < this.gameBoard.gameRunningWidth) {
-          this.skill03State = 's1';
-          this.gameBoard.windForceX = 0;
-          this.stopSkill();
+        if (this.left + this.width + 8 < this.gameBoard.gameRunningWidth) {
+          this.speedX = 8;
+          this.update();
+          this.speedX = -8;
+          if (this.rotate % 360 === 0) {
+            this.skill03State = 's1';
+            this.gameBoard.windForceX = 0;
+            this.stopRotating();
+            this.stopSkill();
+          }
         }
         break;
     }
+  }
+
+  collisionBalance(position) {
+    const rng = Math.floor(Math.random() * 3 + 1);
+    this.rotateDirection = position;
+    this.state = `SKILL0${rng}`;
   }
 
   collision() {
@@ -1331,20 +1351,10 @@ class MoonBoss extends Sprite {
       if (this.state === 'INVULNERABLE' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
         if (projectile.hitBox.top + projectile.hitBox.height / 2 <= this.hitBox.top + this.hitBox.height * 0.1) {
           this.balanceTop -= projectile.dmg;
-          if (this.balanceTop <= 0) {
-            const rng = Math.floor(Math.random() * (5 - 1 + 1) + 1);
-            this.rotateDirection = 1;
-            this.state = rng > 0 ? 'SKILL03' : 'SKILL02';
-          }
+          if (this.balanceTop <= 0) this.collisionBalance(1);
         } else if (projectile.hitBox.top + projectile.hitBox.height / 2 >= this.hitBox.top + this.hitBox.height * 0.9) {
           this.balanceBottom -= projectile.dmg;
-          if (this.balanceBottom <= 0) {
-            const rng = Math.floor(Math.random() * (5 - 1 + 1) + 1);
-            this.rotateDirection = -1;
-
-            this.speedX = -16;
-            this.state = rng > 0 ? 'SKILL02' : 'SKILL02';
-          }
+          if (this.balanceBottom <= 0) this.collisionBalance(-1);
         }
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deletElement(projectile);
