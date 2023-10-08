@@ -14,16 +14,6 @@ const STAGES_LIST = [
     backgroundImage: 'linear-gradient(#7f55ff, #7f55ff)'
   },
   {
-    title: '1-2',
-    enemyGroup: null,
-    bossStage: true,
-    bossId: 0,
-    enemyIntervalFrames: null,
-    scoreGoal: null,
-    isClear: false,
-    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
-  },
-  {
     title: '1-1',
     enemyGroup: [0],
     bossStage: false,
@@ -38,20 +28,30 @@ const STAGES_LIST = [
     breakPointActive: false,
     isClear: false,
     backgroundImage: 'linear-gradient(#5a23a1, #25b3df)'
+  },
+  {
+    title: '1-2',
+    enemyGroup: null,
+    bossStage: true,
+    bossId: 0,
+    enemyIntervalFrames: null,
+    scoreGoal: null,
+    isClear: false,
+    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
   }
 ];
 
 const INIT_CONFIG = {
   gameHeight: 720,
   gameWidth: 1280,
-  keys: ['Numpad8', 'Numpad5', 'Numpad4', 'Numpad6', 'KeyH', 'KeyJ', 'KeyM', 'NumpadDivide', 'Numpad0'], // up, down, left, right, shot, skill1, skill2, pause, debug
+  keys: ['KeyW', 'KeyS', 'KeyA', 'KeyD', 'KeyJ', 'KeyL', 'KeyK', 'Enter', 'KeyP'], // up, down, left, right, shot, skill1, skill2, pause, debug
   stageId: 0,
   pauseGameFrames: 90,
   gravity: 2,
   initStageState: 'TRANSITION_IN',
-  openingStageMsgFrames: 10,
+  openingStageMsgFrames: 132,
   stageClearMsgFrames: 216,
-  warningMsgFrames: 10,
+  warningMsgFrames: 294,
   coinFramesInterval: 360,
   overlayTransitionFrames: 60
 };
@@ -444,7 +444,7 @@ class GameBoardUI {
 
   fillHpBossEl() {
     if (this.hpBossElValue < 100) {
-      this.hpBossElValue += 25;
+      this.hpBossElValue += 1;
       this.hpBossEl.style.width = this.hpBossElValue + '%';
     }
   }
@@ -1172,8 +1172,8 @@ class MoonBoss extends Sprite {
     this.el.src = `${this.src}`;
     this.hp = 40;
     this.balanceTop = 10;
-    this.balanceBottom = 1;
-    this.speedX = -16;
+    this.balanceBottom = 10;
+    this.speedX = -8;
     this.rotate = 0;
     this.rotateSpeed = 10;
     this.rotateDirection = 0;
@@ -1242,7 +1242,7 @@ class MoonBoss extends Sprite {
   stopSkill() {
     this.state = 'INVULNERABLE';
     this.balanceTop = 10;
-    this.balanceBottom = 1;
+    this.balanceBottom = 10;
     this.speedX = 0;
   }
 
@@ -1337,7 +1337,7 @@ class MoonBoss extends Sprite {
   collisionBalance(position) {
     const rng = Math.floor(Math.random() * 3 + 1);
     this.rotateDirection = position;
-    this.state = `SKILL0${2}`;
+    this.state = `SKILL0${rng}`;
   }
 
   collision() {
@@ -1358,7 +1358,10 @@ class MoonBoss extends Sprite {
         }
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deletElement(projectile);
-      } else if ((this.state === 'SKILL01' || this.state === 'SKILL02') && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)) {
+      } else if (
+        (this.state === 'SKILL01' || this.state === 'SKILL02' || (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
+        this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)
+      ) {
         this.hp -= projectile.dmg;
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deletElement(projectile);
@@ -1375,9 +1378,6 @@ class MoonBoss extends Sprite {
           });
           return;
         }
-      } else if (this.state === 'SKILL03' && this.skill03State !== 's2' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
-        this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
-        this.gameBoard.deletElement(projectile);
       }
     });
   }
@@ -1792,6 +1792,7 @@ class Game {
     this.gameBoard.gameRunningArea.innerHTML = '';
     this.gameBoard.stage = null;
     this.gameBoard.state = this.config.initStageState;
+    this.gameBoard.windForceX = 0;
     this.gameBoard.pauseGameFrames = this.config.pauseGameFrames;
     this.gameBoard.pauseAllowed = true;
     this.gameBoard.projectiles.length = 0;
