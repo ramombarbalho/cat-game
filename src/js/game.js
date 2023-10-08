@@ -548,10 +548,10 @@ class GameBoardUI {
       }
       this.boxMsg.innerHTML = ` <div class="box-msg-content">
                                   <h1>STAGE CLEAR</h1>
-                                  <h3>HP:.......1000pts</h3>
-                                  <h3>BOMB:.....1000pts</h3>
-                                  <h3>SHOOTS:...1000pts</h3>
-                                  <h2>TOTAL:.3000pts</h2>
+                                  <h3>HP:.......??</h3>
+                                  <h3>BOMB:.....??</h3>
+                                  <h3>SHOOTS:...??</h3>
+                                  <h2>TOTAL:..??</h2>
                                   <div class="btn-test btn-retry">RETRY</div>
                                   <div class="btn-test btn-overworld">NEXT STAGE</div>
                                 </div>`;
@@ -1837,4 +1837,6 @@ class Game {
   };
 }
 
-window.addEventListener('load', () => new Game(INIT_CONFIG));
+if ('ontouchstart' in document.documentElement)
+  document.querySelector('.game-loading').innerHTML = `<p style="font-size: 20px">THIS GAME DOESN'T WORK ON TOUCH SCREEN DEVICES =/</p>`;
+else window.addEventListener('load', () => new Game(INIT_CONFIG));
