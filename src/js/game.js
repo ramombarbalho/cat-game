@@ -237,7 +237,7 @@ class BtnToBeContinued {
     this.overworld = overworld;
     this.btn = document.createElement('div');
     this.btn.classList.add('btn-test');
-    this.btn.textContent = `TO BE CONTINUED!`;
+    this.btn.textContent = `UNDER DEVELOPMENT`;
     this.overworld.screen.appendChild(this.btn);
   }
 }
@@ -1370,6 +1370,7 @@ class MoonBoss extends Sprite {
         if (this.hp === 0) {
           this.gameBoard.explosions.push(new Explosion(this.gameBoard, this.explosion));
           this.el.remove();
+          this.gameBoard.windForceX = 0;
           this.gameBoard.boss = null;
           this.gameBoard.bossDefeated = true;
           this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
