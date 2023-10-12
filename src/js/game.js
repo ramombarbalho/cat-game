@@ -45,13 +45,17 @@ const INIT_CONFIG = {
   gameHeight: 720,
   gameWidth: 1280,
   keys: ['KeyW', 'KeyS', 'KeyA', 'KeyD', 'KeyJ', 'KeyL', 'KeyK', 'Enter', 'KeyP'], // up, down, left, right, shot, skill1, skill2, pause, debug
+  // keys: ['Numpad8', 'Numpad5', 'Numpad4', 'Numpad6', 'KeyH', 'KeyJ', 'KeyM', 'NumpadDivide', 'Numpad0'],
   stageId: 0,
   pauseGameFrames: 90,
   gravity: 2,
   initStageState: 'TRANSITION_IN',
   openingStageMsgFrames: 132,
+  // openingStageMsgFrames: 10,
   stageClearMsgFrames: 216,
+  // stageClearMsgFrames: 10,
   warningMsgFrames: 294,
+  // warningMsgFrames: 10,
   coinFramesInterval: 360,
   overlayTransitionFrames: 60
 };
@@ -65,7 +69,7 @@ const INIT_PLAYER_STATE = {
   chargeFramesInterval: 36,
   dboostDistance: 150,
   dboostFrames: 5,
-  untargetableFrames: 120
+  untargetableFrames: 80
 };
 
 class InputHandler {
@@ -445,6 +449,7 @@ class GameBoardUI {
   fillHpBossEl() {
     if (this.hpBossElValue < 100) {
       this.hpBossElValue += 1;
+      // this.hpBossElValue += 50;
       this.hpBossEl.style.width = this.hpBossElValue + '%';
     }
   }
@@ -1099,7 +1104,7 @@ class MoonBossProjectile extends Sprite {
     this.src = 'test-p.gif';
     this.hp = 3;
     this.points = 0;
-    this.speed = Math.random() * (10 - 2 + 1) + 2;
+    this.speed = data.speed;
     this.speedY = -this.speed * this.topStart;
     this.speedX = -this.speed;
     this.rotate = data.rotate;
@@ -1168,23 +1173,31 @@ class MoonBoss extends Sprite {
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
     this.el.src = `${this.src}`;
-    this.hp = 40;
-    this.balanceTop = 10;
-    this.balanceBottom = 10;
+    this.hp = 80;
+    this.balanceTop = 1;
+    this.balanceBottom = 1;
     this.speedX = -8;
+    this.speedXVariant = 12;
     this.rotate = 0;
-    this.rotateSpeed = 10;
+    this.rotateSpeed = 5;
     this.rotateDirection = -1;
     this.gameBoard.gameRunningArea.appendChild(this.el);
     this.width = this.el.getBoundingClientRect().width;
     this.dmgHitBoxEl = null;
     this.state = 'INVULNERABLE';
-    this.skill00SpawnInterval = 400;
+    this.dmgVulnerability = true;
+    this.dmgVulnerabilityFrames = 70;
+    this.skill00SpawnInterval = 480;
+    this.skill00SpawnIntervalVariant = 480;
     this.projectileSpawnInterval = 80;
+    this.projectileSpawnIntervalVariant = 80;
     this.rage = 0;
     this.rageMode = false;
-    this.skill01ProjectilesQuantity = 10;
+    this.skill01RotateQuantity = 5;
+    this.skill01RotateQuantityVariant = 5;
     this.skill03State = 's1';
+    this.windForceXVariant = -4;
+    this.maxSpeedMeteorVariant = 3;
 
     this.radius = 0.5 * this.height;
     this.hitBox = {
@@ -1243,10 +1256,29 @@ class MoonBoss extends Sprite {
 
   stopSkill() {
     this.state = 'INVULNERABLE';
-    this.balanceTop = 10;
-    this.balanceBottom = 10;
+    if (this.hp <= 40) {
+      this.speedXVariant = 16;
+      this.rotateSpeed = 8;
+      this.skill00SpawnIntervalVariant = 360;
+      this.projectileSpawnIntervalVariant = 60;
+      this.skill01RotateQuantityVariant = 8;
+      this.windForceXVariant = -5;
+      this.maxSpeedMeteorVariant = 6;
+    }
+    if (this.hp <= 20) {
+      this.speedXVariant = 24;
+      this.rotateSpeed = 12;
+      this.skill00SpawnIntervalVariant = 240;
+      this.projectileSpawnIntervalVariant = 40;
+      this.skill01RotateQuantityVariant = 12;
+      this.windForceXVariant = -7;
+      this.maxSpeedMeteorVariant = 11;
+    }
+    this.balanceTop = 1;
+    this.balanceBottom = 1;
     this.speedX = 0;
-    this.skill00SpawnInterval = 400;
+    this.skill00SpawnInterval = this.skill00SpawnIntervalVariant;
+    this.skill01RotateQuantity = this.skill01RotateQuantityVariant;
     this.rage = 0;
   }
 
@@ -1266,10 +1298,11 @@ class MoonBoss extends Sprite {
         top: rotation === 1 ? this.gameBoard.gameRunningHeight : -200,
         left: Math.floor(Math.random() * this.gameBoard.gameRunningWidth + 100 * 0.8),
         topStart: rotation,
-        rotate: 45 + 45 * rotation
+        rotate: 45 + 45 * rotation,
+        speed: Math.random() * (this.maxSpeedMeteorVariant - 2 + 1) + 2
       })
     );
-    this.projectileSpawnInterval = 80;
+    this.projectileSpawnInterval = this.projectileSpawnIntervalVariant;
   }
 
   throwTargetMeteor() {
@@ -1281,17 +1314,18 @@ class MoonBoss extends Sprite {
             ? this.gameBoard.player.top + this.gameBoard.player.left + 200 * 0.8
             : this.gameBoard.gameRunningHeight - this.gameBoard.player.top - this.gameBoard.player.height + this.gameBoard.player.left + 200 * 0.8,
         topStart: this.rotateDirection,
-        rotate: 45 + 45 * this.rotateDirection
+        rotate: 45 + 45 * this.rotateDirection,
+        speed: Math.random() * (this.maxSpeedMeteorVariant - 2 + 1) + 2
       })
     );
   }
 
   skill00() {
-    if (!this.speedX) this.speedX = -16;
-    if (this.left <= 0) this.speedX = 16;
+    if (!this.speedX) this.speedX = -this.speedXVariant;
+    if (this.left <= 0) this.speedX = this.speedXVariant;
     this.update();
     if (this.left + this.width > this.gameBoard.gameRunningWidth) {
-      this.speedX = -16;
+      this.speedX = -this.speedXVariant;
       this.update();
       this.stopSkill();
     }
@@ -1301,9 +1335,8 @@ class MoonBoss extends Sprite {
     this.rotating();
     if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) {
       this.throwTargetMeteor();
-      this.skill01ProjectilesQuantity--;
-      if (this.skill01ProjectilesQuantity <= 0) {
-        this.skill01ProjectilesQuantity = 10;
+      this.skill01RotateQuantity--;
+      if (this.skill01RotateQuantity <= 0) {
         this.stopRotating();
         this.stopSkill();
       }
@@ -1313,13 +1346,13 @@ class MoonBoss extends Sprite {
   skill02() {
     this.rotating();
     if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) this.throwRandomMeteor(this.rotateDirection);
-    if (!this.speedX) this.speedX = -16;
-    if (this.left <= 0) this.speedX = 16;
+    if (!this.speedX) this.speedX = -this.speedXVariant;
+    if (this.left <= 0) this.speedX = this.speedXVariant;
     this.update();
     if (this.left + this.width > this.gameBoard.gameRunningWidth) {
-      this.speedX = -16;
+      this.speedX = -this.speedXVariant;
       this.update();
-      this.speedX = 16;
+      this.speedX = this.speedXVariant;
       if (this.rotate % 360 === 0) {
         this.stopRotating();
         this.stopSkill();
@@ -1336,20 +1369,30 @@ class MoonBoss extends Sprite {
         this.update();
         if (this.left > this.gameBoard.left + this.gameBoard.gameRunningWidth * 1.3) {
           this.skill03State = 's2';
-          this.speedX = -48;
+          this.speedX = -this.speedXVariant * 4;
         }
         break;
       case 's2':
         this.update();
-        if (this.left + this.width < this.gameBoard.left) {
+        if (this.el.style.filter !== 'blur(3px)') {
+          this.el.style.filter = 'blur(3px)';
+          this.el.style.scale = 1.8;
+          this.el.style.zIndex = '3';
+        }
+        if (this.left + this.width * 1.6 < this.gameBoard.left) {
           this.skill03State = 's3';
           this.left = this.gameBoard.gameRunningWidth * 1.5;
           this.speedX = -8;
-          this.gameBoard.windForceX = -6;
+          this.gameBoard.windForceX = this.windForceXVariant;
         }
         break;
       case 's3':
         this.update();
+        if (this.el.style.filter === 'blur(3px)') {
+          this.el.style.filter = 'none';
+          this.el.style.scale = 1;
+          this.el.style.zIndex = '1';
+        }
         if (this.left + this.width + 8 < this.gameBoard.gameRunningWidth) {
           this.speedX = 8;
           this.update();
@@ -1397,9 +1440,11 @@ class MoonBoss extends Sprite {
         this.gameBoard.deletElement(projectile);
       } else if (
         (this.state === 'SKILL01' || this.state === 'SKILL02' || (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
+        this.dmgVulnerability &&
         this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)
       ) {
         this.hp -= projectile.dmg;
+        this.dmgVulnerability = false;
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deletElement(projectile);
         if (this.hp < 0) this.hp = 0;
@@ -1410,13 +1455,29 @@ class MoonBoss extends Sprite {
           this.gameBoard.windForceX = 0;
           this.gameBoard.boss = null;
           this.gameBoard.bossDefeated = true;
+          this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
+            this.gameBoard.explosions.push(new Explosion(this.gameBoard, enemy.explosion));
+            this.gameBoard.deletElement(enemy, arrEnemies);
+          });
           return;
         }
       }
     });
   }
 
+  dmgInvulnerabilityMode() {
+    if (this.dmgVulnerabilityFrames > 0) {
+      this.dmgVulnerabilityFrames--;
+      this.el.style.filter = this.el.style.filter !== 'brightness(0) invert(1)' ? 'brightness(0) invert(1)' : 'none';
+    } else {
+      this.el.style.filter = 'none';
+      this.dmgVulnerability = true;
+      this.dmgVulnerabilityFrames = 70;
+    }
+  }
+
   stateHandler() {
+    if (!this.dmgVulnerability) this.dmgInvulnerabilityMode();
     if (this.state === 'INVULNERABLE' || this.state === 'SKILL00') this.projectileSpawnInterval--;
     if (this.projectileSpawnInterval <= 0) this.throwRandomMeteor();
     if (this.state === 'INVULNERABLE') {
