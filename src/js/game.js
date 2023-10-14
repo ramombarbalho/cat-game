@@ -14,6 +14,16 @@ const STAGES_LIST = [
     backgroundImage: 'linear-gradient(#7f55ff, #7f55ff)'
   },
   {
+    title: '1-2',
+    enemyGroup: null,
+    bossStage: true,
+    bossId: 0,
+    enemyIntervalFrames: null,
+    scoreGoal: null,
+    isClear: false,
+    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
+  },
+  {
     title: '1-1',
     enemyGroup: [0],
     bossStage: false,
@@ -28,16 +38,6 @@ const STAGES_LIST = [
     breakPointActive: false,
     isClear: false,
     backgroundImage: 'linear-gradient(#5a23a1, #25b3df)'
-  },
-  {
-    title: '1-2',
-    enemyGroup: null,
-    bossStage: true,
-    bossId: 0,
-    enemyIntervalFrames: null,
-    scoreGoal: null,
-    isClear: false,
-    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
   }
 ];
 
@@ -61,7 +61,7 @@ const INIT_CONFIG = {
 };
 
 const INIT_PLAYER_STATE = {
-  height: 100,
+  height: 70,
   hp: 3,
   skills: [0, 0],
   skin: 'original',
@@ -1174,8 +1174,8 @@ class MoonBoss extends Sprite {
     this.el.style.left = this.left + 'px';
     this.el.src = `${this.src}`;
     this.hp = 80;
-    this.balanceTop = 1;
-    this.balanceBottom = 1;
+    this.balanceTop = 7;
+    this.balanceBottom = 7;
     this.speedX = -8;
     this.speedXVariant = 12;
     this.rotate = 0;
@@ -1256,26 +1256,27 @@ class MoonBoss extends Sprite {
 
   stopSkill() {
     this.state = 'INVULNERABLE';
-    if (this.hp <= 40) {
+    if (this.hp <= 40 && this.hp > 20) {
       this.speedXVariant = 16;
       this.rotateSpeed = 8;
+      this.projectileSpawnInterval = 70;
       this.skill00SpawnIntervalVariant = 360;
       this.projectileSpawnIntervalVariant = 60;
-      this.skill01RotateQuantityVariant = 8;
+      this.skill01RotateQuantityVariant = 7;
       this.windForceXVariant = -5;
       this.maxSpeedMeteorVariant = 6;
-    }
-    if (this.hp <= 20) {
+    } else if (this.hp <= 20) {
       this.speedXVariant = 24;
       this.rotateSpeed = 12;
+      this.projectileSpawnInterval = 60;
       this.skill00SpawnIntervalVariant = 240;
       this.projectileSpawnIntervalVariant = 40;
-      this.skill01RotateQuantityVariant = 12;
+      this.skill01RotateQuantityVariant = 11;
       this.windForceXVariant = -7;
       this.maxSpeedMeteorVariant = 11;
     }
-    this.balanceTop = 1;
-    this.balanceBottom = 1;
+    this.balanceTop = 7;
+    this.balanceBottom = 7;
     this.speedX = 0;
     this.skill00SpawnInterval = this.skill00SpawnIntervalVariant;
     this.skill01RotateQuantity = this.skill01RotateQuantityVariant;
@@ -1296,7 +1297,7 @@ class MoonBoss extends Sprite {
     this.gameBoard.enemies.push(
       new MoonBossProjectile(this.gameBoard, {
         top: rotation === 1 ? this.gameBoard.gameRunningHeight : -200,
-        left: Math.floor(Math.random() * this.gameBoard.gameRunningWidth + 100 * 0.8),
+        left: Math.floor(Math.random() * this.gameBoard.gameRunningWidth + 200 * 0.9),
         topStart: rotation,
         rotate: 45 + 45 * rotation,
         speed: Math.random() * (this.maxSpeedMeteorVariant - 2 + 1) + 2
@@ -1447,6 +1448,8 @@ class MoonBoss extends Sprite {
         this.dmgVulnerability = false;
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deletElement(projectile);
+        if (this.hp <= 40 && this.hp > 20) this.el.src = 'moon-boss-1.png';
+        if (this.hp <= 20) this.el.src = 'moon-boss-2.png';
         if (this.hp < 0) this.hp = 0;
         this.gameBoard.ui.updateBarrBoss();
         if (this.hp === 0) {
