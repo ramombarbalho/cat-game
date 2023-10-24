@@ -13,16 +13,16 @@ const STAGES_LIST = [
     isClear: true,
     backgroundImage: 'linear-gradient(#7f55ff, #7f55ff)'
   },
-  {
-    title: '1-2',
-    enemyGroup: null,
-    bossStage: true,
-    bossId: 0,
-    enemyIntervalFrames: null,
-    scoreGoal: null,
-    isClear: false,
-    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
-  },
+  // {
+  //   title: '1-2',
+  //   enemyGroup: null,
+  //   bossStage: true,
+  //   bossId: 0,
+  //   enemyIntervalFrames: null,
+  //   scoreGoal: null,
+  //   isClear: false,
+  //   backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
+  // },
   {
     title: '1-1',
     enemyGroup: [0],
@@ -38,6 +38,16 @@ const STAGES_LIST = [
     breakPointActive: false,
     isClear: false,
     backgroundImage: 'linear-gradient(#5a23a1, #25b3df)'
+  },
+  {
+    title: '1-2',
+    enemyGroup: null,
+    bossStage: true,
+    bossId: 0,
+    enemyIntervalFrames: null,
+    scoreGoal: null,
+    isClear: false,
+    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
   }
 ];
 
@@ -172,38 +182,17 @@ class TitleUI {
     this.boxOptions = document.createElement('div');
     this.boxOptions.classList.add('box-options');
     this.boxOptions.style.display = 'none';
+    const optionsActions = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'SHOT', 'SKILL 1', 'SKILL 2', 'PAUSE', 'DEBUG']
+      .map(
+        (action, i) => `<div class="options-row"><h3>${action}</h3> <h3 class="label-key">${this.title.game.keys[i]}</h3> <div class="btn-set-key" data-id="${i}">SET</div></div>`
+      )
+      .join('');
     this.boxOptions.innerHTML = ` <h1>OPTIONS</h1>
                                   <div class="options-key-set">
                                     <div class="options-row">
                                       <h2>ACTION</h2> <h2>KEY</h2>
                                     </div>
-                                    <div class="options-row">
-                                      <h3>UP</h3> <h3 class="label-key">${this.title.game.keys[0]}</h3> <div class="btn-set-key" data-id="0">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>DOWN</h3> <h3 class="label-key">${this.title.game.keys[1]}</h3> <div class="btn-set-key" data-id="1">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>LEFT</h3> <h3 class="label-key">${this.title.game.keys[2]}</h3> <div class="btn-set-key" data-id="2">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>RIGHT</h3> <h3 class="label-key">${this.title.game.keys[3]}</h3> <div class="btn-set-key" data-id="3">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>SHOT</h3> <h3 class="label-key">${this.title.game.keys[4]}</h3> <div class="btn-set-key" data-id="4">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>SKILL 1</h3> <h3 class="label-key">${this.title.game.keys[5]}</h3> <div class="btn-set-key" data-id="5">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>SKILL 2</h3> <h3 class="label-key">${this.title.game.keys[6]}</h3> <div class="btn-set-key" data-id="6">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>PAUSE</h3> <h3 class="label-key">${this.title.game.keys[7]}</h3> <div class="btn-set-key" data-id="7">SET</div>
-                                    </div>
-                                    <div class="options-row">
-                                      <h3>DEBUG</h3> <h3 class="label-key">${this.title.game.keys[8]}</h3> <div class="btn-set-key" data-id="8">SET</div>
-                                    </div>
+                                    ${optionsActions}
                                   </div>
                                   <div class="btn-test btn-save">SAVE</div>`;
     this.title.screen.appendChild(this.boxOptions);
@@ -477,17 +466,10 @@ class GameBoardUI {
     if (!this.stageClearMsg) {
       this.stageClearMsg = document.createElement('div');
       this.stageClearMsg.classList.add('stage-clear-msg');
-      this.stageClearMsg.innerHTML = `  <span class="game-text stage-clear-msg-text">s</span>
-                                        <span class="game-text stage-clear-msg-text">t</span>
-                                        <span class="game-text stage-clear-msg-text">a</span>
-                                        <span class="game-text stage-clear-msg-text">g</span>
-                                        <span class="game-text stage-clear-msg-text">e</span>
-                                        <span class="game-text stage-clear-msg-text">c</span>
-                                        <span class="game-text stage-clear-msg-text">l</span>
-                                        <span class="game-text stage-clear-msg-text">e</span>
-                                        <span class="game-text stage-clear-msg-text">a</span>
-                                        <span class="game-text stage-clear-msg-text">r</span>
-                                        <span class="game-text stage-clear-msg-text">!</span>`;
+      this.stageClearMsg.innerHTML = 'stageclear!'
+        .split('')
+        .map(c => `<span class="game-text stage-clear-msg-text">${c}</span>`)
+        .join('');
       this.gameBoard.gameRunningArea.appendChild(this.stageClearMsg);
     } else if (this.stageClearMsgFrames <= 0) {
       this.stageClearMsg.remove();
@@ -501,13 +483,10 @@ class GameBoardUI {
     if (!this.warningMsg) {
       this.warningMsg = document.createElement('div');
       this.warningMsg.classList.add('warning-msg');
-      this.warningMsg.innerHTML = ` <span class="game-text warning-msg-text">w</span>
-                                    <span class="game-text warning-msg-text">a</span>
-                                    <span class="game-text warning-msg-text">r</span>
-                                    <span class="game-text warning-msg-text">n</span>
-                                    <span class="game-text warning-msg-text">i</span>
-                                    <span class="game-text warning-msg-text">n</span>
-                                    <span class="game-text warning-msg-text">g</span>`;
+      this.warningMsg.innerHTML = 'warning'
+        .split('')
+        .map(c => `<span class="game-text warning-msg-text">${c}</span>`)
+        .join('');
       this.gameBoard.gameRunningArea.appendChild(this.warningMsg);
       this.addHpBossBarr();
     } else if (this.warningMsgFrames <= 0) {
@@ -1101,7 +1080,7 @@ class MoonBossProjectile extends Sprite {
     this.height = 200;
     this.top = data.top;
     this.left = data.left;
-    this.src = 'test-p.gif';
+    this.src = 'boss-meteor.gif';
     this.hp = 3;
     this.points = 0;
     this.speed = data.speed;
