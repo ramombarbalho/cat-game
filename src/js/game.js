@@ -1175,7 +1175,8 @@ class MoonBoss extends Sprite {
     this.skill01RotateQuantity = 5;
     this.skill01RotateQuantityVariant = 5;
     this.skill03State = 's1';
-    this.windForceXVariant = -4;
+    this.skill03DirectionRng = 1;
+    this.windForceXVariant = 4;
     this.maxSpeedMeteorVariant = 3;
 
     this.radius = 0.5 * this.height;
@@ -1235,23 +1236,23 @@ class MoonBoss extends Sprite {
 
   stopSkill() {
     this.state = 'INVULNERABLE';
-    if (this.hp <= 40 && this.hp > 20) {
+    if (this.hp <= 48 && this.hp > 24) {
       this.speedXVariant = 16;
       this.rotateSpeed = 8;
       this.projectileSpawnInterval = 70;
       this.skill00SpawnIntervalVariant = 360;
       this.projectileSpawnIntervalVariant = 60;
       this.skill01RotateQuantityVariant = 7;
-      this.windForceXVariant = -5;
+      this.windForceXVariant = 5;
       this.maxSpeedMeteorVariant = 6;
-    } else if (this.hp <= 20) {
+    } else if (this.hp <= 24) {
       this.speedXVariant = 24;
       this.rotateSpeed = 12;
       this.projectileSpawnInterval = 60;
       this.skill00SpawnIntervalVariant = 240;
       this.projectileSpawnIntervalVariant = 40;
-      this.skill01RotateQuantityVariant = 11;
-      this.windForceXVariant = -7;
+      this.skill01RotateQuantityVariant = 10;
+      this.windForceXVariant = 7;
       this.maxSpeedMeteorVariant = 11;
     }
     this.balanceTop = 7;
@@ -1347,28 +1348,29 @@ class MoonBoss extends Sprite {
       case 's1':
         this.speedX = 8;
         this.update();
-        if (this.left > this.gameBoard.left + this.gameBoard.gameRunningWidth * 1.3) {
+        if (this.left - 600 > this.gameBoard.left + this.gameBoard.gameRunningWidth) {
           this.skill03State = 's2';
-          this.speedX = -this.speedXVariant * 4;
+          this.speedX = this.skill03DirectionRng * this.speedXVariant * 4;
+          if (this.skill03DirectionRng === 1) this.left = -(this.width + 400);
         }
         break;
       case 's2':
         this.update();
-        if (this.el.style.filter !== 'blur(3px)') {
-          this.el.style.filter = 'blur(3px)';
-          this.el.style.scale = 1.8;
+        if (this.el.style.filter !== 'blur(2px)') {
+          this.el.style.filter = 'blur(2px)';
+          this.el.style.scale = 2;
           this.el.style.zIndex = '3';
         }
-        if (this.left + this.width * 1.6 < this.gameBoard.left) {
+        if (this.left + this.width + 600 < this.gameBoard.left || this.left - 600 > this.gameBoard.left + this.gameBoard.gameRunningWidth) {
           this.skill03State = 's3';
           this.left = this.gameBoard.gameRunningWidth * 1.5;
           this.speedX = -8;
-          this.gameBoard.windForceX = this.windForceXVariant;
+          this.gameBoard.windForceX = this.skill03DirectionRng * this.windForceXVariant;
         }
         break;
       case 's3':
         this.update();
-        if (this.el.style.filter === 'blur(3px)') {
+        if (this.el.style.filter === 'blur(2px)') {
           this.el.style.filter = 'none';
           this.el.style.scale = 1;
           this.el.style.zIndex = '1';
@@ -1392,6 +1394,7 @@ class MoonBoss extends Sprite {
     const rng = Math.floor(Math.random() * 3 + 1);
     this.rotateDirection = position;
     this.state = `SKILL0${rng}`;
+    if (rng === 3) this.skill03DirectionRng = Math.round(Math.random()) * 2 - 1;
   }
 
   collision() {
