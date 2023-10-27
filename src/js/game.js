@@ -1430,8 +1430,8 @@ class MoonBoss extends Sprite {
         this.dmgVulnerability = false;
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deletElement(projectile);
-        if (this.hp <= 40 && this.hp > 20) this.el.src = 'moon-boss-1.png';
-        if (this.hp <= 20) this.el.src = 'moon-boss-2.png';
+        if (this.hp <= 48 && this.hp > 24) this.el.src = 'moon-boss-1.png';
+        if (this.hp <= 24) this.el.src = 'moon-boss-2.png';
         if (this.hp < 0) this.hp = 0;
         this.gameBoard.ui.updateBarrBoss();
         if (this.hp === 0) {
