@@ -13,12 +13,12 @@ export class TitleUI {
   initTitleUI() {
     this.titleLabel = document.createElement('p');
     this.titleLabel.classList.add('score-label');
-    this.title.screen.appendChild(this.titleLabel);
+    this.title.game.screen.appendChild(this.titleLabel);
     this.titleLabel.innerHTML = 'TITLE LAYOUT';
     this.overlaySetKey = document.createElement('div');
     this.overlaySetKey.classList.add('overlay', 'overlay-set-key');
     this.overlaySetKey.innerHTML = `<p style="font-size: 20px">PRESS A KEY TO SET "<span class="label-key-overlay-options"></span>"</p>`;
-    this.title.screen.appendChild(this.overlaySetKey);
+    this.title.game.screen.appendChild(this.overlaySetKey);
     this.labelKeyOverlayOptions = document.querySelector('.label-key-overlay-options');
     this.overlaySetKey.style.display = 'none';
     this.boxOptions = document.createElement('div');
@@ -37,7 +37,7 @@ export class TitleUI {
                                     ${optionsActions}
                                   </div>
                                   <div class="btn-test btn-save">SAVE</div>`;
-    this.title.screen.appendChild(this.boxOptions);
+    this.title.game.screen.appendChild(this.boxOptions);
     document.querySelector('.btn-save').addEventListener('click', () => (this.boxOptions.style.display = 'none'));
     this.boxOptions.querySelector('.options-key-set').addEventListener('click', ({ target }) => {
       if (target.classList.contains('btn-set-key')) {
@@ -50,16 +50,16 @@ export class TitleUI {
     this.btnOverworld = document.createElement('div');
     this.btnOverworld.classList.add('btn-test');
     this.btnOverworld.textContent = 'OVERWORLD';
-    this.title.screen.appendChild(this.btnOverworld);
+    this.title.game.screen.appendChild(this.btnOverworld);
     this.btnOverworld.addEventListener('click', () => {
       if (this.title.game.activeScreen !== 'TITLE' || this.title.game.transition.overlayTransition) return;
       this.title.game.updateActiveScreen('OVERWORLD');
-      this.title.game.transitionLoop();
+      this.title.game.transition.loop();
     });
     this.btnOptions = document.createElement('div');
     this.btnOptions.classList.add('btn-test');
     this.btnOptions.textContent = 'OPTIONS';
-    this.title.screen.appendChild(this.btnOptions);
+    this.title.game.screen.appendChild(this.btnOptions);
     this.btnOptions.addEventListener('click', () => {
       if (this.title.game.activeScreen !== 'TITLE' || this.title.game.transition.overlayTransition) return;
       this.boxOptions.style.display = 'flex';

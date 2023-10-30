@@ -4,6 +4,6 @@ export class BtnToBeContinued {
     this.btn = document.createElement('div');
     this.btn.classList.add('btn-test');
     this.btn.textContent = `UNDER DEVELOPMENT`;
-    this.overworld.screen.appendChild(this.btn);
+    this.overworld.game.screen.appendChild(this.btn);
   }
 }

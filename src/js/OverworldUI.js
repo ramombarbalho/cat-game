@@ -1,4 +1,5 @@
 import { BtnStage } from './BtnStage';
+import { BtnToBeContinued } from './BtnToBeContinued';
 
 export class OverworldUI {
   constructor(overworld) {
@@ -12,17 +13,21 @@ export class OverworldUI {
   initOverworldUI() {
     this.overworldLabel = document.createElement('p');
     this.overworldLabel.classList.add('score-label');
-    this.overworld.screen.appendChild(this.overworldLabel);
+    this.overworld.game.screen.appendChild(this.overworldLabel);
     this.overworldLabel.innerHTML = 'OVERWORLD LAYOUT';
     this.btnTitle = document.createElement('div');
     this.btnTitle.classList.add('btn-test');
     this.btnTitle.textContent = 'TITLE';
-    this.overworld.screen.appendChild(this.btnTitle);
+    this.overworld.game.screen.appendChild(this.btnTitle);
     this.btnTitle.addEventListener('click', () => {
       if (this.overworld.game.activeScreen !== 'OVERWORLD' || this.overworld.game.transition.overlayTransition) return;
       this.overworld.game.updateActiveScreen('TITLE');
-      this.overworld.game.transitionLoop();
+      this.overworld.game.transition.loop();
     });
-    this.btnStages.push(new BtnStage(this.overworld, this.overworld.game.stageId + 1));
+    for (let i = 0; i < this.overworld.game.stages.length; i++) {
+      this.btnStages.push(new BtnStage(this.overworld, i));
+      if (!this.overworld.game.stages[i].isClear) break;
+    }
+    if (this.overworld.game.stages.every(stage => stage.isClear)) this.btnToBeContinued = new BtnToBeContinued(this.overworld);
   }
 }

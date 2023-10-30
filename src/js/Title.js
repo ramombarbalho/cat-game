@@ -3,10 +3,19 @@ import { TitleUI } from './TitleUI';
 export class Title {
   constructor(game) {
     this.game = game;
-    this.id = 'TITLE';
-    this.screen = document.createElement('div');
-    this.screen.classList.add('game-title');
-    this.game.gameContainer.appendChild(this.screen);
     this.ui = new TitleUI(this);
+  }
+
+  setKey(key) {
+    const keyIndex = this.game.keys.indexOf(key);
+    if (keyIndex > -1) {
+      this.game.keys[keyIndex] = this.game.keys[this.ui.id];
+      this.ui.boxOptions.querySelector(`div[data-id="${keyIndex}"]`).previousElementSibling.innerHTML = this.game.keys[keyIndex];
+    }
+    this.game.keys[this.ui.id] = key;
+    this.ui.boxOptions.querySelector(`div[data-id="${this.ui.id}"]`).previousElementSibling.innerHTML = key;
+    this.ui.labelKeyOverlayOptions.innerHTML = '';
+    this.ui.overlaySetKey.style.display = 'none';
+    this.ui.overlaySetKeyIsOpen = false;
   }
 }

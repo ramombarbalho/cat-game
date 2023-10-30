@@ -1,7 +1,7 @@
 import { INIT_CONFIG } from './INIT_CONFIG';
 import { STAGES_LIST } from './STAGES_LIST';
 import { INIT_PLAYER_STATE } from './INIT_PLAYER_STATE';
-import { Game } from './Game';
+import { Game } from './App';
 
 if ('ontouchstart' in document.documentElement)
   document.querySelector('.game-loading').innerHTML = `<p style="font-size: 20px">THIS GAME DOESN'T WORK ON TOUCH SCREEN DEVICES =/</p>`;

@@ -1,6 +1,4 @@
 import { GameImg } from './GameImg';
-import { BtnToBeContinued } from './BtnToBeContinued';
-import { BtnStage } from './BtnStage';
 
 export class GameBoardUI {
   constructor(gameBoard) {
@@ -39,26 +37,11 @@ export class GameBoardUI {
     this.statusBarr.classList.add('game-status-barr');
     this.statusBarr.style.height = this.statusBarrHeight + 'px';
     this.statusBarr.style.width = this.statusBarrWidth + 'px';
-    this.gameBoard.screen.appendChild(this.statusBarr);
+    this.gameBoard.game.screen.appendChild(this.statusBarr);
     this.overlayPaused = document.createElement('div');
     this.overlayPaused.classList.add('overlay', 'overlay-paused');
     this.overlayPaused.style.display = 'none';
-    this.gameBoard.screen.appendChild(this.overlayPaused);
-  }
-
-  clearGameBoardUI() {
-    this.statusBarr.innerHTML = '';
-    this.overlayPaused.innerHTML = '';
-    this.openingStageMsgFrames = this.gameBoard.game.config.openingStageMsgFrames;
-    this.stageClearMsgFrames = this.gameBoard.game.config.stageClearMsgFrames;
-    this.warningMsgFrames = this.gameBoard.game.config.warningMsgFrames;
-    this.hpBossElValue = 0;
-    this.initialBossHp = 0;
-    this.overlayPaused.style.display = 'none';
-  }
-
-  updateGameBoardUI() {
-    this.clearGameBoardUI();
+    this.gameBoard.game.screen.appendChild(this.overlayPaused);
     if (!this.gameBoard.stage.bossStage) {
       this.scoreLabel = document.createElement('p');
       this.scoreLabel.classList.add('score-label');
@@ -73,14 +56,14 @@ export class GameBoardUI {
     this.btnRetry = document.querySelector('.btn-retry');
     this.btnRetry.addEventListener('click', () => {
       if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
-      this.gameBoard.game.transitionLoop();
+      this.gameBoard.game.transition.loop();
     });
     this.btnOverworld = document.querySelector('.btn-overworld');
     this.btnOverworld.addEventListener('click', () => {
       if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
       this.gameBoard.game.stageId = 0;
       this.gameBoard.game.updateActiveScreen('OVERWORLD');
-      this.gameBoard.game.transitionLoop();
+      this.gameBoard.game.transition.loop();
     });
     this.heartsBox = document.createElement('div');
     this.heartsBox.classList.add('box-hearts');
@@ -240,19 +223,6 @@ export class GameBoardUI {
       this.btnRetry.addEventListener('mouseover', this.catThumbsUp);
       this.btnRetry.addEventListener('mouseout', this.catThumbsDown);
     } else if (this.gameBoard.state === 'STAGE_CLEAR') {
-      if (
-        this.gameBoard.game.stages.length > this.gameBoard.game.stageId + 1 &&
-        this.gameBoard.game.stages[this.gameBoard.game.stageId].isClear &&
-        !this.gameBoard.game.overworld.ui.btnStages[this.gameBoard.game.stageId]
-      ) {
-        this.gameBoard.game.overworld.ui.btnStages.push(new BtnStage(this.gameBoard.game.overworld, this.gameBoard.game.stageId + 1));
-      } else if (
-        this.gameBoard.game.stages.length === this.gameBoard.game.stageId + 1 &&
-        this.gameBoard.game.stages[this.gameBoard.game.stageId].isClear &&
-        !this.gameBoard.game.overworld.ui.btnToBeContinued
-      ) {
-        this.gameBoard.game.overworld.ui.btnToBeContinued = new BtnToBeContinued(this.gameBoard.game.overworld);
-      }
       this.boxMsg.innerHTML = ` <div class="box-msg-content">
                                   <h1>STAGE CLEAR</h1>
                                   <h3>HP:.......??</h3>
@@ -270,11 +240,11 @@ export class GameBoardUI {
       if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
       this.gameBoard.game.stageId = 0;
       this.gameBoard.game.updateActiveScreen('OVERWORLD');
-      this.gameBoard.game.transitionLoop();
+      this.gameBoard.game.transition.loop();
     });
     this.btnRetry.addEventListener('click', () => {
       if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
-      this.gameBoard.game.transitionLoop();
+      this.gameBoard.game.transition.loop();
     });
   }
 

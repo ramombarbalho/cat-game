@@ -1,25 +1,24 @@
+import { BOSS_LIST } from './BOSS_LIST';
 import { Coin } from './Coin';
+import { ENEMY_LIST } from './ENEMY_LIST';
 import { Explosion } from './Explosion';
 import { GameBoardUI } from './GameBoardUI';
+import { Player } from './Player';
+import { SKILL_LIST } from './SKILL_LIST';
 
 export class GameBoard {
   constructor(game) {
     this.game = game;
-    this.id = 'GAME_BOARD';
-    this.screen = document.createElement('div');
-    this.screen.classList.add('game-board');
-    this.screen.style.display = 'none';
-    this.game.gameContainer.appendChild(this.screen);
     this.gameRunningArea = document.createElement('div');
     this.gameRunningArea.classList.add('game-running-area');
     this.gameRunningHeight = this.game.height / 1.2;
     this.gameRunningWidth = this.game.width;
     this.gameRunningArea.style.height = this.gameRunningHeight + 'px';
     this.gameRunningArea.style.width = this.gameRunningWidth + 'px';
-    this.screen.appendChild(this.gameRunningArea);
+    this.game.screen.appendChild(this.gameRunningArea);
     this.top = 0;
     this.left = 0;
-    this.stage = null;
+    this.stage = { ...this.game.stages[this.game.stageId] };
     this.state = this.game.config.initStageState;
     this.gravity = this.game.config.gravity;
     this.windForceX = 0;
@@ -31,12 +30,28 @@ export class GameBoard {
     this.explosions = [];
     this.coins = [];
     this.hitBoxElements = [];
-    this.enemySpawnInterval = null;
+    this.enemySpawnInterval = this.stage.enemyIntervalFrames;
     this.score = 0;
     this.boss = null;
     this.bossDefeated = false;
-    this.player = null;
+    this.gameRunningArea.style.backgroundImage = this.stage.backgroundImage;
+    this.player = new Player(this);
+    this.player.skills = [this.addPlayerSkills(this.game.playerState.skills[0]), this.addPlayerSkills(this.game.playerState.skills[1])];
     this.ui = new GameBoardUI(this);
+    this.loop();
+  }
+
+  addPlayerSkills(id) {
+    return new SKILL_LIST[id](this, this.player);
+  }
+
+  addEnemy() {
+    const rng = Math.floor(Math.random() * this.stage.enemyGroup.length);
+    return new ENEMY_LIST[this.stage.enemyGroup[rng]](this);
+  }
+
+  addBoss(id) {
+    return new BOSS_LIST[id](this);
   }
 
   deletElement(element) {
@@ -137,7 +152,7 @@ export class GameBoard {
       if (!this.boss) this.ui.warning();
       if (!this.ui.warningMsg) {
         if (!this.boss) {
-          this.boss = this.game.addBoss(this.stage.bossId);
+          this.boss = this.addBoss(this.stage.bossId);
           this.ui.initialBossHp = this.boss.hp;
         } else this.boss.entrance();
       }
@@ -204,7 +219,7 @@ export class GameBoard {
 
     if (this.state === 'GAME_RUNNING' && this.score < this.stage.scoreGoal && !this.stage.bossStage) {
       if (this.enemySpawnInterval <= 0) {
-        this.enemies.push(this.game.addEnemy());
+        this.enemies.push(this.addEnemy());
         this.enemySpawnInterval = this.stage.enemyIntervalFrames;
       } else {
         this.enemySpawnInterval--;
