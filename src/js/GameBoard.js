@@ -4,7 +4,6 @@ import { ENEMY_LIST } from './ENEMY_LIST';
 import { Explosion } from './Explosion';
 import { GameBoardUI } from './GameBoardUI';
 import { Player } from './Player';
-import { SKILL_LIST } from './SKILL_LIST';
 
 export class GameBoard {
   constructor(game) {
@@ -36,13 +35,8 @@ export class GameBoard {
     this.bossDefeated = false;
     this.gameRunningArea.style.backgroundImage = this.stage.backgroundImage;
     this.player = new Player(this);
-    this.player.skills = [this.addPlayerSkills(this.game.playerState.skills[0]), this.addPlayerSkills(this.game.playerState.skills[1])];
     this.ui = new GameBoardUI(this);
     this.loop();
-  }
-
-  addPlayerSkills(id) {
-    return new SKILL_LIST[id](this, this.player);
   }
 
   addEnemy() {

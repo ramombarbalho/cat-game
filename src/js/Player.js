@@ -1,6 +1,7 @@
 import { Sprite } from './Sprite';
 import { Projectile } from './Projectile';
 import { ChargeAnimation } from './ChargeAnimation';
+import { SKILL_LIST } from './SKILL_LIST';
 
 export class Player extends Sprite {
   constructor(gameBoard) {
@@ -18,7 +19,7 @@ export class Player extends Sprite {
     this.speedY = 0;
     this.speedX = 0;
     this.speed = this.gameBoard.game.playerState.speed;
-    this.skills = [];
+    this.skills = this.gameBoard.game.playerState.skills.map(skill => this.addSkills(skill));
     this.chargeValue = 0;
     this.chargeFrames = 0;
     this.untargetableFrames = this.gameBoard.game.playerState.untargetableFrames;
@@ -46,6 +47,10 @@ export class Player extends Sprite {
     };
 
     if (this.gameBoard.debugMode) this.addHitBoxDebug();
+  }
+
+  addSkills(id) {
+    return new SKILL_LIST[id](this.gameBoard, this);
   }
 
   update() {

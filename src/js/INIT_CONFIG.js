@@ -2,7 +2,6 @@ export const INIT_CONFIG = {
   gameHeight: 720,
   gameWidth: 1280,
   keys: ['KeyW', 'KeyS', 'KeyA', 'KeyD', 'KeyJ', 'KeyL', 'KeyK', 'Enter', 'KeyP'],
-
   // keys: ['Numpad8', 'Numpad5', 'Numpad4', 'Numpad6', 'KeyH', 'KeyJ', 'KeyM', 'NumpadDivide', 'Numpad0'],
   stageId: 0,
   pauseGameFrames: 90,

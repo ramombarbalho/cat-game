@@ -50,8 +50,8 @@ export class Game {
   updateActiveScreen = screen => (this.activeScreen = screen);
 
   switchScreens() {
-    this.screen.innerHTML = '';
     const view = camelCase('_' + this.activeScreen);
+    this.screen.innerHTML = '';
     this.currentView = new this.views[view](this);
   }
 }

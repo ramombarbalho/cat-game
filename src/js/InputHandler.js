@@ -2,11 +2,10 @@ export class InputHandler {
   constructor(game) {
     this.game = game;
     window.addEventListener('keydown', e => {
-      if (this.game.keys.slice(0, 5).includes(e.code) && !this.game.keysActive.includes(e.code)) {
-        this.game.keysActive.push(e.code);
-      }
       if (this.game.activeScreen === 'GAME_BOARD') {
-        if (this.game.keys.slice(5, 7).includes(e.code)) {
+        if (this.game.keys.slice(0, 5).includes(e.code) && !this.game.keysActive.includes(e.code)) {
+          this.game.keysActive.push(e.code);
+        } else if (this.game.keys.slice(5, 7).includes(e.code)) {
           if (!this.game.keysActive.includes(e.code)) {
             this.game.keysActive.push(e.code);
             if (this.game.currentView.state === 'GAME_RUNNING') this.game.currentView.player.useSkill(this.game.keys.slice(5, 7).indexOf(e.code));
@@ -18,7 +17,7 @@ export class InputHandler {
           this.game.keysActive.push(e.code);
           if (this.game.currentView.stage) this.game.currentView.switchDebugMode();
         }
-      } else if (this.game.activeScreen === 'TITLE' && this.game.currentView?.ui.overlaySetKeyIsOpen) {
+      } else if (this.game.activeScreen === 'TITLE') {
         this.game.currentView.setKey(e.code);
       }
       if (e.code === 'Space') e.preventDefault();

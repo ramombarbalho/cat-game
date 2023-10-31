@@ -7,6 +7,7 @@ export class Title {
   }
 
   setKey(key) {
+    if (!this.ui.overlaySetKeyIsOpen) return;
     const keyIndex = this.game.keys.indexOf(key);
     if (keyIndex > -1) {
       this.game.keys[keyIndex] = this.game.keys[this.ui.id];
