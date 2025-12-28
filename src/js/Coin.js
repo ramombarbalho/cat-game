@@ -1,24 +1,24 @@
-import { Sprite } from './Sprite';
+import { SpriteNew } from './SpriteNew';
 
-export class Coin extends Sprite {
+export class Coin extends SpriteNew {
   constructor(gameBoard, enemy) {
-    super(gameBoard);
-    this.type = 'coins';
-    this.gameBoard = gameBoard;
-    this.height = 50;
-    this.src = 'coin.gif';
-    this.el.style.height = this.height + 'px';
-    this.el.src = `${this.src}`;
-    this.gameBoard.gameRunningArea.appendChild(this.el);
-    this.width = this.el.getBoundingClientRect().width;
+    super(gameBoard, {
+      src: 'coin-spritesheet.png',
+      height: 50,
+      currentFrameY: 1,
+      maxFramesY: 1,
+      currentFrameX: 1,
+      maxFramesX: 4,
+      delayByFrameXCount: 1,
+      delayByFrameX: 8,
+      lifetimeFrames: gameBoard.game.config.coinLifetimeFrames
+    });
+
     this.top = enemy.top + enemy.height / 2 - this.height / 2;
+    this.width = this.spriteSheet.width / this.maxFramesX;
     this.left = enemy.left + enemy.width / 2 - this.width / 2;
-    this.el.style.top = this.top + 'px';
-    this.el.style.left = this.left + 'px';
-    this.el.style.zIndex = '2';
-    this.points = 2;
-    this.frames = this.gameBoard.game.config.coinFramesInterval;
-    this.markForDeletion = false;
+
+    this.setPosition();
 
     this.hitBox = {
       height: this.height,
@@ -28,15 +28,11 @@ export class Coin extends Sprite {
       boxType: 'rectangle-yellow'
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug();
-  }
+    this.type = 'coins';
+    this.points = 2;
 
-  timer() {
-    this.frames--;
-    if (this.frames <= this.gameBoard.game.config.coinFramesInterval / 3 && this.frames > 0) {
-      this.el.style.visibility = this.el.style.visibility !== 'hidden' ? 'hidden' : 'visible';
-    } else if (this.frames <= 0) {
-      this.gameBoard.deletElement(this);
-    }
+    this.markForDeletion = false;
+
+    if (this.gameBoard.debugMode) this.addHitBoxDebug();
   }
 }

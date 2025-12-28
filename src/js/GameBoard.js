@@ -188,7 +188,8 @@ export class GameBoard {
           this.deletElement(projectile);
           if (enemy.hp <= 0) {
             this.scoreUp(enemy.points);
-            if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, enemy));
+            // if (Math.random() < enemy.dropRate) 
+              this.coins.push(new Coin(this, enemy));
             this.explosions.push(new Explosion(this, enemy.explosion));
             this.deletElement(enemy);
           }
@@ -206,7 +207,7 @@ export class GameBoard {
         this.scoreUp(coin.points);
         this.deletElement(coin);
       }
-      if (!coin.markForDeletion) coin.timer();
+      if (!coin.markForDeletion) coin.update();
     });
 
     if (this.boss && this.state === 'GAME_RUNNING') this.boss.collision();
