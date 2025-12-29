@@ -7,7 +7,8 @@ export class Coin extends SpriteNew {
       height: 50,
       maxFramesX: 4,
       delayByFrameX: 8,
-      lifetimeFrames: 360
+      lifetimeFrames: 360,
+      willBlink: true
     });
 
     this.type = 'coins';

@@ -13,7 +13,8 @@ export class SpriteNew {
       maxFramesX = 1,
       delayByFrameXCount = 1,
       delayByFrameX = 1,
-      lifetimeFrames = -1
+      lifetimeFrames = -1,
+      willBlink = false
     }
   ) {
     this.gameBoard = gameBoard;
@@ -27,6 +28,7 @@ export class SpriteNew {
     this.delayByFrameX = delayByFrameX;
     this.lifetimeFramesCount = lifetimeFrames;
     this.lifetimeFrames = lifetimeFrames;
+    this.willBlink = willBlink;
 
     this.el = null;
     this.markForDeletion = false;
@@ -72,9 +74,6 @@ export class SpriteNew {
   }
 
   updateCurrentFrameX() {
-    if (this.type === 'coins')
-      console.log(this.currentFrameX, this.delayByFrameXCount);
-
     if (this.maxFramesX < 2) return;
 
     if (this.delayByFrameXCount < this.delayByFrameX) {
@@ -98,7 +97,8 @@ export class SpriteNew {
     this.lifetimeFramesCount--;
     if (
       this.lifetimeFramesCount <= this.lifetimeFrames / 3 &&
-      this.lifetimeFramesCount > 0
+      this.lifetimeFramesCount > 0 &&
+      this.willBlink
     ) {
       this.el.style.visibility =
         this.el.style.visibility !== 'hidden' ? 'hidden' : 'visible';

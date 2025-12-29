@@ -39,8 +39,8 @@ export class SkillBomb extends Sprite {
     this.explosion = {
       height: this.hitBox.height * (4 / 3),
       src: 'boss-explosion-spritesheet.png',
-      maxFramesY: 1,
       maxFramesX: 90,
+      delayByFrameX: 1,
       position: {
         height: this.hitBox.height * (4 / 3),
         width: this.hitBox.width * (4 / 3),

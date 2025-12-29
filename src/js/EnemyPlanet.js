@@ -35,8 +35,8 @@ export class EnemyPlanet extends Sprite {
     this.explosion = {
       height: 147,
       src: 'enemy-explosion-spritesheet.png',
-      maxFramesY: 1,
       maxFramesX: 31,
+      delayByFrameX: 1,
       position: {
         height: this.hitBox.height,
         width: this.hitBox.width,

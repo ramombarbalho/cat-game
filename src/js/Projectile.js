@@ -51,8 +51,8 @@ export class Projectile extends SpriteNew {
     this.explosion = {
       height: this.player.height * 0.375 + this.chargeValue * 15,
       src: `shot-${this.chargeValue}-explosion-spritesheet.png`,
-      maxFramesY: 1,
-      maxFramesX: 6,
+      maxFramesX: 3,
+      delayByFrameX: 2,
       position: {
         height: this.hitBox.height,
         width: this.hitBox.width,

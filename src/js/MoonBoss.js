@@ -64,8 +64,8 @@ export class MoonBoss extends Sprite {
     this.explosion = {
       height: this.height,
       src: 'boss-explosion-spritesheet.png',
-      maxFramesY: 1,
       maxFramesX: 90,
+      delayByFrameX: 1,
       position: {
         height: this.hitBox.height,
         width: this.hitBox.width,

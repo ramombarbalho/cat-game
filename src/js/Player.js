@@ -242,5 +242,13 @@ export class Player extends SpriteNew {
     if (this.chargeAnimation) {
       this.chargeAnimation.update();
     }
+
+    if (this.state === 'UNTARGETABLE') this.untargetableMode();
+
+    this.skills.forEach((skill, i) => {
+      if (!skill.avaliable) this.gameBoard.ui.skillCooldownHandler(i);
+      if (skill.skillAnimation) skill.update();
+      if (skill.active) skill.dmgAreaTimer();
+    });
   }
 }

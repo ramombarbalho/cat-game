@@ -181,17 +181,10 @@ export class GameBoard {
 
     if (this.state !== 'GAME_RUNNING' && this.state !== 'STAGE_CLEAR') return;
 
-    this.player.update();
-
-    if (this.player.state === 'UNTARGETABLE') this.player.untargetableMode();
-
-    this.player.skills.forEach((skill, i) => {
-      if (!skill.avaliable) this.ui.skillCooldownHandler(i);
-      if (skill.skillAnimation) skill.update();
-      if (skill.active) skill.dmgAreaTimer();
-    });
-
     this.projectiles.forEach(projectile => projectile.update());
+    this.player.update();
+    this.explosions.forEach(explosion => explosion.update());
+    this.coins.forEach(coin => coin.update());
 
     this.enemies.forEach(enemy => {
       enemy.update();
@@ -226,14 +219,11 @@ export class GameBoard {
       });
     });
 
-    this.explosions.forEach(explosion => explosion.update());
-
     this.coins.forEach(coin => {
       if (this.collisionRectangleRectangle(this.player.hitBox, coin.hitBox)) {
         this.scoreUp(coin.points);
         this.deleteElement(coin);
       }
-      if (!coin.markForDeletion) coin.update();
     });
 
     if (this.boss && this.state === 'GAME_RUNNING') this.boss.collision();
@@ -296,7 +286,16 @@ export class GameBoard {
     }
   }
 
-  loop = () => {
+  loop = async time => {
+    // if (time > 10027.4) {
+    //   await new Promise(resolve => setTimeout(resolve, 1000));
+    // }
+    // console.log(time);
+
+    // if (this.debugMode) {
+    //   return;
+    // }
+
     this.update();
     this.stateHandler();
     // console.log(this.state);
