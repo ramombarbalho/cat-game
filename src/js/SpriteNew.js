@@ -25,7 +25,12 @@ export class SpriteNew {
     this.maxFramesX = maxFramesX;
     this.delayByFrameXCount = delayByFrameXCount;
     this.delayByFrameX = delayByFrameX;
+    this.lifetimeFramesCount = lifetimeFrames;
     this.lifetimeFrames = lifetimeFrames;
+
+    this.el = null;
+    this.markForDeletion = false;
+    this.hitBoxEl = null;
 
     this.createSprite();
   }
@@ -45,6 +50,7 @@ export class SpriteNew {
       this.spriteSheet.el.getBoundingClientRect().width
     );
     this.spriteSheet.el.style.width = this.spriteSheet.width + 'px';
+    this.width = this.spriteSheet.width / this.maxFramesX;
   }
 
   setPosition() {
@@ -76,21 +82,21 @@ export class SpriteNew {
   }
 
   updateLifetimeFrames() {
-    this.lifetimeFrames--;
+    this.lifetimeFramesCount--;
     if (
-      this.lifetimeFrames <=
-        this.gameBoard.game.config.coinFramesInterval / 3 &&
-      this.lifetimeFrames > 0
+      this.lifetimeFramesCount <= this.lifetimeFrames / 3 &&
+      this.lifetimeFramesCount > 0
     ) {
       this.el.style.visibility =
         this.el.style.visibility !== 'hidden' ? 'hidden' : 'visible';
-    } else if (this.lifetimeFrames <= 0) {
+    } else if (this.lifetimeFramesCount <= 0) {
       this.gameBoard.deletElement(this);
     }
   }
 
-  addHitBoxDebug = () => {
-    this.hitBoxEl = new HitBoxDebug(this.gameBoard, this.hitBox);
+  addHitBoxDebug = hitBox => {
+    console.log(hitBox)
+    this.hitBoxEl = new HitBoxDebug(this.gameBoard, hitBox);
     this.gameBoard.hitBoxElements.push(this.hitBoxEl.el);
   };
 
@@ -101,9 +107,4 @@ export class SpriteNew {
       this.hitBoxEl = null;
     }
   };
-
-  update() {
-    this.updateCurrentFrameX();
-    if (this.lifetimeFrames >= 0) this.updateLifetimeFrames();
-  }
 }

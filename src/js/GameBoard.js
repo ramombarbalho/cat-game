@@ -105,7 +105,7 @@ export class GameBoard {
     [this.player, ...this.projectiles, ...this.enemies, ...this.coins, this.boss, ...this.player.skills].forEach(sprite => {
       if (sprite) {
         if (this.debugMode) {
-          sprite.addHitBoxDebug();
+          sprite.addHitBoxDebug(sprite.hitBox);
           if (sprite.dmgHitBox) sprite.addDmgHitBoxDebug();
         } else {
           sprite.removeHitBoxDebug();
@@ -154,12 +154,7 @@ export class GameBoard {
 
     if (this.state !== 'GAME_RUNNING' && this.state !== 'STAGE_CLEAR') return;
 
-    if (!this.player.dboost.active) {
-      this.player.moviment();
-      this.player.beam();
-    } else {
-      this.player.dboostMove();
-    }
+    this.player.update();
 
     if (this.player.state === 'UNTARGETABLE') this.player.untargetableMode();
 

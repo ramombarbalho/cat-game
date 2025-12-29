@@ -11,11 +11,12 @@ export class Coin extends SpriteNew {
       maxFramesX: 4,
       delayByFrameXCount: 1,
       delayByFrameX: 8,
-      lifetimeFrames: gameBoard.game.config.coinLifetimeFrames
+      lifetimeFrames: 360
     });
+    this.type = 'coins';
+    this.points = 2;
 
     this.top = enemy.top + enemy.height / 2 - this.height / 2;
-    this.width = this.spriteSheet.width / this.maxFramesX;
     this.left = enemy.left + enemy.width / 2 - this.width / 2;
 
     this.setPosition();
@@ -28,11 +29,11 @@ export class Coin extends SpriteNew {
       boxType: 'rectangle-yellow'
     };
 
-    this.type = 'coins';
-    this.points = 2;
+    if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
+  }
 
-    this.markForDeletion = false;
-
-    if (this.gameBoard.debugMode) this.addHitBoxDebug();
+  update() {
+    this.updateCurrentFrameX();
+    this.updateLifetimeFrames();
   }
 }

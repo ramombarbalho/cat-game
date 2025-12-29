@@ -23,6 +23,5 @@ export const INIT_CONFIG = {
   stageClearMsgFrames: 10,
   // warningMsgFrames: 294,
   warningMsgFrames: 10,
-  coinLifetimeFrames: 3600,
   overlayTransitionFrames: 60
 };

@@ -662,5 +662,6 @@ footer {
 .wrapper-spritesheet {
   position: absolute;
   overflow: hidden;
+  /* border: 0.5px solid black; */
   z-index: 2;
 }
