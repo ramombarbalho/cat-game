@@ -72,7 +72,11 @@ export class Projectile extends SpriteNew {
     this.explosion.position.left =
       this.hitBox.left + this.chargeValue * (this.player.height / 4);
     this.el.style.left = this.left + 'px';
-    if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+
+    if (this.hitBoxEl) {
+      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+    }
+
     if (this.left > this.gameBoard.gameRunningWidth + this.width * 0.1) {
       this.gameBoard.deleteElement(this);
     }
