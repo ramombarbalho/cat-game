@@ -108,8 +108,10 @@ export class SpriteNew {
   }
 
   addHitBoxDebug = hitBox => {
-    this.hitBoxEl = new HitBoxDebug(this.gameBoard, hitBox);
-    this.gameBoard.hitBoxElements.push(this.hitBoxEl.el);
+    if (hitBox && !this.hitBoxEl) {
+      this.hitBoxEl = new HitBoxDebug(this.gameBoard, hitBox);
+      this.gameBoard.hitBoxElements.push(this.hitBoxEl.el);
+    }
   };
 
   removeHitBoxDebug = () => {

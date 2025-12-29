@@ -25,7 +25,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   border: 5px solid #ff0000;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .game-loading {
@@ -83,7 +83,7 @@ body {
 .game-running-area {
   position: relative;
   background-image: linear-gradient(#7f55ff, #7f55ff);
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .game-img {

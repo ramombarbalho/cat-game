@@ -17,9 +17,6 @@ export class Player extends SpriteNew {
     this.speedY = 0;
     this.speedX = 0;
     this.speed = this.gameBoard.game.playerState.speed;
-    this.skills = this.gameBoard.game.playerState.skills.map(skill =>
-      this.addSkills(skill)
-    );
     this.chargeValue = 0;
     this.chargeFrames = 0;
     this.untargetableFrames =
@@ -41,6 +38,10 @@ export class Player extends SpriteNew {
     this.top = (this.gameBoard.gameRunningHeight - this.height) / 2;
     this.left = this.gameBoard.left;
     this.setInitialPosition();
+
+    this.skills = this.gameBoard.game.playerState.skills.map(skill =>
+      this.addSkills(skill)
+    );
 
     this.hitBox = {
       height: this.height * 0.49,
@@ -247,7 +248,7 @@ export class Player extends SpriteNew {
 
     this.skills.forEach((skill, i) => {
       if (!skill.avaliable) this.gameBoard.ui.skillCooldownHandler(i);
-      if (skill.skillAnimation) skill.update();
+      if (skill.isLauching) skill.update();
       if (skill.active) skill.dmgAreaTimer();
     });
   }

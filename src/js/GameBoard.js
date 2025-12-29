@@ -182,8 +182,8 @@ export class GameBoard {
     if (this.state !== 'GAME_RUNNING' && this.state !== 'STAGE_CLEAR') return;
 
     this.projectiles.forEach(projectile => projectile.update());
-    this.player.update();
     this.explosions.forEach(explosion => explosion.update());
+    this.player.update();
     this.coins.forEach(coin => coin.update());
 
     this.enemies.forEach(enemy => {
@@ -215,7 +215,17 @@ export class GameBoard {
         }
       });
       this.player.skills.forEach(skill => {
-        if (skill.active) skill.collision(enemy);
+        if (skill.active && skill.collision(enemy)) {
+          enemy.hp -= skill.dmg;
+          if (enemy.hp <= 0) {
+            this.scoreUp(enemy.points);
+            if (Math.random() < enemy.dropRate) {
+              this.coins.push(new Coin(this, enemy));
+            }
+            this.explosions.push(new Explosion(this, enemy.explosion));
+            this.deleteElement(enemy);
+          }
+        }
       });
     });
 
