@@ -64,7 +64,7 @@ export class MoonBossProjectile extends Sprite {
       this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
     }
     if (this.left + this.width * 1.1 < 0 || this.top + this.height * 1.1 < 0 || this.top - this.height * 0.1 > this.gameBoard.gameRunningHeight) {
-      this.gameBoard.deletElement(this);
+      this.gameBoard.deleteElement(this);
     }
   }
 }

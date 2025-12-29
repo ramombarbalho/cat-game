@@ -46,7 +46,7 @@ export class Explosion {
       this.spriteSheet.el.style.left = this.spriteSheet.left + 'px';
       this.frameX++;
     } else {
-      this.gameBoard.deletElement(this);
+      this.gameBoard.deleteElement(this);
     }
   }
 }

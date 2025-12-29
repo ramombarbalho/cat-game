@@ -20,9 +20,7 @@ export class Projectile extends SpriteNew {
       height:
         player.height * (1 / 6) +
         player.chargeValue * player.height * (11 / 24),
-      currentFrameX: 1,
       maxFramesX: getMaxFramesX(player.chargeValue),
-      delayByFrameXCount: 1,
       delayByFrameX: 2
     });
 
@@ -38,8 +36,7 @@ export class Projectile extends SpriteNew {
       this.gameBoard.player.height / 2 -
       this.height / 2;
     this.left = this.gameBoard.player.left + this.gameBoard.player.width * 0.8;
-
-    this.setPosition();
+    this.setInitialPosition();
 
     this.radius = 0.5 * this.height;
     this.hitBox = {
@@ -77,7 +74,7 @@ export class Projectile extends SpriteNew {
     this.el.style.left = this.left + 'px';
     if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
     if (this.left > this.gameBoard.gameRunningWidth + this.width * 0.1) {
-      this.gameBoard.deletElement(this);
+      this.gameBoard.deleteElement(this);
     }
   }
 }

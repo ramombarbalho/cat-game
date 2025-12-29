@@ -116,7 +116,7 @@ export class SkillBomb extends Sprite {
         this.gameBoard.scoreUp(enemy.points);
         if (Math.random() < enemy.dropRate) this.gameBoard.coins.push(new Coin(this.gameBoard, enemy));
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, enemy.explosion));
-        this.gameBoard.deletElement(enemy);
+        this.gameBoard.deleteElement(enemy);
       }
     }
   }

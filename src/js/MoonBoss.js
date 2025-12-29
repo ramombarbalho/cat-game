@@ -279,10 +279,10 @@ export class MoonBoss extends Sprite {
           if (this.rage >= 10) this.state = 'SKILL00';
         }
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
-        this.gameBoard.deletElement(projectile);
+        this.gameBoard.deleteElement(projectile);
       } else if (this.state === 'SKILL00' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
-        this.gameBoard.deletElement(projectile);
+        this.gameBoard.deleteElement(projectile);
       } else if (
         (this.state === 'SKILL01' || this.state === 'SKILL02' || (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
         this.dmgVulnerability &&
@@ -291,7 +291,7 @@ export class MoonBoss extends Sprite {
         this.hp -= projectile.dmg;
         this.dmgVulnerability = false;
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
-        this.gameBoard.deletElement(projectile);
+        this.gameBoard.deleteElement(projectile);
         if (this.hp <= 48 && this.hp > 24) this.el.src = 'moon-boss-1.png';
         if (this.hp <= 24) this.el.src = 'moon-boss-2.png';
         if (this.hp < 0) this.hp = 0;
@@ -304,7 +304,7 @@ export class MoonBoss extends Sprite {
           this.gameBoard.bossDefeated = true;
           this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
             this.gameBoard.explosions.push(new Explosion(this.gameBoard, enemy.explosion));
-            this.gameBoard.deletElement(enemy, arrEnemies);
+            this.gameBoard.deleteElement(enemy, arrEnemies);
           });
           return;
         }

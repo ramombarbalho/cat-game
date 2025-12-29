@@ -43,9 +43,11 @@ export class SpriteNew {
     this.spriteSheet.el.src = `${this.src}`;
     this.gameBoard.gameRunningArea.appendChild(this.el);
     this.el.appendChild(this.spriteSheet.el);
-    this.spriteSheet.top = this.height * (1 - this.currentFrameY);
+    this.spriteSheet.top = 0;
     this.spriteSheet.el.style.height = this.height + 'px';
     this.spriteSheet.el.style.top = this.spriteSheet.top + 'px';
+    const valueY = this.height * (1 - this.currentFrameY);
+    this.spriteSheet.el.style.transform = `translateY(${valueY}px)`;
     this.spriteSheet.width = Math.round(
       this.spriteSheet.el.getBoundingClientRect().width
     );
@@ -53,17 +55,26 @@ export class SpriteNew {
     this.width = this.spriteSheet.width / this.maxFramesX;
   }
 
-  setPosition() {
+  setInitialPosition() {
     this.el.style.height = this.height + 'px';
     this.el.style.top = this.top + 'px';
     this.el.style.width = this.width + 'px';
     this.el.style.left = this.left + 'px';
-
-    this.spriteSheet.left = this.width * (1 - this.currentFrameX);
+    this.spriteSheet.left = 0;
     this.spriteSheet.el.style.left = this.spriteSheet.left + 'px';
+    const valueX = this.width * (1 - this.currentFrameX);
+    this.spriteSheet.el.style.transform = `translateX(${valueX}px)`;
+  }
+
+  setSrc(src) {
+    this.src = src;
+    this.spriteSheet.el.src = this.src;
   }
 
   updateCurrentFrameX() {
+    if (this.type === 'coins')
+      console.log(this.currentFrameX, this.delayByFrameXCount);
+
     if (this.maxFramesX < 2) return;
 
     if (this.delayByFrameXCount < this.delayByFrameX) {
@@ -79,8 +90,8 @@ export class SpriteNew {
 
     this.delayByFrameXCount = 1;
 
-    const value = this.width * (1 - this.currentFrameX);
-    this.spriteSheet.el.style.transform = `translateX(${value}px)`;
+    const valueX = this.width * (1 - this.currentFrameX);
+    this.spriteSheet.el.style.transform = `translateX(${valueX}px)`;
   }
 
   updateLifetimeFrames() {
@@ -92,7 +103,7 @@ export class SpriteNew {
       this.el.style.visibility =
         this.el.style.visibility !== 'hidden' ? 'hidden' : 'visible';
     } else if (this.lifetimeFramesCount <= 0) {
-      this.gameBoard.deletElement(this);
+      this.gameBoard.deleteElement(this);
     }
   }
 

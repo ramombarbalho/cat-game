@@ -8,9 +8,7 @@ export class Player extends SpriteNew {
     super(gameBoard, {
       src: `cat-${gameBoard.game.playerState.skin}-spritesheet.png`,
       height: gameBoard.game.playerState.height,
-      currentFrameX: 1,
       maxFramesX: 12,
-      delayByFrameXCount: 1,
       delayByFrameX: 4
     });
 
@@ -27,7 +25,7 @@ export class Player extends SpriteNew {
     this.untargetableFrames =
       this.gameBoard.game.playerState.untargetableFrames;
     this.gameBoard.gameRunningArea.appendChild(this.el);
-    this.chargeAnimation = new ChargeAnimation(this.gameBoard, this);
+    this.chargeAnimation = null;
     this.state = 'JUST_HANGING_AROUND';
 
     this.dboost = {
@@ -42,8 +40,7 @@ export class Player extends SpriteNew {
 
     this.top = (this.gameBoard.gameRunningHeight - this.height) / 2;
     this.left = this.gameBoard.left;
-
-    this.setPosition();
+    this.setInitialPosition();
 
     this.hitBox = {
       height: this.height * 0.49,
@@ -93,8 +90,6 @@ export class Player extends SpriteNew {
     this.hitBox.left = this.left + this.width * 0.42;
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
-    this.chargeAnimation.el.style.top = this.top - this.height * 0.125 + 'px';
-    this.chargeAnimation.el.style.left = this.left + this.width * 0.31 + 'px';
 
     if (this.hitBoxEl) {
       this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
@@ -160,29 +155,22 @@ export class Player extends SpriteNew {
         this.chargeValue === 0
       ) {
         this.chargeValue = 1;
-        this.chargeAnimation.el.src = `${
-          this.chargeAnimation.sources[this.chargeValue]
-        }`;
-        this.chargeAnimation.el.style.display = 'block';
+        this.chargeAnimation = new ChargeAnimation(this.gameBoard, this);
       } else if (
         this.chargeFrames >=
           this.gameBoard.game.playerState.chargeFramesInterval * 2 &&
         this.chargeValue === 1
       ) {
         this.chargeValue = 2;
-        this.chargeAnimation.el.src = `${
-          this.chargeAnimation.sources[this.chargeValue]
-        }`;
+        this.chargeAnimation.updateSrc(this.chargeValue);
       }
       this.chargeFrames++;
     } else if (this.chargeFrames > 0) {
       if (this.chargeValue > 0) {
         this.shooting();
         this.chargeValue = 0;
-        this.chargeAnimation.el.style.display = 'none';
-        this.chargeAnimation.el.src = `${
-          this.chargeAnimation.sources[this.chargeValue]
-        }`;
+        this.gameBoard.deleteElement(this.chargeAnimation);
+        this.chargeAnimation = null;
       }
       this.chargeFrames = 0;
     }
@@ -249,6 +237,10 @@ export class Player extends SpriteNew {
       this.beam();
     } else {
       this.dboostMove();
+    }
+
+    if (this.chargeAnimation) {
+      this.chargeAnimation.update();
     }
   }
 }

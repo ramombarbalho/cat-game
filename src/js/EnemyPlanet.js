@@ -55,7 +55,7 @@ export class EnemyPlanet extends Sprite {
     this.el.style.left = this.left + 'px';
     if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
     if (this.left + this.width * 1.1 < 0) {
-      this.gameBoard.deletElement(this);
+      this.gameBoard.deleteElement(this);
     }
   }
 }

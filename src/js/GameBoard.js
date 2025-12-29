@@ -48,10 +48,13 @@ export class GameBoard {
     return new BOSS_LIST[id](this);
   }
 
-  deletElement(element) {
+  deleteElement(element) {
     element.markForDeletion = true;
     element.el.remove();
-    this[element.type] = this[element.type].filter(el => !el.markForDeletion);
+
+    if (this?.[element?.type]) {
+      this[element.type] = this[element.type].filter(el => !el.markForDeletion);
+    }
   }
 
   collisionRectangleRectangle(rect1, rect2) {
@@ -207,14 +210,14 @@ export class GameBoard {
         if (this.collisionCircleCircle(projectile.hitBox, enemy.hitBox)) {
           enemy.hp -= projectile.dmg;
           this.explosions.push(new Explosion(this, projectile.explosion));
-          this.deletElement(projectile);
+          this.deleteElement(projectile);
           if (enemy.hp <= 0) {
             this.scoreUp(enemy.points);
             if (Math.random() < enemy.dropRate) {
               this.coins.push(new Coin(this, enemy));
             }
             this.explosions.push(new Explosion(this, enemy.explosion));
-            this.deletElement(enemy);
+            this.deleteElement(enemy);
           }
         }
       });
@@ -228,7 +231,7 @@ export class GameBoard {
     this.coins.forEach(coin => {
       if (this.collisionRectangleRectangle(this.player.hitBox, coin.hitBox)) {
         this.scoreUp(coin.points);
-        this.deletElement(coin);
+        this.deleteElement(coin);
       }
       if (!coin.markForDeletion) coin.update();
     });
