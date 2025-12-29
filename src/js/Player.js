@@ -233,6 +233,10 @@ export class Player extends SpriteNew {
   update() {
     this.updateCurrentFrameX();
 
+    if (this.chargeAnimation) {
+      this.chargeAnimation.update();
+    }
+
     if (!this.dboost.active) {
       this.moviment();
       this.beam();
@@ -240,12 +244,9 @@ export class Player extends SpriteNew {
       this.dboostMove();
     }
 
-    if (this.chargeAnimation) {
-      this.chargeAnimation.update();
-    }
-
     if (this.state === 'UNTARGETABLE') this.untargetableMode();
 
+    // ##fix passar para apenas uma função de skill.update
     this.skills.forEach((skill, i) => {
       if (!skill.avaliable) this.gameBoard.ui.skillCooldownHandler(i);
       if (skill.isLauching) skill.update();

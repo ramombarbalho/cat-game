@@ -17,11 +17,11 @@ export const INIT_CONFIG = {
   pauseGameFrames: 90,
   gravity: 2,
   initStageState: 'TRANSITION_IN',
-  // openingStageMsgFrames: 132,
-  openingStageMsgFrames: 10,
-  // stageClearMsgFrames: 216,
-  stageClearMsgFrames: 10,
-  // warningMsgFrames: 294,
-  warningMsgFrames: 10,
+  openingStageMsgFrames: 132,
+  stageClearMsgFrames: 216,
+  warningMsgFrames: 294,
+  // openingStageMsgFrames: 10,
+  // stageClearMsgFrames: 10,
+  // warningMsgFrames: 10,
   overlayTransitionFrames: 60
 };

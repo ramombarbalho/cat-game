@@ -306,6 +306,7 @@ export class GameBoard {
     //   return;
     // }
 
+    // ##fix corrigir quando clico no botão retry, roda outro loop
     this.update();
     this.stateHandler();
     // console.log(this.state);
