@@ -55,7 +55,12 @@ export class GameBoard {
   }
 
   collisionRectangleRectangle(rect1, rect2) {
-    return rect1.left < rect2.left + rect2.width && rect1.left + rect1.width > rect2.left && rect1.top < rect2.top + rect2.height && rect1.top + rect1.height > rect2.top;
+    return (
+      rect1.left < rect2.left + rect2.width &&
+      rect1.left + rect1.width > rect2.left &&
+      rect1.top < rect2.top + rect2.height &&
+      rect1.top + rect1.height > rect2.top
+    );
   }
 
   collisionCircleCircle(circ1, circ2) {
@@ -102,7 +107,14 @@ export class GameBoard {
 
   switchDebugMode() {
     this.debugMode = !this.debugMode;
-    [this.player, ...this.projectiles, ...this.enemies, ...this.coins, this.boss, ...this.player.skills].forEach(sprite => {
+    [
+      this.player,
+      ...this.projectiles,
+      ...this.enemies,
+      ...this.coins,
+      this.boss,
+      ...this.player.skills
+    ].forEach(sprite => {
       if (sprite) {
         if (this.debugMode) {
           sprite.addHitBoxDebug(sprite.hitBox);
@@ -118,11 +130,18 @@ export class GameBoard {
   scoreUp(points) {
     if (this.stage.bossStage) return;
     this.score += points;
-    this.ui.scorePoints.textContent = String(this.score).padStart(String(this.stage.scoreGoal).length, '0');
-    if (this.stage.breakPoint.score <= this.score && !this.stage.breakPointActive) {
+    this.ui.scorePoints.textContent = String(this.score).padStart(
+      String(this.stage.scoreGoal).length,
+      '0'
+    );
+    if (
+      this.stage.breakPoint.score <= this.score &&
+      !this.stage.breakPointActive
+    ) {
       this.stage.breakPointActive = true;
       this.stage.enemyGroup = this.stage.breakPoint.enemyGroup;
-      this.stage.enemyIntervalFrames = this.stage.breakPoint.enemyIntervalFrames;
+      this.stage.enemyIntervalFrames =
+        this.stage.breakPoint.enemyIntervalFrames;
     }
   }
 
@@ -138,7 +157,12 @@ export class GameBoard {
       }
     }
 
-    if (this.state === 'GAME_RUNNING' && !document.hasFocus() && this.pauseAllowed) this.pauseGame();
+    if (
+      this.state === 'GAME_RUNNING' &&
+      !document.hasFocus() &&
+      this.pauseAllowed
+    )
+      this.pauseGame();
 
     if (this.state === 'STAGE_CLEAR') this.ui.stageClear();
 
@@ -168,7 +192,10 @@ export class GameBoard {
 
     this.enemies.forEach(enemy => {
       enemy.update();
-      if (this.collisionRectangleCircle(this.player.hitBox, enemy.hitBox) && this.player.state !== 'UNTARGETABLE') {
+      if (
+        this.collisionRectangleCircle(this.player.hitBox, enemy.hitBox) &&
+        this.player.state !== 'UNTARGETABLE'
+      ) {
         if (this.state === 'GAME_RUNNING') {
           this.player.hp--;
           this.player.dboost.active = true;
@@ -183,8 +210,9 @@ export class GameBoard {
           this.deletElement(projectile);
           if (enemy.hp <= 0) {
             this.scoreUp(enemy.points);
-            // if (Math.random() < enemy.dropRate) 
+            if (Math.random() < enemy.dropRate) {
               this.coins.push(new Coin(this, enemy));
+            }
             this.explosions.push(new Explosion(this, enemy.explosion));
             this.deletElement(enemy);
           }
@@ -207,7 +235,11 @@ export class GameBoard {
 
     if (this.boss && this.state === 'GAME_RUNNING') this.boss.collision();
 
-    if (this.state === 'GAME_RUNNING' && this.score < this.stage.scoreGoal && !this.stage.bossStage) {
+    if (
+      this.state === 'GAME_RUNNING' &&
+      this.score < this.stage.scoreGoal &&
+      !this.stage.bossStage
+    ) {
       if (this.enemySpawnInterval <= 0) {
         this.enemies.push(this.addEnemy());
         this.enemySpawnInterval = this.stage.enemyIntervalFrames;
@@ -220,7 +252,8 @@ export class GameBoard {
   stateHandler() {
     switch (this.state) {
       case 'TRANSITION_IN':
-        if (!this.game.transition.overlayTransition) this.state = 'OPENING_STAGE';
+        if (!this.game.transition.overlayTransition)
+          this.state = 'OPENING_STAGE';
         break;
       case 'OPENING_STAGE':
         if (this.ui.openingStageMsg) return;
@@ -233,9 +266,19 @@ export class GameBoard {
           this.ui.createBoxMsg();
         } else if (this.stage.bossStage) {
           if (this.boss) this.boss.stateHandler();
-          if (this.bossDefeated && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
+          if (
+            this.bossDefeated &&
+            this.enemies.length === 0 &&
+            this.explosions.length === 0
+          )
+            this.state = 'STAGE_CLEAR';
         } else {
-          if (this.score >= this.stage.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
+          if (
+            this.score >= this.stage.scoreGoal &&
+            this.enemies.length === 0 &&
+            this.explosions.length === 0
+          )
+            this.state = 'STAGE_CLEAR';
         }
         break;
       case 'STAGE_CLEAR':
@@ -254,7 +297,8 @@ export class GameBoard {
     this.update();
     this.stateHandler();
     // console.log(this.state);
-    if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD') return;
+    if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD')
+      return;
     requestAnimationFrame(this.loop);
   };
 }

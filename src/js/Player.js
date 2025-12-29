@@ -8,8 +8,6 @@ export class Player extends SpriteNew {
     super(gameBoard, {
       src: `cat-${gameBoard.game.playerState.skin}-spritesheet.png`,
       height: gameBoard.game.playerState.height,
-      currentFrameY: 1,
-      maxFramesY: 1,
       currentFrameX: 1,
       maxFramesX: 12,
       delayByFrameXCount: 1,

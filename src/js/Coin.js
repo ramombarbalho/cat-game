@@ -5,14 +5,13 @@ export class Coin extends SpriteNew {
     super(gameBoard, {
       src: 'coin-spritesheet.png',
       height: 50,
-      currentFrameY: 1,
-      maxFramesY: 1,
       currentFrameX: 1,
       maxFramesX: 4,
       delayByFrameXCount: 1,
       delayByFrameX: 8,
       lifetimeFrames: 360
     });
+
     this.type = 'coins';
     this.points = 2;
 

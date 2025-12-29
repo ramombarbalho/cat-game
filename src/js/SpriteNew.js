@@ -64,6 +64,8 @@ export class SpriteNew {
   }
 
   updateCurrentFrameX() {
+    if (this.maxFramesX < 2) return;
+
     if (this.delayByFrameXCount < this.delayByFrameX) {
       this.delayByFrameXCount++;
       return;
@@ -95,7 +97,6 @@ export class SpriteNew {
   }
 
   addHitBoxDebug = hitBox => {
-    console.log(hitBox)
     this.hitBoxEl = new HitBoxDebug(this.gameBoard, hitBox);
     this.gameBoard.hitBoxElements.push(this.hitBoxEl.el);
   };
