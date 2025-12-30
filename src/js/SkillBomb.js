@@ -102,7 +102,7 @@ export class SkillBomb extends Sprite {
       this.active = true;
       this.isLaunching = false;
 
-      if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
+      if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
 
       if (this.hitBoxEl) {
         this.hitBoxEl.el.style.top = this.hitBox.top + 'px';

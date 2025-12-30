@@ -3,6 +3,7 @@ import { Coin } from './Coin';
 import { ENEMY_LIST } from './ENEMY_LIST';
 import { Explosion } from './Explosion';
 import { GameBoardUI } from './GameBoardUI';
+import { HitBoxDebug } from './HitBoxDebug';
 import { Player } from './Player';
 
 export class GameBoard {
@@ -127,28 +128,6 @@ export class GameBoard {
     this.pauseAllowed = false;
   }
 
-  switchDebugMode() {
-    this.debugMode = !this.debugMode;
-    [
-      this.player,
-      ...this.projectiles,
-      ...this.enemies,
-      ...this.coins,
-      this.boss,
-      ...this.player.skills
-    ].forEach(sprite => {
-      if (sprite) {
-        if (this.debugMode) {
-          sprite.addHitBoxDebug(sprite.hitBox);
-          if (sprite.dmgHitBox) sprite.addDmgHitBoxDebug();
-        } else {
-          sprite.removeHitBoxDebug();
-          if (sprite.dmgHitBox) sprite.removeDmgBoxDebug();
-        }
-      }
-    });
-  }
-
   scoreUp(points) {
     if (this.stage.bossStage) return;
     this.score += points;
@@ -213,9 +192,7 @@ export class GameBoard {
         this.player.state !== 'UNTARGETABLE'
       ) {
         if (this.state === 'GAME_RUNNING') {
-          this.player.hp--;
-          this.player.dboost.active = true;
-          this.player.calcDboost(enemy);
+          this.player.takeDamage(enemy);
           this.ui.updateHeart();
         }
       }
@@ -318,8 +295,44 @@ export class GameBoard {
     }
   }
 
+  addHitBoxDebug = sprite => {
+    if (sprite.hitBox && !sprite.hitBoxEl) {
+      sprite.hitBoxEl = new HitBoxDebug(this, sprite);
+      this.hitBoxElements.push(sprite.hitBoxEl);
+    }
+  };
+
+  removeHitBoxDebug = sprite => {
+    sprite.hitBoxEl.el.remove();
+    sprite.hitBoxEl = null;
+  };
+
+  switchDebugMode() {
+    this.debugMode = !this.debugMode;
+
+    if (this.debugMode) {
+      [
+        this.player,
+        ...this.projectiles,
+        ...this.enemies,
+        ...this.coins,
+        this.boss,
+        ...this.player.skills
+      ].forEach(sprite => {
+        if (sprite) {
+          this.addHitBoxDebug(sprite);
+        }
+      });
+    } else {
+      this.hitBoxElements.forEach(hitBoxEl => {
+        if (hitBoxEl.sprite) this.removeHitBoxDebug(hitBoxEl.sprite);
+      });
+      this.hitBoxElements.length = 0;
+    }
+  }
+
   loop = async time => {
-    // if (time > 10027.4) {
+    // if (time > 15027.4) {
     //   await new Promise(resolve => setTimeout(resolve, 1000));
     // }
     // console.log(time);

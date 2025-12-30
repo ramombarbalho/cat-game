@@ -62,7 +62,7 @@ export class Projectile extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
+    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
   }
 
   updatePosition() {

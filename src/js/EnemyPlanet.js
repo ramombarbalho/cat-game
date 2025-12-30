@@ -9,6 +9,7 @@ export class EnemyPlanet extends Sprite {
 
     this.type = 'enemies';
     this.hp = type * 3 + 3;
+    this.dmg = 1;
     this.speedX = -10 / (type + 1);
     this.dropRate = 0.2 + type * 0.1;
     this.points = type + 2;
@@ -42,7 +43,7 @@ export class EnemyPlanet extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
+    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
   }
 
   updatePosition() {

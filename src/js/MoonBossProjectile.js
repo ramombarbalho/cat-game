@@ -13,6 +13,7 @@ export class MoonBossProjectile extends Sprite {
     this.type = 'enemies';
     this.topStart = data.topStart;
     this.hp = 3;
+    this.dmg = 1;
     this.points = 0;
     this.speed = data.speed;
     this.speedY = -this.speed * this.topStart;
@@ -50,7 +51,7 @@ export class MoonBossProjectile extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
+    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
   }
 
   update() {

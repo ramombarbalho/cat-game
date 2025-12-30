@@ -1,4 +1,3 @@
-import { HitBoxDebug } from './HitBoxDebug';
 import { GameImg } from './GameImg';
 
 export class Sprite {
@@ -105,20 +104,4 @@ export class Sprite {
       this.gameBoard.deleteElement(this);
     }
   }
-
-  // ##fix melhorar responsabilidade e lógica de add e remove da hitBoxDebug
-  addHitBoxDebug = hitBox => {
-    if (hitBox && !this.hitBoxEl) {
-      this.hitBoxEl = new HitBoxDebug(this.gameBoard, hitBox);
-      this.gameBoard.hitBoxElements.push(this.hitBoxEl.el);
-    }
-  };
-
-  removeHitBoxDebug = () => {
-    if (this.hitBoxEl) {
-      this.gameBoard.hitBoxElements.forEach(el => el.remove());
-      this.gameBoard.hitBoxElements.length = 0;
-      this.hitBoxEl = null;
-    }
-  };
 }

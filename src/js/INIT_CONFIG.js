@@ -19,9 +19,9 @@ export const INIT_CONFIG = {
   initStageState: 'TRANSITION_IN',
   // openingStageMsgFrames: 132,
   stageClearMsgFrames: 216,
-  warningMsgFrames: 250,
+  // warningMsgFrames: 250,
   openingStageMsgFrames: 10,
   // stageClearMsgFrames: 10,
-  // warningMsgFrames: 10,
+  warningMsgFrames: 10,
   overlayTransitionFrames: 60
 };

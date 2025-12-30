@@ -51,7 +51,7 @@ export class Player extends Sprite {
       color: '#fff'
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
+    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
   }
 
   addSkills(id) {
@@ -97,8 +97,14 @@ export class Player extends Sprite {
   }
 
   useSkill(i) {
-    if (!this.skills[i].avaliable) return;
+    if (!this.skills[i]?.avaliable) return;
     this.skills[i].activeSkill(i);
+  }
+
+  takeDamage(enemy) {
+    this.hp -= enemy.dmg;
+    this.dboost.active = true;
+    this.calcDboost(enemy);
   }
 
   dboostMove() {
