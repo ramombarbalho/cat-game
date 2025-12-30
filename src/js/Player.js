@@ -1,9 +1,9 @@
 import { Projectile } from './Projectile';
 import { ChargeAnimation } from './ChargeAnimation';
 import { SKILL_LIST } from './SKILL_LIST';
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class Player extends SpriteNew {
+export class Player extends Sprite {
   constructor(gameBoard) {
     super(gameBoard, {
       src: `cat-${gameBoard.game.playerState.skin}-spritesheet.png`,

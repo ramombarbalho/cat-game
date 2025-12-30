@@ -1,13 +1,15 @@
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class Explosion extends SpriteNew {
+export class Explosion extends Sprite {
   constructor(gameBoard, data) {
+    const delayX = data?.delayByFrameX ?? 1;
+
     super(gameBoard, {
       src: data.src,
       height: data.height,
       maxFramesX: data.maxFramesX,
-      delayByFrameX: data.delayByFrameX,
-      lifetimeFrames: data.maxFramesX * data.delayByFrameX
+      delayByFrameX: delayX,
+      lifetimeFrames: data.maxFramesX * delayX
     });
 
     this.type = 'explosions';

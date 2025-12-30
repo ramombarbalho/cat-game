@@ -1,7 +1,7 @@
 import { Explosion } from './Explosion';
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class SkillBomb extends SpriteNew {
+export class SkillBomb extends Sprite {
   constructor(gameBoard, player) {
     super(gameBoard, {
       src: 'skill-ziggs.png',

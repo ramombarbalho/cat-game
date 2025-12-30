@@ -1,4 +1,4 @@
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
 function getMaxFramesX(value) {
   switch (value) {
@@ -13,7 +13,7 @@ function getMaxFramesX(value) {
   }
 }
 
-export class Projectile extends SpriteNew {
+export class Projectile extends Sprite {
   constructor(gameBoard, player) {
     super(gameBoard, {
       src: `shoot-${player.chargeValue}-spritesheet.png`,

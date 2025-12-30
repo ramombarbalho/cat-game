@@ -1,6 +1,6 @@
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class ChargeAnimation extends SpriteNew {
+export class ChargeAnimation extends Sprite {
   constructor(gameBoard, player) {
     super(gameBoard, {
       src: 'charge-1-spritesheet.png',

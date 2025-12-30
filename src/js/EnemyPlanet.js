@@ -1,6 +1,6 @@
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class EnemyPlanet extends SpriteNew {
+export class EnemyPlanet extends Sprite {
   constructor(gameBoard, type = Math.floor(Math.random() * 4)) {
     super(gameBoard, {
       src: `planet-${type}-spritesheet.png`,

@@ -1,6 +1,6 @@
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class MoonBossProjectile extends SpriteNew {
+export class MoonBossProjectile extends Sprite {
   constructor(gameBoard, data) {
     super(gameBoard, {
       src: 'meteor-spritesheet.png',

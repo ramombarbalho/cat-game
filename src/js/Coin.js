@@ -1,6 +1,6 @@
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class Coin extends SpriteNew {
+export class Coin extends Sprite {
   constructor(gameBoard, enemy) {
     super(gameBoard, {
       src: 'coin-spritesheet.png',

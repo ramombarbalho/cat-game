@@ -1,9 +1,9 @@
 import { HitBoxDebug } from './HitBoxDebug';
 import { Explosion } from './Explosion';
 import { MoonBossProjectile } from './MoonBossProjectile';
-import { SpriteNew } from './SpriteNew';
+import { Sprite } from './Sprite';
 
-export class MoonBoss extends SpriteNew {
+export class MoonBoss extends Sprite {
   constructor(gameBoard) {
     super(gameBoard, {
       src: 'moon-boss.png',
