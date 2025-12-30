@@ -202,8 +202,8 @@ export class GameBoard {
 
     this.projectiles.forEach(projectile => projectile.update());
     this.explosions.forEach(explosion => explosion.update());
-    this.player.update();
     this.coins.forEach(coin => coin.update());
+    this.player.update();
 
     this.enemies.forEach(enemy => {
       enemy.update();
@@ -235,6 +235,7 @@ export class GameBoard {
           }
         }
       });
+
       this.player.skills.forEach(skill => {
         if (skill.active && this.collision(skill.hitBox, enemy.hitBox)) {
           enemy.hp -= skill.dmg;

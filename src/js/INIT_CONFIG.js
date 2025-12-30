@@ -7,7 +7,7 @@ export const INIT_CONFIG = {
     'Numpad5',
     'Numpad4',
     'Numpad6',
-    'KeyA',
+    'KeyH',
     'KeyJ',
     'KeyM',
     'NumpadDivide',

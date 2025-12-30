@@ -30,7 +30,6 @@ export class SkillBomb extends SpriteNew {
       height: 2 * this.radius * (4 / 3),
       src: 'boss-explosion-spritesheet.png',
       maxFramesX: 90,
-      delayByFrameX: 1,
       position: {
         height: 2 * this.radius * (4 / 3),
         width: 2 * this.radius * (4 / 3),

@@ -236,8 +236,9 @@ export class Player extends SpriteNew {
   }
 
   updatePlayerBehavior() {
+    // ##fix melhorar lógica para eveitar repetição dessa condição
     if (this.chargeAnimation) {
-      this.chargeAnimation.update();
+      this.chargeAnimation.updateCurrentFrameX();
     }
 
     if (!this.dboost.active) {
@@ -245,6 +246,11 @@ export class Player extends SpriteNew {
       this.beam();
     } else {
       this.dboostMove();
+    }
+
+    // ##fix melhorar lógica para eveitar repetição dessa condição
+    if (this.chargeAnimation) {
+      this.chargeAnimation.updatePosition();
     }
 
     if (this.state === 'UNTARGETABLE') this.untargetableMode();

@@ -37,6 +37,7 @@ export class ChargeAnimation extends SpriteNew {
     this.el.style.left = this.left + 'px';
   }
 
+  // ##fix metodo sem utilização no momento
   update() {
     this.updateCurrentFrameX();
     this.updatePosition();
