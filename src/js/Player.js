@@ -19,12 +19,11 @@ export class Player extends SpriteNew {
     this.speed = this.gameBoard.game.playerState.speed;
     this.chargeValue = 0;
     this.chargeFrames = 0;
+    this.chargeAnimation = null;
     this.untargetableFrames =
       this.gameBoard.game.playerState.untargetableFrames;
     this.gameBoard.gameRunningArea.appendChild(this.el);
-    this.chargeAnimation = null;
     this.state = 'JUST_HANGING_AROUND';
-
     this.dboost = {
       active: false,
       distance: this.gameBoard.game.playerState.dboostDistance,
@@ -44,11 +43,12 @@ export class Player extends SpriteNew {
     );
 
     this.hitBox = {
+      shape: 'RECT',
       height: this.height * 0.49,
       width: this.width * 0.34,
       top: this.top + this.height * 0.255,
       left: this.left + this.width * 0.42,
-      boxType: 'rectangle-white'
+      color: '#fff'
     };
 
     if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
@@ -58,88 +58,7 @@ export class Player extends SpriteNew {
     return new SKILL_LIST[id](this.gameBoard, this);
   }
 
-  // ##fix implementar fomar mais clean para posicionamento evitando numeros decimais
-  updatePosition() {
-    this.top += this.speedY;
-    this.left += this.speedX + this.gameBoard.windForceX;
-    if (this.top + this.height * 0.255 < this.gameBoard.top) {
-      this.top = this.gameBoard.top - this.height * 0.255;
-    }
-    if (
-      this.top + this.height * 0.74 >
-      this.gameBoard.top + this.gameBoard.gameRunningHeight
-    ) {
-      this.top =
-        this.gameBoard.top +
-        this.gameBoard.gameRunningHeight -
-        this.height * 0.74;
-    }
-    if (this.left + this.width * 0.42 < this.gameBoard.left) {
-      this.left = this.gameBoard.left - this.width * 0.42;
-    }
-    if (
-      this.left + this.width * 0.76 >
-      this.gameBoard.left + this.gameBoard.gameRunningWidth
-    ) {
-      this.left =
-        this.gameBoard.left +
-        this.gameBoard.gameRunningWidth -
-        this.width * 0.76;
-    }
-
-    this.hitBox.top = this.top + this.height * 0.255;
-    this.hitBox.left = this.left + this.width * 0.42;
-    this.el.style.top = this.top + 'px';
-    this.el.style.left = this.left + 'px';
-
-    if (this.hitBoxEl) {
-      this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
-      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
-    }
-  }
-
-  // ##fix implementar fomar mais clean para posicionamento evitando numeros decimais
-  moviment() {
-    if (
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[0]) &&
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[1])
-    )
-      this.speedY = 0;
-    else if (
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[0]) &&
-      this.top + this.height * 0.255 > this.gameBoard.top
-    )
-      this.speedY = -this.speed;
-    else if (
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[1]) &&
-      this.top + this.height * 0.74 <
-        this.gameBoard.top + this.gameBoard.gameRunningHeight
-    )
-      this.speedY = this.speed;
-    else this.speedY = 0;
-    if (
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[2]) &&
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[3])
-    )
-      this.speedX = 0;
-    else if (
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[2]) &&
-      this.left + this.width * 0.42 > this.gameBoard.left
-    )
-      this.speedX = -this.speed;
-    else if (
-      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[3]) &&
-      this.left + this.width * 0.76 <
-        this.gameBoard.left + this.gameBoard.gameRunningWidth
-    )
-      this.speedX = this.speed;
-    else this.speedX = 0;
-
-    if (this.speedY || this.speedX || this.gameBoard.windForceX) {
-      this.updatePosition();
-    }
-  }
-
+  // ##fix evidar soltar projectil logo apos um tiro carregado ??
   shooting() {
     this.gameBoard.projectiles.push(new Projectile(this.gameBoard, this));
   }
@@ -150,16 +69,16 @@ export class Player extends SpriteNew {
         this.shooting();
       } else if (
         this.chargeFrames >=
-          this.gameBoard.game.playerState.chargeFramesInterval &&
+          this.gameBoard.game.playerState.chargeFramesInterval[0] &&
         this.chargeFrames <
-          this.gameBoard.game.playerState.chargeFramesInterval * 2 &&
+          this.gameBoard.game.playerState.chargeFramesInterval[1] &&
         this.chargeValue === 0
       ) {
         this.chargeValue = 1;
         this.chargeAnimation = new ChargeAnimation(this.gameBoard, this);
       } else if (
         this.chargeFrames >=
-          this.gameBoard.game.playerState.chargeFramesInterval * 2 &&
+          this.gameBoard.game.playerState.chargeFramesInterval[1] &&
         this.chargeValue === 1
       ) {
         this.chargeValue = 2;
@@ -230,9 +149,93 @@ export class Player extends SpriteNew {
     }
   }
 
-  update() {
-    this.updateCurrentFrameX();
+  // ##fix implementar fomar mais clean para posicionamento evitando numeros decimais
+  moviment() {
+    if (
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[0]) &&
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[1])
+    )
+      this.speedY = 0;
+    else if (
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[0]) &&
+      this.top + this.height * 0.255 > this.gameBoard.top
+    )
+      this.speedY = -this.speed;
+    else if (
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[1]) &&
+      this.top + this.height * 0.74 <
+        this.gameBoard.top + this.gameBoard.gameRunningHeight
+    )
+      this.speedY = this.speed;
+    else this.speedY = 0;
+    if (
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[2]) &&
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[3])
+    )
+      this.speedX = 0;
+    else if (
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[2]) &&
+      this.left + this.width * 0.42 > this.gameBoard.left
+    )
+      this.speedX = -this.speed;
+    else if (
+      this.gameBoard.game.keysActive.includes(this.gameBoard.game.keys[3]) &&
+      this.left + this.width * 0.76 <
+        this.gameBoard.left + this.gameBoard.gameRunningWidth
+    )
+      this.speedX = this.speed;
+    else this.speedX = 0;
 
+    if (this.speedY || this.speedX || this.gameBoard.windForceX) {
+      this.updatePosition();
+    }
+  }
+
+  // ##fix implementar fomar mais clean para posicionamento evitando numeros decimais
+  updatePosition() {
+    this.top += this.speedY;
+    this.left += this.speedX + this.gameBoard.windForceX;
+
+    if (this.top + this.height * 0.255 < this.gameBoard.top) {
+      this.top = this.gameBoard.top - this.height * 0.255;
+    }
+
+    if (
+      this.top + this.height * 0.74 >
+      this.gameBoard.top + this.gameBoard.gameRunningHeight
+    ) {
+      this.top =
+        this.gameBoard.top +
+        this.gameBoard.gameRunningHeight -
+        this.height * 0.74;
+    }
+
+    if (this.left + this.width * 0.42 < this.gameBoard.left) {
+      this.left = this.gameBoard.left - this.width * 0.42;
+    }
+
+    if (
+      this.left + this.width * 0.76 >
+      this.gameBoard.left + this.gameBoard.gameRunningWidth
+    ) {
+      this.left =
+        this.gameBoard.left +
+        this.gameBoard.gameRunningWidth -
+        this.width * 0.76;
+    }
+
+    this.hitBox.top = this.top + this.height * 0.255;
+    this.hitBox.left = this.left + this.width * 0.42;
+    this.el.style.top = this.top + 'px';
+    this.el.style.left = this.left + 'px';
+
+    if (this.hitBoxEl) {
+      this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
+      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+    }
+  }
+
+  updatePlayerBehavior() {
     if (this.chargeAnimation) {
       this.chargeAnimation.update();
     }
@@ -246,11 +249,13 @@ export class Player extends SpriteNew {
 
     if (this.state === 'UNTARGETABLE') this.untargetableMode();
 
-    // ##fix passar para apenas uma função de skill.update
     this.skills.forEach((skill, i) => {
-      if (!skill.avaliable) this.gameBoard.ui.skillCooldownHandler(i);
-      if (skill.isLauching) skill.update();
-      if (skill.active) skill.dmgAreaTimer();
+      skill.update(i);
     });
+  }
+
+  update() {
+    this.updateCurrentFrameX();
+    this.updatePlayerBehavior();
   }
 }

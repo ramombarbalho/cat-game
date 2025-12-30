@@ -57,28 +57,28 @@ export class GameBoard {
     }
   }
 
-  collisionRectangleRectangle(rect1, rect2) {
+  rectRectCollision(rectA, rectB) {
     return (
-      rect1.left < rect2.left + rect2.width &&
-      rect1.left + rect1.width > rect2.left &&
-      rect1.top < rect2.top + rect2.height &&
-      rect1.top + rect1.height > rect2.top
+      rectA.left < rectB.left + rectB.width &&
+      rectA.left + rectA.width > rectB.left &&
+      rectA.top < rectB.top + rectB.height &&
+      rectA.top + rectA.height > rectB.top
     );
   }
 
-  collisionCircleCircle(circ1, circ2) {
-    const circ1X = circ1.left + circ1.radius;
-    const circ1Y = circ1.top + circ1.radius;
-    const circ2X = circ2.left + circ2.radius;
-    const circ2Y = circ2.top + circ2.radius;
+  circleCircleCollision(circA, circB) {
+    const circ1X = circA.left + circA.radius;
+    const circ1Y = circA.top + circA.radius;
+    const circ2X = circB.left + circB.radius;
+    const circ2Y = circB.top + circB.radius;
     const dx = circ1X - circ2X;
     const dy = circ1Y - circ2Y;
     const distance = Math.hypot(dx, dy);
-    const sumOfRadii = circ1.radius + circ2.radius;
+    const sumOfRadii = circA.radius + circB.radius;
     return distance < sumOfRadii;
   }
 
-  collisionRectangleCircle(rect, circ) {
+  rectCircleCollision(rect, circ) {
     const circX = circ.left + circ.radius;
     const circY = circ.top + circ.radius;
     let offsetX = circX;
@@ -100,6 +100,25 @@ export class GameBoard {
     const distance = Math.hypot(dx, dy);
 
     return distance < circ.radius;
+  }
+
+  collision(hitBoxA, hitBoxB) {
+    switch (`${hitBoxA.shape}_${hitBoxB.shape}`) {
+      case 'RECT_RECT':
+        return this.rectRectCollision(hitBoxA, hitBoxB);
+
+      case 'CIRCLE_CIRCLE':
+        return this.circleCircleCollision(hitBoxA, hitBoxB);
+
+      case 'RECT_CIRCLE':
+        return this.rectCircleCollision(hitBoxA, hitBoxB);
+
+      case 'CIRCLE_RECT':
+        return this.rectCircleCollision(hitBoxB, hitBoxA);
+
+      default:
+        return false;
+    }
   }
 
   pauseGame() {
@@ -188,8 +207,9 @@ export class GameBoard {
 
     this.enemies.forEach(enemy => {
       enemy.update();
+
       if (
-        this.collisionRectangleCircle(this.player.hitBox, enemy.hitBox) &&
+        this.collision(this.player.hitBox, enemy.hitBox) &&
         this.player.state !== 'UNTARGETABLE'
       ) {
         if (this.state === 'GAME_RUNNING') {
@@ -199,8 +219,9 @@ export class GameBoard {
           this.ui.updateHeart();
         }
       }
+
       this.projectiles.forEach(projectile => {
-        if (this.collisionCircleCircle(projectile.hitBox, enemy.hitBox)) {
+        if (this.collision(projectile.hitBox, enemy.hitBox)) {
           enemy.hp -= projectile.dmg;
           this.explosions.push(new Explosion(this, projectile.explosion));
           this.deleteElement(projectile);
@@ -215,7 +236,7 @@ export class GameBoard {
         }
       });
       this.player.skills.forEach(skill => {
-        if (skill.active && skill.collision(enemy)) {
+        if (skill.active && this.collision(skill.hitBox, enemy.hitBox)) {
           enemy.hp -= skill.dmg;
           if (enemy.hp <= 0) {
             this.scoreUp(enemy.points);
@@ -230,7 +251,7 @@ export class GameBoard {
     });
 
     this.coins.forEach(coin => {
-      if (this.collisionRectangleRectangle(this.player.hitBox, coin.hitBox)) {
+      if (this.collision(this.player.hitBox, coin.hitBox)) {
         this.scoreUp(coin.points);
         this.deleteElement(coin);
       }

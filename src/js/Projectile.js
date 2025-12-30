@@ -40,12 +40,13 @@ export class Projectile extends SpriteNew {
 
     this.radius = 0.5 * this.height;
     this.hitBox = {
+      shape: 'CIRCLE',
       radius: this.radius,
       height: 2 * this.radius,
       width: 2 * this.radius,
       top: this.top,
       left: this.left + this.width / 2 - this.radius,
-      boxType: 'circle-green'
+      color: '#00ff00'
     };
 
     this.explosion = {
@@ -64,9 +65,7 @@ export class Projectile extends SpriteNew {
     if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
   }
 
-  update() {
-    this.updateCurrentFrameX();
-
+  updatePosition() {
     this.left += this.speedX;
     this.hitBox.left = this.left + this.width / 2 - this.radius;
     this.explosion.position.left =
@@ -80,5 +79,10 @@ export class Projectile extends SpriteNew {
     if (this.left > this.gameBoard.gameRunningWidth + this.width * 0.1) {
       this.gameBoard.deleteElement(this);
     }
+  }
+
+  update() {
+    this.updateCurrentFrameX();
+    this.updatePosition();
   }
 }

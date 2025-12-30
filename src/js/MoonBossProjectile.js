@@ -18,7 +18,6 @@ export class MoonBossProjectile extends SpriteNew {
     this.speedY = -this.speed * this.topStart;
     this.speedX = -this.speed;
     this.rotate = data.rotate;
-
     this.el.style.rotate = this.rotate + 'deg';
 
     this.top = data.top;
@@ -27,6 +26,7 @@ export class MoonBossProjectile extends SpriteNew {
 
     this.radius = 0.26 * this.height;
     this.hitBox = {
+      shape: 'CIRCLE',
       radius: this.radius,
       height: 2 * this.radius,
       width: 2 * this.radius,
@@ -35,7 +35,7 @@ export class MoonBossProjectile extends SpriteNew {
           ? this.top + this.height - 2 * this.radius
           : this.top,
       left: this.left,
-      boxType: 'circle-red'
+      color: '#ff0000'
     };
 
     this.explosion = {

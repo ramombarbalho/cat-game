@@ -19,9 +19,6 @@ export class ChargeAnimation extends SpriteNew {
 
   updateSrc(value) {
     switch (value) {
-      case 0:
-        this.el.style.display = 'none';
-        return this.setSrc('__blank.png');
       case 1:
         this.el.style.display = 'block';
         return this.setSrc('charge-1-spritesheet.png');

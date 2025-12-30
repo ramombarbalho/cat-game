@@ -29,11 +29,9 @@ export class SpriteNew {
     this.lifetimeFramesCount = lifetimeFrames;
     this.lifetimeFrames = lifetimeFrames;
     this.willBlink = willBlink;
-
     this.el = null;
     this.markForDeletion = false;
     this.hitBoxEl = null;
-
     this.createSprite();
   }
 
@@ -95,6 +93,7 @@ export class SpriteNew {
 
   updateLifetimeFrames() {
     this.lifetimeFramesCount--;
+
     if (
       this.lifetimeFramesCount <= this.lifetimeFrames / 3 &&
       this.lifetimeFramesCount > 0 &&
@@ -107,6 +106,7 @@ export class SpriteNew {
     }
   }
 
+  // ##fix melhorar responsabilidade e lógica de add e remove da hitBoxDebug
   addHitBoxDebug = hitBox => {
     if (hitBox && !this.hitBoxEl) {
       this.hitBoxEl = new HitBoxDebug(this.gameBoard, hitBox);

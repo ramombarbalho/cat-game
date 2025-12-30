@@ -6,7 +6,8 @@ export class HitBoxDebug {
     this.top = data.top;
     this.left = data.left;
     this.el = document.createElement('div');
-    this.el.classList.add('game-img', `hitbox-${data.boxType}`);
+    this.el.classList.add('game-img', 'hitbox', data.shape.toLowerCase());
+    this.el.style.borderColor = data?.color || '#000';
     this.el.style.height = this.height + 'px';
     this.el.style.width = this.width + 'px';
     this.el.style.top = this.top + 'px';

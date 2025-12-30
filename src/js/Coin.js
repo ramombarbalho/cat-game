@@ -19,11 +19,12 @@ export class Coin extends SpriteNew {
     this.setInitialPosition();
 
     this.hitBox = {
+      shape: 'RECT',
       height: this.height,
       width: this.width,
       top: this.top,
       left: this.left,
-      boxType: 'rectangle-yellow'
+      color: '#ffff00'
     };
 
     if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);

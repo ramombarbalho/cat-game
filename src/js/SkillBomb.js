@@ -10,16 +10,15 @@ export class SkillBomb extends SpriteNew {
 
     this.player = player;
     this.el.style.zIndex = '3';
-
     this.icon = { src: 'skill-ziggs.png', height: this.height };
     this.cooldown = 480;
     this.avaliable = true;
     this.active = false;
     this.dmg = 6;
-    this.isLauching = false;
+    this.isLaunching = false;
     this.framesActiveDmg = 1;
-    this.framesLauching = 28;
-    this.framesLauchingCounter = this.framesLauching;
+    this.framesLaunching = 28;
+    this.framesLaunchingCounter = this.framesLaunching;
     this.rotateAnimation = 270;
     this.speedAnimationY = -28;
     this.speedAnimationX = 15;
@@ -45,11 +44,11 @@ export class SkillBomb extends SpriteNew {
 
   activeSkill(i) {
     this.createSprite();
-    this.isLauching = true;
+    this.isLaunching = true;
     this.top = this.player.top;
     this.left = this.player.left + this.player.width - this.player.width * 0.34;
     this.setInitialPosition();
-    this.avoidBombOutOfView();
+    this.keepBombInBounds();
     this.gameBoard.ui.skillBoxesCooldown[i].style.display = 'block';
     this.gameBoard.ui.skillBoxesNotAllowed[i].el.style.display = 'block';
     this.avaliable = false;
@@ -65,11 +64,7 @@ export class SkillBomb extends SpriteNew {
     }
   }
 
-  collision(enemy) {
-    return this.gameBoard.collisionCircleCircle(this.hitBox, enemy.hitBox);
-  }
-
-  avoidBombOutOfView() {
+  keepBombInBounds() {
     if (
       this.left + this.width >=
       this.gameBoard.left + this.gameBoard.gameRunningWidth
@@ -79,19 +74,20 @@ export class SkillBomb extends SpriteNew {
     }
   }
 
-  update() {
-    if (this.framesLauchingCounter <= 0) {
-      this.framesLauchingCounter = this.framesLauching;
+  updateLaunching() {
+    if (this.framesLaunchingCounter <= 0) {
+      this.framesLaunchingCounter = this.framesLaunching;
       this.speedAnimationY = -28;
       this.rotateAnimation = 270;
 
       this.hitBox = {
+        shape: 'CIRCLE',
         radius: this.radius,
         height: 2 * this.radius,
         width: 2 * this.radius,
         top: this.top - this.height * 1.5,
         left: this.left - this.height,
-        boxType: 'circle-orange'
+        color: '#ff8000'
       };
 
       this.explosion.position.top =
@@ -105,7 +101,7 @@ export class SkillBomb extends SpriteNew {
       this.gameBoard.deleteElement(this);
 
       this.active = true;
-      this.isLauching = false;
+      this.isLaunching = false;
 
       if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
 
@@ -118,11 +114,17 @@ export class SkillBomb extends SpriteNew {
       this.top += this.speedAnimationY;
       this.left += this.speedAnimationX;
       this.rotateAnimation += this.speedAnimationX * 1.9;
-      this.avoidBombOutOfView();
+      this.keepBombInBounds();
       this.el.style.top = this.top + 'px';
       this.el.style.left = this.left + 'px';
       this.el.style.rotate = this.rotateAnimation + 'deg';
-      this.framesLauchingCounter--;
+      this.framesLaunchingCounter--;
     }
+  }
+
+  update(i) {
+    if (!this.avaliable) this.gameBoard.ui.skillCooldownHandler(i);
+    if (this.isLaunching) this.updateLaunching();
+    if (this.active) this.dmgAreaTimer();
   }
 }

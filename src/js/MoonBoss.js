@@ -1,19 +1,16 @@
 import { HitBoxDebug } from './HitBoxDebug';
-import { Sprite } from './Sprite';
 import { Explosion } from './Explosion';
 import { MoonBossProjectile } from './MoonBossProjectile';
+import { SpriteNew } from './SpriteNew';
 
-export class MoonBoss extends Sprite {
+export class MoonBoss extends SpriteNew {
   constructor(gameBoard) {
-    super(gameBoard);
-    this.height = this.gameBoard.gameRunningHeight;
-    this.top = this.gameBoard.top;
-    this.left = this.gameBoard.gameRunningWidth;
-    this.src = 'moon-boss.png';
-    this.el.style.height = this.height + 'px';
-    this.el.style.top = this.top + 'px';
-    this.el.style.left = this.left + 'px';
-    this.el.src = `${this.src}`;
+    super(gameBoard, {
+      src: 'moon-boss.png',
+      height: gameBoard.gameRunningHeight,
+
+    });
+
     this.hp = 80;
     this.balanceTop = 7;
     this.balanceBottom = 7;
@@ -22,8 +19,6 @@ export class MoonBoss extends Sprite {
     this.rotate = 0;
     this.rotateSpeed = 5;
     this.rotateDirection = -1;
-    this.gameBoard.gameRunningArea.appendChild(this.el);
-    this.width = this.el.getBoundingClientRect().width;
     this.dmgHitBoxEl = null;
     this.state = 'INVULNERABLE';
     this.dmgVulnerability = true;
@@ -41,24 +36,30 @@ export class MoonBoss extends Sprite {
     this.windForceXVariant = 4;
     this.maxSpeedMeteorVariant = 3;
 
+    this.top = this.gameBoard.top;
+    this.left = this.gameBoard.gameRunningWidth;
+    this.setInitialPosition();
+
     this.radius = 0.5 * this.height;
     this.hitBox = {
+      shape: 'CIRCLE',
       radius: this.radius,
       height: 2 * this.radius,
       width: 2 * this.radius,
       top: this.top,
       left: this.left,
-      boxType: 'circle-red'
+      color: '#ff0000'
     };
 
     this.dmgRadius = 0.073 * this.height;
     this.dmgHitBox = {
+      shape: 'CIRCLE',
       radius: this.dmgRadius,
       height: 2 * this.dmgRadius,
       width: 2 * this.dmgRadius,
       top: this.top + this.height / 2 - this.dmgRadius,
       left: this.left + this.width / 2 - this.dmgRadius,
-      boxType: 'circle-red'
+      color: '#ff0000'
     };
 
     this.explosion = {
@@ -74,7 +75,7 @@ export class MoonBoss extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug();
+    if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
     if (this.gameBoard.debugMode) this.addDmgHitBoxDebug();
   }
 
@@ -260,14 +261,15 @@ export class MoonBoss extends Sprite {
   }
 
   collision() {
-    if (this.gameBoard.collisionRectangleCircle(this.gameBoard.player.hitBox, this.hitBox) && this.gameBoard.player.state !== 'UNTARGETABLE' && this.skill03State !== 's2') {
+    if (this.gameBoard.collision(this.gameBoard.player.hitBox, this.hitBox) && this.gameBoard.player.state !== 'UNTARGETABLE' && this.skill03State !== 's2') {
+      // ##fix remover a responsabilidade de colisão com o player daqui
       this.gameBoard.player.hp--;
       this.gameBoard.player.dboost.active = true;
       this.gameBoard.player.calcDboost(this);
       this.gameBoard.ui.updateHeart();
     }
     this.gameBoard.projectiles.forEach(projectile => {
-      if (this.state === 'INVULNERABLE' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
+      if (this.state === 'INVULNERABLE' && this.gameBoard.collision(projectile.hitBox, this.hitBox)) {
         if (projectile.hitBox.top + projectile.hitBox.height / 2 <= this.hitBox.top + this.hitBox.height * 0.1) {
           this.balanceTop -= projectile.dmg;
           if (this.balanceTop <= 0) this.collisionBalance(1);
@@ -280,20 +282,20 @@ export class MoonBoss extends Sprite {
         }
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deleteElement(projectile);
-      } else if (this.state === 'SKILL00' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
+      } else if (this.state === 'SKILL00' && this.gameBoard.collision(projectile.hitBox, this.hitBox)) {
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deleteElement(projectile);
       } else if (
         (this.state === 'SKILL01' || this.state === 'SKILL02' || (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
         this.dmgVulnerability &&
-        this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)
+        this.gameBoard.collision(projectile.hitBox, this.dmgHitBox)
       ) {
         this.hp -= projectile.dmg;
         this.dmgVulnerability = false;
         this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
         this.gameBoard.deleteElement(projectile);
-        if (this.hp <= 48 && this.hp > 24) this.el.src = 'moon-boss-1.png';
-        if (this.hp <= 24) this.el.src = 'moon-boss-2.png';
+        if (this.hp <= 48 && this.hp > 24) this.setSrc('moon-boss-1.png');
+        if (this.hp <= 24) this.setSrc('moon-boss-2.png');
         if (this.hp < 0) this.hp = 0;
         this.gameBoard.ui.updateBarrBoss();
         if (this.hp === 0) {

@@ -1,35 +1,33 @@
-import { Sprite } from './Sprite';
+import { SpriteNew } from './SpriteNew';
 
-export class EnemyPlanet extends Sprite {
-  constructor(gameBoard) {
-    super(gameBoard);
+export class EnemyPlanet extends SpriteNew {
+  constructor(gameBoard, type = Math.floor(Math.random() * 4)) {
+    super(gameBoard, {
+      src: `planet-${type}-spritesheet.png`,
+      height: 120 + type * 80
+    });
+
     this.type = 'enemies';
-    this.enemyType = Math.floor(Math.random() * 4);
-    this.heights = [120, 200, 280, 360];
-    this.sources = ['planet-0.gif', 'planet-1.gif', 'planet-2.gif', 'planet-3.gif'];
-    this.height = this.heights[this.enemyType];
-    this.top = Math.floor(Math.random() * (this.gameBoard.gameRunningHeight - this.height + 1));
+    this.hp = type * 3 + 3;
+    this.speedX = -10 / (type + 1);
+    this.dropRate = 0.2 + type * 0.1;
+    this.points = type + 2;
+
+    this.top = Math.floor(
+      Math.random() * (this.gameBoard.gameRunningHeight - this.height + 1)
+    );
     this.left = this.gameBoard.gameRunningWidth;
-    this.el.style.height = this.height + 'px';
-    this.el.style.top = this.top + 'px';
-    this.el.style.left = this.left + 'px';
-    this.el.src = `${this.sources[this.enemyType]}`;
-    this.hp = this.enemyType * 3 + 3;
-    this.speedX = -10 / (this.enemyType + 1);
-    this.dropRate = 0.2 + this.enemyType * 0.1;
-    this.points = this.enemyType + 2;
-    this.markForDeletion = false;
-    this.gameBoard.gameRunningArea.appendChild(this.el);
-    this.width = this.el.getBoundingClientRect().width;
+    this.setInitialPosition();
 
     this.radius = 0.5 * this.height;
     this.hitBox = {
+      shape: 'CIRCLE',
       radius: this.radius,
       height: 2 * this.radius,
       width: 2 * this.radius,
       top: this.top,
       left: this.left,
-      boxType: 'circle-red'
+      color: '#ff0000'
     };
 
     this.explosion = {
@@ -45,17 +43,25 @@ export class EnemyPlanet extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug();
+    if (this.gameBoard.debugMode) this.addHitBoxDebug(this.hitBox);
   }
 
-  update() {
+  updatePosition() {
     this.left += this.speedX;
     this.hitBox.left = this.left;
     this.explosion.position.left = this.hitBox.left;
     this.el.style.left = this.left + 'px';
-    if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+
+    if (this.hitBoxEl) {
+      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
+    }
+
     if (this.left + this.width * 1.1 < 0) {
       this.gameBoard.deleteElement(this);
     }
+  }
+
+  update() {
+    this.updatePosition();
   }
 }
