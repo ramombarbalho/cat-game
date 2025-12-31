@@ -93,7 +93,7 @@ export class GameBoardUI {
       this.skillBoxes[i].classList.add('box-skill');
       this.statusBarr.appendChild(this.skillBoxes[i]);
       if (this.gameBoard.player.skills[i]) {
-        const skillEl = new GameImg(this.gameBoard);
+        const skillEl = new GameImg();
         skillEl.el.style.height = this.gameBoard.player.skills[i].icon.height + 'px';
         skillEl.el.src = `${this.gameBoard.player.skills[i].icon.src}`;
         skillEl.el.style.filter = 'drop-shadow(4px 4px 4px black)';
@@ -103,7 +103,7 @@ export class GameBoardUI {
       this.skillBoxesCooldown[i].classList.add('cooldown-box-skill');
       this.skillBoxesCooldown[i].style.display = 'none';
       this.skillBoxes[i].appendChild(this.skillBoxesCooldown[i]);
-      this.skillBoxesNotAllowed[i] = new GameImg(this.gameBoard);
+      this.skillBoxesNotAllowed[i] = new GameImg();
       this.skillBoxesNotAllowed[i].el.style.height = 25 + 'px';
       this.skillBoxesNotAllowed[i].el.src = 'not-allowed.png';
       this.skillBoxesNotAllowed[i].el.classList.add('not-allowed');

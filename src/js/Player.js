@@ -51,7 +51,7 @@ export class Player extends Sprite {
       color: '#fff'
     };
 
-    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
+    if (this.gameBoard.debugMode) this.gameBoard.createHitBoxEl(this);
   }
 
   addSkills(id) {
@@ -234,11 +234,7 @@ export class Player extends Sprite {
     this.hitBox.left = this.left + this.width * 0.42;
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
-
-    if (this.hitBoxEl) {
-      this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
-      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
-    }
+    this.hitBoxEl?.updatePosition();
   }
 
   updatePlayerBehavior() {

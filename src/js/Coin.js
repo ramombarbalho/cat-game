@@ -27,7 +27,7 @@ export class Coin extends Sprite {
       color: '#ffff00'
     };
 
-    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
+    if (this.gameBoard.debugMode) this.gameBoard.createHitBoxEl(this);
   }
 
   update() {

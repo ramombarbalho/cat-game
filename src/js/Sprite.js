@@ -30,6 +30,7 @@ export class Sprite {
     this.willBlink = willBlink;
     this.el = null;
     this.markForDeletion = false;
+    this.hitBox = null;
     this.hitBoxEl = null;
     this.createSprite();
   }
@@ -37,7 +38,7 @@ export class Sprite {
   createSprite() {
     this.el = document.createElement('div');
     this.el.classList.add('wrapper-spritesheet');
-    this.spriteSheet = new GameImg(this.gameBoard);
+    this.spriteSheet = new GameImg();
     this.spriteSheet.el.style.height = this.height;
     this.spriteSheet.el.src = `${this.src}`;
     this.gameBoard.gameRunningArea.appendChild(this.el);
@@ -59,8 +60,6 @@ export class Sprite {
     this.el.style.top = this.top + 'px';
     this.el.style.width = this.width + 'px';
     this.el.style.left = this.left + 'px';
-    this.spriteSheet.left = 0;
-    this.spriteSheet.el.style.left = this.spriteSheet.left + 'px';
     const valueX = this.width * (1 - this.currentFrameX);
     this.spriteSheet.el.style.transform = `translateX(${valueX}px)`;
   }

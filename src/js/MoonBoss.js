@@ -10,7 +10,7 @@ export class MoonBoss extends Sprite {
       height: gameBoard.gameRunningHeight
     });
 
-    this.hp = 1;
+    this.hp = 80;
     this.dmg = 2;
     this.balanceTop = 7;
     this.balanceBottom = 7;
@@ -19,7 +19,6 @@ export class MoonBoss extends Sprite {
     this.rotate = 0;
     this.rotateSpeed = 5;
     this.rotateDirection = -1;
-    this.dmgHitBoxEl = null;
     this.state = 'INVULNERABLE';
     this.dmgVulnerability = true;
     this.dmgVulnerabilityFrames = 70;
@@ -51,8 +50,13 @@ export class MoonBoss extends Sprite {
       color: '#ff0000'
     };
 
+    // ##fix criar nova class para dmgSprite
     this.dmgRadius = 0.073 * this.height;
-    this.dmgHitBox = {
+    this.dmgSprite = new Sprite(gameBoard, {
+      src: '__blank.png',
+      height: 2 * this.dmgRadius
+    });
+    this.dmgSprite.hitBox = {
       shape: 'CIRCLE',
       radius: this.dmgRadius,
       height: 2 * this.dmgRadius,
@@ -61,6 +65,9 @@ export class MoonBoss extends Sprite {
       left: this.left + this.width / 2 - this.dmgRadius,
       color: '#ff0000'
     };
+    this.dmgSprite.top = this.top + this.height / 2 - this.dmgRadius;
+    this.dmgSprite.left = this.left + this.width / 2 - this.dmgRadius;
+    this.dmgSprite.setInitialPosition();
 
     this.explosion = {
       height: this.height,
@@ -74,23 +81,9 @@ export class MoonBoss extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
-    if (this.gameBoard.debugMode) this.addDmgHitBoxDebug();
-  }
-
-  update() {
-    this.left += this.speedX;
-    this.hitBox.left = this.left;
-    this.dmgHitBox.left = this.left + this.width / 2 - this.dmgRadius;
-    this.explosion.position.left = this.left;
-    this.el.style.left = this.left + 'px';
-
-    if (this.hitBoxEl) {
-      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
-    }
-
-    if (this.dmgHitBoxEl) {
-      this.dmgHitBoxEl.el.style.left = this.dmgHitBox.left + 'px';
+    if (this.gameBoard.debugMode) {
+      this.gameBoard.createHitBoxEl(this);
+      this.gameBoard.createHitBoxEl(this.dmgSprite);
     }
   }
 
@@ -99,6 +92,7 @@ export class MoonBoss extends Sprite {
       this.gameBoard.ui.fillHpBossEl();
       return (this.speedX = 0);
     }
+
     this.update();
   }
 
@@ -323,8 +317,8 @@ export class MoonBoss extends Sprite {
   }
 
   collisionBalance(position) {
-    // const rng = Math.floor(Math.random() * 3 + 1);
-    const rng = 1;
+    const rng = Math.floor(Math.random() * 3 + 1);
+    // const rng = 1;
     this.rotateDirection = position;
     this.state = `SKILL0${rng}`;
 
@@ -390,7 +384,7 @@ export class MoonBoss extends Sprite {
           this.state === 'SKILL02' ||
           (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
         this.dmgVulnerability &&
-        this.gameBoard.collision(projectile.hitBox, this.dmgHitBox)
+        this.gameBoard.collision(projectile.hitBox, this.dmgSprite.hitBox)
       ) {
         this.hp -= projectile.dmg;
         this.dmgVulnerability = false;
@@ -473,16 +467,17 @@ export class MoonBoss extends Sprite {
     this[`${this.state}`.toLowerCase()]();
   }
 
-  addDmgHitBoxDebug = () => {
-    this.dmgHitBoxEl = new HitBoxDebug(this.gameBoard, this.dmgHitBox);
-    this.gameBoard.hitBoxElements.push(this.dmgHitBoxEl.el);
-  };
+  updatePosition() {
+    this.left += this.speedX;
+    this.hitBox.left = this.left;
+    this.dmgSprite.hitBox.left = this.left + this.width / 2 - this.dmgRadius;
+    this.explosion.position.left = this.left;
+    this.el.style.left = this.left + 'px';
+    this.hitBoxEl?.updatePositionX();
+    this.dmgSprite.hitBoxEl?.updatePositionX();
+  }
 
-  removeDmgBoxDebug = () => {
-    if (this.dmgHitBoxEl) {
-      this.gameBoard.hitBoxElements.forEach(el => el.remove());
-      this.gameBoard.hitBoxElements.length = 0;
-      this.dmgHitBoxEl = null;
-    }
-  };
+  update() {
+    this.updatePosition();
+  }
 }

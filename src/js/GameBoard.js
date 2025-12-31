@@ -107,16 +107,12 @@ export class GameBoard {
     switch (`${hitBoxA.shape}_${hitBoxB.shape}`) {
       case 'RECT_RECT':
         return this.rectRectCollision(hitBoxA, hitBoxB);
-
       case 'CIRCLE_CIRCLE':
         return this.circleCircleCollision(hitBoxA, hitBoxB);
-
       case 'RECT_CIRCLE':
         return this.rectCircleCollision(hitBoxA, hitBoxB);
-
       case 'CIRCLE_RECT':
         return this.rectCircleCollision(hitBoxB, hitBoxA);
-
       default:
         return false;
     }
@@ -295,14 +291,14 @@ export class GameBoard {
     }
   }
 
-  addHitBoxDebug = sprite => {
+  createHitBoxEl = sprite => {
     if (sprite.hitBox && !sprite.hitBoxEl) {
       sprite.hitBoxEl = new HitBoxDebug(this, sprite);
       this.hitBoxElements.push(sprite.hitBoxEl);
     }
   };
 
-  removeHitBoxDebug = sprite => {
+  deleteHitBoxEl = sprite => {
     sprite.hitBoxEl.el.remove();
     sprite.hitBoxEl = null;
   };
@@ -317,15 +313,16 @@ export class GameBoard {
         ...this.enemies,
         ...this.coins,
         this.boss,
+        this.boss?.dmgSprite,
         ...this.player.skills
       ].forEach(sprite => {
         if (sprite) {
-          this.addHitBoxDebug(sprite);
+          this.createHitBoxEl(sprite);
         }
       });
     } else {
       this.hitBoxElements.forEach(hitBoxEl => {
-        if (hitBoxEl.sprite) this.removeHitBoxDebug(hitBoxEl.sprite);
+        if (hitBoxEl.sprite) this.deleteHitBoxEl(hitBoxEl.sprite);
       });
       this.hitBoxElements.length = 0;
     }

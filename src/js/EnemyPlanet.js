@@ -43,7 +43,13 @@ export class EnemyPlanet extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
+    if (this.gameBoard.debugMode) this.gameBoard.createHitBoxEl(this);
+  }
+
+  deleteIfOutOfBounds() {
+    if (this.left + this.width * 1.1 < 0) {
+      this.gameBoard.deleteElement(this);
+    }
   }
 
   updatePosition() {
@@ -51,14 +57,8 @@ export class EnemyPlanet extends Sprite {
     this.hitBox.left = this.left;
     this.explosion.position.left = this.hitBox.left;
     this.el.style.left = this.left + 'px';
-
-    if (this.hitBoxEl) {
-      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
-    }
-
-    if (this.left + this.width * 1.1 < 0) {
-      this.gameBoard.deleteElement(this);
-    }
+    this.hitBoxEl?.updatePositionX();
+    this.deleteIfOutOfBounds();
   }
 
   update() {

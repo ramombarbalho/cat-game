@@ -51,12 +51,20 @@ export class MoonBossProjectile extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.gameBoard.addHitBoxDebug(this);
+    if (this.gameBoard.debugMode) this.gameBoard.createHitBoxEl(this);
   }
 
-  update() {
-    this.updateCurrentFrameX();
+  deleteIfOutOfBounds() {
+    if (
+      this.left + this.width * 1.1 < 0 ||
+      this.top + this.height * 1.1 < 0 ||
+      this.top - this.height * 0.1 > this.gameBoard.gameRunningHeight
+    ) {
+      this.gameBoard.deleteElement(this);
+    }
+  }
 
+  updatePosition() {
     this.top += this.speedY;
     this.left += this.speedX;
     this.hitBox.top =
@@ -68,18 +76,12 @@ export class MoonBossProjectile extends Sprite {
     this.explosion.position.left = this.hitBox.left;
     this.el.style.top = this.top + 'px';
     this.el.style.left = this.left + 'px';
+    this.hitBoxEl?.updatePosition();
+    this.deleteIfOutOfBounds();
+  }
 
-    if (this.hitBoxEl) {
-      this.hitBoxEl.el.style.top = this.hitBox.top + 'px';
-      this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
-    }
-
-    if (
-      this.left + this.width * 1.1 < 0 ||
-      this.top + this.height * 1.1 < 0 ||
-      this.top - this.height * 0.1 > this.gameBoard.gameRunningHeight
-    ) {
-      this.gameBoard.deleteElement(this);
-    }
+  update() {
+    this.updateCurrentFrameX();
+    this.updatePosition();
   }
 }
