@@ -1,3 +1,4 @@
+import { Explosion } from './Explosion';
 import { Sprite } from './Sprite';
 
 function getMaxFramesX(value) {
@@ -63,6 +64,13 @@ export class Projectile extends Sprite {
     };
 
     if (this.gameBoard.debugMode) this.gameBoard.createHitBoxEl(this);
+  }
+
+  destroy() {
+    this.gameBoard.explosions.push(
+      new Explosion(this.gameBoard, this.explosion)
+    );
+    this.gameBoard.deleteElement(this);
   }
 
   deleteIfOutOfBounds() {

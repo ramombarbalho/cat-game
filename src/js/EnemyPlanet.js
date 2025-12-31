@@ -1,3 +1,5 @@
+import { Coin } from './Coin';
+import { Explosion } from './Explosion';
 import { Sprite } from './Sprite';
 
 export class EnemyPlanet extends Sprite {
@@ -44,6 +46,24 @@ export class EnemyPlanet extends Sprite {
     };
 
     if (this.gameBoard.debugMode) this.gameBoard.createHitBoxEl(this);
+  }
+
+  takeDamage(dmg) {
+    this.hp -= dmg;
+    if (this.hp <= 0) {
+      this.destroy();
+    }
+  }
+
+  destroy() {
+    this.gameBoard.scoreUp(this.points);
+    if (Math.random() < this.dropRate) {
+      this.gameBoard.coins.push(new Coin(this.gameBoard, this));
+    }
+    this.gameBoard.explosions.push(
+      new Explosion(this.gameBoard, this.explosion)
+    );
+    this.gameBoard.deleteElement(this);
   }
 
   deleteIfOutOfBounds() {

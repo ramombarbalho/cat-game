@@ -10,7 +10,7 @@ export class MoonBoss extends Sprite {
       height: gameBoard.gameRunningHeight
     });
 
-    this.hp = 80;
+    this.hp = 1;
     this.dmg = 2;
     this.balanceTop = 7;
     this.balanceBottom = 7;
@@ -327,106 +327,6 @@ export class MoonBoss extends Sprite {
     }
   }
 
-  collision() {
-    if (
-      this.gameBoard.collision(this.gameBoard.player.hitBox, this.hitBox) &&
-      this.gameBoard.player.state !== 'UNTARGETABLE' &&
-      this.skill03State !== 's2'
-    ) {
-      this.gameBoard.player.takeDamage(this);
-      this.gameBoard.ui.updateHeart();
-    }
-
-    this.gameBoard.projectiles.forEach(projectile => {
-      if (
-        this.state === 'INVULNERABLE' &&
-        this.gameBoard.collision(projectile.hitBox, this.hitBox)
-      ) {
-        if (
-          projectile.hitBox.top + projectile.hitBox.height / 2 <=
-          this.hitBox.top + this.hitBox.height * 0.1
-        ) {
-          this.balanceTop -= projectile.dmg;
-
-          if (this.balanceTop <= 0) {
-            this.collisionBalance(1);
-          }
-        } else if (
-          projectile.hitBox.top + projectile.hitBox.height / 2 >=
-          this.hitBox.top + this.hitBox.height * 0.9
-        ) {
-          this.balanceBottom -= projectile.dmg;
-
-          if (this.balanceBottom <= 0) {
-            this.collisionBalance(-1);
-          }
-        } else {
-          this.rage += projectile.dmg;
-
-          if (this.rage >= 10) {
-            this.state = 'SKILL00';
-          }
-        }
-        this.gameBoard.explosions.push(
-          new Explosion(this.gameBoard, projectile.explosion)
-        );
-        this.gameBoard.deleteElement(projectile);
-      } else if (
-        this.state === 'SKILL00' &&
-        this.gameBoard.collision(projectile.hitBox, this.hitBox)
-      ) {
-        this.gameBoard.explosions.push(
-          new Explosion(this.gameBoard, projectile.explosion)
-        );
-        this.gameBoard.deleteElement(projectile);
-      } else if (
-        (this.state === 'SKILL01' ||
-          this.state === 'SKILL02' ||
-          (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
-        this.dmgVulnerability &&
-        this.gameBoard.collision(projectile.hitBox, this.dmgSprite.hitBox)
-      ) {
-        this.hp -= projectile.dmg;
-        this.dmgVulnerability = false;
-        this.gameBoard.explosions.push(
-          new Explosion(this.gameBoard, projectile.explosion)
-        );
-        this.gameBoard.deleteElement(projectile);
-
-        if (this.hp <= 48 && this.hp > 24) {
-          this.setSrc('moon-boss-1.png');
-        }
-
-        if (this.hp <= 24) {
-          this.setSrc('moon-boss-2.png');
-        }
-
-        if (this.hp < 0) {
-          this.hp = 0;
-        }
-
-        this.gameBoard.ui.updateBarrBoss();
-
-        if (this.hp === 0) {
-          this.gameBoard.explosions.push(
-            new Explosion(this.gameBoard, this.explosion)
-          );
-          this.el.remove();
-          this.gameBoard.windForceX = 0;
-          this.gameBoard.boss = null;
-          this.gameBoard.bossDefeated = true;
-          this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
-            this.gameBoard.explosions.push(
-              new Explosion(this.gameBoard, enemy.explosion)
-            );
-            this.gameBoard.deleteElement(enemy, arrEnemies);
-          });
-          return;
-        }
-      }
-    });
-  }
-
   dmgInvulnerabilityMode() {
     if (this.dmgVulnerabilityFrames > 0) {
       this.dmgVulnerabilityFrames--;
@@ -467,14 +367,111 @@ export class MoonBoss extends Sprite {
     this[`${this.state}`.toLowerCase()]();
   }
 
+  takeDamage(dmg) {
+    this.hp -= dmg;
+    this.dmgVulnerability = false;
+  }
+
+  destroy() {
+    this.gameBoard.explosions.push(
+      new Explosion(this.gameBoard, this.explosion)
+    );
+    this.el.remove();
+    this.dmgSprite.el.remove();
+    this.gameBoard.windForceX = 0;
+    this.gameBoard.boss = null;
+    this.gameBoard.bossDefeated = true;
+    this.gameBoard.enemies.forEach(enemy => {
+      enemy.destroy();
+    });
+  }
+
   updatePosition() {
     this.left += this.speedX;
     this.hitBox.left = this.left;
     this.dmgSprite.hitBox.left = this.left + this.width / 2 - this.dmgRadius;
     this.explosion.position.left = this.left;
     this.el.style.left = this.left + 'px';
+    this.dmgSprite.el.style.left = this.dmgSprite.hitBox.left + 'px';
     this.hitBoxEl?.updatePositionX();
     this.dmgSprite.hitBoxEl?.updatePositionX();
+  }
+
+  checkCollision() {
+    if (
+      this.gameBoard.collision(this.gameBoard.player.hitBox, this.hitBox) &&
+      this.gameBoard.player.state !== 'UNTARGETABLE' &&
+      this.skill03State !== 's2'
+    ) {
+      this.gameBoard.player.takeDamage(this);
+    }
+
+    this.gameBoard.projectiles.forEach(projectile => {
+      if (
+        this.state === 'INVULNERABLE' &&
+        this.gameBoard.collision(projectile.hitBox, this.hitBox)
+      ) {
+        if (
+          projectile.hitBox.top + projectile.hitBox.height / 2 <=
+          this.hitBox.top + this.hitBox.height * 0.1
+        ) {
+          this.balanceTop -= projectile.dmg;
+
+          if (this.balanceTop <= 0) {
+            this.collisionBalance(1);
+          }
+        } else if (
+          projectile.hitBox.top + projectile.hitBox.height / 2 >=
+          this.hitBox.top + this.hitBox.height * 0.9
+        ) {
+          this.balanceBottom -= projectile.dmg;
+
+          if (this.balanceBottom <= 0) {
+            this.collisionBalance(-1);
+          }
+        } else {
+          this.rage += projectile.dmg;
+
+          if (this.rage >= 10) {
+            this.state = 'SKILL00';
+          }
+        }
+        projectile.destroy();
+      } else if (
+        this.state === 'SKILL00' &&
+        this.gameBoard.collision(projectile.hitBox, this.hitBox)
+      ) {
+        projectile.destroy();
+      } else if (
+        (this.state === 'SKILL01' ||
+          this.state === 'SKILL02' ||
+          (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
+        this.dmgVulnerability &&
+        this.gameBoard.collision(projectile.hitBox, this.dmgSprite.hitBox)
+      ) {
+        this.takeDamage(projectile.dmg);
+        projectile.destroy();
+
+        if (this.hp <= 48 && this.hp > 24) {
+          this.setSrc('moon-boss-1.png');
+        }
+
+        if (this.hp <= 24) {
+          this.setSrc('moon-boss-2.png');
+        }
+
+        if (this.hp < 0) {
+          this.hp = 0;
+        }
+
+        this.gameBoard.ui.updateBarrBoss();
+
+        if (this.hp === 0) {
+          this.destroy();
+          return;
+        }
+      }
+    });
   }
 
   update() {

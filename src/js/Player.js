@@ -105,6 +105,7 @@ export class Player extends Sprite {
     this.hp -= enemy.dmg;
     this.dboost.active = true;
     this.calcDboost(enemy);
+    this.gameBoard.ui.updateHeart();
   }
 
   dboostMove() {

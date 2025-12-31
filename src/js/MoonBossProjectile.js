@@ -1,3 +1,4 @@
+import { Explosion } from './Explosion';
 import { Sprite } from './Sprite';
 
 export class MoonBossProjectile extends Sprite {
@@ -52,6 +53,20 @@ export class MoonBossProjectile extends Sprite {
     };
 
     if (this.gameBoard.debugMode) this.gameBoard.createHitBoxEl(this);
+  }
+
+  takeDamage(dmg) {
+    this.hp -= dmg;
+    if (this.hp <= 0) {
+      this.destroy();
+    }
+  }
+
+  destroy() {
+    this.gameBoard.explosions.push(
+      new Explosion(this.gameBoard, this.explosion)
+    );
+    this.gameBoard.deleteElement(this);
   }
 
   deleteIfOutOfBounds() {

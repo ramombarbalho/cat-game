@@ -1,7 +1,5 @@
 import { BOSS_LIST } from './BOSS_LIST';
-import { Coin } from './Coin';
 import { ENEMY_LIST } from './ENEMY_LIST';
-import { Explosion } from './Explosion';
 import { GameBoardUI } from './GameBoardUI';
 import { HitBoxDebug } from './HitBoxDebug';
 import { Player } from './Player';
@@ -142,6 +140,43 @@ export class GameBoard {
     }
   }
 
+  checkCollision() {
+    this.enemies.forEach(enemy => {
+      enemy.update();
+
+      if (
+        this.collision(this.player.hitBox, enemy.hitBox) &&
+        this.player.state !== 'UNTARGETABLE'
+      ) {
+        if (this.state === 'GAME_RUNNING') {
+          this.player.takeDamage(enemy);
+        }
+      }
+
+      this.projectiles.forEach(projectile => {
+        if (this.collision(projectile.hitBox, enemy.hitBox)) {
+          enemy.takeDamage(projectile.dmg);
+          projectile.destroy();
+        }
+      });
+
+      this.player.skills.forEach(skill => {
+        if (skill.active && this.collision(skill.hitBox, enemy.hitBox)) {
+          enemy.takeDamage(skill.dmg);
+        }
+      });
+    });
+
+    this.coins.forEach(coin => {
+      if (this.collision(this.player.hitBox, coin.hitBox)) {
+        this.scoreUp(coin.points);
+        this.deleteElement(coin);
+      }
+    });
+
+    if (this.boss && this.state === 'GAME_RUNNING') this.boss.checkCollision();
+  }
+
   update() {
     if (this.state === 'OPENING_STAGE') this.ui.openingStage();
 
@@ -180,58 +215,7 @@ export class GameBoard {
     this.coins.forEach(coin => coin.update());
     this.player.update();
 
-    this.enemies.forEach(enemy => {
-      enemy.update();
-
-      if (
-        this.collision(this.player.hitBox, enemy.hitBox) &&
-        this.player.state !== 'UNTARGETABLE'
-      ) {
-        if (this.state === 'GAME_RUNNING') {
-          this.player.takeDamage(enemy);
-          this.ui.updateHeart();
-        }
-      }
-
-      this.projectiles.forEach(projectile => {
-        if (this.collision(projectile.hitBox, enemy.hitBox)) {
-          enemy.hp -= projectile.dmg;
-          this.explosions.push(new Explosion(this, projectile.explosion));
-          this.deleteElement(projectile);
-          if (enemy.hp <= 0) {
-            this.scoreUp(enemy.points);
-            if (Math.random() < enemy.dropRate) {
-              this.coins.push(new Coin(this, enemy));
-            }
-            this.explosions.push(new Explosion(this, enemy.explosion));
-            this.deleteElement(enemy);
-          }
-        }
-      });
-
-      this.player.skills.forEach(skill => {
-        if (skill.active && this.collision(skill.hitBox, enemy.hitBox)) {
-          enemy.hp -= skill.dmg;
-          if (enemy.hp <= 0) {
-            this.scoreUp(enemy.points);
-            if (Math.random() < enemy.dropRate) {
-              this.coins.push(new Coin(this, enemy));
-            }
-            this.explosions.push(new Explosion(this, enemy.explosion));
-            this.deleteElement(enemy);
-          }
-        }
-      });
-    });
-
-    this.coins.forEach(coin => {
-      if (this.collision(this.player.hitBox, coin.hitBox)) {
-        this.scoreUp(coin.points);
-        this.deleteElement(coin);
-      }
-    });
-
-    if (this.boss && this.state === 'GAME_RUNNING') this.boss.collision();
+    this.checkCollision();
 
     if (
       this.state === 'GAME_RUNNING' &&
