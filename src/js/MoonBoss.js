@@ -1,20 +1,17 @@
 import { HitBoxDebug } from './HitBoxDebug';
-import { Sprite } from './Sprite';
 import { Explosion } from './Explosion';
 import { MoonBossProjectile } from './MoonBossProjectile';
+import { Sprite } from './Sprite';
 
 export class MoonBoss extends Sprite {
   constructor(gameBoard) {
-    super(gameBoard);
-    this.height = this.gameBoard.gameRunningHeight;
-    this.top = this.gameBoard.top;
-    this.left = this.gameBoard.gameRunningWidth;
-    this.src = 'moon-boss.png';
-    this.el.style.height = this.height + 'px';
-    this.el.style.top = this.top + 'px';
-    this.el.style.left = this.left + 'px';
-    this.el.src = `${this.src}`;
+    super(gameBoard, {
+      src: 'moon-boss.png',
+      height: gameBoard.gameRunningHeight
+    });
+
     this.hp = 80;
+    this.dmg = 2;
     this.balanceTop = 7;
     this.balanceBottom = 7;
     this.speedX = -8;
@@ -22,9 +19,6 @@ export class MoonBoss extends Sprite {
     this.rotate = 0;
     this.rotateSpeed = 5;
     this.rotateDirection = -1;
-    this.gameBoard.gameRunningArea.appendChild(this.el);
-    this.width = this.el.getBoundingClientRect().width;
-    this.dmgHitBoxEl = null;
     this.state = 'INVULNERABLE';
     this.dmgVulnerability = true;
     this.dmgVulnerabilityFrames = 70;
@@ -41,30 +35,43 @@ export class MoonBoss extends Sprite {
     this.windForceXVariant = 4;
     this.maxSpeedMeteorVariant = 3;
 
+    this.top = this.gameBoard.top;
+    this.left = this.gameBoard.gameRunningWidth;
+    this.setInitialPosition();
+
     this.radius = 0.5 * this.height;
     this.hitBox = {
+      shape: 'CIRCLE',
       radius: this.radius,
       height: 2 * this.radius,
       width: 2 * this.radius,
       top: this.top,
       left: this.left,
-      boxType: 'circle-red'
+      color: '#ff0000'
     };
 
+    // ##fix criar nova class para dmgSprite
     this.dmgRadius = 0.073 * this.height;
-    this.dmgHitBox = {
+    this.dmgSprite = new Sprite(gameBoard, {
+      src: '__blank.png',
+      height: 2 * this.dmgRadius
+    });
+    this.dmgSprite.hitBox = {
+      shape: 'CIRCLE',
       radius: this.dmgRadius,
       height: 2 * this.dmgRadius,
       width: 2 * this.dmgRadius,
       top: this.top + this.height / 2 - this.dmgRadius,
       left: this.left + this.width / 2 - this.dmgRadius,
-      boxType: 'circle-red'
+      color: '#ff0000'
     };
+    this.dmgSprite.top = this.top + this.height / 2 - this.dmgRadius;
+    this.dmgSprite.left = this.left + this.width / 2 - this.dmgRadius;
+    this.dmgSprite.setInitialPosition();
 
     this.explosion = {
       height: this.height,
       src: 'boss-explosion-spritesheet.png',
-      maxFramesY: 1,
       maxFramesX: 90,
       position: {
         height: this.hitBox.height,
@@ -74,18 +81,10 @@ export class MoonBoss extends Sprite {
       }
     };
 
-    if (this.gameBoard.debugMode) this.addHitBoxDebug();
-    if (this.gameBoard.debugMode) this.addDmgHitBoxDebug();
-  }
-
-  update() {
-    this.left += this.speedX;
-    this.hitBox.left = this.left;
-    this.dmgHitBox.left = this.left + this.width / 2 - this.dmgRadius;
-    this.explosion.position.left = this.left;
-    this.el.style.left = this.left + 'px';
-    if (this.hitBoxEl) this.hitBoxEl.el.style.left = this.hitBox.left + 'px';
-    if (this.dmgHitBoxEl) this.dmgHitBoxEl.el.style.left = this.dmgHitBox.left + 'px';
+    if (this.gameBoard.debugMode) {
+      this.gameBoard.createHitBoxEl(this);
+      this.gameBoard.createHitBoxEl(this.dmgSprite);
+    }
   }
 
   entrance() {
@@ -93,6 +92,7 @@ export class MoonBoss extends Sprite {
       this.gameBoard.ui.fillHpBossEl();
       return (this.speedX = 0);
     }
+
     this.update();
   }
 
@@ -117,6 +117,7 @@ export class MoonBoss extends Sprite {
       this.windForceXVariant = 7;
       this.maxSpeedMeteorVariant = 11;
     }
+
     this.balanceTop = 7;
     this.balanceBottom = 7;
     this.speedX = 0;
@@ -136,37 +137,54 @@ export class MoonBoss extends Sprite {
   }
 
   throwRandomMeteor(rotation = Math.round(Math.random()) * 2 - 1) {
+    const options = {
+      top: rotation === 1 ? this.gameBoard.gameRunningHeight : -200,
+      left: Math.floor(
+        Math.random() * this.gameBoard.gameRunningWidth + 200 * 0.9
+      ),
+      topStart: rotation,
+      rotate: 45 + 45 * rotation,
+      speed: Math.random() * (this.maxSpeedMeteorVariant - 2 + 1) + 2
+    };
+
     this.gameBoard.enemies.push(
-      new MoonBossProjectile(this.gameBoard, {
-        top: rotation === 1 ? this.gameBoard.gameRunningHeight : -200,
-        left: Math.floor(Math.random() * this.gameBoard.gameRunningWidth + 200 * 0.9),
-        topStart: rotation,
-        rotate: 45 + 45 * rotation,
-        speed: Math.random() * (this.maxSpeedMeteorVariant - 2 + 1) + 2
-      })
+      new MoonBossProjectile(this.gameBoard, options)
     );
     this.projectileSpawnInterval = this.projectileSpawnIntervalVariant;
   }
 
   throwTargetMeteor() {
+    const options = {
+      top: this.rotateDirection === 1 ? this.gameBoard.gameRunningHeight : -200,
+      left:
+        this.rotateDirection === -1
+          ? this.gameBoard.player.top + this.gameBoard.player.left + 200 * 0.8
+          : this.gameBoard.gameRunningHeight -
+            this.gameBoard.player.top -
+            this.gameBoard.player.height +
+            this.gameBoard.player.left +
+            200 * 0.8,
+      topStart: this.rotateDirection,
+      rotate: 45 + 45 * this.rotateDirection,
+      speed: Math.random() * (this.maxSpeedMeteorVariant - 2 + 1) + 2
+    };
+
     this.gameBoard.enemies.push(
-      new MoonBossProjectile(this.gameBoard, {
-        top: this.rotateDirection === 1 ? this.gameBoard.gameRunningHeight : -200,
-        left:
-          this.rotateDirection === -1
-            ? this.gameBoard.player.top + this.gameBoard.player.left + 200 * 0.8
-            : this.gameBoard.gameRunningHeight - this.gameBoard.player.top - this.gameBoard.player.height + this.gameBoard.player.left + 200 * 0.8,
-        topStart: this.rotateDirection,
-        rotate: 45 + 45 * this.rotateDirection,
-        speed: Math.random() * (this.maxSpeedMeteorVariant - 2 + 1) + 2
-      })
+      new MoonBossProjectile(this.gameBoard, options)
     );
   }
 
   skill00() {
-    if (!this.speedX) this.speedX = -this.speedXVariant;
-    if (this.left <= 0) this.speedX = this.speedXVariant;
+    if (!this.speedX) {
+      this.speedX = -this.speedXVariant;
+    }
+
+    if (this.left <= 0) {
+      this.speedX = this.speedXVariant;
+    }
+
     this.update();
+
     if (this.left + this.width > this.gameBoard.gameRunningWidth) {
       this.speedX = -this.speedXVariant;
       this.update();
@@ -176,7 +194,11 @@ export class MoonBoss extends Sprite {
 
   skill01() {
     this.rotating();
-    if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) {
+
+    if (
+      this.rotate % 360 === 0 ||
+      this.rotate === this.rotateDirection * this.rotateSpeed
+    ) {
       this.throwTargetMeteor();
       this.skill01RotateQuantity--;
       if (this.skill01RotateQuantity <= 0) {
@@ -188,14 +210,29 @@ export class MoonBoss extends Sprite {
 
   skill02() {
     this.rotating();
-    if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) this.throwRandomMeteor(this.rotateDirection);
-    if (!this.speedX) this.speedX = -this.speedXVariant;
-    if (this.left <= 0) this.speedX = this.speedXVariant;
+
+    if (
+      this.rotate % 360 === 0 ||
+      this.rotate === this.rotateDirection * this.rotateSpeed
+    ) {
+      this.throwRandomMeteor(this.rotateDirection);
+    }
+
+    if (!this.speedX) {
+      this.speedX = -this.speedXVariant;
+    }
+
+    if (this.left <= 0) {
+      this.speedX = this.speedXVariant;
+    }
+
     this.update();
+
     if (this.left + this.width > this.gameBoard.gameRunningWidth) {
       this.speedX = -this.speedXVariant;
       this.update();
       this.speedX = this.speedXVariant;
+
       if (this.rotate % 360 === 0) {
         this.stopRotating();
         this.stopSkill();
@@ -205,42 +242,68 @@ export class MoonBoss extends Sprite {
 
   skill03() {
     this.rotating();
-    if (this.rotate % 360 === 0 || this.rotate === this.rotateDirection * this.rotateSpeed) this.throwTargetMeteor();
+
+    if (
+      this.rotate % 360 === 0 ||
+      this.rotate === this.rotateDirection * this.rotateSpeed
+    ) {
+      this.throwTargetMeteor();
+    }
+
     switch (this.skill03State) {
       case 's1':
         this.speedX = 8;
         this.update();
-        if (this.left - 600 > this.gameBoard.left + this.gameBoard.gameRunningWidth) {
+
+        if (
+          this.left - 600 >
+          this.gameBoard.left + this.gameBoard.gameRunningWidth
+        ) {
           this.skill03State = 's2';
           this.speedX = this.skill03DirectionRng * this.speedXVariant * 4;
-          if (this.skill03DirectionRng === 1) this.left = -(this.width + 400);
+
+          if (this.skill03DirectionRng === 1) {
+            this.left = -(this.width + 400);
+          }
         }
+
         break;
       case 's2':
         this.update();
+
         if (this.el.style.filter !== 'blur(2px)') {
           this.el.style.filter = 'blur(2px)';
           this.el.style.scale = 2;
           this.el.style.zIndex = '3';
         }
-        if (this.left + this.width + 600 < this.gameBoard.left || this.left - 600 > this.gameBoard.left + this.gameBoard.gameRunningWidth) {
+
+        if (
+          this.left + this.width + 600 < this.gameBoard.left ||
+          this.left - 600 >
+            this.gameBoard.left + this.gameBoard.gameRunningWidth
+        ) {
           this.skill03State = 's3';
           this.left = this.gameBoard.gameRunningWidth * 1.5;
           this.speedX = -8;
-          this.gameBoard.windForceX = this.skill03DirectionRng * this.windForceXVariant;
+          this.gameBoard.windForceX =
+            this.skill03DirectionRng * this.windForceXVariant;
         }
+
         break;
       case 's3':
         this.update();
+
         if (this.el.style.filter === 'blur(2px)') {
           this.el.style.filter = 'none';
           this.el.style.scale = 1;
           this.el.style.zIndex = '1';
         }
+
         if (this.left + this.width + 8 < this.gameBoard.gameRunningWidth) {
           this.speedX = 8;
           this.update();
           this.speedX = -8;
+
           if (this.rotate % 360 === 0) {
             this.skill03State = 's1';
             this.gameBoard.windForceX = 0;
@@ -248,63 +311,115 @@ export class MoonBoss extends Sprite {
             this.stopSkill();
           }
         }
+
         break;
     }
   }
 
   collisionBalance(position) {
     const rng = Math.floor(Math.random() * 3 + 1);
+    // const rng = 1;
     this.rotateDirection = position;
     this.state = `SKILL0${rng}`;
-    if (rng === 3) this.skill03DirectionRng = Math.round(Math.random()) * 2 - 1;
+
+    if (rng === 3) {
+      this.skill03DirectionRng = Math.round(Math.random()) * 2 - 1;
+    }
   }
 
   collision() {
-    if (this.gameBoard.collisionRectangleCircle(this.gameBoard.player.hitBox, this.hitBox) && this.gameBoard.player.state !== 'UNTARGETABLE' && this.skill03State !== 's2') {
-      this.gameBoard.player.hp--;
-      this.gameBoard.player.dboost.active = true;
-      this.gameBoard.player.calcDboost(this);
+    if (
+      this.gameBoard.collision(this.gameBoard.player.hitBox, this.hitBox) &&
+      this.gameBoard.player.state !== 'UNTARGETABLE' &&
+      this.skill03State !== 's2'
+    ) {
+      this.gameBoard.player.takeDamage(this);
       this.gameBoard.ui.updateHeart();
     }
+
     this.gameBoard.projectiles.forEach(projectile => {
-      if (this.state === 'INVULNERABLE' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
-        if (projectile.hitBox.top + projectile.hitBox.height / 2 <= this.hitBox.top + this.hitBox.height * 0.1) {
+      if (
+        this.state === 'INVULNERABLE' &&
+        this.gameBoard.collision(projectile.hitBox, this.hitBox)
+      ) {
+        if (
+          projectile.hitBox.top + projectile.hitBox.height / 2 <=
+          this.hitBox.top + this.hitBox.height * 0.1
+        ) {
           this.balanceTop -= projectile.dmg;
-          if (this.balanceTop <= 0) this.collisionBalance(1);
-        } else if (projectile.hitBox.top + projectile.hitBox.height / 2 >= this.hitBox.top + this.hitBox.height * 0.9) {
+
+          if (this.balanceTop <= 0) {
+            this.collisionBalance(1);
+          }
+        } else if (
+          projectile.hitBox.top + projectile.hitBox.height / 2 >=
+          this.hitBox.top + this.hitBox.height * 0.9
+        ) {
           this.balanceBottom -= projectile.dmg;
-          if (this.balanceBottom <= 0) this.collisionBalance(-1);
+
+          if (this.balanceBottom <= 0) {
+            this.collisionBalance(-1);
+          }
         } else {
           this.rage += projectile.dmg;
-          if (this.rage >= 10) this.state = 'SKILL00';
+
+          if (this.rage >= 10) {
+            this.state = 'SKILL00';
+          }
         }
-        this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
-        this.gameBoard.deletElement(projectile);
-      } else if (this.state === 'SKILL00' && this.gameBoard.collisionCircleCircle(projectile.hitBox, this.hitBox)) {
-        this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
-        this.gameBoard.deletElement(projectile);
+        this.gameBoard.explosions.push(
+          new Explosion(this.gameBoard, projectile.explosion)
+        );
+        this.gameBoard.deleteElement(projectile);
       } else if (
-        (this.state === 'SKILL01' || this.state === 'SKILL02' || (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
+        this.state === 'SKILL00' &&
+        this.gameBoard.collision(projectile.hitBox, this.hitBox)
+      ) {
+        this.gameBoard.explosions.push(
+          new Explosion(this.gameBoard, projectile.explosion)
+        );
+        this.gameBoard.deleteElement(projectile);
+      } else if (
+        (this.state === 'SKILL01' ||
+          this.state === 'SKILL02' ||
+          (this.state === 'SKILL03' && this.skill03State !== 's2')) &&
         this.dmgVulnerability &&
-        this.gameBoard.collisionCircleCircle(projectile.hitBox, this.dmgHitBox)
+        this.gameBoard.collision(projectile.hitBox, this.dmgSprite.hitBox)
       ) {
         this.hp -= projectile.dmg;
         this.dmgVulnerability = false;
-        this.gameBoard.explosions.push(new Explosion(this.gameBoard, projectile.explosion));
-        this.gameBoard.deletElement(projectile);
-        if (this.hp <= 48 && this.hp > 24) this.el.src = 'moon-boss-1.png';
-        if (this.hp <= 24) this.el.src = 'moon-boss-2.png';
-        if (this.hp < 0) this.hp = 0;
+        this.gameBoard.explosions.push(
+          new Explosion(this.gameBoard, projectile.explosion)
+        );
+        this.gameBoard.deleteElement(projectile);
+
+        if (this.hp <= 48 && this.hp > 24) {
+          this.setSrc('moon-boss-1.png');
+        }
+
+        if (this.hp <= 24) {
+          this.setSrc('moon-boss-2.png');
+        }
+
+        if (this.hp < 0) {
+          this.hp = 0;
+        }
+
         this.gameBoard.ui.updateBarrBoss();
+
         if (this.hp === 0) {
-          this.gameBoard.explosions.push(new Explosion(this.gameBoard, this.explosion));
+          this.gameBoard.explosions.push(
+            new Explosion(this.gameBoard, this.explosion)
+          );
           this.el.remove();
           this.gameBoard.windForceX = 0;
           this.gameBoard.boss = null;
           this.gameBoard.bossDefeated = true;
           this.gameBoard.enemies.forEach((enemy, _, arrEnemies) => {
-            this.gameBoard.explosions.push(new Explosion(this.gameBoard, enemy.explosion));
-            this.gameBoard.deletElement(enemy, arrEnemies);
+            this.gameBoard.explosions.push(
+              new Explosion(this.gameBoard, enemy.explosion)
+            );
+            this.gameBoard.deleteElement(enemy, arrEnemies);
           });
           return;
         }
@@ -315,7 +430,10 @@ export class MoonBoss extends Sprite {
   dmgInvulnerabilityMode() {
     if (this.dmgVulnerabilityFrames > 0) {
       this.dmgVulnerabilityFrames--;
-      this.el.style.filter = this.el.style.filter !== 'brightness(0) invert(1)' ? 'brightness(0) invert(1)' : 'none';
+      this.el.style.filter =
+        this.el.style.filter !== 'brightness(0) invert(1)'
+          ? 'brightness(0) invert(1)'
+          : 'none';
     } else {
       this.el.style.filter = 'none';
       this.dmgVulnerability = true;
@@ -324,27 +442,42 @@ export class MoonBoss extends Sprite {
   }
 
   stateHandler() {
-    if (!this.dmgVulnerability) this.dmgInvulnerabilityMode();
-    if (this.state === 'INVULNERABLE' || this.state === 'SKILL00') this.projectileSpawnInterval--;
-    if (this.projectileSpawnInterval <= 0) this.throwRandomMeteor();
+    if (!this.dmgVulnerability) {
+      this.dmgInvulnerabilityMode();
+    }
+
+    if (this.state === 'INVULNERABLE' || this.state === 'SKILL00') {
+      this.projectileSpawnInterval--;
+    }
+
+    if (this.projectileSpawnInterval <= 0) {
+      this.throwRandomMeteor();
+    }
+
     if (this.state === 'INVULNERABLE') {
       this.skill00SpawnInterval--;
-      if (this.skill00SpawnInterval <= 0) this.state = 'SKILL00';
+
+      if (this.skill00SpawnInterval <= 0) {
+        this.state = 'SKILL00';
+      }
+
       return;
     }
+
     this[`${this.state}`.toLowerCase()]();
   }
 
-  addDmgHitBoxDebug = () => {
-    this.dmgHitBoxEl = new HitBoxDebug(this.gameBoard, this.dmgHitBox);
-    this.gameBoard.hitBoxElements.push(this.dmgHitBoxEl.el);
-  };
+  updatePosition() {
+    this.left += this.speedX;
+    this.hitBox.left = this.left;
+    this.dmgSprite.hitBox.left = this.left + this.width / 2 - this.dmgRadius;
+    this.explosion.position.left = this.left;
+    this.el.style.left = this.left + 'px';
+    this.hitBoxEl?.updatePositionX();
+    this.dmgSprite.hitBoxEl?.updatePositionX();
+  }
 
-  removeDmgBoxDebug = () => {
-    if (this.dmgHitBoxEl) {
-      this.gameBoard.hitBoxElements.forEach(el => el.remove());
-      this.gameBoard.hitBoxElements.length = 0;
-      this.dmgHitBoxEl = null;
-    }
-  };
+  update() {
+    this.updatePosition();
+  }
 }

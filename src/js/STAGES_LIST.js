@@ -1,5 +1,15 @@
 export const STAGES_LIST = [
   {
+    title: '1-2',
+    enemyGroup: null,
+    bossStage: true,
+    bossId: 0,
+    enemyIntervalFrames: null,
+    scoreGoal: null,
+    isClear: false,
+    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
+  },
+  {
     title: '1-1',
     enemyGroup: [0],
     bossStage: false,
@@ -14,15 +24,5 @@ export const STAGES_LIST = [
     breakPointActive: false,
     isClear: false,
     backgroundImage: 'linear-gradient(#5a23a1, #25b3df)'
-  },
-  {
-    title: '1-2',
-    enemyGroup: null,
-    bossStage: true,
-    bossId: 0,
-    enemyIntervalFrames: null,
-    scoreGoal: null,
-    isClear: false,
-    backgroundImage: 'linear-gradient(#25b3df, #5a23a1)'
   }
 ];

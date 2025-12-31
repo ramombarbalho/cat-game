@@ -3,6 +3,7 @@ import { Coin } from './Coin';
 import { ENEMY_LIST } from './ENEMY_LIST';
 import { Explosion } from './Explosion';
 import { GameBoardUI } from './GameBoardUI';
+import { HitBoxDebug } from './HitBoxDebug';
 import { Player } from './Player';
 
 export class GameBoard {
@@ -48,29 +49,37 @@ export class GameBoard {
     return new BOSS_LIST[id](this);
   }
 
-  deletElement(element) {
+  deleteElement(element) {
     element.markForDeletion = true;
     element.el.remove();
-    this[element.type] = this[element.type].filter(el => !el.markForDeletion);
+
+    if (this?.[element?.type]) {
+      this[element.type] = this[element.type].filter(el => !el.markForDeletion);
+    }
   }
 
-  collisionRectangleRectangle(rect1, rect2) {
-    return rect1.left < rect2.left + rect2.width && rect1.left + rect1.width > rect2.left && rect1.top < rect2.top + rect2.height && rect1.top + rect1.height > rect2.top;
+  rectRectCollision(rectA, rectB) {
+    return (
+      rectA.left < rectB.left + rectB.width &&
+      rectA.left + rectA.width > rectB.left &&
+      rectA.top < rectB.top + rectB.height &&
+      rectA.top + rectA.height > rectB.top
+    );
   }
 
-  collisionCircleCircle(circ1, circ2) {
-    const circ1X = circ1.left + circ1.radius;
-    const circ1Y = circ1.top + circ1.radius;
-    const circ2X = circ2.left + circ2.radius;
-    const circ2Y = circ2.top + circ2.radius;
+  circleCircleCollision(circA, circB) {
+    const circ1X = circA.left + circA.radius;
+    const circ1Y = circA.top + circA.radius;
+    const circ2X = circB.left + circB.radius;
+    const circ2Y = circB.top + circB.radius;
     const dx = circ1X - circ2X;
     const dy = circ1Y - circ2Y;
     const distance = Math.hypot(dx, dy);
-    const sumOfRadii = circ1.radius + circ2.radius;
+    const sumOfRadii = circA.radius + circB.radius;
     return distance < sumOfRadii;
   }
 
-  collisionRectangleCircle(rect, circ) {
+  rectCircleCollision(rect, circ) {
     const circX = circ.left + circ.radius;
     const circY = circ.top + circ.radius;
     let offsetX = circX;
@@ -94,35 +103,42 @@ export class GameBoard {
     return distance < circ.radius;
   }
 
+  collision(hitBoxA, hitBoxB) {
+    switch (`${hitBoxA.shape}_${hitBoxB.shape}`) {
+      case 'RECT_RECT':
+        return this.rectRectCollision(hitBoxA, hitBoxB);
+      case 'CIRCLE_CIRCLE':
+        return this.circleCircleCollision(hitBoxA, hitBoxB);
+      case 'RECT_CIRCLE':
+        return this.rectCircleCollision(hitBoxA, hitBoxB);
+      case 'CIRCLE_RECT':
+        return this.rectCircleCollision(hitBoxB, hitBoxA);
+      default:
+        return false;
+    }
+  }
+
   pauseGame() {
     this.state = this.state === 'PAUSED' ? 'GAME_RUNNING' : 'PAUSED';
     this.ui.overlayPauseGameHandler();
     this.pauseAllowed = false;
   }
 
-  switchDebugMode() {
-    this.debugMode = !this.debugMode;
-    [this.player, ...this.projectiles, ...this.enemies, ...this.coins, this.boss, ...this.player.skills].forEach(sprite => {
-      if (sprite) {
-        if (this.debugMode) {
-          sprite.addHitBoxDebug();
-          if (sprite.dmgHitBox) sprite.addDmgHitBoxDebug();
-        } else {
-          sprite.removeHitBoxDebug();
-          if (sprite.dmgHitBox) sprite.removeDmgBoxDebug();
-        }
-      }
-    });
-  }
-
   scoreUp(points) {
     if (this.stage.bossStage) return;
     this.score += points;
-    this.ui.scorePoints.textContent = String(this.score).padStart(String(this.stage.scoreGoal).length, '0');
-    if (this.stage.breakPoint.score <= this.score && !this.stage.breakPointActive) {
+    this.ui.scorePoints.textContent = String(this.score).padStart(
+      String(this.stage.scoreGoal).length,
+      '0'
+    );
+    if (
+      this.stage.breakPoint.score <= this.score &&
+      !this.stage.breakPointActive
+    ) {
       this.stage.breakPointActive = true;
       this.stage.enemyGroup = this.stage.breakPoint.enemyGroup;
-      this.stage.enemyIntervalFrames = this.stage.breakPoint.enemyIntervalFrames;
+      this.stage.enemyIntervalFrames =
+        this.stage.breakPoint.enemyIntervalFrames;
     }
   }
 
@@ -138,7 +154,12 @@ export class GameBoard {
       }
     }
 
-    if (this.state === 'GAME_RUNNING' && !document.hasFocus() && this.pauseAllowed) this.pauseGame();
+    if (
+      this.state === 'GAME_RUNNING' &&
+      !document.hasFocus() &&
+      this.pauseAllowed
+    )
+      this.pauseGame();
 
     if (this.state === 'STAGE_CLEAR') this.ui.stageClear();
 
@@ -154,64 +175,69 @@ export class GameBoard {
 
     if (this.state !== 'GAME_RUNNING' && this.state !== 'STAGE_CLEAR') return;
 
-    if (!this.player.dboost.active) {
-      this.player.moviment();
-      this.player.beam();
-    } else {
-      this.player.dboostMove();
-    }
-
-    if (this.player.state === 'UNTARGETABLE') this.player.untargetableMode();
-
-    this.player.skills.forEach((skill, i) => {
-      if (!skill.avaliable) this.ui.skillCooldownHandler(i);
-      if (skill.skillAnimation) skill.update();
-      if (skill.active) skill.dmgAreaTimer();
-    });
-
     this.projectiles.forEach(projectile => projectile.update());
+    this.explosions.forEach(explosion => explosion.update());
+    this.coins.forEach(coin => coin.update());
+    this.player.update();
 
     this.enemies.forEach(enemy => {
       enemy.update();
-      if (this.collisionRectangleCircle(this.player.hitBox, enemy.hitBox) && this.player.state !== 'UNTARGETABLE') {
+
+      if (
+        this.collision(this.player.hitBox, enemy.hitBox) &&
+        this.player.state !== 'UNTARGETABLE'
+      ) {
         if (this.state === 'GAME_RUNNING') {
-          this.player.hp--;
-          this.player.dboost.active = true;
-          this.player.calcDboost(enemy);
+          this.player.takeDamage(enemy);
           this.ui.updateHeart();
         }
       }
+
       this.projectiles.forEach(projectile => {
-        if (this.collisionCircleCircle(projectile.hitBox, enemy.hitBox)) {
+        if (this.collision(projectile.hitBox, enemy.hitBox)) {
           enemy.hp -= projectile.dmg;
           this.explosions.push(new Explosion(this, projectile.explosion));
-          this.deletElement(projectile);
+          this.deleteElement(projectile);
           if (enemy.hp <= 0) {
             this.scoreUp(enemy.points);
-            if (Math.random() < enemy.dropRate) this.coins.push(new Coin(this, enemy));
+            if (Math.random() < enemy.dropRate) {
+              this.coins.push(new Coin(this, enemy));
+            }
             this.explosions.push(new Explosion(this, enemy.explosion));
-            this.deletElement(enemy);
+            this.deleteElement(enemy);
           }
         }
       });
+
       this.player.skills.forEach(skill => {
-        if (skill.active) skill.collision(enemy);
+        if (skill.active && this.collision(skill.hitBox, enemy.hitBox)) {
+          enemy.hp -= skill.dmg;
+          if (enemy.hp <= 0) {
+            this.scoreUp(enemy.points);
+            if (Math.random() < enemy.dropRate) {
+              this.coins.push(new Coin(this, enemy));
+            }
+            this.explosions.push(new Explosion(this, enemy.explosion));
+            this.deleteElement(enemy);
+          }
+        }
       });
     });
 
-    this.explosions.forEach(explosion => explosion.update());
-
     this.coins.forEach(coin => {
-      if (this.collisionRectangleRectangle(this.player.hitBox, coin.hitBox)) {
+      if (this.collision(this.player.hitBox, coin.hitBox)) {
         this.scoreUp(coin.points);
-        this.deletElement(coin);
+        this.deleteElement(coin);
       }
-      if (!coin.markForDeletion) coin.timer();
     });
 
     if (this.boss && this.state === 'GAME_RUNNING') this.boss.collision();
 
-    if (this.state === 'GAME_RUNNING' && this.score < this.stage.scoreGoal && !this.stage.bossStage) {
+    if (
+      this.state === 'GAME_RUNNING' &&
+      this.score < this.stage.scoreGoal &&
+      !this.stage.bossStage
+    ) {
       if (this.enemySpawnInterval <= 0) {
         this.enemies.push(this.addEnemy());
         this.enemySpawnInterval = this.stage.enemyIntervalFrames;
@@ -224,7 +250,8 @@ export class GameBoard {
   stateHandler() {
     switch (this.state) {
       case 'TRANSITION_IN':
-        if (!this.game.transition.overlayTransition) this.state = 'OPENING_STAGE';
+        if (!this.game.transition.overlayTransition)
+          this.state = 'OPENING_STAGE';
         break;
       case 'OPENING_STAGE':
         if (this.ui.openingStageMsg) return;
@@ -237,9 +264,19 @@ export class GameBoard {
           this.ui.createBoxMsg();
         } else if (this.stage.bossStage) {
           if (this.boss) this.boss.stateHandler();
-          if (this.bossDefeated && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
+          if (
+            this.bossDefeated &&
+            this.enemies.length === 0 &&
+            this.explosions.length === 0
+          )
+            this.state = 'STAGE_CLEAR';
         } else {
-          if (this.score >= this.stage.scoreGoal && this.enemies.length === 0 && this.explosions.length === 0) this.state = 'STAGE_CLEAR';
+          if (
+            this.score >= this.stage.scoreGoal &&
+            this.enemies.length === 0 &&
+            this.explosions.length === 0
+          )
+            this.state = 'STAGE_CLEAR';
         }
         break;
       case 'STAGE_CLEAR':
@@ -254,11 +291,59 @@ export class GameBoard {
     }
   }
 
-  loop = () => {
+  createHitBoxEl = sprite => {
+    if (sprite.hitBox && !sprite.hitBoxEl) {
+      sprite.hitBoxEl = new HitBoxDebug(this, sprite);
+      this.hitBoxElements.push(sprite.hitBoxEl);
+    }
+  };
+
+  deleteHitBoxEl = sprite => {
+    sprite.hitBoxEl.el.remove();
+    sprite.hitBoxEl = null;
+  };
+
+  switchDebugMode() {
+    this.debugMode = !this.debugMode;
+
+    if (this.debugMode) {
+      [
+        this.player,
+        ...this.projectiles,
+        ...this.enemies,
+        ...this.coins,
+        this.boss,
+        this.boss?.dmgSprite,
+        ...this.player.skills
+      ].forEach(sprite => {
+        if (sprite) {
+          this.createHitBoxEl(sprite);
+        }
+      });
+    } else {
+      this.hitBoxElements.forEach(hitBoxEl => {
+        if (hitBoxEl.sprite) this.deleteHitBoxEl(hitBoxEl.sprite);
+      });
+      this.hitBoxElements.length = 0;
+    }
+  }
+
+  loop = async time => {
+    // if (time > 15027.4) {
+    //   await new Promise(resolve => setTimeout(resolve, 1000));
+    // }
+    // console.log(time);
+
+    // if (this.debugMode) {
+    //   return;
+    // }
+
+    // ##fix corrigir quando clico no botão retry, roda outro loop
     this.update();
     this.stateHandler();
     // console.log(this.state);
-    if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD') return;
+    if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD')
+      return;
     requestAnimationFrame(this.loop);
   };
 }
