@@ -4,7 +4,8 @@ export class GameBoardUI {
   constructor(gameBoard) {
     this.gameBoard = gameBoard;
     this.openingStageMsg = null;
-    this.openingStageMsgFrames = this.gameBoard.game.config.openingStageMsgFrames;
+    this.openingStageMsgFrames =
+      this.gameBoard.game.config.openingStageMsgFrames;
     this.stageClearMsg = null;
     this.stageClearMsgFrames = this.gameBoard.game.config.stageClearMsgFrames;
     this.warningMsg = null;
@@ -48,22 +49,34 @@ export class GameBoardUI {
       this.gameBoard.gameRunningArea.appendChild(this.scoreLabel);
       this.scoreLabel.innerHTML = `SCORE: <span class="score-points"></span>/${this.gameBoard.stage.scoreGoal}`;
       this.scorePoints = document.querySelector('.score-points');
-      this.scorePoints.textContent = String(this.gameBoard.score).padStart(String(this.gameBoard.stage.scoreGoal).length, '0');
+      this.scorePoints.textContent = String(this.gameBoard.score).padStart(
+        String(this.gameBoard.stage.scoreGoal).length,
+        '0'
+      );
     }
     this.overlayPaused.innerHTML = `<p style="font-size: 20px">PAUSED</p>
                                     <div class="btn-test btn-retry">RETRY</div>
                                     <div class="btn-test btn-overworld">RETURN OVERWORLD</div>`;
+    // ##fix criar BtnRetry
     this.btnRetry = document.querySelector('.btn-retry');
     this.btnRetry.addEventListener('click', () => {
-      if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
-      this.gameBoard.game.transition.loop();
+      if (
+        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
+        this.gameBoard.game.transition.overlayTransition
+      )
+        return;
+      this.gameBoard.game.transition.loop(() => this.gameBoard.initStage());
     });
+    // ##fix criar BtnOverworld
     this.btnOverworld = document.querySelector('.btn-overworld');
     this.btnOverworld.addEventListener('click', () => {
-      if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
+      if (
+        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
+        this.gameBoard.game.transition.overlayTransition
+      )
+        return;
       this.gameBoard.game.stageId = 0;
-      this.gameBoard.game.updateActiveScreen('OVERWORLD');
-      this.gameBoard.game.transition.loop();
+      this.gameBoard.game.switchScreens('OVERWORLD');
     });
     this.heartsBox = document.createElement('div');
     this.heartsBox.classList.add('box-hearts');
@@ -94,7 +107,8 @@ export class GameBoardUI {
       this.statusBarr.appendChild(this.skillBoxes[i]);
       if (this.gameBoard.player.skills[i]) {
         const skillEl = new GameImg();
-        skillEl.el.style.height = this.gameBoard.player.skills[i].icon.height + 'px';
+        skillEl.el.style.height =
+          this.gameBoard.player.skills[i].icon.height + 'px';
         skillEl.el.src = `${this.gameBoard.player.skills[i].icon.src}`;
         skillEl.el.style.filter = 'drop-shadow(4px 4px 4px black)';
         this.skillBoxes[i].appendChild(skillEl.el);
@@ -122,14 +136,17 @@ export class GameBoardUI {
       this.gameBoard.player.skills[i].avaliable = true;
     } else {
       this.skillCooldownFrames[i]--;
-      const heightPercent = this.skillCooldownFrames[i] / this.gameBoard.player.skills[i].cooldown;
+      const heightPercent =
+        this.skillCooldownFrames[i] / this.gameBoard.player.skills[i].cooldown;
       this.skillBoxesCooldown[i].style.height = heightPercent * 100 + '%';
     }
   }
 
   overlayPauseGameHandler() {
-    if (this.gameBoard.state === 'GAME_RUNNING') this.overlayPaused.style.display = 'none';
-    else if (this.gameBoard.state === 'PAUSED') this.overlayPaused.style.display = 'flex';
+    if (this.gameBoard.state === 'GAME_RUNNING')
+      this.overlayPaused.style.display = 'none';
+    else if (this.gameBoard.state === 'PAUSED')
+      this.overlayPaused.style.display = 'flex';
   }
 
   addHpBossBarr() {
@@ -150,7 +167,8 @@ export class GameBoardUI {
   }
 
   updateBarrBoss() {
-    this.hpBossEl.style.width = (this.hpBossElValue * this.gameBoard.boss.hp) / this.initialBossHp + '%';
+    this.hpBossEl.style.width =
+      (this.hpBossElValue * this.gameBoard.boss.hp) / this.initialBossHp + '%';
   }
 
   openingStage() {
@@ -235,16 +253,25 @@ export class GameBoardUI {
       this.gameBoard.gameRunningArea.appendChild(this.boxMsg);
       this.btnRetry = document.querySelector('.btn-retry');
     }
+    // ##fix criar BtnOverworld
     this.btnOverworld = document.querySelector('.btn-overworld');
     this.btnOverworld.addEventListener('click', () => {
-      if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
+      if (
+        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
+        this.gameBoard.game.transition.overlayTransition
+      )
+        return;
       this.gameBoard.game.stageId = 0;
-      this.gameBoard.game.updateActiveScreen('OVERWORLD');
-      this.gameBoard.game.transition.loop();
+      this.gameBoard.game.switchScreens('OVERWORLD');
     });
+    // ##fix criar BtnRetry
     this.btnRetry.addEventListener('click', () => {
-      if (this.gameBoard.game.activeScreen !== 'GAME_BOARD' || this.gameBoard.game.transition.overlayTransition) return;
-      this.gameBoard.game.transition.loop();
+      if (
+        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
+        this.gameBoard.game.transition.overlayTransition
+      )
+        return;
+      this.gameBoard.game.transition.loop(() => this.gameBoard.initStage());
     });
   }
 

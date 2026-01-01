@@ -22,7 +22,6 @@ export class Player extends Sprite {
     this.chargeAnimation = null;
     this.untargetableFrames =
       this.gameBoard.game.playerState.untargetableFrames;
-    this.gameBoard.gameRunningArea.appendChild(this.el);
     this.state = 'JUST_HANGING_AROUND';
     this.dboost = {
       active: false,

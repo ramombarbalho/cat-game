@@ -6,7 +6,7 @@ export class GameTransition {
     this.overlayTransitionFrames = this.game.config.overlayTransitionFrames;
   }
 
-  update() {
+  update(callbackFn) {
     if (!this.overlayTransition) {
       this.overlayTransition = document.createElement('div');
       this.overlayTransition.classList.add('overlay', 'overlay-transition');
@@ -23,7 +23,7 @@ export class GameTransition {
         this.overlayTransitionOpacity = this.overlayTransitionOpacity + 1 / (this.game.config.overlayTransitionFrames / 2);
       } else if (this.overlayTransitionFrames === this.game.config.overlayTransitionFrames / 2) {
         this.overlayTransitionOpacity = 1;
-        this.game.switchScreens();
+        callbackFn();
       } else if (this.overlayTransitionFrames < this.game.config.overlayTransitionFrames / 2) {
         this.overlayTransitionOpacity = this.overlayTransitionOpacity - 1 / (this.game.config.overlayTransitionFrames / 2);
       }
@@ -31,10 +31,10 @@ export class GameTransition {
     }
   }
 
-  loop = () => {
-    this.update();
+  loop = (callbackFn) => {
+    this.update(callbackFn);
     // console.log(this.overlayTransitionFrames);
     if (!this.overlayTransition) return;
-    requestAnimationFrame(this.loop);
+    requestAnimationFrame((_) => this.loop(callbackFn));
   };
 }

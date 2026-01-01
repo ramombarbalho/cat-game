@@ -7,10 +7,13 @@ export class BtnStage {
     this.btn.textContent = `STAGE${this.id + 1}`;
     this.overworld.game.screen.appendChild(this.btn);
     this.btn.addEventListener('click', () => {
-      if (this.overworld.game.activeScreen !== 'OVERWORLD' || this.overworld.game.transition.overlayTransition) return;
+      if (
+        this.overworld.game.activeScreen !== 'OVERWORLD' ||
+        this.overworld.game.transition.overlayTransition
+      )
+        return;
       this.overworld.game.stageId = this.id;
-      this.overworld.game.updateActiveScreen('GAME_BOARD');
-      this.overworld.game.transition.loop();
+      this.overworld.game.switchScreens('GAME_BOARD');
     });
   }
 }

@@ -41,17 +41,26 @@ export class Game {
       GameBoard
     };
     this.currentView = null;
-    this.switchScreens();
+    this.updateCurrentView('TITLE');
     this.transition = new GameTransition(this);
     this.input = new InputHandler(this);
     document.querySelector('.game-loading').remove();
   }
 
+  clearScreen() {
+    this.screen.innerHTML = '';
+  }
+
   updateActiveScreen = screen => (this.activeScreen = screen);
 
-  switchScreens() {
-    const view = camelCase('_' + this.activeScreen);
-    this.screen.innerHTML = '';
-    this.currentView = new this.views[view](this);
+  updateCurrentView(view) {
+    this.updateActiveScreen(view);
+    const newView = camelCase('_' + this.activeScreen);
+    this.clearScreen();
+    this.currentView = new this.views[newView](this);
+  }
+
+  switchScreens(view) {
+    this.transition.loop(() => this.updateCurrentView(view));
   }
 }

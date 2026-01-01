@@ -7,6 +7,14 @@ import { Player } from './Player';
 export class GameBoard {
   constructor(game) {
     this.game = game;
+    this.top = 0;
+    this.left = 0;
+    this.isLoopRunning = false;
+    this.initStage();
+  }
+
+  initStage() {
+    this.game.clearScreen();
     this.gameRunningArea = document.createElement('div');
     this.gameRunningArea.classList.add('game-running-area');
     this.gameRunningHeight = this.game.height / 1.2;
@@ -14,8 +22,6 @@ export class GameBoard {
     this.gameRunningArea.style.height = this.gameRunningHeight + 'px';
     this.gameRunningArea.style.width = this.gameRunningWidth + 'px';
     this.game.screen.appendChild(this.gameRunningArea);
-    this.top = 0;
-    this.left = 0;
     this.stage = { ...this.game.stages[this.game.stageId] };
     this.state = this.game.config.initStageState;
     this.gravity = this.game.config.gravity;
@@ -35,7 +41,11 @@ export class GameBoard {
     this.gameRunningArea.style.backgroundImage = this.stage.backgroundImage;
     this.player = new Player(this);
     this.ui = new GameBoardUI(this);
-    this.loop();
+
+    if (!this.isLoopRunning) {
+      this.loop();
+      this.isLoopRunning = true;
+    }
   }
 
   addEnemy() {
@@ -180,7 +190,12 @@ export class GameBoard {
   update() {
     if (this.state === 'OPENING_STAGE') this.ui.openingStage();
 
-    if (this.state === 'PAUSED' || this.state === 'GAME_RUNNING') {
+    if (
+      this.state === 'PAUSED' ||
+      this.state === 'GAME_RUNNING'
+      // &&
+      // this.state !== 'STAGE_CLEAR'
+    ) {
       if (this.pauseGameFrames <= 0) {
         this.pauseGameFrames = this.game.config.pauseGameFrames;
         this.pauseAllowed = true;
@@ -322,12 +337,13 @@ export class GameBoard {
     //   return;
     // }
 
-    // ##fix corrigir quando clico no botão retry, roda outro loop
     this.update();
     this.stateHandler();
     // console.log(this.state);
-    if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD')
+    if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD') {
+      this.isLoopRunning = false;
       return;
+    }
     requestAnimationFrame(this.loop);
   };
 }

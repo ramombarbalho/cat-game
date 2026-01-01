@@ -21,8 +21,7 @@ export class OverworldUI {
     this.overworld.game.screen.appendChild(this.btnTitle);
     this.btnTitle.addEventListener('click', () => {
       if (this.overworld.game.activeScreen !== 'OVERWORLD' || this.overworld.game.transition.overlayTransition) return;
-      this.overworld.game.updateActiveScreen('TITLE');
-      this.overworld.game.transition.loop();
+      this.overworld.game.switchScreens('TITLE');
     });
     for (let i = 0; i < this.overworld.game.stages.length; i++) {
       this.btnStages.push(new BtnStage(this.overworld, i));
