@@ -12,7 +12,7 @@ export class GameConfigUI {
   createGameConfigUI() {
     // ##fix criar class para box-msg
     this.el = document.createElement('div');
-    this.el.classList.add('box-msg');
+    this.el.classList.add('dialog-box');
     const keyActions = [
       'UP',
       'DOWN',
@@ -36,8 +36,7 @@ export class GameConfigUI {
                             </div>
                             ${keyActions}
                           </div>
-                          <div class="btn-test btn-save">SAVE</div>
-                        `;
+                          <div class="btn-test btn-save">SAVE</div>`;
     this.game.screen.appendChild(this.el);
     document
       .querySelector('.btn-save')

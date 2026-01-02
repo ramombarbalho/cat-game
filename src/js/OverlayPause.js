@@ -18,9 +18,6 @@ export class OverlayPause {
     this.el.classList.add('overlay', 'overlay-pause');
     this.game.screen.appendChild(this.el);
     this.el.innerHTML = `<p style="font-size: 20px">PAUSED</p>`;
-    this.el.querySelector('.tteesstt').addEventListener('click', () => {
-      this.createOverlayPause();
-    });
     this.btnRetry = new BtnRetry(this.game, this.el);
     this.btnOverworld = new BtnOverworld(this.game, this.el);
   }

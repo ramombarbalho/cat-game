@@ -228,7 +228,7 @@ body {
   transform: translateY(2px);
 }
 
-.box-msg {
+.dialog-box {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -257,7 +257,7 @@ body {
   }
 }
 
-.box-img-game-over {
+.dialog-img-game-over {
   position: relative;
   width: 240px;
   overflow: hidden;

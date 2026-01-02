@@ -1,7 +1,7 @@
-import { BtnOverworld } from './BtnOverworld';
-import { BtnRetry } from './BtnRetry';
 import { GameImg } from './GameImg';
+import { GameOverDialogBox } from './GameOverDialogBox';
 import { OverlayPause } from './OverlayPause';
+import { StageClearDialogBox } from './StageClearDialogBox';
 
 export class GameBoardUI {
   constructor(gameBoard) {
@@ -22,7 +22,7 @@ export class GameBoardUI {
     this.skillBoxesCooldown = [];
     this.skillBoxesNotAllowed = [];
     this.skillCooldownFrames = [];
-    this.boxMsg = null;
+    this.dialogBox = null;
     this.catThumbs = null;
     this.btnRetry = null;
     this.btnOverworld = null;
@@ -196,41 +196,11 @@ export class GameBoardUI {
     }
   }
 
-  createBoxMsg() {
-    this.boxMsg = document.createElement('div');
-    this.boxMsg.classList.add('box-msg');
-
+  createDialogBox() {
     if (this.gameBoard.state === 'GAME_OVER') {
-      this.boxMsg.innerHTML = ` <h1 style="color: #ff3200">GAME OVER</h1>
-                                <div class="box-img-game-over">
-                                  <img draggable="false" src="cat-game-over.png" class="cat-game-over-img" />
-                                  <img draggable="false" src="cat-game-over-thumbs.png" class="cat-game-over-img thumbs-down" id="thumbs" />
-                                </div>
-                              `;
-      this.gameBoard.gameRunningArea.appendChild(this.boxMsg);
-      this.catThumbs = document.querySelector('#thumbs');
-      this.btnRetry = new BtnRetry(this.gameBoard.game, this.boxMsg);
-      this.btnRetry.el.addEventListener('mouseover', this.catThumbsUp);
-      this.btnRetry.el.addEventListener('mouseout', this.catThumbsDown);
+      this.dialogBox = new GameOverDialogBox(this.gameBoard);
     } else if (this.gameBoard.state === 'STAGE_CLEAR') {
-      this.boxMsg.innerHTML = ` <h1>STAGE CLEAR</h1>
-                                <h3>HP:.......??</h3>
-                                <h3>BOMB:.....??</h3>
-                                <h3>SHOOTS:...??</h3>
-                                <h2>TOTAL:..??</h2>
-                              `;
-      this.gameBoard.gameRunningArea.appendChild(this.boxMsg);
-      this.btnRetry = new BtnRetry(this.gameBoard.game, this.boxMsg);
+      this.dialogBox = new StageClearDialogBox(this.gameBoard);
     }
-
-    this.btnOverworld = new BtnOverworld(this.gameBoard.game, this.boxMsg);
   }
-
-  catThumbsUp = () => {
-    this.catThumbs.classList.remove('thumbs-down');
-  };
-
-  catThumbsDown = () => {
-    this.catThumbs.classList.add('thumbs-down');
-  };
 }

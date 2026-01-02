@@ -53,7 +53,6 @@ export class GameTransition {
 
   loop = callbackFn => {
     this.update(callbackFn);
-    // console.log(this.overlayTransitionFrames);
     if (!this.overlayTransition) return;
     requestAnimationFrame(_ => this.loop(callbackFn));
   };
