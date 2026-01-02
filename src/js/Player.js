@@ -88,7 +88,7 @@ export class Player extends Sprite {
       if (this.chargeValue > 0) {
         this.shooting();
         this.chargeValue = 0;
-        this.gameBoard.deleteElement(this.chargeAnimation);
+        this.chargeAnimation.el.remove();
         this.chargeAnimation = null;
       }
       this.chargeFrames = 0;

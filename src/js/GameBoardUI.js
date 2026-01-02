@@ -1,4 +1,7 @@
+import { BtnOverworld } from './BtnOverworld';
+import { BtnRetry } from './BtnRetry';
 import { GameImg } from './GameImg';
+import { OverlayPause } from './OverlayPause';
 
 export class GameBoardUI {
   constructor(gameBoard) {
@@ -29,20 +32,11 @@ export class GameBoardUI {
     this.hpBossElValue = 0;
     this.scoreLabel = null;
     this.scorePoints = null;
-    this.overlayPaused = null;
+    this.overlayPause = null;
     this.initGameBoardUI();
   }
 
   initGameBoardUI() {
-    this.statusBarr = document.createElement('div');
-    this.statusBarr.classList.add('game-status-barr');
-    this.statusBarr.style.height = this.statusBarrHeight + 'px';
-    this.statusBarr.style.width = this.statusBarrWidth + 'px';
-    this.gameBoard.game.screen.appendChild(this.statusBarr);
-    this.overlayPaused = document.createElement('div');
-    this.overlayPaused.classList.add('overlay', 'overlay-paused');
-    this.overlayPaused.style.display = 'none';
-    this.gameBoard.game.screen.appendChild(this.overlayPaused);
     if (!this.gameBoard.stage.bossStage) {
       this.scoreLabel = document.createElement('p');
       this.scoreLabel.classList.add('score-label');
@@ -54,35 +48,20 @@ export class GameBoardUI {
         '0'
       );
     }
-    this.overlayPaused.innerHTML = `<p style="font-size: 20px">PAUSED</p>
-                                    <div class="btn-test btn-retry">RETRY</div>
-                                    <div class="btn-test btn-overworld">RETURN OVERWORLD</div>`;
-    // ##fix criar BtnRetry
-    this.btnRetry = document.querySelector('.btn-retry');
-    this.btnRetry.addEventListener('click', () => {
-      if (
-        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
-        this.gameBoard.game.transition.overlayTransition
-      )
-        return;
-      this.gameBoard.game.transition.loop(() => this.gameBoard.initStage());
-    });
-    // ##fix criar BtnOverworld
-    this.btnOverworld = document.querySelector('.btn-overworld');
-    this.btnOverworld.addEventListener('click', () => {
-      if (
-        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
-        this.gameBoard.game.transition.overlayTransition
-      )
-        return;
-      this.gameBoard.game.stageId = 0;
-      this.gameBoard.game.switchScreens('OVERWORLD');
-    });
+
+    // ##fix criar class para statusBarr
+    this.statusBarr = document.createElement('div');
+    this.statusBarr.classList.add('game-status-barr');
+    this.statusBarr.style.height = this.statusBarrHeight + 'px';
+    this.statusBarr.style.width = this.statusBarrWidth + 'px';
+    this.gameBoard.game.screen.appendChild(this.statusBarr);
     this.heartsBox = document.createElement('div');
     this.heartsBox.classList.add('box-hearts');
     this.statusBarr.appendChild(this.heartsBox);
     this.renderHeartsBox();
     this.renderSkillBoxes();
+
+    this.overlayPause = new OverlayPause(this.gameBoard.game);
   }
 
   updateHeart() {
@@ -142,14 +121,7 @@ export class GameBoardUI {
     }
   }
 
-  overlayPauseGameHandler() {
-    if (this.gameBoard.state === 'GAME_RUNNING')
-      this.overlayPaused.style.display = 'none';
-    else if (this.gameBoard.state === 'PAUSED')
-      this.overlayPaused.style.display = 'flex';
-  }
-
-  addHpBossBarr() {
+  createHpBossBarr() {
     this.hpBossBarr = document.createElement('div');
     this.hpBossBarr.classList.add('hp-boss-barr');
     this.statusBarr.appendChild(this.hpBossBarr);
@@ -158,7 +130,7 @@ export class GameBoardUI {
     this.hpBossBarr.appendChild(this.hpBossEl);
   }
 
-  fillHpBossEl() {
+  fillHpBossBarr() {
     if (this.hpBossElValue < 100) {
       this.hpBossElValue += 1;
       // this.hpBossElValue += 50;
@@ -171,6 +143,7 @@ export class GameBoardUI {
       (this.hpBossElValue * this.gameBoard.boss.hp) / this.initialBossHp + '%';
   }
 
+  // ##fix criar openStage class
   openingStage() {
     if (!this.openingStageMsg) {
       this.openingStageMsg = document.createElement('div');
@@ -186,6 +159,7 @@ export class GameBoardUI {
     }
   }
 
+  // ##fix criar stageClear class
   stageClear() {
     if (!this.stageClearMsg) {
       this.stageClearMsg = document.createElement('div');
@@ -203,6 +177,7 @@ export class GameBoardUI {
     }
   }
 
+  // ##fix criar warning class
   warning() {
     if (!this.warningMsg) {
       this.warningMsg = document.createElement('div');
@@ -212,7 +187,7 @@ export class GameBoardUI {
         .map(c => `<span class="game-text warning-msg-text">${c}</span>`)
         .join('');
       this.gameBoard.gameRunningArea.appendChild(this.warningMsg);
-      this.addHpBossBarr();
+      this.createHpBossBarr();
     } else if (this.warningMsgFrames <= 0) {
       this.warningMsg.remove();
       this.warningMsg = null;
@@ -226,53 +201,29 @@ export class GameBoardUI {
     this.boxMsg.classList.add('box-msg');
 
     if (this.gameBoard.state === 'GAME_OVER') {
-      this.boxMsg.innerHTML = ` <div class="box-msg-content">
-                                  <h1 style="color: #ff3200">GAME OVER</h1>
-                                  <div class="box-img-game-over">
-                                    <img draggable="false" src="cat-game-over.png" class="cat-game-over-img" />
-                                    <img draggable="false" src="cat-game-over-thumbs.png" class="cat-game-over-img thumbs-down" id="thumbs" />
-                                  </div>
-                                  <div class="btn-test btn-retry">TRY AGAIN!!</div>
-                                  <div class="btn-test btn-overworld">RETURN OVERWORLD</div>
-                                </div>`;
+      this.boxMsg.innerHTML = ` <h1 style="color: #ff3200">GAME OVER</h1>
+                                <div class="box-img-game-over">
+                                  <img draggable="false" src="cat-game-over.png" class="cat-game-over-img" />
+                                  <img draggable="false" src="cat-game-over-thumbs.png" class="cat-game-over-img thumbs-down" id="thumbs" />
+                                </div>
+                              `;
       this.gameBoard.gameRunningArea.appendChild(this.boxMsg);
       this.catThumbs = document.querySelector('#thumbs');
-      this.btnRetry = document.querySelector('.btn-retry');
-      this.btnRetry.addEventListener('mouseover', this.catThumbsUp);
-      this.btnRetry.addEventListener('mouseout', this.catThumbsDown);
+      this.btnRetry = new BtnRetry(this.gameBoard.game, this.boxMsg);
+      this.btnRetry.el.addEventListener('mouseover', this.catThumbsUp);
+      this.btnRetry.el.addEventListener('mouseout', this.catThumbsDown);
     } else if (this.gameBoard.state === 'STAGE_CLEAR') {
-      this.boxMsg.innerHTML = ` <div class="box-msg-content">
-                                  <h1>STAGE CLEAR</h1>
-                                  <h3>HP:.......??</h3>
-                                  <h3>BOMB:.....??</h3>
-                                  <h3>SHOOTS:...??</h3>
-                                  <h2>TOTAL:..??</h2>
-                                  <div class="btn-test btn-retry">RETRY</div>
-                                  <div class="btn-test btn-overworld">NEXT STAGE</div>
-                                </div>`;
+      this.boxMsg.innerHTML = ` <h1>STAGE CLEAR</h1>
+                                <h3>HP:.......??</h3>
+                                <h3>BOMB:.....??</h3>
+                                <h3>SHOOTS:...??</h3>
+                                <h2>TOTAL:..??</h2>
+                              `;
       this.gameBoard.gameRunningArea.appendChild(this.boxMsg);
-      this.btnRetry = document.querySelector('.btn-retry');
+      this.btnRetry = new BtnRetry(this.gameBoard.game, this.boxMsg);
     }
-    // ##fix criar BtnOverworld
-    this.btnOverworld = document.querySelector('.btn-overworld');
-    this.btnOverworld.addEventListener('click', () => {
-      if (
-        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
-        this.gameBoard.game.transition.overlayTransition
-      )
-        return;
-      this.gameBoard.game.stageId = 0;
-      this.gameBoard.game.switchScreens('OVERWORLD');
-    });
-    // ##fix criar BtnRetry
-    this.btnRetry.addEventListener('click', () => {
-      if (
-        this.gameBoard.game.activeScreen !== 'GAME_BOARD' ||
-        this.gameBoard.game.transition.overlayTransition
-      )
-        return;
-      this.gameBoard.game.transition.loop(() => this.gameBoard.initStage());
-    });
+
+    this.btnOverworld = new BtnOverworld(this.gameBoard.game, this.boxMsg);
   }
 
   catThumbsUp = () => {

@@ -10,10 +10,10 @@ export class GameBoard {
     this.top = 0;
     this.left = 0;
     this.isLoopRunning = false;
-    this.initStage();
+    this.initGameboard();
   }
 
-  initStage() {
+  initGameboard() {
     this.game.clearScreen();
     this.gameRunningArea = document.createElement('div');
     this.gameRunningArea.classList.add('game-running-area');
@@ -22,7 +22,9 @@ export class GameBoard {
     this.gameRunningArea.style.height = this.gameRunningHeight + 'px';
     this.gameRunningArea.style.width = this.gameRunningWidth + 'px';
     this.game.screen.appendChild(this.gameRunningArea);
-    this.stage = { ...this.game.stages[this.game.stageId] };
+    this.stage = {
+      ...this.game.stageList.find(stage => stage.id === this.game.stageId)
+    };
     this.state = this.game.config.initStageState;
     this.gravity = this.game.config.gravity;
     this.windForceX = 0;
@@ -128,7 +130,7 @@ export class GameBoard {
 
   pauseGame() {
     this.state = this.state === 'PAUSED' ? 'GAME_RUNNING' : 'PAUSED';
-    this.ui.overlayPauseGameHandler();
+    this.ui.overlayPause.switchDisplay(this.state);
     this.pauseAllowed = false;
   }
 
@@ -280,7 +282,7 @@ export class GameBoard {
         break;
       case 'STAGE_CLEAR':
         if (this.ui.stageClearMsg) return;
-        this.game.stages[this.game.stageId].isClear = true;
+        this.game.setStageIsClear(this.stage.id);
         this.ui.createBoxMsg();
         this.state = 'GAME_OVER';
         break;

@@ -3,6 +3,7 @@ import { Title } from './Title';
 import { Overworld } from './Overworld';
 import { GameBoard } from './GameBoard';
 import { InputHandler } from './InputHandler';
+import { GameConfig } from './GameConfig';
 
 function camelCase(string) {
   return string
@@ -17,7 +18,7 @@ function camelCase(string) {
 }
 
 export class Game {
-  constructor(config, stages, playerState) {
+  constructor(config, stageList, playerState) {
     this.config = config;
     this.height = this.config.gameHeight;
     this.width = this.config.gameWidth;
@@ -30,7 +31,7 @@ export class Game {
     this.screen.classList.add('game-screen');
     this.gameContainer.appendChild(this.screen);
     this.activeScreen = 'TITLE';
-    this.stages = [...stages];
+    this.stageList = [...stageList];
     this.stageId = this.config.stageId;
     this.playerState = playerState;
     this.keys = [...this.config.keys];
@@ -42,6 +43,7 @@ export class Game {
     };
     this.currentView = null;
     this.updateCurrentView('TITLE');
+    this.gameConfig = new GameConfig(this);
     this.transition = new GameTransition(this);
     this.input = new InputHandler(this);
     document.querySelector('.game-loading').remove();
@@ -49,6 +51,10 @@ export class Game {
 
   clearScreen() {
     this.screen.innerHTML = '';
+  }
+
+  setStageIsClear(stageId, value = true) {
+    this.stageList.find(stage => stage.id === stageId).isClear = value;
   }
 
   updateActiveScreen = screen => (this.activeScreen = screen);

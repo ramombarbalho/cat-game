@@ -39,7 +39,7 @@ export class InputHandler {
           }
         }
       } else if (this.game.activeScreen === 'TITLE') {
-        this.game.currentView.setKey(e.code);
+        this.game.gameConfig.setKey(e.code);
       }
       if (e.code === 'Space') {
         e.preventDefault();

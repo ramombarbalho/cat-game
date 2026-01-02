@@ -89,7 +89,7 @@ export class MoonBoss extends Sprite {
 
   entrance() {
     if (this.left + this.width < this.gameBoard.gameRunningWidth) {
-      this.gameBoard.ui.fillHpBossEl();
+      this.gameBoard.ui.fillHpBossBarr();
       return (this.speedX = 0);
     }
 

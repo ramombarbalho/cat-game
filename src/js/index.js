@@ -1,5 +1,5 @@
 import { INIT_CONFIG } from './INIT_CONFIG';
-import { STAGES_LIST } from './STAGES_LIST';
+import { STAGE_LIST } from './STAGE_LIST';
 import { INIT_PLAYER_STATE } from './INIT_PLAYER_STATE';
 import { Game } from './Game';
 
@@ -10,6 +10,6 @@ if ('ontouchstart' in document.documentElement) {
 } else {
   window.addEventListener(
     'load',
-    () => new Game(INIT_CONFIG, STAGES_LIST, INIT_PLAYER_STATE)
+    () => new Game(INIT_CONFIG, STAGE_LIST, INIT_PLAYER_STATE)
   );
 }

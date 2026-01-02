@@ -1,20 +1,19 @@
-export class BtnStage {
-  constructor(game, parentEl, stageId) {
+export class BtnOverworld {
+  constructor(game, parentEl) {
     this.game = game;
     this.parentEl = parentEl;
-    this.stageId = stageId;
     this.el = document.createElement('div');
     this.el.classList.add('btn-test');
-    this.el.textContent = `STAGE ${this.stageId}`;
+    this.el.textContent = 'OVERWORLD';
     this.parentEl.appendChild(this.el);
 
     this.el.addEventListener('click', () => {
       if (
-        this.game.activeScreen === 'OVERWORLD' &&
+        this.game.activeScreen !== 'OVERWORLD' &&
         !this.game.transition.isOverlayTransitionRunning
       ) {
-        this.game.stageId = this.stageId;
-        this.game.switchScreens('GAME_BOARD');
+        this.game.stageId = 'tutorial';
+        this.game.switchScreens('OVERWORLD');
       }
     });
   }

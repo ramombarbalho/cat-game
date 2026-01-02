@@ -13,15 +13,15 @@ export const INIT_CONFIG = {
     'NumpadDivide',
     'Numpad0'
   ],
-  stageId: 0,
+  stageId: 'tutorial',
   pauseGameFrames: 90,
   gravity: 2,
   initStageState: 'TRANSITION_IN',
   // openingStageMsgFrames: 132,
-  stageClearMsgFrames: 216,
+  // stageClearMsgFrames: 216,
   // warningMsgFrames: 250,
   openingStageMsgFrames: 10,
-  // stageClearMsgFrames: 10,
+  stageClearMsgFrames: 10,
   warningMsgFrames: 10,
-  overlayTransitionFrames: 60
+  overlayTransitionFrames: 20
 };
