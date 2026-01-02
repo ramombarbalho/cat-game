@@ -1,18 +1,17 @@
+import { Dialog } from './Dialog';
 import { OverlaySetKey } from './OverlaySetKey';
 
-export class GameConfigUI {
+export class GameConfigDialog extends Dialog {
   constructor(game) {
+    super();
     this.game = game;
-    this.el = null;
     this.overlaySetKey = null;
     this.isOverlaySetKeyOpen = false;
     this.id = null;
+    this.initGameConfigDialog();
   }
 
-  createGameConfigUI() {
-    // ##fix criar class para box-msg
-    this.el = document.createElement('div');
-    this.el.classList.add('dialog-box');
+  initGameConfigDialog() {
     const keyActions = [
       'UP',
       'DOWN',
@@ -29,18 +28,20 @@ export class GameConfigUI {
           `<div class="options-row"><h3>${action}</h3> <h3 class="label-key">${this.game.keys[i]}</h3> <div class="btn-set-key" data-id="${i}">SET</div></div>`
       )
       .join('');
-    this.el.innerHTML = ` <h1>CONFIG</h1>
-                          <div class="options-key-set">
-                            <div class="options-row">
-                              <h2>ACTION</h2> <h2>KEY</h2>
-                            </div>
-                            ${keyActions}
-                          </div>
-                          <div class="btn-test btn-save">SAVE</div>`;
+
+    const content = ` <h1>CONFIG</h1>
+                      <div class="options-key-set">
+                        <div class="options-row">
+                          <h2>ACTION</h2> <h2>KEY</h2>
+                        </div>
+                        ${keyActions}
+                      </div>
+                      <div class="btn-test btn-save">SAVE</div>`;
+    this.addContent(content);
     this.game.screen.appendChild(this.el);
-    document
+    this.el
       .querySelector('.btn-save')
-      .addEventListener('click', () => this.deleteGameConfigUI());
+      .addEventListener('click', () => this.game.gameConfig.deleteDialog());
 
     this.overlaySetKey = new OverlaySetKey(this.game);
 
@@ -55,16 +56,5 @@ export class GameConfigUI {
           this.id = +target.dataset.id;
         }
       });
-  }
-
-  deleteGameConfigUI() {
-    this.el.remove();
-    this.el = null;
-    if (this.overlaySetKey?.el) {
-      this.overlaySetKey.deleteOverlaySetKey();
-    }
-    this.overlaySetKey = null;
-    this.isOverlaySetKeyOpen = false;
-    this.id = null;
   }
 }

@@ -1,18 +1,18 @@
 import { BtnOverworld } from './BtnOverworld';
 import { BtnRetry } from './BtnRetry';
-import { DialogBox } from './DialogBox';
+import { Dialog } from './Dialog';
 
-export class GameOverDialogBox extends DialogBox {
+export class GameOverDialog extends Dialog {
   constructor(gameBoard) {
     super();
     this.gameBoard = gameBoard;
     this.catThumbs = null;
     this.btnRetry = null;
     this.btnOverworld = null;
-    this.initGameOverDialogBox();
+    this.initGameOverDialog();
   }
 
-  initGameOverDialogBox() {
+  initGameOverDialog() {
     const content = ` <h1 style="color: #ff3200">GAME OVER</h1>
                       <div class="dialog-img-game-over">
                         <img draggable="false" src="cat-game-over.png" class="cat-game-over-img" />

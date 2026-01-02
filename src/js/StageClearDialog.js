@@ -1,18 +1,18 @@
 import { BtnOverworld } from './BtnOverworld';
 import { BtnRetry } from './BtnRetry';
-import { DialogBox } from './DialogBox';
+import { Dialog } from './Dialog';
 
-export class StageClearDialogBox extends DialogBox {
+export class StageClearDialog extends Dialog {
   constructor(gameBoard) {
     super();
     this.gameBoard = gameBoard;
     this.catThumbs = null;
     this.btnRetry = null;
     this.btnOverworld = null;
-    this.initStageClearDialogBox();
+    this.initStageClearDialog();
   }
 
-  initStageClearDialogBox() {
+  initStageClearDialog() {
     const content = ` <h1>STAGE CLEAR</h1>
                       <h3>HP:.......??</h3>
                       <h3>BOMB:.....??</h3>

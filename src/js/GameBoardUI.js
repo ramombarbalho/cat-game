@@ -1,7 +1,7 @@
 import { GameImg } from './GameImg';
-import { GameOverDialogBox } from './GameOverDialogBox';
+import { GameOverDialog } from './GameOverDialog';
 import { OverlayPause } from './OverlayPause';
-import { StageClearDialogBox } from './StageClearDialogBox';
+import { StageClearDialog } from './StageClearDialog';
 
 export class GameBoardUI {
   constructor(gameBoard) {
@@ -22,7 +22,7 @@ export class GameBoardUI {
     this.skillBoxesCooldown = [];
     this.skillBoxesNotAllowed = [];
     this.skillCooldownFrames = [];
-    this.dialogBox = null;
+    this.dialog = null;
     this.catThumbs = null;
     this.btnRetry = null;
     this.btnOverworld = null;
@@ -196,11 +196,11 @@ export class GameBoardUI {
     }
   }
 
-  createDialogBox() {
+  createDialog() {
     if (this.gameBoard.state === 'GAME_OVER') {
-      this.dialogBox = new GameOverDialogBox(this.gameBoard);
+      this.dialog = new GameOverDialog(this.gameBoard);
     } else if (this.gameBoard.state === 'STAGE_CLEAR') {
-      this.dialogBox = new StageClearDialogBox(this.gameBoard);
+      this.dialog = new StageClearDialog(this.gameBoard);
     }
   }
 }

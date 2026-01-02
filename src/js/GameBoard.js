@@ -262,7 +262,7 @@ export class GameBoard {
       case 'GAME_RUNNING':
         if (this.player.hp <= 0) {
           this.state = 'GAME_OVER';
-          this.ui.createDialogBox();
+          this.ui.createDialog();
         } else if (this.stage.bossStage) {
           if (this.boss) this.boss.stateHandler();
           if (
@@ -283,7 +283,7 @@ export class GameBoard {
       case 'STAGE_CLEAR':
         if (this.ui.stageClearMsg) return;
         this.game.setStageIsClear(this.stage.id);
-        this.ui.createDialogBox();
+        this.ui.createDialog();
         this.state = 'GAME_OVER';
         break;
       case 'WARNING':

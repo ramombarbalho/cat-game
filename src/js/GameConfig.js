@@ -1,26 +1,41 @@
-import { GameConfigUI } from './GameConfigUI';
+import { GameConfigDialog } from './GameConfigDialog';
 
 export class GameConfig {
   constructor(game) {
     this.game = game;
-    this.ui = new GameConfigUI(this.game);
+    this.dialog = null;
+  }
+
+  createDialog() {
+    this.dialog = new GameConfigDialog(this.game);
+  }
+
+  deleteDialog() {
+    if (this.dialog?.overlaySetKey?.el) {
+      this.dialog.overlaySetKey.deleteOverlaySetKey();
+    }
+    this.dialog.overlaySetKey = null;
+    this.dialog.isOverlaySetKeyOpen = false;
+    this.dialog.id = null;
+    this.dialog.deleteDialog();
+    this.dialog = null;
   }
 
   setKey(key) {
-    if (!this.ui.isOverlaySetKeyOpen) return;
+    if (!this.dialog?.isOverlaySetKeyOpen) return;
     const keyIndex = this.game.keys.indexOf(key);
     if (keyIndex > -1) {
-      this.game.keys[keyIndex] = this.game.keys[this.ui.id];
-      this.ui.el.querySelector(
+      this.game.keys[keyIndex] = this.game.keys[this.dialog.id];
+      this.dialog.el.querySelector(
         `div[data-id="${keyIndex}"]`
       ).previousElementSibling.innerHTML = this.game.keys[keyIndex];
     }
-    this.game.keys[this.ui.id] = key;
-    this.ui.el.querySelector(
-      `div[data-id="${this.ui.id}"]`
+    this.game.keys[this.dialog.id] = key;
+    this.dialog.el.querySelector(
+      `div[data-id="${this.dialog.id}"]`
     ).previousElementSibling.innerHTML = key;
-    this.ui.overlaySetKey.labelKeyActionEl.innerHTML = '';
-    this.ui.overlaySetKey.deleteOverlaySetKey();
-    this.ui.isOverlaySetKeyOpen = false;
+    this.dialog.overlaySetKey.labelKeyActionEl.innerHTML = '';
+    this.dialog.overlaySetKey.deleteOverlaySetKey();
+    this.dialog.isOverlaySetKeyOpen = false;
   }
 }

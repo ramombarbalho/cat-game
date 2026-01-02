@@ -12,7 +12,7 @@ export class BtnConfig {
         this.game.activeScreen === 'TITLE' &&
         !this.game.transition.isOverlayTransitionRunning
       ) {
-        this.game.gameConfig.ui.createGameConfigUI();
+        this.game.gameConfig.createDialog();
       }
     });
   }
