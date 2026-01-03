@@ -1,23 +1,22 @@
-export class OverlaySetKey {
+import { Overlay } from './Overlay';
+
+export class OverlaySetKey extends Overlay {
   constructor(game) {
+    super();
     this.game = game;
     this.el = null;
     this.labelKeyActionEl = null;
+    this.init();
   }
 
-  createOverlaySetKey() {
-    if (this.el) {
-      this.deleteOverlaySetKey();
-    }
-
-    this.el = document.createElement('div');
-    this.el.classList.add('overlay');
-    this.el.innerHTML = `<p style="font-size: 20px">PRESS A KEY TO SET "<span id="label-key-action"></span>"</p>`;
+  init() {
+    const content = `<p style="font-size: 20px">PRESS A KEY TO SET "<span id="label-key-action"></span>"</p>`;
+    this.el = this.createEl(content);
     this.game.screen.appendChild(this.el);
-    this.labelKeyActionEl = document.querySelector('#label-key-action');
+    this.labelKeyActionEl = this.el.querySelector('#label-key-action');
   }
 
-  deleteOverlaySetKey() {
+  reset() {
     this.el.remove();
     this.el = null;
     this.labelKeyActionEl = null;

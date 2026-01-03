@@ -2,42 +2,28 @@ import { BtnOverworld } from './BtnOverworld';
 import { BtnRetry } from './BtnRetry';
 import { Overlay } from './Overlay';
 
-export class OverlayPause extends Overlay {
+export class OverlayGamePaused extends Overlay {
   constructor(game) {
+    super();
     this.game = game;
     this.el = null;
     this.btnRetry = null;
     this.btnOverworld = null;
+    this.init();
   }
 
-  createOverlayPause() {
-    if (this.el) {
-      this.deleteOverlayPause();
-    }
-
-    this.el = document.createElement('div');
-    this.el.classList.add('overlay');
+  init() {
+    const content = `<p style="font-size: 20px">PAUSED</p>`;
+    this.el = this.createEl(content);
     this.game.screen.appendChild(this.el);
-    this.el.innerHTML = `<p style="font-size: 20px">PAUSED</p>`;
     this.btnRetry = new BtnRetry(this.game, this.el);
     this.btnOverworld = new BtnOverworld(this.game, this.el);
   }
 
-  deleteOverlayPause() {
+  reset() {
     this.el.remove();
     this.el = null;
     this.btnRetry = null;
     this.btnOverworld = null;
-  }
-
-  switchDisplay(state) {
-    switch (state) {
-      case 'GAME_RUNNING':
-        this.deleteOverlayPause();
-        return;
-      case 'PAUSED':
-        this.createOverlayPause();
-        return;
-    }
   }
 }

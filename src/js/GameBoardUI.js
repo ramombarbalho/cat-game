@@ -1,6 +1,7 @@
 import { GameImg } from './GameImg';
 import { GameOverDialog } from './GameOverDialog';
-import { OverlayPause } from './OverlayPause';
+import { OverlayGameCrashed } from './OverlayGameCrashed';
+import { OverlayGamePaused } from './OverlayGamePaused';
 import { StageClearDialog } from './StageClearDialog';
 
 export class GameBoardUI {
@@ -32,11 +33,12 @@ export class GameBoardUI {
     this.hpBossElValue = 0;
     this.scoreLabel = null;
     this.scorePoints = null;
-    this.overlayPause = null;
-    this.initGameBoardUI();
+    this.overlayGamePaused = null;
+    this.overlayGameCrashed = null;
+    this.init();
   }
 
-  initGameBoardUI() {
+  init() {
     if (!this.gameBoard.stage.bossStage) {
       this.scoreLabel = document.createElement('p');
       this.scoreLabel.classList.add('score-label');
@@ -60,8 +62,6 @@ export class GameBoardUI {
     this.statusBarr.appendChild(this.heartsBox);
     this.renderHeartsBox();
     this.renderSkillBoxes();
-
-    this.overlayPause = new OverlayPause(this.gameBoard.game);
   }
 
   updateHeart() {
@@ -202,5 +202,30 @@ export class GameBoardUI {
     } else if (this.gameBoard.state === 'STAGE_CLEAR') {
       this.dialog = new StageClearDialog(this.gameBoard);
     }
+  }
+
+  createOverlayGamePaused() {
+    if (this.overlayGamePaused) this.deleteOverlayGamePaused();
+    this.overlayGamePaused = new OverlayGamePaused(this.gameBoard.game);
+  }
+
+  deleteOverlayGamePaused() {
+    this.overlayGamePaused.reset();
+    this.overlayGamePaused = null;
+  }
+
+  switchOverlayGamePaused(state) {
+    switch (state) {
+      case 'GAME_RUNNING':
+        this.deleteOverlayGamePaused();
+        return;
+      case 'PAUSED':
+        this.createOverlayGamePaused();
+        return;
+    }
+  }
+
+  createOverlayGameCrashed() {
+    this.overlayGameCrashed = new OverlayGameCrashed(this.gameBoard.game);
   }
 }

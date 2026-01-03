@@ -44,7 +44,6 @@ export class GameBoard {
     this.gameRunningArea.style.backgroundImage = this.stage.backgroundImage;
     this.player = new Player(this);
     this.ui = new GameBoardUI(this);
-    this.overlayGameCrashed = null;
 
     if (!this.isLoopRunning) {
       this.loop();
@@ -132,7 +131,7 @@ export class GameBoard {
 
   pauseGame() {
     this.state = this.state === 'PAUSED' ? 'GAME_RUNNING' : 'PAUSED';
-    this.ui.overlayPause.switchDisplay(this.state);
+    this.ui.switchOverlayGamePaused(this.state);
     this.pauseAllowed = false;
   }
 
@@ -225,7 +224,7 @@ export class GameBoard {
     if (this.state !== 'GAME_RUNNING' && this.state !== 'STAGE_CLEAR') return;
 
     this.projectiles.forEach(projectile => projectile.update());
-    this.explosions.forEach(explosion => explosion.update());
+    this.explosions.forEach(explosion => explosion.updatae());
     this.coins.forEach(coin => coin.update());
     this.player.update();
 
@@ -348,7 +347,7 @@ export class GameBoard {
         return;
       }
     } catch (err) {
-      this.overlayGameCrashed = new OverlayGameCrashed(this.game);
+      this.ui.createOverlayGameCrashed();
       throw new Error(err);
     }
 

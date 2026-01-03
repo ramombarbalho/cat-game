@@ -14,7 +14,7 @@ export class GameConfig {
   deleteDialog() {
     if (!this.dialog) return;
     if (this.dialog.overlaySetKey?.el) {
-      this.dialog.overlaySetKey.deleteOverlaySetKey();
+      this.dialog.overlaySetKey.reset();
     }
     this.dialog.overlaySetKey = null;
     this.dialog.isOverlaySetKeyOpen = false;
@@ -36,8 +36,7 @@ export class GameConfig {
     this.dialog.el.querySelector(
       `div[data-id="${this.dialog.id}"]`
     ).previousElementSibling.innerHTML = key;
-    this.dialog.overlaySetKey.labelKeyActionEl.innerHTML = '';
-    this.dialog.overlaySetKey.deleteOverlaySetKey();
+    this.dialog.deleteOverlaySetKey();
     this.dialog.isOverlaySetKeyOpen = false;
   }
 }

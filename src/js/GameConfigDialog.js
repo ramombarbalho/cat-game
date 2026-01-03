@@ -43,18 +43,26 @@ export class GameConfigDialog extends Dialog {
       .querySelector('.btn-save')
       .addEventListener('click', () => this.game.gameConfig.deleteDialog());
 
-    this.overlaySetKey = new OverlaySetKey(this.game);
-
     this.el
       .querySelector('.options-key-set')
       .addEventListener('click', ({ target }) => {
         if (target.classList.contains('btn-set-key')) {
-          this.overlaySetKey.createOverlaySetKey();
+          this.createOverlaySetKey();
           this.overlaySetKey.labelKeyActionEl.innerHTML =
             target.closest('.options-row').firstElementChild.innerHTML;
           this.isOverlaySetKeyOpen = true;
           this.id = +target.dataset.id;
         }
       });
+  }
+
+  createOverlaySetKey() {
+    if (this.overlaySetKey) this.deleteOverlaySetKey();
+    this.overlaySetKey = new OverlaySetKey(this.game);
+  }
+
+  deleteOverlaySetKey() {
+    this.overlaySetKey.reset();
+    this.overlaySetKey = null;
   }
 }
