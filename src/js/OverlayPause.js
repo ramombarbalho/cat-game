@@ -1,7 +1,8 @@
 import { BtnOverworld } from './BtnOverworld';
 import { BtnRetry } from './BtnRetry';
+import { Overlay } from './Overlay';
 
-export class OverlayPause {
+export class OverlayPause extends Overlay {
   constructor(game) {
     this.game = game;
     this.el = null;
@@ -15,7 +16,7 @@ export class OverlayPause {
     }
 
     this.el = document.createElement('div');
-    this.el.classList.add('overlay', 'overlay-pause');
+    this.el.classList.add('overlay');
     this.game.screen.appendChild(this.el);
     this.el.innerHTML = `<p style="font-size: 20px">PAUSED</p>`;
     this.btnRetry = new BtnRetry(this.game, this.el);

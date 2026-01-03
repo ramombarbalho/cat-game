@@ -2,6 +2,7 @@ import { BOSS_LIST } from './BOSS_LIST';
 import { ENEMY_LIST } from './ENEMY_LIST';
 import { GameBoardUI } from './GameBoardUI';
 import { HitBoxDebug } from './HitBoxDebug';
+import { OverlayGameCrashed } from './OverlayGameCrashed';
 import { Player } from './Player';
 
 export class GameBoard {
@@ -43,6 +44,7 @@ export class GameBoard {
     this.gameRunningArea.style.backgroundImage = this.stage.backgroundImage;
     this.player = new Player(this);
     this.ui = new GameBoardUI(this);
+    this.overlayGameCrashed = null;
 
     if (!this.isLoopRunning) {
       this.loop();
@@ -192,12 +194,7 @@ export class GameBoard {
   update() {
     if (this.state === 'OPENING_STAGE') this.ui.openingStage();
 
-    if (
-      this.state === 'PAUSED' ||
-      this.state === 'GAME_RUNNING'
-      // &&
-      // this.state !== 'STAGE_CLEAR'
-    ) {
+    if (this.state === 'PAUSED' || this.state === 'GAME_RUNNING') {
       if (this.pauseGameFrames <= 0) {
         this.pauseGameFrames = this.game.config.pauseGameFrames;
         this.pauseAllowed = true;
@@ -339,13 +336,22 @@ export class GameBoard {
     //   return;
     // }
 
-    this.update();
-    this.stateHandler();
-    // console.log(this.state);
-    if (this.state === 'GAME_OVER' || this.game.activeScreen !== 'GAME_BOARD') {
-      this.isLoopRunning = false;
-      return;
+    try {
+      this.update();
+      this.stateHandler();
+      // console.log(this.state);
+      if (
+        this.state === 'GAME_OVER' ||
+        this.game.activeScreen !== 'GAME_BOARD'
+      ) {
+        this.isLoopRunning = false;
+        return;
+      }
+    } catch (err) {
+      this.overlayGameCrashed = new OverlayGameCrashed(this.game);
+      throw new Error(err);
     }
+
     requestAnimationFrame(this.loop);
   };
 }

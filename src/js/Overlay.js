@@ -1,7 +1,7 @@
-export class Dialog {
+export class Overlay {
   constructor() {
     this.el = document.createElement('div');
-    this.el.classList.add('dialog');
+    this.el.classList.add('overlay');
   }
 
   addContent(content) {

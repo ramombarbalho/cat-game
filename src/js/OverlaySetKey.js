@@ -11,7 +11,7 @@ export class OverlaySetKey {
     }
 
     this.el = document.createElement('div');
-    this.el.classList.add('overlay', 'overlay-set-key');
+    this.el.classList.add('overlay');
     this.el.innerHTML = `<p style="font-size: 20px">PRESS A KEY TO SET "<span id="label-key-action"></span>"</p>`;
     this.game.screen.appendChild(this.el);
     this.labelKeyActionEl = document.querySelector('#label-key-action');

@@ -1,6 +1,7 @@
 export class GameTransition {
   constructor(game) {
     this.game = game;
+    // ##fix trocar nome overlay para gameTransitionEl
     this.overlayTransition = null;
     this.overlayTransitionOpacity = 0;
     this.overlayTransitionFrames = this.game.config.overlayTransitionFrames;

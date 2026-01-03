@@ -7,17 +7,19 @@ export class GameConfig {
   }
 
   createDialog() {
+    this.deleteDialog();
     this.dialog = new GameConfigDialog(this.game);
   }
 
   deleteDialog() {
-    if (this.dialog?.overlaySetKey?.el) {
+    if (!this.dialog) return;
+    if (this.dialog.overlaySetKey?.el) {
       this.dialog.overlaySetKey.deleteOverlaySetKey();
     }
     this.dialog.overlaySetKey = null;
     this.dialog.isOverlaySetKeyOpen = false;
     this.dialog.id = null;
-    this.dialog.deleteDialog();
+    this.dialog.deleteElement();
     this.dialog = null;
   }
 
